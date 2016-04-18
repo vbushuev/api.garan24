@@ -1,5 +1,6 @@
 @import url("//fonts.googleapis.com/css?family=Lato:400,100");
 @import url("//fonts.googleapis.com/css?family=Roboto+Mono:400,100&subset=latin,cyrillic");
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
 * {
   font-weight: 100;
   font-family: 'Lato', 'Roboto Mono';
@@ -44,15 +45,16 @@ button {
   -webkit-border-radius: 0.2em;
   -moz-border-radius: 0.2em;
   border-radius: 0.2em;
+  font-size: 12pt;
   font-weight: 400;
   display: inline-block;
   cursor: pointer;
   background-color: rgba(255,255,255,0.75);
   border: solid #639e14 1px;
-  width: 8em;
+  width: 6em;
   height: 2.2em;
   line-height: 2.2em;
-  margin: auto 1em;
+  margin: 0.1em;
   color: #96588a;
 }
 a.button :hover,
@@ -72,6 +74,52 @@ button :hover {
 }
 .alert :hover {
   background-color: #f00 !important;
+}
+input,
+select {
+  -webkit-border-radius: 0.2em;
+  -moz-border-radius: 0.2em;
+  border-radius: 0.2em;
+  display: inline-block;
+  font-size: 12pt;
+  border: solid 1px #808080;
+  width: 12em;
+  height: 2.2em;
+  line-height: 2.2em;
+  margin: 0.1em;
+  padding-left: 2em;
+  color: #96588a;
+  position: relative;
+}
+input.email::before {
+  content: "EMAIL:";
+}
+input.address-line {
+  width: 18em;
+}
+input.city,
+input.state {
+  width: 6em;
+}
+input.postcode {
+  width: 6em;
+}
+select.country {
+  width: 8em;
+}
+select.titles {
+  width: 4em;
+  font-size: 12pt;
+}
+.form-submit {
+  margin: 1em;
+  text-align: center;
+}
+.disabled {
+  position: relative;
+}
+#foward {
+  float: right;
 }
 .container .sidebar {
   width: 100%;
@@ -96,6 +144,22 @@ button :hover {
 }
 .container .content .title {
   font-size: 96px;
+}
+.container .columns {
+  display: inline-block;
+}
+.container .columns .title {
+  font-size: 28px;
+  border-bottom: solid 1px #808080;
+  margin-bottom: 1em;
+  padding-bottom: 0.6em;
+}
+.container .col-left,
+.container .col-right {
+  display: table-cell;
+  text-align: left;
+  width: 20em;
+  padding: 0 1em;
 }
 .container .footer {
   width: 100%;
