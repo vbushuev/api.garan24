@@ -16,9 +16,15 @@
             @foreach ($order as $item)
                 <div class="order-item">
                     <span class="item-name">{{$item['name']}}</span>
-                    <span class="item-quantity">{{$item['quantity']}}</span>
-                    ............................
-                    <span class="item-price">{{$item['price']}}</span>
+                    <span class="item-quantity">x{{$item['quantity']}}</span>
+                    <span class="item-dots">..........................</span>
+                    <span class="item-price">
+                        @if($item['currency']=='eur') <i class="fa fa-euro"></i>
+                        @elseif($item['currency']=='usd') <i class="fa fa-usd"></i>
+                        @elseif($item['currency']=='rub') <i class="fa fa-rub"></i>
+                        @endif
+                        {{$item['price']}}
+                    </span>
                 </div>
             @endforeach
         @else
@@ -29,39 +35,36 @@
         <div class="title">
             Garan<sup>24</sup> Checkout
         </div>
-        <div class="form-group">
-            <input type="email" class="email" id="email" placeholder="Email address">
+        <div class="form-group user">
+            <input type="email" class="email required" id="email" placeholder="Email address">
         </div>
-        <div class="form-group">
-            <input type="phone" class="phone" id="phone" placeholder="Mobile phone number">
+        <div class="form-group user">
+            <input type="phone" class="phone required" id="phone" placeholder="Mobile phone number">
             <button type="button" class="highlighted" id="foward">Foward</button>
         </div>
-        <br />
         <div class="form-group disabled postcode">
-            <select class="country" id="country" placeholder="Country">
+            <select class="country requered" id="country" placeholder="Country">
                 <option value="ru">Russia</option>
                 <option value="ru">German</option>
                 <option value="ru">UK</option>
                 <option value="ru">USA</option>
             </select>
-            <input type="text" class="postcode" id="postcode" placeholder="Postcode">
+            <input type="text" class="postcode required" id="postcode" placeholder="Postcode">
         </div>
-        <br/>
         <div class="form-group disabled fullname">
             <select class="titles" id="titles">
                 <option value="mr">Mr.</option>
                 <option value="mrs">Mrs.</option>
                 <option value="miss">Miss</option>
             </select>
-            <input type="text" class="name" id="name" placeholder="Name">
-            <input type="text" class="surname" id="surname" placeholder="Surname">
+            <input type="text" class="name required" id="name" placeholder="Name">
+            <input type="text" class="surname required" id="surname" placeholder="Surname">
         </div>
-        <br/>
         <div class="form-group disabled address">
-            <input type="text" class="address-line" id="address-line1" placeholder="Address line 1">
+            <input type="text" class="address required-line" id="address-line1" placeholder="Address line 1">
             <input type="text" class="address-line" id="address-line2" placeholder="Address line 2">
-            <input type="text" class="city" id="city" placeholder="City/Town">
-            <input type="text" class="state" id="state" placeholder="State">
+            <input type="text" class="city required" id="city" placeholder="City/Town">
+            <input type="text" class="state required" id="state" placeholder="State">
 
         </div>
         <div class="form-submit disabled checkout">

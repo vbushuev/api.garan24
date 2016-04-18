@@ -39,15 +39,32 @@ var _grn = {
         }
     },
     stage:0,
+    mandatory:function(){
+        var ret = true;
+        $(".required:visible").each(function(e){
+            var $t = $(this);
+            if($t.val().length==0){
+                $t.hasClass("alert")?null:$t.addClass('alert');
+                console.debug("mandatory field "+$t.attr("id"));
+                ret = false;
+            }
+            else {
+                console.debug("can remove alert class on "+$t.attr("id"));
+                $t.removeClass('alert');
+            }
+        });
+        return ret;
+    },
     foward:function(){
         var $t = $(this),t = _grn;
-        console.debug("stage "+_grn.stage);
+        if(!_grn.mandatory())return;
         switch(t.stage){
             case 0:{
                 _grn.user.set();
                 var $next=$("div.postcode");
                 unDisable($next);
                 $t.detach().appendTo($next);
+                $("div.user").slideUp();
                 _grn.stage++;
             }break;
             case 1:{
@@ -55,18 +72,21 @@ var _grn = {
                 console.debug("name "+$next.length);
                 unDisable($next);
                 $t.detach().appendTo($next);
+                $("div.postcode").slideUp();
                 _grn.stage++;
             }break;
             case 2:{
                 var $next=$("div.address");
                 unDisable($next);
                 $t.detach().appendTo($next);
+                $("div.fullname").slideUp();
                 _grn.stage++;
             }break;
             case 3:{
                 var $next=$("div.checkout");
                 unDisable($next);
                 $t.detach();
+                $("div.address").slideUp();
                 _grn.stage++;
             }break;
             case 4:{}break;

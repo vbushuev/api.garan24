@@ -40,7 +40,6 @@ hr {
 .overlay {
   display: none;
 }
-a.button,
 button {
   -webkit-border-radius: 0.2em;
   -moz-border-radius: 0.2em;
@@ -51,29 +50,29 @@ button {
   cursor: pointer;
   background-color: rgba(255,255,255,0.75);
   border: solid #639e14 1px;
-  width: 6em;
+  width: 8em;
   height: 2.2em;
   line-height: 2.2em;
   margin: 0.1em;
   color: #96588a;
 }
-a.button :hover,
 button :hover {
   background-color: rgba(0,0,0,0.4);
 }
-.highlighted {
-  background-color: #639e14 !important;
-  color: #fff !important;
+button.highlighted {
+  background-color: #639e14;
+  border: none;
+  color: #fff;
 }
-.highlighted :hover {
-  background-color: #639e14 !important;
+button.highlighted :hover {
+  background-color: #639e14;
 }
-.alert {
-  background-color: rgba(255,0,0,0.75) !important;
-  color: #fff !important;
+button.alert {
+  background-color: rgba(255,0,0,0.75);
+  color: #fff;
 }
-.alert :hover {
-  background-color: #f00 !important;
+button.alert :hover {
+  background-color: #f00;
 }
 input,
 select {
@@ -83,13 +82,20 @@ select {
   display: inline-block;
   font-size: 12pt;
   border: solid 1px #808080;
-  width: 12em;
+  width: 14em;
   height: 2.2em;
   line-height: 2.2em;
   margin: 0.1em;
-  padding-left: 2em;
+  padding-left: 0.02em;
   color: #96588a;
   position: relative;
+}
+.alert {
+  border: solid 2px rgba(255,0,0,0.8);
+  background-color: rgba(0,255,0,0.3);
+}
+.required {
+  font-weight: 400;
 }
 input.email::before {
   content: "EMAIL:";
@@ -158,8 +164,17 @@ select.titles {
 .container .col-right {
   display: table-cell;
   text-align: left;
-  width: 20em;
+  width: 20.4em;
   padding: 0 1em;
+}
+.container .order-item {
+  position: relative;
+}
+.container .order-item span {
+  font-weight: 400;
+}
+.container .order-item .item-name {
+  font-size: 24pt;
 }
 .container .footer {
   width: 100%;

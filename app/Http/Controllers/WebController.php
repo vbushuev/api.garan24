@@ -18,8 +18,8 @@ class WebController extends Controller{
     }
     public function getCheckout(Request $rq){
         $order = $rq->input('order',[
-            ['name' => 'jacket','price' => '79 Euros','quantity' => '1'],
-            ['name' => 'window','price' => '229 Euros','quantity' => '3']
+            ['name' => 'jacket','price' => '79','currency'=>'eur','quantity' => '1'],
+            ['name' => 'window','price' => '229','currency'=>'eur','quantity' => '3']
         ]);
         $vd = [
             'order' => $order
