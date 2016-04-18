@@ -7,11 +7,25 @@ var _grn = {
         surname:"",
         set:function(u){
             _grn.user.email=$("input.email").val();
+            _grn.user.check();
             _grn.user.phone=$("input.phone").val();
             _grn.user.title=$("input.titles").val();
             _grn.user.name=$("input.name").val();
             _grn.user.surname=$("input.surname").val();
         },
+        check:function(){
+            $.ajax({
+                url:"/customer/"+_grn.user.email,
+                dataType: "json",
+                success: function(data,status,jqXHR){
+                    $("input.name").val(data.customer.billing_address.first_name);
+                    $("input.surname").val(data.customer.billing_address.last_name);
+                    $("input.phone").val(data.customer.billing_address.phone);
+                    $("input.postcode").val(data.customer.billing_address.postcode);
+                    $("select.country option[val='"+data.customer.billing_address.country+"']").attr("selected",true);
+                }
+            });
+        }
     },
     order:{
         items:[]

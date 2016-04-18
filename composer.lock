@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "9baf711deeb18944f7903c53e7c1e293",
-    "content-hash": "2661e9c88cb0b1e0ac7e71896e0e88fb",
+    "hash": "48a9fea26e4d6b7250b9fb1521d15f5a",
+    "content-hash": "9eb9d9690e1c4586d44e1966a4857199",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -1792,6 +1792,47 @@
                 "environment"
             ],
             "time": "2015-12-29 15:10:30"
+        },
+        {
+            "name": "woothemes/woocommerce-api",
+            "version": "2.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/kloon/WooCommerce-REST-API-Client-Library.git",
+                "reference": "66fb772d21822dde0a07ea083953a5873a390e07"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/kloon/WooCommerce-REST-API-Client-Library/zipball/66fb772d21822dde0a07ea083953a5873a390e07",
+                "reference": "66fb772d21822dde0a07ea083953a5873a390e07",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "php": ">= 5.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "classmap": [
+                    "lib/woocommerce-api"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "GPL v3"
+            ],
+            "authors": [
+                {
+                    "name": "Max Rice",
+                    "email": "max@maxrice.com"
+                },
+                {
+                    "name": "Gerhard Potgieter"
+                }
+            ],
+            "description": "A client library for the WooCommerce REST API",
+            "time": "2015-07-13 21:19:17"
         }
     ],
     "packages-dev": [
