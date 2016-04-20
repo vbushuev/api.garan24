@@ -14,7 +14,7 @@
     <div class="title">
         Garan<sup>24</sup>
     </div>
-    <button>Pay After</button>
-    <a class="button highlighted">Part Pay</a>
-    <button class="alert">Pay Now</button>
+
+    <a class="button highlighted" href="/checkout">Part After</a>
+
 @endsection

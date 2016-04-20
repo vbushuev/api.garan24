@@ -56,9 +56,28 @@ class GaranCustomerController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $rq)
     {
-        //
+        $res = ["code"=>"0","message"=>""];
+        if(!$this->resource_avaliable) return json_encode($res);
+        try{
+            $customer = [
+                "customer"=>[
+                    "email"=>$rq->input("email"),
+                    "password"=>$rq->input("email"),
+                    "username"=>$rq->input("email")
+                ]
+            ];
+            $res = $this->resource->create($customer)->http->response->body;
+        }catch ( WC_API_Client_Exception $e ) {
+            $res["code"] = $e->getCode();
+            $res["message"] = $e->getMessage();
+            if ( $e instanceof WC_API_Client_HTTP_Exception ) {
+                $res["request"] = $e->get_request();
+                $res["response"] = $e->get_response();
+            }
+        }
+        return $res;
     }
 
     /**
@@ -80,8 +99,19 @@ class GaranCustomerController extends Controller
      */
     public function show($id)
     {
-        if(!$this->resource_avaliable) return "{}";
-        return $this->resource->get_by_email($id)->http->response->body;
+        $res = ["code"=>"0","message"=>""];
+        if(!$this->resource_avaliable) return json_encode($res);
+        try{
+            $res = $this->resource->get_by_email($id)->http->response->body;
+        }catch ( WC_API_Client_Exception $e ) {
+            $res["code"] = $e->getCode();
+            $res["message"] = $e->getMessage();
+            if ( $e instanceof WC_API_Client_HTTP_Exception ) {
+                $res["request"] = $e->get_request();
+                $res["response"] = $e->get_response();
+            }
+        }
+        return $res;
     }
 
     /**

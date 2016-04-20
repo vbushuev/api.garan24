@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use Log;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use WC_API_Client;
@@ -25,6 +25,21 @@ class WebController extends Controller{
             'order' => $order
         ];
         return view('public.checkout',$vd);
+    }
+    public function postProcesspay(Request $rq){
+        $order = $rq->getContent();
+        $order = json_decode($order);
+        Log::debug($order);
+        print($order);
+        $resp = [
+            "code" => "0",
+            "message" => "Ok",
+            "request" => $order
+        ];
+        return json_encode($resp);
+    }
+    public function getProcesspay(Request $rq){
+        return $this->postProcesspay($rq);
     }
     public function getTestwoo(Request $rq){
         /*******************************************************************

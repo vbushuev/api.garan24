@@ -40,14 +40,14 @@
         </div>
         <div class="form-group user">
             <input type="phone" class="phone required" id="phone" placeholder="Mobile phone number">
-            <button type="button" class="highlighted" id="foward">Foward</button>
+
         </div>
         <div class="form-group disabled postcode">
             <select class="country requered" id="country" placeholder="Country">
                 <option value="ru">Russia</option>
-                <option value="ru">German</option>
-                <option value="ru">UK</option>
-                <option value="ru">USA</option>
+                <option value="de">German</option>
+                <option value="uk">UK</option>
+                <option value="us">USA</option>
             </select>
             <input type="text" class="postcode required" id="postcode" placeholder="Postcode">
         </div>
@@ -66,6 +66,9 @@
             <input type="text" class="city required" id="city" placeholder="City/Town">
             <input type="text" class="state required" id="state" placeholder="State">
 
+        </div>
+        <div class="form-group">
+            <button type="button" class="highlighted" id="foward">Foward</button>
         </div>
         <div class="form-submit disabled checkout">
             <button class="highlighted" id="checkout">Checkout</button>

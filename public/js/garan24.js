@@ -1,5 +1,6 @@
 var _grn = {
     user:{
+        id:"",
         email:"",
         phone:"",
         title:"",
@@ -18,11 +19,47 @@ var _grn = {
                 url:"/customer/"+_grn.user.email,
                 dataType: "json",
                 success: function(data,status,jqXHR){
-                    $("input.name").val(data.customer.billing_address.first_name);
-                    $("input.surname").val(data.customer.billing_address.last_name);
-                    $("input.phone").val(data.customer.billing_address.phone);
-                    $("input.postcode").val(data.customer.billing_address.postcode);
-                    $("select.country option[val='"+data.customer.billing_address.country+"']").attr("selected",true);
+                    console.debug(jqXHR);
+                    if(typeof data.code !="undefined"){
+                        switch(data.code){
+                            case "404":
+                            default:{
+                                _grn.user.create(_grn.user.email);
+                            }break;
+                        }
+                        return;
+                    }
+                    _grn.user.id=data.customer.id;
+                    data.customer.first_name.length?$("input.name").val(data.customer.first_name):null;
+                    data.customer.last_name.length?$("input.surname").val(data.customer.last_name):null;
+                    data.customer.billing_address.phone.length?$("input.phone").val(data.customer.billing_address.phone):null;
+                    data.customer.billing_address.postcode.length?$("input.postcode").val(data.customer.billing_address.postcode):null;
+                    data.customer.billing_address.country.length?$("select.country option").removeAttr("selected").filter("[value="+data.customer.billing_address.country+"]").attr("selected",true):null;
+                },
+            });
+        },
+        create:function(mail){
+            $.ajax({
+                url:"/customer/create/",
+                data:{"email":mail},
+                success:function(data,status,jqXHR){
+                    if(typeof data.code !="undefined"){
+                        return;
+                    }
+                    _grn.user.id=data.customer.id;
+                }
+            });
+        },
+        update:function(){
+            $.ajax({
+                url:"/customer/"+_grn.user.id,
+                method:"PUT",
+                data:_grn.user,
+                success:function(data,status,jqXHR){
+                    if(typeof data.code !="undefined"){
+                        console.error("code:"+data.code+". Message:"+data.message);
+                        return;
+                    }
                 }
             });
         }
@@ -63,7 +100,7 @@ var _grn = {
                 _grn.user.set();
                 var $next=$("div.postcode");
                 unDisable($next);
-                $t.detach().appendTo($next);
+                //$t.detach().appendTo($next);
                 $("div.user").slideUp();
                 _grn.stage++;
             }break;
@@ -71,14 +108,14 @@ var _grn = {
                 var $next=$("div.fullname");
                 console.debug("name "+$next.length);
                 unDisable($next);
-                $t.detach().appendTo($next);
+                //$t.detach().appendTo($next);
                 $("div.postcode").slideUp();
                 _grn.stage++;
             }break;
             case 2:{
                 var $next=$("div.address");
                 unDisable($next);
-                $t.detach().appendTo($next);
+                //$t.detach().appendTo($next);
                 $("div.fullname").slideUp();
                 _grn.stage++;
             }break;
