@@ -78,9 +78,9 @@ class WebController extends Controller{
                 //create user
                 $user = $resource->create([
                     "customer"=>[
-                        "email"=>$order->x_email,
-                        "password"=>$order->x_email,
-                        "username"=>$order->x_email
+                        "email"=>$order["order"]["billing_address"]["email"],
+                        "password"=>$order["order"]["billing_address"]["email"],
+                        "username"=>$order["order"]["billing_address"]["email"]
                     ]
                 ]);
             }
