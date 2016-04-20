@@ -134,6 +134,30 @@ var _grn = {
 var Garan24 = function(data){
     $.extend(_grn,data);
 }
+var Garan24Test = function(){
+    $.ajax({
+        url:"/customer/"+_grn.user.email,
+        dataType: "json",
+        success: function(data,status,jqXHR){
+            console.debug(jqXHR);
+            if(typeof data.code !="undefined"){
+                switch(data.code){
+                    case "404":
+                    default:{
+                        _grn.user.create(_grn.user.email);
+                    }break;
+                }
+                return;
+            }
+            _grn.user.id=data.customer.id;
+            data.customer.first_name.length?$("input.name").val(data.customer.first_name):null;
+            data.customer.last_name.length?$("input.surname").val(data.customer.last_name):null;
+            data.customer.billing_address.phone.length?$("input.phone").val(data.customer.billing_address.phone):null;
+            data.customer.billing_address.postcode.length?$("input.postcode").val(data.customer.billing_address.postcode):null;
+            data.customer.billing_address.country.length?$("select.country option").removeAttr("selected").filter("[value="+data.customer.billing_address.country+"]").attr("selected",true):null;
+        },
+    });
+}
 /******************************************************************************
  *
  *****************************************************************************/
