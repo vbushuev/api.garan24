@@ -13,9 +13,13 @@ use WC_API_Client_Resource_Customers;
 use WC_API_Client_Resource_Products;
 //use Garan24;
 //use Garan24\HTTP;
+use \Garan24\Garan24 as Garan24;
+use \Garan24\Gateway\Aruispay\Sale as AruisSale;
+use \Garan24\Gateway\Aruispay\Exception as AruispayException;
 
 class WebController extends Controller{
     protected $wc_client;
+    protected $_host = "http://api.garan24.bs2/";
     protected function createProduct(WC_API_Client $client,$item){
         $resource = new WC_API_Client_Resource_Products($client);
         try{
@@ -209,6 +213,72 @@ class WebController extends Controller{
             }
         }
         return json_encode($resp);
+    }
+    public function postPayout(Request $rq){
+        $data = $rq->getContent();
+        Log::debug($data);
+        $data = json_decode($data,true);
+        $resp = [
+            "code" => "502",
+            "message" => "Protocol Error",
+            "request" => $data
+        ];
+        $sale = new AruisSale([
+            "client_orderid" => $data["client_orderid"],
+            "order_desc" => $data["order_desc"],
+            "first_name" => $data["first_name"],
+            "last_name" => $data["last_name"],
+            "ssn" => $data["ssn"],
+            "birthday" => $data["birthday"],
+            "address1" => $data["address1"],
+            "city" => $data["city"],
+            "state" => $data["state"],
+            "zip_code" => $data["zip_code"],
+            "country" => $data["country"],
+            "phone" => $data["phone"],
+            "cell_phone" => $data["cell_phone"],
+            "amount" => $data["amount"],
+            "currency" => $data["currency"],
+            "email" => $data["email"],
+            "currency" => $data["currency"],
+            "ipaddress" => $data["ipaddress"],
+            "site_url" => $data["site_url"],
+            /*"credit_card_number" => "4444555566661111",
+            "card_printed_name" => "CARD HOLDER",
+            "expire_month" => "12",
+            "expire_year" => "2099",
+            "cvv2" => "123",*/
+            "purpose" => "www.twitch.tv/dreadztv",
+            "redirect_url" => $this->_host."payoutresponse",
+            //"redirect_url" => "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]",
+            //"redirect_url" => "https://arius.garan24.bs2/test/response.php",
+            "server_callback_url" => $this->_host."payoutcallback",
+            //"merchant_data" => "VIP customer"
+        ]);
+        $sale->setDebugMode(true);
+        try{
+            $sale->call();
+            $timeout = makeTimeout($timeout);
+            while(!$sale->check()){
+                $timeout = makeTimeout($timeout);
+            }
+        }
+        catch(\Garan24\Gateway\Aruispay\Exception $e){
+            print("Exception in AruisPay gateway:".$e->getMessage());
+        }
+    }
+    public function postPayoutCallback(Request $rq){
+        $data = $rq->getContent();
+        Log::debug("payoutcallback:".$data);
+
+    }
+    public function postPayoutresponse(Request $rq){
+        $data = $rq->getContent();
+        Log::debug("payoutresponse:".$data);
+
+    }
+    public function getPayout(Request $rq){
+        return $this->postPayout($rq);
     }
     public function getTestwoo(Request $rq){
         /*******************************************************************

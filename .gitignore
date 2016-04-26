@@ -7,3 +7,4 @@ Homestead.json
 *.styl
 
 .env.example
+composer.lock
