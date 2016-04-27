@@ -215,34 +215,33 @@ class WebController extends Controller{
         return json_encode($resp);
     }
     public function postPayout(Request $rq){
-        $data = $rq->getContent();
-        Log::debug($data);
-        $data = json_decode($data,true);
+        $data = $this->parseParams($rq);
         $resp = [
             "code" => "502",
             "message" => "Protocol Error",
             "request" => $data
         ];
         $sale = new AruisSale([
-            "client_orderid" => $data["client_orderid"],
-            "order_desc" => $data["order_desc"],
-            "first_name" => $data["first_name"],
-            "last_name" => $data["last_name"],
-            "ssn" => $data["ssn"],
-            "birthday" => $data["birthday"],
-            "address1" => $data["address1"],
-            "city" => $data["city"],
-            "state" => $data["state"],
-            "zip_code" => $data["zip_code"],
-            "country" => $data["country"],
-            "phone" => $data["phone"],
-            "cell_phone" => $data["cell_phone"],
-            "amount" => $data["amount"],
-            "currency" => $data["currency"],
-            "email" => $data["email"],
-            "currency" => $data["currency"],
-            "ipaddress" => $data["ipaddress"],
-            "site_url" => $data["site_url"],
+            "client_orderid" => isset($data["client_orderid"])?$data["client_orderid"]:"",
+            "order_desc" => isset($data["order_desc"])?$data["order_desc"]:"Garan24 pay order",
+            "first_name" => isset($data["first_name"])?$data["first_name"]:"",
+            "last_name" => isset($data["last_name"])?$data["last_name"]:"",
+            "ssn" => isset($data["ssn"])?$data["ssn"]:"",
+            "birthday" => isset($data["birthday"])?$data["birthday"]:"",
+            "address1" => isset($data["address1"])?$data["address1"]:"",
+            "address2" => isset($data["address2"])?$data["address2"]:"",
+            "city" => isset($data["city"])?$data["city"]:"",
+            "state" => "",//isset($data["state"])?$data["state"]:"",
+            "zip_code" => isset($data["zip_code"])?$data["zip_code"]:"",
+            "country" => isset($data["country"])?$data["country"]:"",
+            "phone" => isset($data["phone"])?$data["phone"]:"",
+            "cell_phone" => isset($data["cell_phone"])?$data["cell_phone"]:"",
+            "amount" => isset($data["amount"])?$data["amount"]:"",
+            "currency" => isset($data["currency"])?$data["currency"]:"",
+            "email" => isset($data["email"])?$data["email"]:"",
+            "currency" => isset($data["currency"])?$data["currency"]:"",
+            "ipaddress" => isset($data["ipaddress"])?$data["ipaddress"]:"",
+            "site_url" => isset($data["site_url"])?$data["site_url"]:"",
             /*"credit_card_number" => "4444555566661111",
             "card_printed_name" => "CARD HOLDER",
             "expire_month" => "12",
@@ -255,7 +254,7 @@ class WebController extends Controller{
             "server_callback_url" => $this->_host."payoutcallback",
             //"merchant_data" => "VIP customer"
         ]);
-        $sale->setDebugMode(true);
+        $sale::setLogger(Log)
         try{
             $sale->call();
             $timeout = makeTimeout($timeout);
@@ -342,6 +341,20 @@ class WebController extends Controller{
         // Open the file using the HTTP headers set above
         $file = file_get_contents('http://www.plugin.garan24.ru/processpay', false, $context);
         return $file;
+    }
+    protected function parseParams(Request $rq){
+        $data = $rq->getContent();
+        $data = json_decode($data,true);
+        $log = "";
+        if(empty($data))$data = $rq->all();
+        foreach($data as $k=>$v){
+            if(empty($v))unset($data["{$k}"]);
+            else{
+                $log .= "{$k} = {$v}, ";
+            }
+        }
+        Log::debug($log);
+        return $data;
     }
 }
 ?>
