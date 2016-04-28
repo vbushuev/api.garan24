@@ -254,7 +254,7 @@ class WebController extends Controller{
             "server_callback_url" => $this->_host."payoutcallback",
             //"merchant_data" => "VIP customer"
         ]);
-        $sale::setLogger(Log)
+        $sale::setLogger(Log);
         try{
             $sale->call();
             $timeout = makeTimeout($timeout);
