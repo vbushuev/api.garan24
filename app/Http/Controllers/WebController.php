@@ -14,12 +14,12 @@ use WC_API_Client_Resource_Products;
 //use Garan24;
 //use Garan24\HTTP;
 use \Garan24\Garan24 as Garan24;
-use \Garan24\Gateway\Aruispay\Sale as AruisSale;
-use \Garan24\Gateway\Aruispay\Exception as AruispayException;
+use \Garan24\Gateway\Ariuspay\Sale as AriusSale;
+use \Garan24\Gateway\Ariuspay\Exception as AriuspayException;
 
 class WebController extends Controller{
     protected $wc_client;
-    protected $_host = "http://api.garan24.bs2/";
+    protected $_host = "https://garan24.ru/service/public/";
     protected function createProduct(WC_API_Client $client,$item){
         $resource = new WC_API_Client_Resource_Products($client);
         try{
@@ -221,7 +221,8 @@ class WebController extends Controller{
             "message" => "Protocol Error",
             "request" => $data
         ];
-        $sale = new AruisSale([
+        $amt = $this->exchangeRates(["amount"=>(isset($data["amount"])?$data["amount"]:0),"currency" => (isset($data["currency"])?$data["currency"]:"RUB")]);
+        $saleData = [
             "client_orderid" => isset($data["client_orderid"])?$data["client_orderid"]:"",
             "order_desc" => isset($data["order_desc"])?$data["order_desc"]:"Garan24 pay order",
             "first_name" => isset($data["first_name"])?$data["first_name"]:"",
@@ -236,10 +237,10 @@ class WebController extends Controller{
             "country" => isset($data["country"])?$data["country"]:"",
             "phone" => isset($data["phone"])?$data["phone"]:"",
             "cell_phone" => isset($data["cell_phone"])?$data["cell_phone"]:"",
-            "amount" => isset($data["amount"])?$data["amount"]:"",
-            "currency" => isset($data["currency"])?$data["currency"]:"",
+            "amount" => $amt["amount"],
+            "currency" => $amt["currency"],
             "email" => isset($data["email"])?$data["email"]:"",
-            "currency" => isset($data["currency"])?$data["currency"]:"",
+
             "ipaddress" => isset($data["ipaddress"])?$data["ipaddress"]:"",
             "site_url" => isset($data["site_url"])?$data["site_url"]:"",
             /*"credit_card_number" => "4444555566661111",
@@ -247,19 +248,27 @@ class WebController extends Controller{
             "expire_month" => "12",
             "expire_year" => "2099",
             "cvv2" => "123",*/
-            "purpose" => "www.twitch.tv/dreadztv",
+            "purpose" => "www.garan24.eu",
             "redirect_url" => $this->_host."payoutresponse",
             //"redirect_url" => "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]",
             //"redirect_url" => "https://arius.garan24.bs2/test/response.php",
             "server_callback_url" => $this->_host."payoutcallback",
             //"merchant_data" => "VIP customer"
-        ]);
-        $sale::setLogger(Log);
+        ];
+        $request = new \Garan24\Gateway\Ariuspay\SaleRequest($saleData);
+        $connector = new \Garan24\Gateway\Ariuspay\Connector();
+        $connector->setRequest($request);
         try{
-            $sale->call();
-            $timeout = makeTimeout($timeout);
-            while(!$sale->check()){
-                $timeout = makeTimeout($timeout);
+            $connector->call();
+            $response = $connector->getResponse();
+            if($response->isRedirect()){
+                //return redirect($response->getRedirectUrl());
+                return view("public/payout",[
+                    "content"=>[
+                        "text"=>"Для проведения оплаты Вам необходимо подготовить кредитную карту и нажмите продолжить."
+                        ,"url"=>$response->getRedirectUrl()
+                    ]
+                ]);
             }
         }
         catch(\Garan24\Gateway\Aruispay\Exception $e){
@@ -274,7 +283,53 @@ class WebController extends Controller{
     public function postPayoutresponse(Request $rq){
         $data = $rq->getContent();
         Log::debug("payoutresponse:".$data);
+        $dataArr = [];
+        parse_str($data,$dataArr);
+        $r = [
+            "url" => $_SERVER["HTTP_ORIGIN"],
+            "data" => $dataArr
+        ];
+        try{
+            $obj = new \Garan24\Gateway\Ariuspay\CallbackResponse($r,function($d){
+                //echo "Make order is payed.";
+                //echo \Garan24\Garan24::obj2str($d);
+                try{
+                    $consumer_key = "ck_0597b2b7f710f5e402f4e8cf90673f41588cbf89";
+                    $consumer_secret = "cs_45d3c2b094f683ca8a02834a6d2c6a1126573b7e";
+                    $domain = "https://garan24.ru";
+                    $options = [
+                        'debug'           => true,
+                    	'return_as_array' => false,
+                    	'validate_url'    => false,
+                    	'timeout'         => 30,
+                        'ssl_verify'      => false
+                    ];
+                    $client = new WC_API_Client( $domain, $consumer_key,$consumer_secret, $options );
+                    $resource = new WC_API_Client_Resource_Orders($client);
+                    $order = $resource->update_status($d["client_orderid"],"processing");
 
+                } catch ( Exception $e ) {
+
+                    $resp["code"] = $e->getCode();
+                    $resp["message"] = $e->getMessage();
+                    if ( $e instanceof WC_API_Client_HTTP_Exception ) {
+                        $resp["request"] = $e->get_request();
+                        $resp["response"] = $e->get_response();
+                    }
+                }
+            });
+            if($obj->accept()){
+                $crd = new \Garan24\Gateway\Ariuspay\CreateCardRef([
+                    'client_orderid' => $obj->client_orderid,
+                    'orderid' => $obj->orderid
+                ]);
+                $crd->call();
+            }
+        }
+        catch(\Garan24\Gateway\Ariuspay\Exception $e){
+            Log::error("Exception in AruisPay Response gateway:".$e->getMessage());
+        }
+        return view("public/payoutresponse");
     }
     public function getPayout(Request $rq){
         return $this->postPayout($rq);
@@ -355,6 +410,16 @@ class WebController extends Controller{
         }
         Log::debug($log);
         return $data;
+    }
+    protected function exchangeRates($d){
+        $rates=[
+            "USD" => 66.01,
+            "EUR" => 75,
+            "RUB" => 1
+        ];
+        $amount = $d["amount"];
+        $currency = $d["currency"];
+        return ["amount"=>$amount*$rates["{$currency}"],"currency"=>"RUB"];
     }
 }
 ?>

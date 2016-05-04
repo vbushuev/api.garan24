@@ -40,7 +40,8 @@ hr {
 .overlay {
   display: none;
 }
-button {
+button,
+.button {
   -webkit-border-radius: 0.2em;
   -moz-border-radius: 0.2em;
   border-radius: 0.2em;
@@ -56,15 +57,18 @@ button {
   margin: 0.1em;
   color: #96588a;
 }
-button :hover {
+button :hover,
+.button :hover {
   background-color: rgba(0,0,0,0.4);
 }
-button.highlighted {
+button.highlighted,
+.button.highlighted {
   background-color: #639e14;
   border: none;
   color: #fff;
 }
-button.highlighted :hover {
+button.highlighted :hover,
+.button.highlighted :hover {
   background-color: #639e14;
 }
 button.alert {
