@@ -8,7 +8,7 @@
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
         "garan":"*",
-        "garan-gateway-ariuspay":"*",
+        "garan-gateway-ariuspay":">=2.0",
         "woothemes/woocommerce-api": "^2.0"
     },
     "require-dev": {
@@ -70,11 +70,11 @@
             "type":"package",
             "package":{
                 "name":"garan-gateway-ariuspay",
-                "version":"1.0",
+                "version":"2.0",
                 "source":{
                     "type":"git",
                     "url":"https://github.com/vbushuev/gateway-ariuspay/",
-                    "reference":"release-1-0"
+                    "reference":"master"
                 },
                 "autoload":{
                     "psr-4": {"Garan24\\": "src"}
