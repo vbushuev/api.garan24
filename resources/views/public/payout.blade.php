@@ -16,7 +16,7 @@
     </div>
 <br /><br />
     <div class="form-group">
-        {{$content["text"]}}
+        <textarea></textarea>
     </div>
     <br />
     <div class="form-group">

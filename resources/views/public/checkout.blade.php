@@ -79,5 +79,5 @@
 </div>
 @endsection
 @section('scripts')
-<script src="/js/garan24.js"></script>
+<script src="js/garan24.js"></script>
 @endsection

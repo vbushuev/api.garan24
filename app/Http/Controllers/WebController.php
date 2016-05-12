@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Log;
+use DB;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use WC_API_Client;
@@ -43,8 +44,9 @@ class WebController extends Controller{
         ];
         return view('public.checkout',$vd);
     }
-    public function postProcesspay(Request $rq){
+    public function postProcesspay(Request $rq,$test_data){
         $order = $rq->getContent();
+        if(!empty($test_data))$order=$test_data;
         Log::debug($order);
         $order = json_decode($order,true);
         $resp = [
@@ -58,7 +60,7 @@ class WebController extends Controller{
          * Secret:  cs_4bbfa365ae1850f93f1144ebe666302315831ff0
          ******************************************************************/
         $domain = "http://garan24.ru";
-        if(!isset($order["x_key"])||!isset($order["order"])){
+        if((!isset($order["x_key"])||!isset($order["order"]))){
             Log::error("Protocol error ". json_encode($resp));
             return json_encode($resp);
         }
@@ -113,6 +115,21 @@ class WebController extends Controller{
             $data["order"]["line_items"]=$items;
             Log::debug("Create order ". json_encode($data));
             $resp=$resource->create($data)->http->response->body;
+            //make deal row
+            $shop = DB::table('woocommerce_api_keys')
+                ->join('shops','shops.api_key_id', '=','woocommerce_api_keys.key_id')
+                ->where('consumer_secret', $consumer_secret)->first();
+
+            DB::table('deals')->insert(
+                [
+                    'amount' => $resp["total"]*100,
+                    'currency' => $resp["currency"],
+                    'shop_id' => $shop->id,
+                    'status' => 'new',
+                    'internal_order_id' => $resp["id"],
+                    'external_order_id' => $order["order_id"]
+                ]
+            );
             //print_r($obj);
         } catch ( Exception $e ) {
 
@@ -127,7 +144,7 @@ class WebController extends Controller{
         return json_encode($resp);
     }
     public function getProcesspay(Request $rq){
-        return $this->postProcesspay($rq);
+        return $this->postProcesspay($rq,'{"x_secret":"cs_89f95570b4bd18759b8501cd16e4756ab03a544c","x_key":"ck_7575374a55d17741f3999e8c98725c6471030d6c","version":"1.0","order":{"payment_details":{"method_id":"garan24","method_title":"Garan24 Pay","paid":false},"billing_address":{"first_name":"\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440","last_name":"\u0411\u0443\u0448\u0443\u0435\u0432","address_1":"\u041c\u043e\u043b\u043e\u0434\u0446\u043e\u0432\u0430","city":"\u041c\u043e\u0441\u043a\u0432\u0430","state":"","postcode":"127221","country":"RU","phone":"9265766710","email":"yanusdnd@inbox.ru"},"line_items":{"65":{"name":"Jacket","type":"line_item","item_meta":{"_qty":["1"],"_tax_class":[""],"_product_id":["9"],"_variation_id":["0"],"_line_subtotal":["79"],"_line_total":["79"],"_line_subtotal_tax":["0"],"_line_tax":["0"],"_line_tax_data":["a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"]},"item_meta_array":{"427":{"key":"_qty","value":"1"},"428":{"key":"_tax_class","value":""},"429":{"key":"_product_id","value":"9"},"430":{"key":"_variation_id","value":"0"},"431":{"key":"_line_subtotal","value":"79"},"432":{"key":"_line_total","value":"79"},"433":{"key":"_line_subtotal_tax","value":"0"},"434":{"key":"_line_tax","value":"0"},"435":{"key":"_line_tax_data","value":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"qty":"1","tax_class":"","product_id":"9","variation_id":"0","line_subtotal":"79","line_total":"79","line_subtotal_tax":"0","line_tax":"0","line_tax_data":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"},"66":{"name":"Office package #1","type":"line_item","item_meta":{"_qty":["1"],"_tax_class":[""],"_product_id":["32"],"_variation_id":["0"],"_line_subtotal":["650"],"_line_total":["650"],"_line_subtotal_tax":["0"],"_line_tax":["0"],"_line_tax_data":["a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"]},"item_meta_array":{"436":{"key":"_qty","value":"1"},"437":{"key":"_tax_class","value":""},"438":{"key":"_product_id","value":"32"},"439":{"key":"_variation_id","value":"0"},"440":{"key":"_line_subtotal","value":"650"},"441":{"key":"_line_total","value":"650"},"442":{"key":"_line_subtotal_tax","value":"0"},"443":{"key":"_line_tax","value":"0"},"444":{"key":"_line_tax_data","value":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"qty":"1","tax_class":"","product_id":"32","variation_id":"0","line_subtotal":"650","line_total":"650","line_subtotal_tax":"0","line_tax":"0","line_tax_data":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"},"67":{"name":"Sofa design","type":"line_item","item_meta":{"_qty":["1"],"_tax_class":[""],"_product_id":["24"],"_variation_id":["0"],"_line_subtotal":["148"],"_line_total":["148"],"_line_subtotal_tax":["0"],"_line_tax":["0"],"_line_tax_data":["a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"]},"item_meta_array":{"445":{"key":"_qty","value":"1"},"446":{"key":"_tax_class","value":""},"447":{"key":"_product_id","value":"24"},"448":{"key":"_variation_id","value":"0"},"449":{"key":"_line_subtotal","value":"148"},"450":{"key":"_line_total","value":"148"},"451":{"key":"_line_subtotal_tax","value":"0"},"452":{"key":"_line_tax","value":"0"},"453":{"key":"_line_tax_data","value":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"qty":"1","tax_class":"","product_id":"24","variation_id":"0","line_subtotal":"148","line_total":"148","line_subtotal_tax":"0","line_tax":"0","line_tax_data":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"order_total":"877.00","order_currency":"EUR","customer_ip_address":"31.173.82.154","customer_user_agent":"Mozilla\/5.0 (Windows NT 10.0; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/50.0.2661.94 Safari\/537.36"}}');
         /*******************************************************************
          * Woo Commerce keys
          * Key:     ck_a060e095bdafdc57d95fb4df2d19aa9a2d671a91
@@ -148,8 +165,9 @@ class WebController extends Controller{
             $resource = new WC_API_Client_Resource_Orders($client);
             $data = [
                 "order"=> [
+                    "order_id" => '57',
                     "payment_details"=> [
-                        "method_id"=> "bacs",
+                        "method_id"=> "garan24",
                         "method_title"=> "Direct Bank Transfer",
                         "paid"=> true
                     ],
