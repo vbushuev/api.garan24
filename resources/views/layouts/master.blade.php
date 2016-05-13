@@ -32,7 +32,7 @@
         @yield('scripts')
         @if(isset($routeback))
         <script>
-            window.location = "{{$routeback}}";
+            document.location.href = "{{$routeback}}";
         </script>
         @endif
     </body>

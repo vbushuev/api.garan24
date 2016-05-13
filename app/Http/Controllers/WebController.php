@@ -45,10 +45,9 @@ class WebController extends Controller{
         return view('public.checkout',$vd);
     }
     public function postProcesspay(Request $rq,$test_data=""){
-        $order = $rq->getContent();
-        if(!empty($test_data))$order=$test_data;
+        $order = (!empty($test_data))?$test_data:$rq->getContent();
         Log::debug($order);
-        $order = json_decode($order,true);
+        $order = (substr($order,0,1)=="{")?json_decode($order,true):$rq->all();
         $resp = [
             "code" => "502",
             "message" => "Protocol Error",
@@ -113,7 +112,6 @@ class WebController extends Controller{
                 $items[]=$item;
             }
             $data["order"]["line_items"]=$items;
-
             $res=$resource->create($data);
             $resp = $res->http->response->body;
             //make deal row
@@ -131,7 +129,8 @@ class WebController extends Controller{
                     'shop_id' => $shop->id,
                     'status' => 1,
                     'internal_order_id' => $res->order->id,
-                    'external_order_id' => $data["order"]["order_id"]
+                    'external_order_id' => $data["order"]["order_id"],
+                    'external_order_url' => $data["order"]["order_url"]
                 ]
             );
             //print_r($obj);
@@ -144,8 +143,32 @@ class WebController extends Controller{
                 $resp["response"] = $e->get_response();
             }
         }
+        //need redirect to payneteasy
+
+        $payout_data = [
+            "amount"			=> 1,//$res->order->total,
+            "currency" 			=> "RUB",//$res->order->currency,
+            "client_orderid" 	=> $res->order->id,
+            "order_desc" 		=> "Financia for order ".$data["order"]["order_id"],
+            "first_name" 		=> $res->order->billing_address->first_name,
+            "last_name" 		=> $res->order->billing_address->last_name,
+            "address" 			=> $res->order->billing_address->address_1,
+            "address1" 			=> $res->order->billing_address->address_1,
+            "address2" 			=> $res->order->billing_address->address_2,
+            "city" 				=> $res->order->billing_address->city,
+            "state" 			=> $res->order->billing_address->state,
+            "zip_code" 			=> $res->order->billing_address->postcode,
+            "country" 			=> $res->order->billing_address->country,
+            "phone" 			=> $res->order->billing_address->phone,
+            "cell_phone"		=> $res->order->billing_address->phone,
+            "email" 			=> $res->order->billing_address->email,
+            "ipaddress" 		=> $res->order->customer_ip,
+            "site_url" 			=> $data["order"]["order_url"],
+            "purpose" 			=> $data["order"]["order_url"]
+        ];
         Log::debug(json_encode($resp));
-        return json_encode($resp);
+        return $this->postPayout($rq,$payout_data);
+        //return json_encode($resp);
     }
     public function getProcesspay(Request $rq){
         return $this->postProcesspay($rq,'{"x_secret":"cs_89f95570b4bd18759b8501cd16e4756ab03a544c","x_key":"ck_7575374a55d17741f3999e8c98725c6471030d6c","version":"1.0","order":{,"order_id":58,"payment_details":{"method_id":"garan24","method_title":"Garan24 Pay","paid":false},"billing_address":{"first_name":"\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440","last_name":"\u0411\u0443\u0448\u0443\u0435\u0432","address_1":"\u041c\u043e\u043b\u043e\u0434\u0446\u043e\u0432\u0430","city":"\u041c\u043e\u0441\u043a\u0432\u0430","state":"","postcode":"127221","country":"RU","phone":"9265766710","email":"yanusdnd@inbox.ru"},"line_items":{"65":{"name":"Jacket","type":"line_item","item_meta":{"_qty":["1"],"_tax_class":[""],"_product_id":["9"],"_variation_id":["0"],"_line_subtotal":["79"],"_line_total":["79"],"_line_subtotal_tax":["0"],"_line_tax":["0"],"_line_tax_data":["a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"]},"item_meta_array":{"427":{"key":"_qty","value":"1"},"428":{"key":"_tax_class","value":""},"429":{"key":"_product_id","value":"9"},"430":{"key":"_variation_id","value":"0"},"431":{"key":"_line_subtotal","value":"79"},"432":{"key":"_line_total","value":"79"},"433":{"key":"_line_subtotal_tax","value":"0"},"434":{"key":"_line_tax","value":"0"},"435":{"key":"_line_tax_data","value":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"qty":"1","tax_class":"","product_id":"9","variation_id":"0","line_subtotal":"79","line_total":"79","line_subtotal_tax":"0","line_tax":"0","line_tax_data":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"},"66":{"name":"Office package #1","type":"line_item","item_meta":{"_qty":["1"],"_tax_class":[""],"_product_id":["32"],"_variation_id":["0"],"_line_subtotal":["650"],"_line_total":["650"],"_line_subtotal_tax":["0"],"_line_tax":["0"],"_line_tax_data":["a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"]},"item_meta_array":{"436":{"key":"_qty","value":"1"},"437":{"key":"_tax_class","value":""},"438":{"key":"_product_id","value":"32"},"439":{"key":"_variation_id","value":"0"},"440":{"key":"_line_subtotal","value":"650"},"441":{"key":"_line_total","value":"650"},"442":{"key":"_line_subtotal_tax","value":"0"},"443":{"key":"_line_tax","value":"0"},"444":{"key":"_line_tax_data","value":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"qty":"1","tax_class":"","product_id":"32","variation_id":"0","line_subtotal":"650","line_total":"650","line_subtotal_tax":"0","line_tax":"0","line_tax_data":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"},"67":{"name":"Sofa design","type":"line_item","item_meta":{"_qty":["1"],"_tax_class":[""],"_product_id":["24"],"_variation_id":["0"],"_line_subtotal":["148"],"_line_total":["148"],"_line_subtotal_tax":["0"],"_line_tax":["0"],"_line_tax_data":["a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"]},"item_meta_array":{"445":{"key":"_qty","value":"1"},"446":{"key":"_tax_class","value":""},"447":{"key":"_product_id","value":"24"},"448":{"key":"_variation_id","value":"0"},"449":{"key":"_line_subtotal","value":"148"},"450":{"key":"_line_total","value":"148"},"451":{"key":"_line_subtotal_tax","value":"0"},"452":{"key":"_line_tax","value":"0"},"453":{"key":"_line_tax_data","value":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"qty":"1","tax_class":"","product_id":"24","variation_id":"0","line_subtotal":"148","line_total":"148","line_subtotal_tax":"0","line_tax":"0","line_tax_data":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"order_total":"877.00","order_currency":"EUR","customer_ip_address":"31.173.82.154","customer_user_agent":"Mozilla\/5.0 (Windows NT 10.0; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/50.0.2661.94 Safari\/537.36"}}');
@@ -236,8 +259,8 @@ class WebController extends Controller{
         }
         return json_encode($resp);
     }
-    public function postPayout(Request $rq){
-        $data = $this->parseParams($rq);
+    public function postPayout(Request $rq,$local=[]){
+        $data = count($local)?$local:$this->parseParams($rq);
         $resp = [
             "code" => "502",
             "message" => "Protocol Error",
@@ -284,7 +307,7 @@ class WebController extends Controller{
             $connector->call();
             $response = $connector->getResponse();
             if($response->isRedirect()){
-                //return redirect($response->getRedirectUrl());
+                return redirect()->away($response->getRedirectUrl());
                 return view("public/payout",[
                     "content"=>[
                         "text"=>"Для проведения оплаты Вам необходимо подготовить кредитную карту и нажмите продолжить."
@@ -311,6 +334,7 @@ class WebController extends Controller{
             "url" => $_SERVER["HTTP_ORIGIN"],
             "data" => $dataArr
         ];
+        $redirect_url = "";
         try{
             $obj = new \Garan24\Gateway\Ariuspay\CallbackResponse($r,function($d){
                 //echo "Make order is payed.";
@@ -329,9 +353,7 @@ class WebController extends Controller{
                     $client = new WC_API_Client( $domain, $consumer_key,$consumer_secret, $options );
                     $resource = new WC_API_Client_Resource_Orders($client);
                     $order = $resource->update_status($d["client_orderid"],"processing");
-
                 } catch ( Exception $e ) {
-
                     $resp["code"] = $e->getCode();
                     $resp["message"] = $e->getMessage();
                     if ( $e instanceof WC_API_Client_HTTP_Exception ) {
@@ -346,6 +368,12 @@ class WebController extends Controller{
                     'orderid' => $obj->orderid
                 ]);
                 $crd->call();
+                /* Check user have this card*/
+                // DB::table('garan24_usermeta')->exist
+                $deal = DB::table('deals')->where('internal_order_id', $obj->client_orderid)->first();
+                Log::debug("Deal is : ". json_encode($deal));
+                $redirect_url = $deal->external_order_url."&status=success&order_id=".$deal->external_order_id;
+                return redirect()->away($redirect_url);
             }
         }
         catch(\Garan24\Gateway\Ariuspay\Exception $e){
