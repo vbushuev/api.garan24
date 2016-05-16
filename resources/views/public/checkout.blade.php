@@ -8,27 +8,6 @@
 
 @section('content')
     <section>
-        <div class="title">Your order</div>
-        @if(isset($order) )
-            @foreach ($order as $item)
-                <div class="order-item">
-                    <span class="item-name">{{$item['name']}}</span>
-                    <span class="item-quantity">x{{$item['quantity']}}</span>
-                    <span class="item-dots">..........................</span>
-                    <span class="item-price">
-                        @if($item['currency']=='eur') <i class="fa fa-euro"></i>
-                        @elseif($item['currency']=='usd') <i class="fa fa-usd"></i>
-                        @elseif($item['currency']=='rub') <i class="fa fa-rub"></i>
-                        @endif
-                        {{$item['price']}}
-                    </span>
-                </div>
-            @endforeach
-        @else
-            No items in order
-        @endif
-    </section>
-    <section>
         <div class="title">
             Garan<sup>24</sup> Checkout
         </div>
@@ -37,10 +16,10 @@
             <input name="email" class="form-control email" type="text" placeholder="Email address">
         </div>
         <div class="input-group">
-            <span class="input-group-addon"><i class="fa fa-mobile fa-fw"></i></span>
+            <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
             <input name="phone" class="form-control phone" type="text" placeholder="Mobile phone">
         </div>
-        <div class="btn-group open">
+        <div class="btn-group">
             <a class="btn btn-primary" href="#"><i class="fa fa-globe fa-fw"></i> Country</a>
             <a class="btn btn-primary dropdown-toggle" data-toggle="dropdown" href="#">
                 <span class="fa fa-caret-down" title="Toggle dropdown menu"></span>
@@ -91,6 +70,27 @@
             <button>Pay Now</button>-->
         </div>
 
+    </section>
+    <section>
+        <div class="title">Your order</div>
+        @if(isset($order) )
+            @foreach ($order as $item)
+                <div class="order-item">
+                    <span class="item-name">{{$item['name']}}</span>
+                    <span class="item-quantity">x{{$item['quantity']}}</span>
+                    <span class="item-dots">..........................</span>
+                    <span class="item-price">
+                        @if($item['currency']=='eur') <i class="fa fa-euro"></i>
+                        @elseif($item['currency']=='usd') <i class="fa fa-usd"></i>
+                        @elseif($item['currency']=='rub') <i class="fa fa-rub"></i>
+                        @endif
+                        {{$item['price']}}
+                    </span>
+                </div>
+            @endforeach
+        @else
+            No items in order
+        @endif
     </section>
 @endsection
 @section('scripts')
