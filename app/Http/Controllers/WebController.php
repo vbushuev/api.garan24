@@ -20,9 +20,15 @@ use \Garan24\Gateway\Ariuspay\Exception as AriuspayException;
 
 class WebController extends Controller{
     protected $wc_client;
+    protected $request;
+    protected $response;
+    protected $customer;
+    protected $order;
+    protected $shop;
+    protected $deal;
     protected $_host = "https://garan24.ru/service/public/";
-    protected function createProduct(WC_API_Client $client,$item){
-        $resource = new WC_API_Client_Resource_Products($client);
+    protected function createProduct($item){
+        $resource = new WC_API_Client_Resource_Products($this->wc_client);
         try{
             $resp = $resource->get($item["product_id"]);
         }
@@ -45,133 +51,37 @@ class WebController extends Controller{
         return view('public.checkout',$vd);
     }
     public function postProcesspay(Request $rq,$test_data=""){
-        $order = (!empty($test_data))?$test_data:$rq->getContent();
-        Log::debug($order);
-        $order = (substr($order,0,1)=="{")?json_decode($order,true):$rq->all();
-        $resp = [
+        $order_rq = (!empty($test_data))?$test_data:$rq->getContent();
+        $this->request = (substr($order_rq,0,1)=="{")?json_decode($order_rq,true):$rq->all();
+        $this->response = [
             "code" => "502",
             "message" => "Protocol Error",
-            "request" => $order
+            "request" => $order_rq
         ];
-        /*******************************************************************
-         * Woo Commerce keys
-         * Key:     ck_a060e095bdafdc57d95fb4df2d19aa9a2d671a91
-         * Secret:  cs_4bbfa365ae1850f93f1144ebe666302315831ff0
-         ******************************************************************/
-        $domain = "http://garan24.ru";
-        if((!isset($order["x_key"])||!isset($order["order"]))){
-            Log::error("Protocol error ". json_encode($resp));
-            return json_encode($resp);
+        if((!isset($this->request["x_key"])||!isset($this->request["order"]))){
+            Log::error("Protocol error ". json_encode($this->response));
+            return json_encode($this->response);
         }
-        $consumer_key = $order["x_key"];
-        $consumer_secret = $order["x_secret"];
-        $options = [
-            'debug'           => true,
-        	'return_as_array' => false,
-        	'validate_url'    => false,
-        	'timeout'         => 30,
-            'ssl_verify'      => false
-        ];
+        Log::debug("Request :".json_encode($this->request));
         try {
-            $client = new WC_API_Client( $domain, $consumer_key,$consumer_secret, $options );
-            $resource = new WC_API_Client_Resource_Customers($client);
-            $user = false;
-            try{
-                $user = $resource->get_by_email($order["order"]["billing_address"]["email"]);
-            }
-            catch ( WC_API_Client_Exception $e ) {
-                //create user
-                $user = $resource->create([
-                    "customer"=>[
-                        "email"=>$order["order"]["billing_address"]["email"],
-                        "password"=>$order["order"]["billing_address"]["email"],
-                        "username"=>$order["order"]["billing_address"]["email"]
-                    ]
-                ]);
-            }
-            if($user===false) throw new Exception("Customers internal error", 500);
-            Log::debug("Customer ". json_encode($user));
-            $resource = new WC_API_Client_Resource_Orders($client);
-            $data=[
-                "order"=>$order["order"]
-            ];
-            $data["order"]["customer_id"] = $user->customer->id;
+            $this->getWC($rq);//new WC_API_Client( $domain, $consumer_key,$consumer_secret, $options );
+            $this->getCustomer($rq);
+            $this->createOrder($rq);
+            $this->createDeal($rq);
+            return $this->moveToPayout($rq);
 
-            $products = $data["order"]["line_items"];
-            $items=[];
-            foreach($products as $key => $val) {
-                $item=[];
-                $item["title"]=$products[$key]["name"];
-                $item["type"]="external";
-                $item["quantity"]=$products[$key]["qty"];
-                $item["regular_price"]=$products[$key]["line_subtotal"];
-                $item["product_id"]=$products[$key]["product_id"];
-                Log::debug("Product check ". json_encode($item));
-                $p = $this->createProduct($client,$item);
-                $item["product_id"] = $p->product->id;
-                $items[]=$item;
-            }
-            $data["order"]["line_items"]=$items;
-            $res=$resource->create($data);
-            $resp = $res->http->response->body;
-            //make deal row
-            $shop = DB::table('woocommerce_api_keys')
-                ->join('shops','shops.api_key_id', '=','woocommerce_api_keys.key_id')
-                ->where('consumer_secret', $consumer_secret)->first();
-            Log::debug("Create order ". json_encode($data));
-            Log::debug("Shop is : ". json_encode($shop));
-            Log::debug("resp is : ". json_encode($res));
-            Log::debug("Order is : ". json_encode($order));
-            DB::table('deals')->insert(
-                [
-                    'amount' => $res->order->total*100,
-                    'currency' => $res->order->currency,
-                    'shop_id' => $shop->id,
-                    'status' => 1,
-                    'internal_order_id' => $res->order->id,
-                    'external_order_id' => $data["order"]["order_id"],
-                    'external_order_url' => $data["order"]["order_url"]
-                ]
-            );
-            //print_r($obj);
         } catch ( Exception $e ) {
-
-            $resp["code"] = $e->getCode();
-            $resp["message"] = $e->getMessage();
+            $this->response["code"] = $e->getCode();
+            $this->response["message"] = $e->getMessage();
             if ( $e instanceof WC_API_Client_HTTP_Exception ) {
-                $resp["request"] = $e->get_request();
-                $resp["response"] = $e->get_response();
+                $this->response["request"] = $e->get_request();
+                $this->response["response"] = $e->get_response();
             }
         }
-        //need redirect to payneteasy
-
-        $payout_data = [
-            "amount"			=> 1,//$res->order->total,
-            "currency" 			=> "RUB",//$res->order->currency,
-            "client_orderid" 	=> $res->order->id,
-            "order_desc" 		=> "Financia for order ".$data["order"]["order_id"],
-            "first_name" 		=> $res->order->billing_address->first_name,
-            "last_name" 		=> $res->order->billing_address->last_name,
-            "address" 			=> $res->order->billing_address->address_1,
-            "address1" 			=> $res->order->billing_address->address_1,
-            "address2" 			=> $res->order->billing_address->address_2,
-            "city" 				=> $res->order->billing_address->city,
-            "state" 			=> $res->order->billing_address->state,
-            "zip_code" 			=> $res->order->billing_address->postcode,
-            "country" 			=> $res->order->billing_address->country,
-            "phone" 			=> $res->order->billing_address->phone,
-            "cell_phone"		=> $res->order->billing_address->phone,
-            "email" 			=> $res->order->billing_address->email,
-            "ipaddress" 		=> $res->order->customer_ip,
-            "site_url" 			=> $data["order"]["order_url"],
-            "purpose" 			=> $data["order"]["order_url"]
-        ];
-        Log::debug(json_encode($resp));
-        return $this->postPayout($rq,$payout_data);
-        //return json_encode($resp);
+        return json_encode($this->response);
     }
     public function getProcesspay(Request $rq){
-        return $this->postProcesspay($rq,'{"x_secret":"cs_89f95570b4bd18759b8501cd16e4756ab03a544c","x_key":"ck_7575374a55d17741f3999e8c98725c6471030d6c","version":"1.0","order":{,"order_id":58,"payment_details":{"method_id":"garan24","method_title":"Garan24 Pay","paid":false},"billing_address":{"first_name":"\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440","last_name":"\u0411\u0443\u0448\u0443\u0435\u0432","address_1":"\u041c\u043e\u043b\u043e\u0434\u0446\u043e\u0432\u0430","city":"\u041c\u043e\u0441\u043a\u0432\u0430","state":"","postcode":"127221","country":"RU","phone":"9265766710","email":"yanusdnd@inbox.ru"},"line_items":{"65":{"name":"Jacket","type":"line_item","item_meta":{"_qty":["1"],"_tax_class":[""],"_product_id":["9"],"_variation_id":["0"],"_line_subtotal":["79"],"_line_total":["79"],"_line_subtotal_tax":["0"],"_line_tax":["0"],"_line_tax_data":["a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"]},"item_meta_array":{"427":{"key":"_qty","value":"1"},"428":{"key":"_tax_class","value":""},"429":{"key":"_product_id","value":"9"},"430":{"key":"_variation_id","value":"0"},"431":{"key":"_line_subtotal","value":"79"},"432":{"key":"_line_total","value":"79"},"433":{"key":"_line_subtotal_tax","value":"0"},"434":{"key":"_line_tax","value":"0"},"435":{"key":"_line_tax_data","value":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"qty":"1","tax_class":"","product_id":"9","variation_id":"0","line_subtotal":"79","line_total":"79","line_subtotal_tax":"0","line_tax":"0","line_tax_data":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"},"66":{"name":"Office package #1","type":"line_item","item_meta":{"_qty":["1"],"_tax_class":[""],"_product_id":["32"],"_variation_id":["0"],"_line_subtotal":["650"],"_line_total":["650"],"_line_subtotal_tax":["0"],"_line_tax":["0"],"_line_tax_data":["a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"]},"item_meta_array":{"436":{"key":"_qty","value":"1"},"437":{"key":"_tax_class","value":""},"438":{"key":"_product_id","value":"32"},"439":{"key":"_variation_id","value":"0"},"440":{"key":"_line_subtotal","value":"650"},"441":{"key":"_line_total","value":"650"},"442":{"key":"_line_subtotal_tax","value":"0"},"443":{"key":"_line_tax","value":"0"},"444":{"key":"_line_tax_data","value":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"qty":"1","tax_class":"","product_id":"32","variation_id":"0","line_subtotal":"650","line_total":"650","line_subtotal_tax":"0","line_tax":"0","line_tax_data":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"},"67":{"name":"Sofa design","type":"line_item","item_meta":{"_qty":["1"],"_tax_class":[""],"_product_id":["24"],"_variation_id":["0"],"_line_subtotal":["148"],"_line_total":["148"],"_line_subtotal_tax":["0"],"_line_tax":["0"],"_line_tax_data":["a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"]},"item_meta_array":{"445":{"key":"_qty","value":"1"},"446":{"key":"_tax_class","value":""},"447":{"key":"_product_id","value":"24"},"448":{"key":"_variation_id","value":"0"},"449":{"key":"_line_subtotal","value":"148"},"450":{"key":"_line_total","value":"148"},"451":{"key":"_line_subtotal_tax","value":"0"},"452":{"key":"_line_tax","value":"0"},"453":{"key":"_line_tax_data","value":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"qty":"1","tax_class":"","product_id":"24","variation_id":"0","line_subtotal":"148","line_total":"148","line_subtotal_tax":"0","line_tax":"0","line_tax_data":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"order_total":"877.00","order_currency":"EUR","customer_ip_address":"31.173.82.154","customer_user_agent":"Mozilla\/5.0 (Windows NT 10.0; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/50.0.2661.94 Safari\/537.36"}}');
+        return $this->postProcesspay($rq,'{"x_secret":"cs_89f95570b4bd18759b8501cd16e4756ab03a544c","x_key":"ck_7575374a55d17741f3999e8c98725c6471030d6c","version":"1.0","order":{"order_url":"http://demostore.garan24.ru","order_id":58,"payment_details":{"method_id":"garan24","method_title":"Garan24 Pay","paid":false},"billing_address":{"first_name":"\u0412\u043b\u0430\u0434\u0438\u043c\u0438\u0440","last_name":"\u0411\u0443\u0448\u0443\u0435\u0432","address_1":"\u041c\u043e\u043b\u043e\u0434\u0446\u043e\u0432\u0430","city":"\u041c\u043e\u0441\u043a\u0432\u0430","state":"","postcode":"127221","country":"RU","phone":"9265766710","email":"yanusdnd@inbox.ru"},"line_items":{"65":{"name":"Jacket","type":"line_item","item_meta":{"_qty":["1"],"_tax_class":[""],"_product_id":["9"],"_variation_id":["0"],"_line_subtotal":["79"],"_line_total":["79"],"_line_subtotal_tax":["0"],"_line_tax":["0"],"_line_tax_data":["a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"]},"item_meta_array":{"427":{"key":"_qty","value":"1"},"428":{"key":"_tax_class","value":""},"429":{"key":"_product_id","value":"9"},"430":{"key":"_variation_id","value":"0"},"431":{"key":"_line_subtotal","value":"79"},"432":{"key":"_line_total","value":"79"},"433":{"key":"_line_subtotal_tax","value":"0"},"434":{"key":"_line_tax","value":"0"},"435":{"key":"_line_tax_data","value":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"qty":"1","tax_class":"","product_id":"9","variation_id":"0","line_subtotal":"79","line_total":"79","line_subtotal_tax":"0","line_tax":"0","line_tax_data":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"},"66":{"name":"Office package #1","type":"line_item","item_meta":{"_qty":["1"],"_tax_class":[""],"_product_id":["32"],"_variation_id":["0"],"_line_subtotal":["650"],"_line_total":["650"],"_line_subtotal_tax":["0"],"_line_tax":["0"],"_line_tax_data":["a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"]},"item_meta_array":{"436":{"key":"_qty","value":"1"},"437":{"key":"_tax_class","value":""},"438":{"key":"_product_id","value":"32"},"439":{"key":"_variation_id","value":"0"},"440":{"key":"_line_subtotal","value":"650"},"441":{"key":"_line_total","value":"650"},"442":{"key":"_line_subtotal_tax","value":"0"},"443":{"key":"_line_tax","value":"0"},"444":{"key":"_line_tax_data","value":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"qty":"1","tax_class":"","product_id":"32","variation_id":"0","line_subtotal":"650","line_total":"650","line_subtotal_tax":"0","line_tax":"0","line_tax_data":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"},"67":{"name":"Sofa design","type":"line_item","item_meta":{"_qty":["1"],"_tax_class":[""],"_product_id":["24"],"_variation_id":["0"],"_line_subtotal":["148"],"_line_total":["148"],"_line_subtotal_tax":["0"],"_line_tax":["0"],"_line_tax_data":["a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"]},"item_meta_array":{"445":{"key":"_qty","value":"1"},"446":{"key":"_tax_class","value":""},"447":{"key":"_product_id","value":"24"},"448":{"key":"_variation_id","value":"0"},"449":{"key":"_line_subtotal","value":"148"},"450":{"key":"_line_total","value":"148"},"451":{"key":"_line_subtotal_tax","value":"0"},"452":{"key":"_line_tax","value":"0"},"453":{"key":"_line_tax_data","value":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"qty":"1","tax_class":"","product_id":"24","variation_id":"0","line_subtotal":"148","line_total":"148","line_subtotal_tax":"0","line_tax":"0","line_tax_data":"a:2:{s:5:\"total\";a:0:{}s:8:\"subtotal\";a:0:{}}"}},"order_total":"877.00","order_currency":"EUR","customer_ip_address":"31.173.82.154","customer_user_agent":"Mozilla\/5.0 (Windows NT 10.0; WOW64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/50.0.2661.94 Safari\/537.36"}}');
         /*******************************************************************
          * Woo Commerce keys
          * Key:     ck_a060e095bdafdc57d95fb4df2d19aa9a2d671a91
@@ -188,8 +98,8 @@ class WebController extends Controller{
             'ssl_verify'      => false
         ];
         try {
-            $client = new WC_API_Client( $domain, $consumer_key,$consumer_secret, $options );
-            $resource = new WC_API_Client_Resource_Orders($client);
+            $this->wc_client = new WC_API_Client( $domain, $consumer_key,$consumer_secret, $options );
+            $resource = new WC_API_Client_Resource_Orders($this->wc_client);
             $data = [
                 "order"=> [
                     "order_id" => '57',
@@ -241,7 +151,7 @@ class WebController extends Controller{
                 ]
             ];
             for($i=0;$i<count($products);$i++) {
-                $p = $this->createProduct($client,$products[$i]);
+                $p = $this->createProduct($products[$i]);
                 $products[$i]["product_id"] = $p->product->id;
             }
             $data = array_merge($data,$products);
@@ -368,9 +278,23 @@ class WebController extends Controller{
                     'orderid' => $obj->orderid
                 ]);
                 $crd->call();
+                $key = "card-ref-id";
+                $cardref =  $crd->getResponse()->$key;
+                //$crd->getResponse()->
                 /* Check user have this card*/
                 // DB::table('garan24_usermeta')->exist
                 $deal = DB::table('deals')->where('internal_order_id', $obj->client_orderid)->first();
+                $usercard = DB::table("garan24_usermeta")
+                        ->where('user_id',$deal->customer_id)
+                        ->where('value_key','card-ref')
+                        ->where('value_data',$cardref)
+                        ->first();
+
+                if(is_null($usercard)){
+                    DB::table("garan24_usermeta")
+                            ->insert(['user_id'=>$deal->customer_id,'value_key'=>'card-ref','value_data'=>$cardref]);
+                }
+
                 Log::debug("Deal is : ". json_encode($deal));
                 $redirect_url = $deal->external_order_url."&status=success&order_id=".$deal->external_order_id;
                 return redirect()->away($redirect_url);
@@ -470,6 +394,111 @@ class WebController extends Controller{
         $amount = $d["amount"];
         $currency = $d["currency"];
         return ["amount"=>$amount*$rates["{$currency}"],"currency"=>"RUB"];
+    }
+    protected function getCustomer(Request $rq){
+        $resource = new WC_API_Client_Resource_Customers($this->wc_client);
+        try{
+            $this->customer = $resource->get_by_email($this->request["order"]["billing_address"]["email"]);
+        }
+        catch ( WC_API_Client_Exception $e ) {
+            //create user
+            $this->customer = $resource->create([
+                "customer"=>[
+                    "email"=>$this->request["order"]["billing_address"]["email"],
+                    "password"=>$this->request["order"]["billing_address"]["email"],
+                    "username"=>$this->request["order"]["billing_address"]["email"]
+                ]
+            ]);
+        }
+        if($this->customer===false) throw new Exception("Customers internal error", 500);
+        Log::debug("Customer ". json_encode($this->customer));
+    }
+    protected function createOrder(Request $rq){
+        $resource = new WC_API_Client_Resource_Orders($this->wc_client);
+        $data=[
+            "order"=>$this->request["order"]
+        ];
+        $data["order"]["customer_id"] = $this->customer->customer->id;
+        $products = $data["order"]["line_items"];
+        $items=[];
+        foreach($products as $key => $val) {
+            $item=[];
+            $item["title"]=$products[$key]["name"];
+            $item["type"]="external";
+            $item["quantity"]=$products[$key]["qty"];
+            $item["regular_price"]=$products[$key]["line_subtotal"];
+            $item["product_id"]=$products[$key]["product_id"];
+            Log::debug("Product check ". json_encode($item));
+            $p = $this->createProduct($item);
+            $item["product_id"] = $p->product->id;
+            $items[]=$item;
+        }
+        $data["order"]["line_items"]=$items;
+        $this->order=$resource->create($data);
+        Log::debug("Order is : ". json_encode($this->order->http->response->body));
+    }
+    protected function getShop(Request $rq){
+        $consumer_secret = $this->request["x_secret"];
+        Log::debug("Secret is : ". $consumer_secret);
+        $this->shop = DB::table('woocommerce_api_keys')
+            ->join('shops','shops.api_key_id', '=','woocommerce_api_keys.key_id')
+            ->where('consumer_secret', $consumer_secret)->first();
+        Log::debug("Shop is : ". json_encode($this->shop));
+    }
+    protected function createDeal(Request $rq){
+        DB::table('deals')->insert(
+            [
+                'amount' => $this->order->order->total*100,
+                'currency' => $this->order->order->currency,
+                'shop_id' => $this->shop->id,
+                'status' => 1,
+                'internal_order_id' => $this->order->order->id,
+                'external_order_id' => $this->request["order"]["order_id"],
+                'external_order_url' => $this->request["order"]["order_url"],
+                'customer_id' => $this->customer->customer->id
+            ]
+        );
+    }
+    protected function getWC(Request $rq){
+        $this->getShop($rq);
+        $domain ="https://garan24.ru";//$this->shop->link;
+        $consumer_key = $this->request["x_key"];
+        $consumer_secret = $this->request["x_secret"];
+        $options = [
+            'debug'           => true,
+        	'return_as_array' => false,
+        	'validate_url'    => false,
+        	'timeout'         => 30,
+            'ssl_verify'      => false
+        ];
+        $this->wc_client = new WC_API_Client( $domain, $consumer_key,$consumer_secret, $options );
+    }
+    protected function moveToPayout(Request $rq){
+        $res = $this->order;
+        $data = $this->request;
+        //need redirect to payneteasy
+        $payout_data = [
+            "amount"			=> 1,//$res->order->total,
+            "currency" 			=> "RUB",//$res->order->currency,
+            "client_orderid" 	=> $res->order->id,
+            "order_desc" 		=> "Financia for order ".$data["order"]["order_id"],
+            "first_name" 		=> $res->order->billing_address->first_name,
+            "last_name" 		=> $res->order->billing_address->last_name,
+            "address" 			=> $res->order->billing_address->address_1,
+            "address1" 			=> $res->order->billing_address->address_1,
+            "address2" 			=> $res->order->billing_address->address_2,
+            "city" 				=> $res->order->billing_address->city,
+            "state" 			=> $res->order->billing_address->state,
+            "zip_code" 			=> $res->order->billing_address->postcode,
+            "country" 			=> $res->order->billing_address->country,
+            "phone" 			=> $res->order->billing_address->phone,
+            "cell_phone"		=> $res->order->billing_address->phone,
+            "email" 			=> $res->order->billing_address->email,
+            "ipaddress" 		=> $res->order->customer_ip,
+            "site_url" 			=> $data["order"]["order_url"],
+            "purpose" 			=> $data["order"]["order_url"]
+        ];
+        return $this->postPayout($rq,$payout_data);
     }
 }
 ?>

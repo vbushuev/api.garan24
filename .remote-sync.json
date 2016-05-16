@@ -1,0 +1,16 @@
+{
+  "uploadOnSave": true,
+  "useAtomicWrites": false,
+  "deleteLocal": false,
+  "hostname": "nkofrs.ru",
+  "port": "21",
+  "target": "/var/www/u0173919/data/www/garan24.ru/service",
+  "ignore": [
+    ".git/*",
+    "vendor/*"
+  ],
+  "username": "u0173919",
+  "password": "Mx7D6_pq",
+  "watch": [],
+  "transport": "ftp"
+}

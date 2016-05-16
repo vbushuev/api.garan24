@@ -1,10 +1,10 @@
 @import url("//fonts.googleapis.com/css?family=Lato:400,100");
-@import url("//fonts.googleapis.com/css?family=Roboto+Mono:400,100&subset=latin,cyrillic");
+@import url("//fonts.googleapis.com/css?family=Roboto+Mono:800,400,100&subset=latin,cyrillic");
 @import url("//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
 * {
   font-weight: 100;
   font-family: 'Lato', 'Roboto Mono';
-  font-size: 20px;
+  font-size: 18pt;
 }
 html,
 body {
@@ -24,9 +24,6 @@ a {
   color: rgba(150,88,138,0.75);
   font-weight: 700;
 }
-a:hover {
-  color: #96588a;
-}
 hr {
   color: rgba(0,0,0,0.4);
   margin: 0.2em 35% 1em 35%;
@@ -40,96 +37,72 @@ hr {
 .overlay {
   display: none;
 }
-button,
 .button {
   -webkit-border-radius: 0.2em;
   -moz-border-radius: 0.2em;
   border-radius: 0.2em;
-  font-size: 12pt;
-  font-weight: 400;
+  font-size: 11pt;
+  font-weight: 100;
   display: inline-block;
+  text-align: center;
   cursor: pointer;
-  background-color: rgba(255,255,255,0.75);
-  border: solid #639e14 1px;
-  width: 8em;
+  width: 14em;
   height: 2.2em;
   line-height: 2.2em;
-  margin: 0.1em;
-  color: #96588a;
+  margin: 0.4em;
+  text-transform: uppercase;
+  color: #639e14;
+  border: solid #639e14 1px;
+  background-color: #fff;
+  text-decoration: none;
 }
-button :hover,
-.button :hover {
-  background-color: rgba(0,0,0,0.4);
-}
-button.highlighted,
-.button.highlighted {
+.button:hover {
   background-color: #639e14;
-  border: none;
+  border: solid #fff 1px;
   color: #fff;
 }
-button.highlighted :hover,
-.button.highlighted :hover {
-  background-color: #639e14;
-}
-button.alert {
-  background-color: rgba(255,0,0,0.75);
-  color: #fff;
-}
-button.alert :hover {
+.button.alert {
   background-color: #f00;
+  border: solid #f00 1px;
+  color: #fff;
+}
+.button.alert:hover {
+  background-color: #fff;
+  color: #f00;
 }
 input,
 select {
   -webkit-border-radius: 0.2em;
   -moz-border-radius: 0.2em;
   border-radius: 0.2em;
+  font-family: Roboto-Mono;
+  font-weight: 100;
   display: inline-block;
   font-size: 12pt;
-  border: solid 1px #808080;
+  border: solid rgba(0,0,0,0.2) 1px;
   width: 14em;
-  height: 2.2em;
-  line-height: 2.2em;
-  margin: 0.1em;
-  padding-left: 0.02em;
-  color: #96588a;
+  height: 1.8em;
+  line-height: 1.8em;
+  padding-left: 0.2em;
+  color: rgba(0,0,0,0.7);
   position: relative;
 }
-.alert {
-  border: solid 2px rgba(255,0,0,0.8);
-  background-color: rgba(0,255,0,0.3);
+label {
+  display: block;
+  font-family: Roboto-Mono;
+  font-size: 10pt;
+  text-transform: uppercase;
+  color: rgba(0,0,0,0.7);
+  margin-bottom: 0.2em;
 }
-.required {
-  font-weight: 400;
+.required label {
+  font-weight: 800;
 }
-input.email::before {
-  content: "EMAIL:";
+.required label:after {
+  content: "*";
 }
-input.address-line {
-  width: 18em;
-}
-input.city,
-input.state {
-  width: 6em;
-}
-input.postcode {
-  width: 6em;
-}
-select.country {
-  width: 8em;
-}
-select.titles {
-  width: 4em;
-  font-size: 12pt;
-}
-.form-submit {
-  margin: 1em;
-  text-align: center;
-}
-.disabled {
-  position: relative;
-}
-#foward {
-  float: right;
+.input-group {
+  margin: 0 0.6em 0.6em 0;
 }
 .container .sidebar {
   width: 100%;
@@ -152,8 +125,16 @@ select.titles {
   display: inline-block;
   width: 100%;
 }
-.container .content .title {
-  font-size: 96px;
+.container .content section {
+  padding: 1em;
+  width: 60%;
+  margin: 0 20% 2em 20%;
+  text-align: left;
+}
+.container .content section .title {
+  font-size: 32pt;
+  margin-bottom: 0.6em;
+  border-bottom: solid rgba(0,0,0,0.2) 1px;
 }
 .container .columns {
   display: inline-block;
@@ -161,7 +142,7 @@ select.titles {
 .container .columns .title {
   font-size: 28px;
   border-bottom: solid 1px #808080;
-  margin-bottom: 1em;
+  margin-bottom: 2em;
   padding-bottom: 0.6em;
 }
 .container .col-left,
