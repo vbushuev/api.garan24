@@ -37,10 +37,28 @@ hr {
 .overlay {
   display: none;
 }
+.nodisplay {
+  display: none;
+}
+i {
+  font-style: normal;
+}
+.smaller {
+  font-size: 80%;
+}
+.bigger {
+  font-size: 120%;
+}
+.garan24-red {
+  color: #d50000;
+}
+.garan24-blue {
+  color: #2962ff;
+}
 .button {
-  -webkit-border-radius: 0.2em;
-  -moz-border-radius: 0.2em;
-  border-radius: 0.2em;
+  -webkit-border-radius: 0.4em;
+  -moz-border-radius: 0.4em;
+  border-radius: 0.4em;
   font-size: 11pt;
   font-weight: 100;
   display: inline-block;
@@ -49,12 +67,12 @@ hr {
   width: 14em;
   height: 2.2em;
   line-height: 2.2em;
-  margin: 0.4em;
+  margin: 0 0.4em 0.4em 0;
   text-transform: uppercase;
   color: #639e14;
   border: solid #639e14 1px;
   background-color: #fff;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 .button:hover {
   background-color: #639e14;
@@ -104,6 +122,20 @@ label {
 .input-group {
   margin: 0 0.6em 0.6em 0;
 }
+.input-form {
+  -webkit-border-radius: 0.4em;
+  -moz-border-radius: 0.4em;
+  border-radius: 0.4em;
+  background-color: rgba(0,0,0,0.05);
+  border: solid 1px rgba(0,0,0,0.1);
+  margin: 0;
+  padding: 0.5em;
+}
+.input-form h3 {
+  margin: 0 0 0.4em 0;
+  color: rgba(0,0,0,0.7);
+  font-family: 'Roboto Mono';
+}
 .container .sidebar {
   width: 100%;
   height: 120px;
@@ -132,9 +164,30 @@ label {
   text-align: left;
 }
 .container .content section .title {
-  font-size: 32pt;
+  font-size: 36pt;
   margin-bottom: 0.6em;
   border-bottom: solid rgba(0,0,0,0.2) 1px;
+}
+.container .content section table.review-order {
+  -webkit-border-radius: 0.4em;
+  -moz-border-radius: 0.4em;
+  border-radius: 0.4em;
+  border: 1px solid rgba(0,0,0,0.1);
+  text-align: center;
+  width: 100%;
+  border-collapse: separate;
+}
+.container .content section table.review-order tr th {
+  padding: 0.2em;
+}
+.container .content section table.review-order tr td {
+  border: 1px solid rgba(0,0,0,0.1);
+  padding: 0.4em;
+  font-family: 'Roboto Mono';
+  font-size: 80%;
+}
+.container .content section table.review-order tr td .fa {
+  color: #639e14;
 }
 .container .columns {
   display: inline-block;

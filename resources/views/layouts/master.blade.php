@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Portal - @yield('title')</title>
+        <title>Garan24 - @yield('title')</title>
         <link href="css/img/favicon.png" rel="icon" type="image/x-icon">
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
         <!-- Latest compiled and minified CSS -->
@@ -27,11 +27,13 @@
 
         <div class="overlay"></div>
         <script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+        <script src="js/jquery-ui.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
         <script src="js/jquery.color.js"></script>
+        <script src="js/jquery.redirect.js"></script>
         <script src="js/jquery.maskedinput.min.js"></script>
-        <script src="js/garan.js"></script>
+        <!--<script src="js/garan.js"></script>-->
         <script src="js/responsibility.js"></script>
         @yield('scripts')
         @if(isset($routeback))

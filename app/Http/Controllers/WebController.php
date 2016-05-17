@@ -42,8 +42,8 @@ class WebController extends Controller{
     }
     public function getCheckout(Request $rq){
         $order = $rq->input('order',[
-            ['name' => 'jacket','price' => '79','currency'=>'eur','quantity' => '1'],
-            ['name' => 'window','price' => '229','currency'=>'eur','quantity' => '3']
+            ['img'=>'http://demostore.garan24.ru/wp-content/uploads/2016/04/jacket-180x180.jpg','name' => 'jacket','price' => '79','currency'=>'rub','quantity' => '1'],
+            ['img'=>'http://demostore.garan24.ru/wp-content/uploads/2016/04/x._V293494175_-300x300.jpg','name' => 'Shoes','price' => '129','currency'=>'rub','quantity' => '3']
         ]);
         $vd = [
             'order' => $order
@@ -307,6 +307,9 @@ class WebController extends Controller{
     }
     public function getPayout(Request $rq){
         return $this->postPayout($rq);
+    }
+    public function getTest(Request $rq){
+        return view("public/test");
     }
     public function getTestwoo(Request $rq){
         /*******************************************************************

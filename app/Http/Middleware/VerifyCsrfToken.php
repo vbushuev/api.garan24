@@ -14,6 +14,7 @@ class VerifyCsrfToken extends BaseVerifier
     protected $except = [
         "/processpay",
         "/payout",
+        "/checkout",
         "/payoutresponse",
         "/payoutcallback"
     ];
