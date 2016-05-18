@@ -12,6 +12,8 @@
 */
 
 //Route::get('/', function () {return view('welcome');});
+
 Route::resource('customer', 'GaranCustomerController');
 Route::resource('order', 'GaranOrderController');
+Route::controller('magnitolkin', 'MagnitolkinController');
 Route::controller('/', 'WebController');

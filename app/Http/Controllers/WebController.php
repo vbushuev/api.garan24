@@ -27,16 +27,7 @@ class WebController extends Controller{
     protected $shop;
     protected $deal;
     protected $_host = "https://garan24.ru/service/public/";
-    protected function createProduct($item){
-        $resource = new WC_API_Client_Resource_Products($this->wc_client);
-        try{
-            $resp = $resource->get($item["product_id"]);
-        }
-        catch(WC_API_Client_Exception $e){
-            $resp = $resource->create(["product"=> $item]);
-        }
-        return $resp;
-    }
+
     public function getIndex(Request $rq){
         return view('public.index');
     }
@@ -502,6 +493,16 @@ class WebController extends Controller{
             "purpose" 			=> $data["order"]["order_url"]
         ];
         return $this->postPayout($rq,$payout_data);
+    }
+    protected function createProduct($item){
+        $resource = new WC_API_Client_Resource_Products($this->wc_client);
+        try{
+            $resp = $resource->get($item["product_id"]);
+        }
+        catch(WC_API_Client_Exception $e){
+            $resp = $resource->create(["product"=> $item]);
+        }
+        return $resp;
     }
 }
 ?>
