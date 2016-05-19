@@ -26,6 +26,9 @@ class MagnitolkinController extends Controller{
     public function getPaymethod(Request $rq){
         return view('magnitolkin.cart.paymethod');
     }
+    public function getDeliverypaymethod(Request $rq){
+        return view('magnitolkin.cart.deliverypaymethod');
+    }
     public function getThanks(Request $rq){
         return view('magnitolkin.cart.thankspage');
     }

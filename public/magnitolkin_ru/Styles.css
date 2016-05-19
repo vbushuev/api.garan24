@@ -115,7 +115,9 @@ ul.clear { list-style-type: none; padding: 0; margin: 0 0 0 10px; }
 #TopNewsList .details_link { display: block; margin-top: 5px; font-size: 0.8em; }
 #TopNewsList h3 { margin-top: 0; font-weight: bold; font-size: 0.9em; }
 
-#InnerContent {  text-align: left;margin-top: 20px; width: 820px; }
+
+#InnerContent { float: left; margin-left: 70px; margin-top: 20px; width: 820px; }
+#InnerContent2 {  text-align: left;margin-top: 20px; width: 820px; }
 
 #ShopItemDescription { font-family: "Times New Roman", serif !important; font-size: 16px; margin-top: 20px; }
 

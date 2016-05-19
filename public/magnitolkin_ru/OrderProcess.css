@@ -15,8 +15,18 @@
 #order-options #delivery .notice .comment { margin-left: 10px; margin-top: 5px; float: left; }
 #order-options #delivery .notice .section_type_header { color: #f00603; font-size: 24px; }
 #order-options #delivery .notice .section_type_comment { color: #d0d0d0; font-size: 12px; width: 250px; }
-#order-options #delivery #delivery_types { padding: 0; margin: 5px 0; width: 320px; float: left; }
+
+#order-options #delivery .notice.right { width: 320px; float: right; min-height: 80px; margin-right: 40px; border:none;}
+#order-options #delivery .notice .icon { width: 40px; float: left; }
+#order-options #delivery .notice .comment { margin-left: 10px; margin-top: 5px; float: left; }
+#order-options #delivery .notice .section_type_header { color: #f00603; font-size: 24px; }
+#order-options #delivery .notice .section_type_comment { color: #d0d0d0; font-size: 12px; width: 250px; }
+
+#order-options #delivery #delivery_types { padding: 0; margin: 5px 0; width: 320px; float: right; }
 #order-options #delivery #delivery_types .selected { font-weight: bold; }
+
+#order-options #delivery #payment_types { padding: 0; margin: 5px 0; width: 320px; float: left; }
+#order-options #delivery #payment_types .selected { font-weight: bold; }
 
 #delivery-calculator { width: 220px; margin-top: 30px; float: right; }
 #delivery-calculator .heading { font-size: 14px; font-weight: bold; color: #ffffff; background-color: #555555; text-shadow: 1px 1px 1px #000; text-align: center; height: 25px; }

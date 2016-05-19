@@ -16,6 +16,8 @@
 	<link rel="stylesheet" href="../magnitolkin_ru/bootstrap-theme.min.css">
 	<script type="text/javascript" src="../magnitolkin_ru/bootstrap.min.js"></script>
 	<script type="text/javascript" src="../magnitolkin_ru/openapi.js"></script>
+	<script type="text/javascript" src="../js/api/1.0/garan24.core.js"></script>
+	<script type="text/javascript" src="../js/api/1.0/garan24.delivery.js"></script>
 	<script type="text/javascript">
     	VK.init({ apiId: 2755072, onlyWidgets: true });
 	</script>
@@ -82,7 +84,7 @@
 
         </div>
         <div id="OuterContent" style="text-align:center;">
-            <div id="InnerContent" style="display:inline-block;">
+            <div id="InnerContent2" style="display:inline-block;">
 				@yield('content')
 			</div>
 				<div class="clearfix"></div>

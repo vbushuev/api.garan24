@@ -1,4 +1,4 @@
-var garan = {
+window.garan = {
     customer:{
         display:function(){
 
