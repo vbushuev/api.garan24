@@ -31,6 +31,9 @@ class WebController extends Controller{
     public function getIndex(Request $rq){
         return view('public.index');
     }
+    public function getPayneteasy(Request $rq){
+        return view('payneteasy.index');
+    }
     public function getCheckout(Request $rq){
         $order = $rq->input('order',[
             ['img'=>'http://demostore.garan24.ru/wp-content/uploads/2016/04/jacket-180x180.jpg','name' => 'jacket','price' => '79','currency'=>'rub','quantity' => '1'],

@@ -12,14 +12,8 @@
             Garan<sup><i class="garan24-blue">2</i><i class="garan24-red">4</i></sup> <i class="smaller">checkout</i>
         </div>
         <div id="alert-field" class="alert alert-success nodisplay" role="alert">The field email is required!!!</div>
-        <div class="input-group required">
-            <span class="input-group-addon"><i class="fa fa-envelope-o fa-fw"></i></span>
-            <input name="email" class="form-control email" type="text" placeholder="Email address">
-        </div>
-        <div class="input-group required">
-            <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
-            <input name="phone" class="form-control phone" type="text" placeholder="Mobile phone">
-        </div>
+        @include('elements.inputs.email')
+        @include('elements.inputs.mobile')
         <div class="input-form nodisplay register">
             <h3>Your personal info</h3>
             <div class="row">
@@ -77,51 +71,7 @@
             </div>
         </div>
     </section>
-    @if(isset($order) )
-    <section>
-        <div class="title">Your order</div>
-        <table class="review-order">
-            <tr>
-                <th>&nbsp;</th>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-            </tr>
-            @foreach ($order as $item)
-                <tr>
-                    <td>@if(isset($item['img']))
-                            <img src="{{$item['img']}}" alt="{{$item['name']}}" width="48px"/>
-                        @else
-                            &nbsp;
-                        @endif
-                    </td>
-                    <td>{{$item['name']}}</td>
-                    <td>
-                        @if($item['currency']=='eur') <i class="fa fa-euro"></i>
-                        @elseif($item['currency']=='usd') <i class="fa fa-usd"></i>
-                        @elseif($item['currency']=='rub') <i class="fa fa-rub"></i>
-                        @endif
-                        {{$item['price']}}
-                    </td>
-                    <td>{{$item['quantity']}}</td>
-                    <td>
-                        @if($item['currency']=='eur') <i class="fa fa-euro"></i>
-                        @elseif($item['currency']=='usd') <i class="fa fa-usd"></i>
-                        @elseif($item['currency']=='rub') <i class="fa fa-rub"></i>
-                        @endif
-                        {{$item['price']*$item['quantity']}}
-                    </td>
-                </tr>
-            @endforeach
-            <tr>
-                <th colspan="5">&nbsp;</th>
-            </tr>
-        </table>
-    </section>
-    @else
-        No items in order
-    @endif
+    @include('public.review-order',['order'=>$order])
 @endsection
 @section('scripts')
 <script src="js/api/1.0/garan24.core.js"></script>

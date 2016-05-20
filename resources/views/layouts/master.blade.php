@@ -2,7 +2,7 @@
 <html>
     <head>
         <title>Garan24 - @yield('title')</title>
-        <link href="css/img/favicon.png" rel="icon" type="image/x-icon">
+        <link href="css/img/logo_garan24.png" rel="icon" type="image/x-icon">
         <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">

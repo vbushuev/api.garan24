@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Форма оплаты</title>
+    <!--
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/paynet-ui-skin/${SKIN_VERSION}/d/css/processing-form.css"/>
+    -->
+    <style>
+        @import url("//fonts.googleapis.com/css?family=Roboto+Mono:800,400,100&subset=latin,cyrillic");
+        @import url("//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
+        @import url("https://sandbox.ariuspay.ru/paynet-ui-skin/version/main/css/processing-form.css");
+        .header-logo{background:url("https://sandbox.ariuspay.ru/paynet-ui-skin/version/main/images/payneteasy-logo.png") no-repeat left center;width:200px;height:120px;}
+        /*html,
+        body {
+          height: 100%;
+        }
+        body {
+          margin: 0;
+          padding: 0;
+          width: 100%;
+          font-family: 'Verdana','Roboto Mono';
+          display: table;
+          color:rgba(0,0,0,.8);
+          z-index: 0;
+          position: relative;
+        }
+        .container {
+          text-align: center;
+          display: table-cell;
+          vertical-align: middle;
+          position: relative;
+
+        }
+        .header{
+            width: 720px;
+            display: inline-block;
+        }
+        .main{
+            border-radius: 1em;
+            width:720px;
+            background-color: #fff;
+            text-align: center;
+            display: inline-block;
+            padding: 1em;
+        }*/
+    </style>
+</head>
+
+<body>
+<div class="container">
+    <!-- HEADER -->
+    <div class="header">
+        <table cellspacing="0" cellpadding="10" style="width:100%; text-align:center; margin:24px 0 0">
+            <tr>
+                <td><img alt="Verified by Visa logo" src="https://sandbox.ariuspay.ru/images/visa/visa1_53x34_a.gif"></td>
+                <td class="centered">
+                    <a title="Платежный шлюз компании Ариус" href="http://www.ariuspay.ru/"><img height="40" alt="Arius payment company" src="https://gate.ariuspay.ru/images/ariuslogo.png"></a>
+                </td>
+                <td class="right">
+                    <img alt="MasterCard Secure Code logo" src="https://sandbox.ariuspay.ru/images/mc/mc_accpt_034_gif.gif">
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="main">
+        <!-- Order Summary -->
+        <div class="summary">
+            <h2 class="summary-title as-title">Информация о платеже</h2>
+            <div class="summary-description">$!ORDERDESCRIPTION</div>
+
+            <div class="summary-total">
+                <span class="summary-total-label">Сумма:</span>
+                <span class="summary-total-value">$!AMOUNT $!CURRENCY</span>
+            </div>
+        </div>
+
+        <!-- Pay form -->
+        <form class="form" action="${ACTION}" method="post">
+
+            <h2 class="form-title as-title">Данные вашей карты</h2>
+
+            <ul class="form-ul">
+                <!-- Card printed name -->
+                <li class="form-li">
+                    <label class="form-label" for="${CARDHOLDER}">Имя держателя:</label>
+                    <input class="form-number-field" id="${CARDHOLDER}" name="${CARDHOLDER}" type="text" maxlength="50" autocomplete="off" value="${CARDHOLDER_VALUE}" />
+                </li>
+
+                <!-- Card Number -->
+                <li class="form-li">
+                    <label class="form-label" for="${CARDNO}">Номер карты:</label>
+                    <input class="form-number-field" id="${CARDNO}" name="${CARDNO}" type="text" maxlength="18" autocomplete="off"  />
+                </li>
+
+                <!-- CVV -->
+                <li class="form-li">
+                    <label class="form-label" for="${CVV2}">CVV2/CVC2-код:</label>
+                    <input class="form-cvv-field" name="${CVV2}" id="${CVV2}" type="password" maxlength="4" autocomplete="off" />
+                </li>
+
+                <li class="form-li">
+                    <label class="form-label" for="${EXPMONTH}">Срок действия:</label>
+
+                    <select class="form-expire-month" id="${EXPMONTH}" name="${EXPMONTH}" size="1" >
+                        <option value="01">01 / January</option>
+                        <option value="02">02 / February</option>
+                        <option value="03">03 / March</option>
+                        <option value="04">04 / April</option>
+                        <option value="05">05 / May</option>
+                        <option value="06">06 / June</option>
+                        <option value="07">07 / July</option>
+                        <option value="08">08 / August</option>
+                        <option value="09">09 / September</option>
+                        <option value="10">10 / October</option>
+                        <option value="11">11 / November</option>
+                        <option value="12">12 / December</option>
+                    </select>
+
+                    <!--suppress HtmlFormInputWithoutLabel -->
+                    <select class="form-expire-year" name="${EXPYEAR}" id="${EXPYEAR}" size="1">
+                        ${EXPIRE_YEARS}
+                    </select>
+                </li>
+
+                $!{INTERNAL_SECTION}
+
+                #if($!card_error)
+                <div class="form-error">
+                    $!card_error
+                </div>
+                #end
+
+
+                <li class="form-li-buttons">
+
+                    <span class="form-secure-connection">БЕЗОПАСНОЕ СОЕДИНЕНИЕ</span>
+
+                    <!--suppress HtmlFormInputWithoutLabel -->
+                    <input name="submit" type="submit" class="form-button form-button-ok"     value="Оплатить" />
+                    <!--suppress HtmlFormInputWithoutLabel -->
+                    <input name="cancel" type="submit" class="form-button form-button-cancel" value="Отмена" />
+                </li>
+
+            </ul>
+
+            <div class="form-card-info"></div>
+
+        </form>
+    </div>
+</div>
+</body>
+
+</html>
