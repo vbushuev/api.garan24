@@ -15,24 +15,25 @@ class MagnitolkinController extends Controller{
         return view('magnitolkin.index');
     }
     public function getCheckout(Request $rq){
-        return view('magnitolkin.cart.email');
+        return view('magnitolkin.cart.email',["route"=>$this->getBPRoute("email")]);
     }
     public function getPersonal(Request $rq){
-        return view('magnitolkin.cart.personal');
+        return view('magnitolkin.cart.personal',["route"=>$this->getBPRoute("personal")]);
     }
     public function getDelivery(Request $rq){
-        return view('magnitolkin.cart.delivery');
+        return view('magnitolkin.cart.delivery',["route"=>$this->getBPRoute("delivery")]);
     }
     public function getPaymethod(Request $rq){
-        return view('magnitolkin.cart.paymethod');
+        return view('magnitolkin.cart.paymethod',["route"=>$this->getBPRoute("paymethod")]);
     }
     public function getDeliverypaymethod(Request $rq){
-        return view('magnitolkin.cart.deliverypaymethod');
+        return view('magnitolkin.cart.deliverypaymethod',["route"=>$this->getBPRoute("paymethod")]);
     }
     public function getThanks(Request $rq){
-        return view('magnitolkin.cart.thankspage');
+        return view('magnitolkin.cart.thankspage',["route"=>$this->getBPRoute("thanks")]);
     }
     public function getCheckcard(Request $rq){
+        return view('magnitolkin.cart.payment-form',["route"=>$this->getBPRoute("checkcard")]);
         $data = [
             "client_orderid"=>"905",
             "order_desc" => "Test Order Description",
@@ -84,10 +85,43 @@ class MagnitolkinController extends Controller{
 
     }
     public function postPayneteasyresponse(Request $rq){
-        return redirect('magnitolkin/thanks');
+        return redirect('magnitolkin/thanks',["route"=>$this->getBPRoute("email")]);
     }
     public function getPayneteasyresponse(Request $rq){
         return $this->postPayneteasyresponse($rq);
+    }
+    protected $bpmodels=[
+        "index" => ["text"=>"Продолжить","href"=>"../magnitolkin/"],
+        "email" => ["text"=>"Продолжить","href"=>"../magnitolkin/checkout"],
+        "personal" => ["text"=>"Продолжить","href"=>"../magnitolkin/personal"],
+        "delivery" => ["text"=>"Продолжить","href"=>"../magnitolkin/delivery"],
+        "paymethod" => ["text"=>"Продолжить","href"=>"../magnitolkin/paymethod"],
+        "checkcard" => ["text"=>"Продолжить","href"=>"../magnitolkin/checkcard"],
+        "deliverypaymethod" => ["text"=>"Продолжить","href"=>"../magnitolkin/deliverypaymethod"],
+        "thanks" => ["text"=>"Продолжить","href"=>"../magnitolkin/thanks"],
+    ];
+    protected $bpmatrix=[
+        "index" => ["condition"=>false,"next"=>"email","back"=>"index"],
+        "email" => ["condition"=>false,"next"=>"personal","back"=>"index"],
+        //"personal" => ["condition"=>false,"next"=>"delivery","back"=>"email"],
+        "personal" => ["condition"=>false,"next"=>"deliverypaymethod","back"=>"email"],
+        "delivery" => ["condition"=>false,"next"=>"paymethod","back"=>"personal"],
+        "deliverypaymethod" => ["condition"=>false,"next"=>"checkcard","back"=>"personal"],
+        "paymethod" => ["condition"=>false,"next"=>"checkcard","back"=>"delivery"],
+        "checkcard" => ["condition"=>false,"next"=>"thanks","back"=>"deliverypaymethod"],
+        "thanks" => ["condition"=>false,"next"=>"index","back"=>false]
+    ];
+    protected function getBPRoute($current,$condition=false){
+        $dir="../magnitolkin/";
+        $c = (!isset($this->bpmatrix[$current]))
+            ? $this->bpmatrix["index"]
+            : $this->bpmatrix[$current];
+        return [
+            "next" => ($c["condition"]!==false)
+                    ? (isset($c["condition"][$condition])?$this->bpmodels[$c["condition"][$condition]]:$this->bpmodels[$c["next"]])
+                    : $this->bpmodels[$c["next"]],
+            "back" => (($c["back"]!==false)?$this->bpmodels[$c["back"]]:false)
+        ];
     }
 }
 ?>

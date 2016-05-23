@@ -62,21 +62,7 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
 
     </div>
 
-    <div style="margin-top: 15px;">
-        <button id="btnReturnToCart" class="btn btn-default btn-lg pull-left">← Вернуться</button>
-        <button id="btnMakeOrder" class="btn btn-success btn-lg pull-right">Продолжить</button>
-        <div class="clearfix"></div>
-    </div>
+    @include("magnitolkin.cart._buttons")
 </div>
-<script>
-$(document).ready(function(){
-    $("#order-form-container").show();
-    $("#btnMakeOrder").click(function(){
-        document.location.href = "../magnitolkin/delivery"
-    })
-    $("#btnReturnToCart").click(function(){
-        document.location.href = "../magnitolkin/checkout"
-    })
-});
-</script>
+
 @endsection

@@ -228,19 +228,10 @@ function optionClickPaymentType(i,t){
     <div id="total_cost">
         <div class="label">Полная стоимость:</div>
         <div class="cost_value"><span id="lblTotalPrice">4 881</span> руб.</div>
-        <div style="margin-top: 15px;">
-            <button id="btnCheckout" class="btn btn-success btn-lg">Перейти к оплате</button>
-        </div>
     </div>
+    <div class="clearfix"></div>
+    @include("magnitolkin.cart._buttons")
 </div>
 </div>
 
-<script>
-$(document).ready(function(){
-
-    $("#btnCheckout").click(function(){
-        document.location.href = "../magnitolkin/checkcard";
-    })
-});
-</script>
 @endsection
