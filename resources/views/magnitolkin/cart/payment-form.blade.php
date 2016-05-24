@@ -21,14 +21,18 @@
 <div class="container">
     <!-- HEADER -->
     <div class="header">
-        <table cellspacing="0" cellpadding="10" style="width:100%; text-align:center; margin:24px 0 0">
+        <table cellspacing="0" cellpadding="10" style="width:100%; text-align:center; margin:4px 0 0">
             <tr>
-                <td><img alt="Verified by Visa logo" src="https://sandbox.ariuspay.ru/images/visa/visa1_53x34_a.gif"></td>
-                <td class="centered">
-                    <a title="Платежный шлюз компании Ариус" href="http://www.ariuspay.ru/"><img height="40" alt="Arius payment company" src="https://gate.ariuspay.ru/images/ariuslogo.png"></a>
+
+                <td style="text-align:left;">
+                    <a title="Платежный шлюз компании Ариус" href="https://magnitolkin.ru">
+                        <img height="80" alt="Магнитолкин" src="../magnitolkin_ru/Logo.gif">
+                    </a>
                 </td>
-                <td class="right">
-                    <img alt="MasterCard Secure Code logo" src="https://sandbox.ariuspay.ru/images/mc/mc_accpt_034_gif.gif">
+                <td style="text-align:right;">
+                    <a title="Платежный шлюз компании Ариус" href="https://garan.ru">
+                        <img height="50" alt="Garan24" src="http://garan24.ru/wp-content/uploads/2016/04/Logo_GARAN24b.png">
+                    </a>
                 </td>
             </tr>
         </table>
@@ -44,6 +48,16 @@
                 <span class="summary-total-label">Сумма:</span>
                 <span class="summary-total-value">$!AMOUNT $!CURRENCY</span>
             </div>
+        </div>
+
+        <!-- Order Description -->
+        <div class="summary summary-descr" style="height:120px;">
+            <h2 class="summary-title as-title">Зачем мне вводить карту?</h2>
+            <div class="summary-description" style="width:620px;">
+                Вы оплачиваете полную стоимость заказа банковской картой Visa\MC курьеру или сотруднику пункта выдачи заказов при получении заказа.<br />
+                Сейчас необходимо сейчас сделать предоплату стоимости доставки банковской картой.
+            </div>
+
         </div>
 
         <!-- Pay form -->
@@ -103,7 +117,10 @@
                 </div>
                 #end
 
-
+                <li class="form-li">
+                    @include('elements.inputs.checkbox',["name"=>"agree1","text"=>"Сохранить мою карту."])
+                    <p class="text-muted small">Указав согласие, Вы принимаете <a href="https://garan24.ru/terms" target="__blank">соглашение</a> Гаран24 хранении Ваших персональных данных.</p>
+                </li>
                 <li class="form-li-buttons">
 
                     <span class="form-secure-connection">БЕЗОПАСНОЕ СОЕДИНЕНИЕ</span>

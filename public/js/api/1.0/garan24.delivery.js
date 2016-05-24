@@ -15,9 +15,10 @@ $.extend(window.garan,{
                 name:(typeof o.name!="undefined")?o.name:"#delivery",
                 description:(typeof o.description!="undefined")?o.description:"#delivery",
                 cost:(typeof o.cost!="undefined")?o.cost:"#delivery",
-                duration:(typeof o.duration!="undefined")?o.duration:"#delivery"
+                duration:(typeof o.duration!="undefined")?o.duration:"#delivery",
             };
-            garan.delivery.list[d.id]=d;
+            //garan.delivery.list[d.id]=d;
+            garan.delivery.list.push(d);
         },
         list:[]
     }

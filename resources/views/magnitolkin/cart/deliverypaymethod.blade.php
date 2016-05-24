@@ -1,45 +1,12 @@
 @extends('magnitolkin.cart.magnitolkin')
 
 @section('content')
-<script>
-var paymethod = 1;
-function optionClickPaymentType(i,t){
-    paymethod = i;
-}
 
-</script>
 <h2><span class="red">Оформление</span> заказа</h2>
 
 <div id="cart-container">
 
-<table id="cart-content" class="table">
-<tbody><tr class="cart-content-header">
-    <th style="width: 15%;">&nbsp;</th>
-    <th style="width: 50%;">Товар</th>
-    <th style="width: 15%;">Количество</th>
-    <th style="width: 20%; text-align: right;">Стоимость</th>
-</tr>
-
-<tr class="cart-item" id="cartItemPos14832">
-    <td class="image"><img src="https://magnitolkin.ru/Handlers/CartShopItemImage/?id=14832" alt="Tempo Coax 5"></td>
-    <td><a class="name" href="/catalogue/Akustika/coaxial/5_25_inch/11075/" target="_blank">Morel Tempo Coax 5</a></td>
-    <td>
-        <img id="btn_delete_14832" class="button" src="https://magnitolkin.ru/Files/Images/DeleteCartItem.png" alt="Удалить" title="Удалить" onclick="javascript:removeCartItem(14832)">
-        <img id="btn_decrement_14832" class="button" src="https://magnitolkin.ru/Files/Images/DecrementCartItemQuantity.png" onclick="javascript:shopItemDecrementQuantity(this, 14832)" alt="Уменьшить количество" title="Уменьшить количество" style="display: none;">
-		<span id="quantity_14832" class="quantity">1</span> <span class="quantity">шт.</span>
-        <img id="btn_increment_14832" class="button" src="https://magnitolkin.ru/Files/Images/IncerementCartItemQuantity.png" onclick="javascript:shopItemIncrementQuantity(this, 14832)" alt="Увеличить количество" title="Увеличить количество">
-        <!--<script type="text/javascript">Order.addItemToCart(14832, 4581, 1);</script>-->
-    </td>
-    <td><div class="cost"><span id="totalPrice14832">4&nbsp;581</span> руб.</div></td>
-</tr>
-<tr class="cart-item">
-    <td style="padding:0;">&nbsp;</td>
-    <td style="padding:0;"><strong>Доставка заказа</strong></td>
-    <td style="padding:0;"><img id="btn_delete_14832" class="button" src="https://magnitolkin.ru/Files/Images/DeleteCartItem.png" alt="Удалить" title="Удалить" onclick="javascript:removeCartItem(14832)"><span id="quantity_14832" class="quantity">1</span> <span class="quantity">шт.</span></td>
-    <td style="padding:0;"><div class="cost"><span id="totalDeliveryPrice">300</span> руб.</div></td>
-</tr>
-<tr><td colspan="4">&nbsp;</td></tr></tbody></table>
-
+@include('magnitolkin.cart.goods')
 <div id="order-options" style="margin-left: 10px;">
 <style>
     .description {
@@ -66,8 +33,13 @@ function optionClickPaymentType(i,t){
      2 - online by card
      3 - cash
     */
+    garan.delivery.add({id:"curier_express",name:"",description:"Доставка осуществляется курьерской службой интернет магазина.",duration:"3 часа",cost:"600"});
+    garan.delivery.add({id:"curier",name:"Доставка курьером по Москве",description:"Доставка осуществляется курьерской службой интернет магазина.",duration:"на следующий рабочий день",cost:"300"});
     garan.delivery.add({id:"self",name:"Самовывоз",description:"Вы самостоятельно получаете заказ в офисе интернет магазина.",duration:"на следующий рабочий день",cost:"бесплатно"});
-    console.debug(garan.delivery.list.self);
+    garan.delivery.add({id:"post",name:"Доставка по России",description:"Доставка по России осуществляется Почтой России.",duration:"до 20 дней",cost:"по тарифам"});
+    garan.delivery.add({id:"boxberry",name:"Доставка BoxBerry",description:"Доставка производится до ближайшего к Вам пункта выдачи заказов Boxberry.",duration:"до 11 дней",cost:"по тарифам"});
+    garan.delivery.add({id:"curier_mkad",name:"Доставка курьером за МКАД",description:"Доставка осуществляется курьерской службой интернет магазина",duration:"на следующий рабочий день",cost:"300руб. + 30руб. за каждый километр от МКАД"});
+    console.debug(garan.delivery.list);
     var deliverypayDependence = [
         [true,true,true,true],
         [true,true,true,true],
@@ -82,10 +54,35 @@ function optionClickPaymentType(i,t){
         [true,true,true,true,true,true],
         [true,true,true,true,true,true]
     ];
+    /**
+     * Number.prototype.format(n, x, s, c)
+     *
+     * @param integer n: length of decimal
+     * @param integer x: length of whole part
+     * @param mixed   s: sections delimiter
+     * @param mixed   c: decimal delimiter
+     */
+    Number.prototype.format = function(n, x, s, c) {
+        var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+            num = this.toFixed(Math.max(0, ~~n));
+
+        return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+    };
     function optionClickPaymentType(i,t){
         $(t).parent().parent().parent().find(".description").hide();
         $(t).parent().parent().parent().find("label").removeClass("selected");
         $(t).parent().addClass("selected").parent().find(".description").show();
+        if(i==0){
+            $("#btnMakeOrder").unbind('click').click(function(){
+                document.location.href = "../magnitolkin/passport";
+            })
+        }
+
+        else{
+            $("#btnMakeOrder").unbind('click').click(function(){
+                document.location.href = "../magnitolkin/checkcard";
+            })
+        }
     }
     function optionClickDeliveryType(i,t){
         $(t).parent().parent().parent().find(".description").hide();
@@ -95,42 +92,49 @@ function optionClickPaymentType(i,t){
         else $("[data-payment-id=0]").parent().parent().show();
         if(i==3)$("[data-payment-id=1]").parent().parent().hide();
         else $("[data-payment-id=1]").parent().parent().show();
+
+        var totalDelivery = isNaN(garan.delivery.list[i].cost)?garan.delivery.list[i].cost:parseInt(garan.delivery.list[i].cost);
+        var total = parseInt($("#totalPrice14832").text().replace(/\s+/ig,''));
+        total += isNaN(garan.delivery.list[i].cost)?0:parseInt(garan.delivery.list[i].cost);
+        $("#totalDeliveryPrice").html(isNaN(totalDelivery)?totalDelivery:totalDelivery.format(0,3,' ','.')+" руб.");
+        $("#lblTotalPrice").html(total.format(0,3,' ','.'));
+        $(".delivery-row").show();
+        if(i==0 || i==1 || i==5){
+            $("#btnMakeOrder").unbind('click').click(function(){document.location.href = "../magnitolkin/thanks";});
+        }
+        else{
+            $("#btnMakeOrder").unbind('click').click(function(){document.location.href = "../magnitolkin/checkcard";});
+        }
     }
+    $(document).ready(function(){
+        optionClickDeliveryType(1);
+    });
 </script>
 <div id="delivery">
     <div class="notice">
-        <div class="icon"><img src="https://magnitolkin.ru/Files/Images/SectionDelivery.png" alt="!"></div>
-        <div class="comment">
-            <div class="section_type_header">Способ получения</div>
-            <div class="section_type_comment">Чтобы узнать полную стоимость заказа укажите способ получения товара</div>
-        </div>
-    </div>
-    <div class="notice right">
         <div class="icon"><img src="https://magnitolkin.ru/Files/Images/SectionPayment.png" alt="!"></div>
         <div class="comment">
             <div class="section_type_header">Способ оплаты</div>
             <div class="section_type_comment">Укажите предпочитаемый способ оплаты. Скорость прохождения платежа влияет на сроки доставки товара.</div>
         </div>
     </div>
+    <div class="notice right">
+        <div class="icon"><img src="https://magnitolkin.ru/Files/Images/SectionDelivery.png" alt="!"></div>
+        <div class="comment">
+            <div class="section_type_header">Способ получения</div>
+            <div class="section_type_comment">Чтобы узнать полную стоимость заказа укажите способ получения товара</div>
+        </div>
+    </div>
     <div class="clearfix"></div>
     <div id="delivery_types">
-        <div class="radio">
-            <label class="selected">
-                <input type="radio" id="delivery_type_2" name="delivery_types" checked="checked" onclick="javascript:optionClickDeliveryType(2, this)" data-delivery-id="2">
-                Самовывоз
-            </label>
-            <div class="description" style="display:block;">
-                Вы самостоятельно получаете заказ в офисе интернет магазина.<br/><strong>Срок</strong> - на следующий рабочий день<br /><strong>Стоимость</strong> - бесплатно
-            </div>
-        </div>
         <!--<script type="text/javascript">Order.addDeliveryType(2, 0, 0, "False", "False");</script>-->
 
         <div class="radio">
-            <label>
-                <input type="radio" id="delivery_type_1" name="delivery_types" onclick="javascript:optionClickDeliveryType(1, this)" data-delivery-id="1">
+            <label class="selected">
+                <input type="radio" id="delivery_type_1" checked="checked" name="delivery_types" onclick="javascript:optionClickDeliveryType(1, this)" data-delivery-id="1">
                 Доставка курьером по Москве
             </label>
-            <div class="description">Доставка осуществляется курьерской службой интернет магазина.<br/><strong>Срок</strong> - на следующий рабочий день<br /><strong>Стоимость</strong> - 300руб.</div>
+            <div class="description" style="display:block;">Доставка осуществляется курьерской службой интернет магазина.<br/><strong>Срок</strong> - на следующий рабочий день<br /><strong>Стоимость</strong> - 300руб.</div>
         </div>
         <!--<script type="text/javascript">Order.addDeliveryType(1, 0, 0, "True", "False");</script>-->
 
@@ -169,6 +173,15 @@ function optionClickPaymentType(i,t){
             <div class="description">Доставка осуществляется курьерской службой интернет магазина.<br/><strong>Срок</strong> - на следующий рабочий день<br /><strong>Стоимость</strong> - 300руб. + 30руб. за каждый километр от МКАД</div>
         </div>
         <!--<script type="text/javascript">Order.addDeliveryType(3, 0, 30, "True", "False");</script>-->
+        <div class="radio">
+            <label>
+                <input type="radio" id="delivery_type_2" name="delivery_types" onclick="javascript:optionClickDeliveryType(2, this)" data-delivery-id="2">
+                Самовывоз
+            </label>
+            <div class="description">
+                Вы самостоятельно получаете заказ в офисе интернет магазина.<br/><strong>Срок</strong> - на следующий рабочий день<br /><strong>Стоимость</strong> - бесплатно
+            </div>
+        </div>
     </div>
     <div id="payment_types">
         <div class="radio">
@@ -207,7 +220,7 @@ function optionClickPaymentType(i,t){
             </div>
         </div>
 
-        <div class="radio" style="display:none;">
+        <div class="radio">
             <label>
                 <input type="radio" id="payment_type_0" name="payment_types" onclick="javascript:optionClickPaymentType(0, this)" data-payment-id="0">
                 Оплатить картой после получения (в течение 14 дней)
@@ -221,10 +234,12 @@ function optionClickPaymentType(i,t){
 
 
 </div>
-    <div id="payment">
 <div class="clearfix"></div>
-    </div>
-
+<div class="form-group">
+    @include('elements.inputs.checkbox',["name"=>"agree1","text"=>"Я согласен с условиями."])
+    <p class="text-muted small">Указав согласие, Вы принимаете <a href="https://garan24.ru/terms" target="__blank">соглашение</a> Гаран24</p>
+</div>
+<div class="clearfix"></div>
     <div id="total_cost">
         <div class="label">Полная стоимость:</div>
         <div class="cost_value"><span id="lblTotalPrice">4 881</span> руб.</div>
