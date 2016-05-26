@@ -37,6 +37,8 @@ var web = {
     $(".passport-seria").mask("9999");//.insertBefor
     $(".passport-number").mask("999999");
     $(".passport-code").mask("999-999");
+    $(".pan").mask("9999 9999 9999 9999");
+    $(".expiredate").mask("99/99");
     //$('.email').append();
     //$('<i class="fa fa-mobile" aria-hidden="true"></i>').insertBefore( ".phone" );
     //$( '<i class="fa fa-envelope-o"></i>' ).insertBefore( ".email" );

@@ -35,6 +35,9 @@ class MagnitolkinController extends Controller{
     public function getPassport(Request $rq){
         return view('magnitolkin.cart.passport',["route"=>$this->getBPRoute("passport")]);
     }
+    public function getCard(Request $rq){
+        return view('magnitolkin.cart.card',["route"=>$this->getBPRoute("card")]);
+    }
     public function getCheckcard(Request $rq){
         return view('magnitolkin.cart.payment-form',["route"=>$this->getBPRoute("checkcard")]);
         $data = [
@@ -103,6 +106,7 @@ class MagnitolkinController extends Controller{
         "deliverypaymethod" => ["text"=>"Продолжить","href"=>"../magnitolkin/deliverypaymethod"],
         "thanks" => ["text"=>"Продолжить","href"=>"../magnitolkin/thanks"],
         "passport" => ["text"=>"Продолжить","href"=>"../magnitolkin/passport"],
+        "card" => ["text"=>"Подтвердить","href"=>"../magnitolkin/card"],
     ];
     protected $bpmatrix=[
         "index" => ["condition"=>false,"next"=>"email","back"=>"index"],
@@ -110,11 +114,12 @@ class MagnitolkinController extends Controller{
         //"personal" => ["condition"=>false,"next"=>"delivery","back"=>"email"],
         "personal" => ["condition"=>false,"next"=>"deliverypaymethod","back"=>"email"],
         "delivery" => ["condition"=>false,"next"=>"paymethod","back"=>"personal"],
-        "deliverypaymethod" => ["condition"=>["credit"=>"passport"],"next"=>"checkcard","back"=>"personal"],
-        "paymethod" => ["condition"=>["credit"=>"passport"],"next"=>"checkcard","back"=>"delivery"],
+        "deliverypaymethod" => ["condition"=>["credit"=>"passport"],"next"=>"card","back"=>"personal"],
+        "paymethod" => ["condition"=>["credit"=>"passport"],"next"=>"card","back"=>"delivery"],
         "checkcard" => ["condition"=>false,"next"=>"thanks","back"=>"deliverypaymethod"],
         "thanks" => ["condition"=>false,"next"=>"index","back"=>false],
-        "passport" => ["condition"=>false,"next"=>"checkcard","back"=>"deliverypaymethod"]
+        "passport" => ["condition"=>false,"next"=>"card","back"=>"deliverypaymethod"],
+        "card" => ["condition"=>false,"next"=>"thanks","back"=>"deliverypaymethod"]
     ];
     protected function getBPRoute($current,$condition=false){
         $dir="../magnitolkin/";
