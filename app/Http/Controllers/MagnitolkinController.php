@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Log;
+use DB;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -17,8 +19,28 @@ class MagnitolkinController extends Controller{
     public function getCheckout(Request $rq){
         return view('magnitolkin.cart.email',["route"=>$this->getBPRoute("email")]);
     }
-    public function getPersonal(Request $rq){
+    public function postPersonal(Request $rq){
+        $data = $this->getParams($rq);
+        $person = DB::table('users')
+            ->join('usermeta',function($join){
+                $join->on('users.id', '=','usermeta.user_id')->where('usermeta.meta_key','=','billing_phone');
+            })
+            ->where('users.user_email', $data["email"])
+            ->where('usermeta.meta_value','=',$data["phone"])
+            ->first();
+        if(isset($person->ID)){
+            Log::debug("Person is : ". json_encode($person));
+            $person = json_decode(json_encode($person),true);
+            $rq->session()->put('customer',$person);
+            Log::debug($this->getBPRoute("personal")["next"]);
+            return redirect('magnitolkin/'.$this->bpmatrix["personal"]["next"]);
+        }
+        Log::debug("Person is new: ". json_encode($person));
         return view('magnitolkin.cart.personal',["route"=>$this->getBPRoute("personal")]);
+    }
+    public function getPersonal(Request $rq){
+        return $this->postPersonal($rq);
+
     }
     public function getDelivery(Request $rq){
         return view('magnitolkin.cart.delivery',["route"=>$this->getBPRoute("delivery")]);
@@ -132,6 +154,22 @@ class MagnitolkinController extends Controller{
                     : $this->bpmodels[$c["next"]],
             "back" => (($c["back"]!==false)?$this->bpmodels[$c["back"]]:false)
         ];
+    }
+    protected function getParams(Request $rq){
+        Log::debug($rq->get("data"));
+        $data = $rq->get("data",$rq->getContent());
+        $data = json_decode($data,true);
+        if(empty($data))$data = $rq->all();
+        $log = "";
+        if(empty($data))$data = $rq->all();
+        foreach($data as $k=>$v){
+            if(empty($v))unset($data["{$k}"]);
+            else{
+                $log .= "{$k} = {$v}, ";
+            }
+        }
+        Log::debug($log);
+        return $data;
     }
 }
 ?>

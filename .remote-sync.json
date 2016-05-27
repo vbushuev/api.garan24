@@ -1,5 +1,5 @@
 {
-  "uploadOnSave": true,
+  "uploadOnSave": false,
   "useAtomicWrites": false,
   "deleteLocal": false,
   "hostname": "nkofrs.ru",
@@ -7,7 +7,9 @@
   "target": "/var/www/u0173919/data/www/garan24.ru/service",
   "ignore": [
     ".git/*",
-    "vendor/*"
+    "vendor/*",
+    ".env",
+    "storage/*"
   ],
   "username": "u0173919",
   "password": "Mx7D6_pq",

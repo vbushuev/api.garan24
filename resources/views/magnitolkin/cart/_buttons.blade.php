@@ -7,10 +7,14 @@
 </div>
 <script>
     $(document).ready(function(){
+        var a= {
+            form:$("#order-form-container"),
+            url:"{{$route["next"]["href"]}}"
+        };
         $("#order-form-container").show();
         $("#btnMakeOrder").click(function(){
-            //document.location.href = "../magnitolkin/personal";
-            document.location.href = "{{$route["next"]["href"]}}";
+            garan.form.submit(a);
+            //document.location.href = "{{$route["next"]["href"]}}";
         })
         $("#btnReturnToCart").click(function(){
             //document.location.href = "../magnitolkin";

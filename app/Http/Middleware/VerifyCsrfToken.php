@@ -18,5 +18,6 @@ class VerifyCsrfToken extends BaseVerifier
         "/payoutresponse",
         "/payoutcallback",
         "/magnitolkin/payneteasyresponse",
+        "/magnitolkin/personal",
     ];
 }

@@ -1,5 +1,1 @@
-<div class="input-group required">
-    <span class="input-group-addon"><i class="fa fa-phone fa-fw"></i></span>
-    <input name="phone" class="form-control phone" type="text" placeholder="Mobile phone" style="width:13em;">
-
-</div>
+@include('elements.inputs.text',["required" => isset($required)?$required:"","name"=>isset($name)?$name:'phone',"class"=>"phone","icon"=>"phone"])
