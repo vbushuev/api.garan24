@@ -31,7 +31,7 @@ window.garan = {
             var args = arguments.length?arguments[0]:{form:$("form:first")};
             this.ret = {};
             var tt = this;
-            args.form.find(".input-group input,.input-group select,.input-group textarea").each(function(){
+            args.form.find("input,select,textarea").each(function(){
                 var $t = $(this),n=$t.attr("name"),v=$t.val();
                 if($t.hasClass("phone")){
                     v=v.replace(/[\(\)\s]/ig,'');

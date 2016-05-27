@@ -21,35 +21,32 @@ class MagnitolkinController extends Controller{
     }
     public function postPersonal(Request $rq){
         $data = $this->getParams($rq);
-        $person = DB::table('users')
-            ->join('usermeta',function($join){
-                $join->on('users.id', '=','usermeta.user_id')->where('usermeta.meta_key','=','billing_phone');
-            })
-            ->where('users.user_email', $data["email"])
-            ->where('usermeta.meta_value','=',$data["phone"])
-            ->first();
+        if(!isset($data["email"])||!isset($data["phone"])){
+            return redirect('magnitolkin/checkout');
+        }
+        $person = $this->getCustomer($data);
         if(isset($person->ID)){
             Log::debug("Person is : ". json_encode($person));
             $person = json_decode(json_encode($person),true);
             $rq->session()->put('customer',$person);
             Log::debug($this->getBPRoute("personal")["next"]);
             return redirect('magnitolkin/'.$this->bpmatrix["personal"]["next"]);
+        }else{
+            $cust = app('App\Http\Controllers\GaranCustomerController')->create($rq);
+            Log::debug($cust);
         }
         Log::debug("Person is new: ". json_encode($person));
         return view('magnitolkin.cart.personal',["route"=>$this->getBPRoute("personal")]);
     }
     public function getPersonal(Request $rq){
         return $this->postPersonal($rq);
-
     }
-    public function getDelivery(Request $rq){
-        return view('magnitolkin.cart.delivery',["route"=>$this->getBPRoute("delivery")]);
-    }
-    public function getPaymethod(Request $rq){
-        return view('magnitolkin.cart.paymethod',["route"=>$this->getBPRoute("paymethod")]);
+    public function postDeliverypaymethod(Request $rq){
+        $data = $this->getParams($rq);
+        return view('magnitolkin.cart.deliverypaymethod',["route"=>$this->getBPRoute("paymethod")]);
     }
     public function getDeliverypaymethod(Request $rq){
-        return view('magnitolkin.cart.deliverypaymethod',["route"=>$this->getBPRoute("paymethod")]);
+        return $this->postDeliverypaymethod($rq);
     }
     public function getThanks(Request $rq){
         return view('magnitolkin.cart.thankspage',["route"=>$this->getBPRoute("thanks")]);
@@ -59,6 +56,12 @@ class MagnitolkinController extends Controller{
     }
     public function getCard(Request $rq){
         return view('magnitolkin.cart.card',["route"=>$this->getBPRoute("card")]);
+    }
+    public function getDelivery(Request $rq){
+        return view('magnitolkin.cart.delivery',["route"=>$this->getBPRoute("delivery")]);
+    }
+    public function getPaymethod(Request $rq){
+        return view('magnitolkin.cart.paymethod',["route"=>$this->getBPRoute("paymethod")]);
     }
     public function getCheckcard(Request $rq){
         return view('magnitolkin.cart.payment-form',["route"=>$this->getBPRoute("checkcard")]);
@@ -165,11 +168,21 @@ class MagnitolkinController extends Controller{
         foreach($data as $k=>$v){
             if(empty($v))unset($data["{$k}"]);
             else{
-                $log .= "{$k} = {$v}, ";
+                $log .= "{$k} = ".Garan24::obj2str($v).", ";
             }
         }
         Log::debug($log);
         return $data;
+    }
+    protected function getCustomer($data){
+        $person = DB::table('users')
+            ->join('usermeta',function($join){
+                $join->on('users.id', '=','usermeta.user_id')->where('usermeta.meta_key','=','billing_phone');
+            })
+            ->where('users.user_email', $data["email"])
+            ->where('usermeta.meta_value','=',$data["phone"])
+            ->first();
+        return $person;
     }
 }
 ?>
