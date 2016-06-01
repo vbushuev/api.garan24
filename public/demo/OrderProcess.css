@@ -1,0 +1,139 @@
+#cart-container { border: none; font-family: Tahoma; color: #333333; }
+#cart-container .cart-content-header { font-weight: bold; font-size: 12px; text-align: left; height: 25px; }
+#cart-container .cart-item { height: 100px; }
+#cart-container .cart-item>td { vertical-align: middle; }
+#cart-container .cart-item .image {text-align: center; }
+#cart-container .cart-item .name { font-size: 18px; color: #333333; }
+#cart-container .cart-item .quantity { font-size: 18px; color: #333333; position: relative; bottom: 2px; }
+#cart-container .cart-item .cost { font-size: 18px; text-align: right; position: relative; bottom: 1px; }
+#cart-container .button { cursor: pointer; }
+#cart-container .hidden { display: none; }
+
+#order-options #delivery { margin-top: 15px; font-size: 14px; }
+#order-options #delivery .notice { width: 320px; float: left; min-height: 80px; border-right: 2px solid #ececec; margin-right: 40px; }
+#order-options #delivery .notice .icon { width: 40px; float: left; }
+#order-options #delivery .notice .comment { margin-left: 10px; margin-top: 5px; float: left; }
+#order-options #delivery .notice .section_type_header { color: #f00603; font-size: 24px; }
+#order-options #delivery .notice .section_type_comment { color: #d0d0d0; font-size: 12px; width: 250px; }
+
+#order-options #delivery .notice.right { width: 320px; float: right; min-height: 80px; margin-right: 40px; border:none;}
+#order-options #delivery .notice .icon { width: 40px; float: left; }
+#order-options #delivery .notice .comment { margin-left: 10px; margin-top: 5px; float: left; }
+#order-options #delivery .notice .section_type_header { color: #f00603; font-size: 24px; }
+#order-options #delivery .notice .section_type_comment { color: #d0d0d0; font-size: 12px; width: 250px; }
+
+#order-options #delivery #delivery_types { padding: 0; margin: 5px 0; width: 320px; float: right; }
+#order-options #delivery #delivery_types .selected { font-weight: bold; }
+
+#order-options #delivery #payment_types { padding: 0; margin: 5px 0; width: 320px; float: left; }
+#order-options #delivery #payment_types .selected { font-weight: bold; }
+
+#delivery-calculator { width: 220px; margin-top: 30px; float: right; }
+#delivery-calculator .heading { font-size: 14px; font-weight: bold; color: #ffffff; background-color: #555555; text-shadow: 1px 1px 1px #000; text-align: center; height: 25px; }
+#delivery-calculator .comment { text-align: right; margin: 5px 10px 0 0; }
+#delivery-calculator .pad { margin: 10px 0 10px 30px; }
+#delivery-calculator .pad>div { margin-top: 5px; }
+#delivery-calculator .rate { font-size: 14px; }
+#delivery-calculator .rate>span { font-size: 18px; }
+#delivery-calculator .multisign { font-size: 20px; color: #f00603; }
+#delivery-calculator .multiplicator { font-size: 14px; }
+#delivery-calculator #txtDistanceToCustomer { width: 45px; border: 1px dotted #f00603; font-size: 18px; color: #333333; }
+#delivery-calculator .result { border-top: 1px solid #a8a8a8; width: 160px; margin: 5px 0; text-align: right; }
+#delivery-calculator .result_delivery_price { font-weight: bold; font-size: 18px; color: #232323; position: relative; left: 5px; }
+
+#order-options #payment { margin-top: 15px; font-size: 14px; }
+#order-options #payment .notice { width: 320px; float: left; min-height: 80px; border-right: 2px solid #ececec; margin-right: 40px; }
+#order-options #payment .notice .icon { width: 40px; float: left; }
+#order-options #payment .notice .comment { margin-left: 10px; margin-top: 5px; float: left; }
+#order-options #payment .notice .section_type_header { color: #f00603; font-size: 24px; }
+#order-options #payment .notice .section_type_comment { color: #d0d0d0; font-size: 12px; width: 250px; }
+#order-options #payment #payment_types { padding: 0; margin: 5px 0; width: 330px; float: left; }
+#order-options #payment #payment_types .selected { font-weight: bold; }
+
+#order-options #total_cost { width: 200px; float: right; text-align: right; margin-top: 30px;}
+#order-options #total_cost .label { font-size: 18px; color: #333333; }
+#order-options #total_cost .cost_value { font-size: 24px; font-weight: bold; color: #f00603; }
+
+#order-form-container { color: #333333; font-size: 18px; position: relative; }
+#order-form-container tr td { padding-bottom: 15px; vertical-align: top; }
+#order-form-container tr td.label { text-align: right; }
+
+#order-form-container #commercial_checkbox { width: 340px; position: absolute; top: 10px; right: -10px; text-align: right; cursor: pointer; }
+#order-form-container #commercial_requisites { width: 350px; position: absolute; top: 60px; right: -5px; display: none; }
+
+#order-form-container #btn-boxberry-map { display: block; margin: 5px 0; }
+
+#order-form-container .checkbox { }
+#order-form-container .checkbox .checkbox_area { float: left; }
+#order-form-container .checkbox .label { float: left; margin-left: 10px; }
+
+#order-form-container input.contact_person { width: 300px; }
+#order-form-container input.phone_code { width: 55px; text-align: center; }
+#order-form-container input.phone_number { width: 120px; }
+#order-form-container input.email { width: 325px; }
+#order-form-container input.inn { width: 180px; }
+#order-form-container input.kpp { width: 105px; }
+#order-form-container textarea.additional_info { width: 325px; height: 85px; }
+#order-form-container textarea.delivery_address { width: 300px; height: 85px; }
+#order-form-container textarea.legal_name { width: 370px; height: 55px; }
+#order-form-container textarea.legal_address { width: 370px; height: 55px; }
+#order-form-container textarea.bank_requisites { width: 370px; height: 55px; }
+
+#order-form-container .commercial_customer { font-weight: bold; }
+#order-form-container .commercial_extension { display: none; }
+#order-form-container .required { color: #e11313; font-size: 10px; }
+
+#OrderInfo { list-style-type: none; }
+#OrderInfo li { line-height: 24px; }
+#OrderInfo div.divider { border-bottom: 1px dotted #999999; margin: 10px 0; width: 765px; }
+#OrderInfo .param { margin-right: 7px; font-weight: bold; }
+#OrderInfo .value {  }
+
+.BlockInfo { list-style-type: none; }
+.BlockInfo li { line-height: 24px; }
+.BlockInfo div.divider { border-bottom: 1px dotted #999999; margin: 10px 0; width: 765px; }
+.BlockInfo .param { margin-right: 7px; font-weight: bold; }
+.BlockInfo .value {  }
+
+#DeliveryInfo { padding: 15px; background-color: #97d5ff; margin: 10px 0; }
+#DeliveryInfo #DeliveryHeader { margin-right: 7px; font-weight: bold; }
+
+#PaymentInfo { }
+#PaymentInfo #Requisites { padding: 15px; }
+#PaymentInfo #Requisites #RequisitesMessage { margin-bottom: 10px; border-bottom: 1px dotted #00aa00; padding-bottom: 7px; font-weight: bold; }
+#PaymentInfo #Requisites #RequisitesContent  { margin-left: 25px; }
+#PaymentInfo #ProceedToPay { padding: 15px; text-align: right; }
+#PaymentInfo #ProceedToPay a { color: #333333; }
+
+#DownloadQuote { width: 305px; height: 60px; margin-top: 10px; border: 1px dotted #999999; cursor: pointer; }
+#DownloadQuote:hover { border: 1px solid #999999; }
+#DownloadQuote img { color: #333333; margin-right: 7px; }
+#DownloadQuote span { color: #333333; top: 20px; position: absolute; text-decoration: underline; }
+
+#DownloadPD4 { width: 305px; height: 60px; margin-top: 10px; border: 1px dotted #999999; cursor: pointer; }
+#DownloadPD4:hover { border: 1px solid #999999; }
+#DownloadPD4 img { color: #333333; margin-right: 7px; }
+#DownloadPD4 span { color: #333333; top: 20px; position: absolute; text-decoration: underline; }
+
+.pay-secure-icon { background: url('/Files/Images/Secure_32.png') no-repeat center; width: 64px; height: 64px; }
+.pay-alfa-bank-logo { background: url('/Files/Images/AlfaBankLogo.gif') no-repeat center; width: 100px; height: 100px; }
+
+#order-form-container { display: none; }
+#OrderForm { }
+#OrderForm .inner { margin: 35px; float: left; }
+#OrderForm .divider { border-left: 1px solid; height: 300px; width: 1px; float: left; margin-top: 20px; }
+#OrderForm .inner .form { list-style-type: none; padding: 0; margin: 0; }
+#OrderForm .inner .form li { margin-bottom: 15px; }
+#OrderForm .inner .form input, #OrderForm .inner .form select { font-family: Arial, Tahoma, Sans-Serif; font-size: 18px; height: 30px; }
+#OrderForm .inner .form #txtPhoneCode { width: 60px; text-align: center; }
+#OrderForm .inner .form #txtPhoneNumber { width: 90px; }
+#OrderForm .inner .form #chkPaymentType { list-style-type: none; padding: 0; margin: 0; margin-left: 5px; }
+#OrderForm .inner .form #chkPaymentType li { padding-left: 25px; }
+#OrderForm .inner .form #chkPaymentType li.selected { text-decoration: underline; background: url('/Files/Images/Checked.png') no-repeat 0 2px; }
+#OrderForm .inner .form #cbxDeliveryType { width: 190px; font-size: 16px; }
+#OrderForm .inner .form #lblTotalCost { color: #029713; font-weight: bold; font-size: 18px }
+#OrderForm #btnClosePopup { position: absolute; width: 25px; height: 25px; background-color: #fff; top: 5px; right: 5px; }
+#OrderForm #btnClosePopup img { position: absolute; left: 5px; top: 5px; }
+
+#OrderingSuccessContainer { display: none; }
+#OrderingSuccessMessage { background-color: #ffffff; border: 1px solid #232323; border-top: 3px solid #e62019; }

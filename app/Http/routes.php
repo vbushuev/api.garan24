@@ -16,4 +16,5 @@
 Route::resource('customer', 'GaranCustomerController');
 Route::resource('order', 'GaranOrderController');
 Route::controller('magnitolkin', 'MagnitolkinController');
+Route::controller('democheckout', 'DemoCheckoutController');
 Route::controller('/', 'WebController');
