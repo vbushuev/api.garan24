@@ -23,7 +23,7 @@ class DemoCheckoutController extends Controller{
     public function postPersonal(Request $rq){
         $data = $this->getParams($rq);
         if(!isset($data["email"])||!isset($data["phone"])){
-            return redirect('magnitolkin/checkout');
+            return redirect('/democheckout/checkout');
         }
         $person = $this->getCustomer($data);
         if(isset($person->ID)){
@@ -31,41 +31,41 @@ class DemoCheckoutController extends Controller{
             $person = json_decode(json_encode($person),true);
             $rq->session()->put('customer',$person);
             Log::debug($this->getBPRoute("personal")["next"]);
-            return redirect('magnitolkin/'.$this->bpmatrix["personal"]["next"]);
+            return redirect('/democheckout/'.$this->bpmatrix["personal"]["next"]);
         }else{
             $cust = app('App\Http\Controllers\GaranCustomerController')->create($rq);
             Log::debug($cust);
         }
         Log::debug("Person is new: ". json_encode($person));
-        return view('democheckout.cart.personal',["route"=>$this->getBPRoute("personal")]);
+        return view('democheckout.personal',["route"=>$this->getBPRoute("personal")]);
     }
     public function getPersonal(Request $rq){
         return $this->postPersonal($rq);
     }
     public function postDeliverypaymethod(Request $rq){
         $data = $this->getParams($rq);
-        return view('democheckout.cart.deliverypaymethod',["route"=>$this->getBPRoute("paymethod")]);
+        return view('democheckout.deliverypaymethod',["route"=>$this->getBPRoute("paymethod")]);
     }
     public function getDeliverypaymethod(Request $rq){
         return $this->postDeliverypaymethod($rq);
     }
     public function getThanks(Request $rq){
-        return view('democheckout.cart.thankspage',["route"=>$this->getBPRoute("thanks")]);
+        return view('democheckout.thankspage',["route"=>$this->getBPRoute("thanks")]);
     }
     public function getPassport(Request $rq){
-        return view('democheckout.cart.passport',["route"=>$this->getBPRoute("passport")]);
+        return view('democheckout.passport',["route"=>$this->getBPRoute("passport")]);
     }
     public function getCard(Request $rq){
-        return view('democheckout.cart.card',["route"=>$this->getBPRoute("card")]);
+        return view('democheckout.card',["route"=>$this->getBPRoute("card")]);
     }
     public function getDelivery(Request $rq){
-        return view('democheckout.cart.delivery',["route"=>$this->getBPRoute("delivery")]);
+        return view('democheckout.delivery',["route"=>$this->getBPRoute("delivery")]);
     }
     public function getPaymethod(Request $rq){
-        return view('democheckout.cart.paymethod',["route"=>$this->getBPRoute("paymethod")]);
+        return view('democheckout.paymethod',["route"=>$this->getBPRoute("paymethod")]);
     }
     public function getCheckcard(Request $rq){
-        return view('democheckout.cart.payment-form',["route"=>$this->getBPRoute("checkcard")]);
+        return view('democheckout.payment-form',["route"=>$this->getBPRoute("checkcard")]);
         $data = [
             "client_orderid"=>"905",
             "order_desc" => "Test Order Description",
@@ -91,7 +91,7 @@ class DemoCheckoutController extends Controller{
             "expire_year" => "2099",
             "cvv2" => "123",*/
             "purpose" => "www.twitch.tv/dreadztv",
-            "redirect_url" => "https://garan24.ru/service/public/magnitolkin/payneteasyresponse",
+            "redirect_url" => "https://service.garan24.ru/democheckout/payneteasyresponse",
             //"server_callback_url" => "http://doc.payneteasy.com/doc/dummy.htm",
             "merchant_data" => "VIP customer",
             "control" => "768eb8162fc361a3e14150ec46e9a6dd8fbfa483"
@@ -117,22 +117,22 @@ class DemoCheckoutController extends Controller{
 
     }
     public function postPayneteasyresponse(Request $rq){
-        return redirect('magnitolkin/thanks',["route"=>$this->getBPRoute("email")]);
+        return redirect('/democheckout/thanks',["route"=>$this->getBPRoute("email")]);
     }
     public function getPayneteasyresponse(Request $rq){
         return $this->postPayneteasyresponse($rq);
     }
     protected $bpmodels=[
-        "index" => ["text"=>"Продолжить","href"=>"../magnitolkin/"],
-        "email" => ["text"=>"Продолжить","href"=>"../magnitolkin/checkout"],
-        "personal" => ["text"=>"Продолжить","href"=>"../magnitolkin/personal"],
-        "delivery" => ["text"=>"Продолжить","href"=>"../magnitolkin/delivery"],
-        "paymethod" => ["text"=>"Продолжить","href"=>"../magnitolkin/paymethod"],
-        "checkcard" => ["text"=>"Продолжить","href"=>"../magnitolkin/checkcard"],
-        "deliverypaymethod" => ["text"=>"Продолжить","href"=>"../magnitolkin/deliverypaymethod"],
-        "thanks" => ["text"=>"Продолжить","href"=>"../magnitolkin/thanks"],
-        "passport" => ["text"=>"Продолжить","href"=>"../magnitolkin/passport"],
-        "card" => ["text"=>"Подтвердить","href"=>"../magnitolkin/card"],
+        "index" => ["text"=>"Продолжить","href"=>"/democheckout/"],
+        "email" => ["text"=>"Продолжить","href"=>"/democheckout/checkout"],
+        "personal" => ["text"=>"Продолжить","href"=>"/democheckout/personal"],
+        "delivery" => ["text"=>"Продолжить","href"=>"/democheckout/delivery"],
+        "paymethod" => ["text"=>"Продолжить","href"=>"/democheckout/paymethod"],
+        "checkcard" => ["text"=>"Продолжить","href"=>"/democheckout/checkcard"],
+        "deliverypaymethod" => ["text"=>"Продолжить","href"=>"/democheckout/deliverypaymethod"],
+        "thanks" => ["text"=>"Продолжить","href"=>"/democheckout/thanks"],
+        "passport" => ["text"=>"Продолжить","href"=>"/democheckout/passport"],
+        "card" => ["text"=>"Подтвердить","href"=>"/democheckout/card"],
     ];
     protected $bpmatrix=[
         "index" => ["condition"=>false,"next"=>"email","back"=>"index"],
@@ -148,7 +148,7 @@ class DemoCheckoutController extends Controller{
         "card" => ["condition"=>false,"next"=>"thanks","back"=>"deliverypaymethod"]
     ];
     protected function getBPRoute($current,$condition=false){
-        $dir="../magnitolkin/";
+        $dir="/democheckout/";
         $c = (!isset($this->bpmatrix[$current]))
             ? $this->bpmatrix["index"]
             : $this->bpmatrix[$current];
