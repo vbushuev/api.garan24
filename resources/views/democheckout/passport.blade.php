@@ -1,14 +1,11 @@
-@extends('magnitolkin.cart.magnitolkin')
+@extends('democheckout.layout')
 
 @section('content')
-<!--<script>
-var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
 
-</script>-->
 <h2><span class="red">Оформление</span> заказа</h2>
 
 <div id="cart-container">
-    @include('magnitolkin.cart.goods')
+    @include('democheckout.goods',['goods'=>$goods])
 <div id="order-form-container">
     <div>
         <div class="page-header">

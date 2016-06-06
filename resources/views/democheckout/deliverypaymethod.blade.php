@@ -1,4 +1,4 @@
-@extends('magnitolkin.cart.magnitolkin')
+@extends('democheckout.layout')
 
 @section('content')
 
@@ -6,7 +6,7 @@
 
 <div id="cart-container">
 
-@include('magnitolkin.cart.goods')
+@include('democheckout.goods',['goods'=>$goods])
 <div id="order-options" style="margin-left: 10px;">
 <style>
     .description, .description_shot {
@@ -81,14 +81,24 @@
         $(t).parent().addClass("selected").parent().find(descr).show();
         if(i==0){
             $("#btnMakeOrder").unbind('click').click(function(){
-                document.location.href = "../magnitolkin/passport";
+                document.location.href = "../democheckout/passport";
             })
         }
         else{
             $("#btnMakeOrder").unbind('click').click(function(){
-                document.location.href = "../magnitolkin/card";
+                document.location.href = "../democheckout/card";
             })
         }
+    }
+    function caclulateTotal(i){
+        var totalDelivery = isNaN(garan.delivery.list[i].cost)?garan.delivery.list[i].cost:parseInt(garan.delivery.list[i].cost);
+        var total = 0;
+        $(".productPrice").each(function(){
+            total+=parseInt($(this).text().replace(/\s+/ig,''));
+        });
+        total += isNaN(garan.delivery.list[i].cost)?0:parseInt(garan.delivery.list[i].cost);
+        $("#totalDeliveryPrice").html(isNaN(totalDelivery)?totalDelivery:totalDelivery.format(0,3,' ','.')+" руб.");
+        $("#lblTotalPrice").html(total.format(0,3,' ','.'));
     }
     function optionClickDeliveryType(i,t){
         currentDelivery = i;
@@ -108,17 +118,13 @@
         if(i==3)$("[data-payment-id=1]").parent().parent().hide();
         else $("[data-payment-id=1]").parent().parent().show();
 
-        var totalDelivery = isNaN(garan.delivery.list[i].cost)?garan.delivery.list[i].cost:parseInt(garan.delivery.list[i].cost);
-        var total = parseInt($("#totalPrice14832").text().replace(/\s+/ig,''));
-        total += isNaN(garan.delivery.list[i].cost)?0:parseInt(garan.delivery.list[i].cost);
-        $("#totalDeliveryPrice").html(isNaN(totalDelivery)?totalDelivery:totalDelivery.format(0,3,' ','.')+" руб.");
-        $("#lblTotalPrice").html(total.format(0,3,' ','.'));
+        caclulateTotal(i);
         $(".delivery-row").show();
         if(i==0 || i==1 || i==5){
-            $("#btnMakeOrder").unbind('click').click(function(){document.location.href = "../magnitolkin/thanks";});
+            $("#btnMakeOrder").unbind('click').click(function(){document.location.href = "../democheckout/thanks";});
         }
         else{
-            $("#btnMakeOrder").unbind('click').click(function(){document.location.href = "../magnitolkin/card";});
+            $("#btnMakeOrder").unbind('click').click(function(){document.location.href = "../democheckout/card";});
         }
     }
     $(document).ready(function(){
@@ -256,8 +262,11 @@
         <div class="cost_value"><span id="lblTotalPrice">4 881</span> руб.</div>
     </div>
     <div class="clearfix"></div>
-    @include("magnitolkin.cart._buttons")
+    @include("democheckout._buttons")
 </div>
 </div>
+<script>
+caclulateTotal(0);
+</script>
 
 @endsection

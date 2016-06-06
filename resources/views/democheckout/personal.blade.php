@@ -1,4 +1,4 @@
-@extends('magnitolkin.cart.magnitolkin')
+@extends('democheckout.layout')
 
 @section('content')
 <!--<script>
@@ -8,7 +8,7 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
 <h2><span class="red">Оформление</span> заказа</h2>
 
 <div id="cart-container">
-@include('magnitolkin.cart.goods')
+@include('democheckout.goods',['goods'=>$goods])
 
 <div id="order-form-container">
     <div>
@@ -17,11 +17,11 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
         </div>
         <div class="form-group" id="PersonLastName">
             <label for="fio['last']" class="control-label">Фамилия:</label>
-            @include('elements.inputs.text',["name"=>"fio['last']","text"=>"Фамилия"])
+            @include('elements.inputs.text',["name"=>"fio['last']","text"=>"Фамилия",'required'=>"required"])
         </div>
         <div class="form-group" id="PersonFirstName">
             <label for="fio['first']" class="control-label">Ваше имя:</label>
-            @include('elements.inputs.text',["name"=>"fio['first']","text"=>"Имя"])
+            @include('elements.inputs.text',["name"=>"fio['first']","text"=>"Имя",'required'=>"required"])
         </div>
         <div class="form-group" id="PersonMiddleName">
             <label for="fio['middle']" class="control-label">Отчество:</label>
@@ -80,7 +80,7 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
 
     </div>
 
-    @include("magnitolkin.cart._buttons")
+    @include("democheckout._buttons")
 </div>
 
 @endsection

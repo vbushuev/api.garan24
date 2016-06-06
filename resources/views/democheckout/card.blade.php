@@ -1,4 +1,4 @@
-@extends('magnitolkin.cart.magnitolkin')
+@extends('democheckout.layout')
 
 @section('content')
 <!--<script>
@@ -15,6 +15,18 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
             <p>
                 <strong>Вы заказали:</strong>
                 <table style="width:100%;border:solid 1px rgba(0,0,0,.2);font-size:12pt;">
+                    @if(isset($goods))
+                        @foreach($goods as $good)
+                            <tr>
+                                <td style="padding:.4em;">
+                                    {{$good["title"]}}
+                                </td>
+                                <td style="padding:.4em;">
+                                    {{$good["quantity"]}} шт.
+                                </td>
+                            </tr>
+                        @endforeach
+                    @else
                     <tr>
                         <td style="padding:.4em;">
                             Morel Tempo Coax 5
@@ -23,6 +35,7 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
                             1 шт.
                         </td>
                     </tr>
+                    @endif
                 </table>
             </p>
 

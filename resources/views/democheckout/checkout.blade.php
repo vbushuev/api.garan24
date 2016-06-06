@@ -6,7 +6,7 @@
 
 <div id="cart-container">
 
-@include('democheckout.goods')
+@include('democheckout.goods',['goods'=>$goods])
 
 <div id="order-form-container">
     <div>

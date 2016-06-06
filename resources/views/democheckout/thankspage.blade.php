@@ -1,4 +1,4 @@
-@extends('magnitolkin.cart.magnitolkin')
+@extends('democheckout.layout')
 
 @section('content')
 <div id="OrderingSuccessContainer">

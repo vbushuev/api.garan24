@@ -1,4 +1,4 @@
-@extends('magnitolkin.cart.magnitolkin')
+@extends('democheckout.layout')
 
 @section('content')
 <script>
@@ -11,34 +11,7 @@ function optionClickPaymentType(i,t){
 <h2><span class="red">Оформление</span> заказа</h2>
 
 <div id="cart-container">
-
-<table id="cart-content" class="table">
-<tbody><tr class="cart-content-header">
-    <th style="width: 15%;">&nbsp;</th>
-    <th style="width: 50%;">Товар</th>
-    <th style="width: 15%;">Количество</th>
-    <th style="width: 20%; text-align: right;">Стоимость</th>
-</tr>
-
-<tr class="cart-item" id="cartItemPos14832">
-    <td class="image"><img src="https://magnitolkin.ru/Handlers/CartShopItemImage/?id=14832" alt="Tempo Coax 5"></td>
-    <td><a class="name" href="/catalogue/Akustika/coaxial/5_25_inch/11075/" target="_blank">Morel Tempo Coax 5</a></td>
-    <td>
-        <img id="btn_delete_14832" class="button" src="https://magnitolkin.ru/Files/Images/DeleteCartItem.png" alt="Удалить" title="Удалить" onclick="javascript:removeCartItem(14832)">
-        <img id="btn_decrement_14832" class="button" src="https://magnitolkin.ru/Files/Images/DecrementCartItemQuantity.png" onclick="javascript:shopItemDecrementQuantity(this, 14832)" alt="Уменьшить количество" title="Уменьшить количество" style="display: none;">
-		<span id="quantity_14832" class="quantity">1</span> <span class="quantity">шт.</span>
-        <img id="btn_increment_14832" class="button" src="https://magnitolkin.ru/Files/Images/IncerementCartItemQuantity.png" onclick="javascript:shopItemIncrementQuantity(this, 14832)" alt="Увеличить количество" title="Увеличить количество">
-        <!--<script type="text/javascript">Order.addItemToCart(14832, 4581, 1);</script>-->
-    </td>
-    <td><div class="cost"><span id="totalPrice14832">4&nbsp;581</span> руб.</div></td>
-</tr>
-<tr class="cart-item">
-    <td style="padding:0;">&nbsp;</td>
-    <td style="padding:0;"><strong>Доставка заказа</strong></td>
-    <td style="padding:0;"><img id="btn_delete_14832" class="button" src="https://magnitolkin.ru/Files/Images/DeleteCartItem.png" alt="Удалить" title="Удалить" onclick="javascript:removeCartItem(14832)"><span id="quantity_14832" class="quantity">1</span> <span class="quantity">шт.</span></td>
-    <td style="padding:0;"><div class="cost"><span id="totalDeliveryPrice">300</span> руб.</div></td>
-</tr>
-<tr><td colspan="4">&nbsp;</td></tr></tbody></table>
+@include('democheckout.goods',['goods'=>$goods])
 
 <div id="order-options" style="margin-left: 10px;">
 

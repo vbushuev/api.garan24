@@ -8,17 +8,36 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
+use WC_API_Client;
+use WC_API_Client_Exception;
+use WC_API_Client_Resource_Orders;
+use WC_API_Client_Resource_Customers;
+use WC_API_Client_Resource_Products;
+
 use \Garan24\Garan24 as Garan24;
 use \Garan24\Gateway\Ariuspay\Sale as AriusSale;
 use \Garan24\Gateway\Ariuspay\Exception as AriuspayException;
 
 class DemoCheckoutController extends Controller{
+    protected $rawgoods;
+    protected $raworder;
+    public function __construct(){
+        $this->raworder = file_get_contents('../tests/example.order.json');
+        $this->raworder = json_decode($this->raworder,true);
+        $this->rawgoods = $this->raworder["order"]["items"];
+        //print_r($this->rawgoods);
+    }
     public function getIndex(Request $rq){
         return $this->getCheckout($rq);
-        return view('democheckout.index');
     }
     public function getCheckout(Request $rq){
-        return view('democheckout.checkout',["route"=>$this->getBPRoute("email")]);
+        $data = $this->getParams($rq);
+        $rq->session()->put("order",$this->raworder);
+        $rq->session()->put("products",$this->rawgoods);
+        return view('democheckout.checkout',["route"=>$this->getBPRoute("email"), "debug"=>"", "goods"=>$this->rawgoods]);
+    }
+    public function postCheckout(Request $rq){
+        return $this->getCheckout($rq);
     }
     public function postPersonal(Request $rq){
         $data = $this->getParams($rq);
@@ -26,46 +45,161 @@ class DemoCheckoutController extends Controller{
             return redirect('/democheckout/checkout');
         }
         $person = $this->getCustomer($data);
+        Log::debug(Garan24::obj2str($person));
+        $cust="{}";
         if(isset($person->ID)){
-            Log::debug("Person is : ". json_encode($person));
-            $person = json_decode(json_encode($person),true);
-            $rq->session()->put('customer',$person);
-            Log::debug($this->getBPRoute("personal")["next"]);
-            return redirect('/democheckout/'.$this->bpmatrix["personal"]["next"]);
+            $cust = app('App\Http\Controllers\GaranCustomerController')->show($person->user_email);
         }else{
             $cust = app('App\Http\Controllers\GaranCustomerController')->create($rq);
-            Log::debug($cust);
         }
-        Log::debug("Person is new: ". json_encode($person));
-        return view('democheckout.personal',["route"=>$this->getBPRoute("personal")]);
+        Log::debug("Customer: ". Garan24::obj2str($cust));
+        $person = json_decode($cust,true);
+        Log::debug("Person is: ". Garan24::obj2str($person));
+        $rq->session()->put('customer',$person);
+        return view('democheckout.personal',["route"=>$this->getBPRoute("personal"), "debug"=>"", "goods"=>$this->rawgoods,"customer"=>$person]);
     }
     public function getPersonal(Request $rq){
         return $this->postPersonal($rq);
     }
     public function postDeliverypaymethod(Request $rq){
         $data = $this->getParams($rq);
-        return view('democheckout.deliverypaymethod',["route"=>$this->getBPRoute("paymethod")]);
+        $delivery = $data["billing"];
+        $name = $data["fio"];
+        $rq->session()->put("address",$delivery);
+        return view('democheckout.deliverypaymethod',["route"=>$this->getBPRoute("paymethod"), "debug"=>"", "goods"=>$this->rawgoods]);
     }
     public function getDeliverypaymethod(Request $rq){
         return $this->postDeliverypaymethod($rq);
     }
-    public function getThanks(Request $rq){
+    public function postThanks(Request $rq){
+        $this->getWC($rq);
+        $this->createOrder($rq);
+        $this->createDeal($rq);
         return view('democheckout.thankspage',["route"=>$this->getBPRoute("thanks")]);
     }
+    public function getThanks(Request $rq){
+        return $this->postThanks($rq);
+    }
+    public function postPassport(Request $rq){
+        return view('democheckout.passport',["route"=>$this->getBPRoute("passport"), "debug"=>"", "goods"=>$this->rawgoods]);
+    }
     public function getPassport(Request $rq){
-        return view('democheckout.passport',["route"=>$this->getBPRoute("passport")]);
+        return $this->postPassport($rq);
     }
-    public function getCard(Request $rq){
-        return view('democheckout.card',["route"=>$this->getBPRoute("card")]);
+	public function getCard(Request $rq){
+        return $this->postCard($rq);
     }
+    public function postCard(Request $rq){
+        return view('democheckout.card',["route"=>$this->getBPRoute("card"), "debug"=>"", "goods"=>$this->rawgoods]);
+    }
+    protected function getParams(Request $rq){
+        Log::debug("getParams data:".$rq->get("data"));
+        $data = $rq->get("data",$rq->getContent());
+        $data = json_decode($data,true);
+        if(empty($data))$data = $rq->all();
+        $log = "";
+        if(empty($data))$data = $rq->all();
+        foreach($data as $k=>$v){
+            if(empty($v))unset($data["{$k}"]);
+            else{
+                $log .= "{$k} = ".Garan24::obj2str($v).", ";
+            }
+        }
+        Log::debug("getParams request: ".$log);
+        return $data;
+    }
+    protected function getCustomer($data){
+        $person = DB::table('users')
+            ->join('usermeta',function($join){
+                $join->on('users.id', '=','usermeta.user_id')->where('usermeta.meta_key','=','billing_phone');
+            })
+            ->where('users.user_email', $data["email"])
+            ->where('usermeta.meta_value','like','%'.$data["phone"])
+            ->first();
+        return $person;
+    }
+    protected $wc_client;
+    protected function createOrder(Request $rq){
+        $resource = new WC_API_Client_Resource_Orders($this->wc_client);
+        $customer = $rq->session()->get("customer");
+        $products = $rq->session()->get("products");
+        $order = $rq->session()->get("order");
+        $delivery = $rq->session()->get("address");
+        $data=["order"=>$order];
+        $data["order"]["payment_details"] = [ "method_id" => "garan24","method_title" => "Garan24 Pay","paid" => false ];
+        $data["order"]["billing_address"] = $delivery;
+        $data["order"]["line_items"] = [];
+        $data["order"]["customer_id"] = $customer["customer"]["id"];
+        $products = $data["order"]["line_items"];
+        $items=[];
+        foreach($products as $key => $val) {
+            $item=[];
+            $item["type"]="external";
+            Log::debug("Product check ". json_encode($item));
+            $p = $this->createProduct($item);
+            $item["product_id"] = $p->product->id;
+            $items[]=$item;
+        }
+        $data["order"]["line_items"]=$items;
+        $res = $resource->create($data);
+
+        $internal_order=json_decode($res->http->response->body,true);
+        $rq->session()->put("internal_order",$internal_order);
+        Log::debug("Order is : ". Garan24::obj2str($internal_order));
+        return $internal_order;
+    }
+    protected function getShop(Request $rq){
+        $order = $rq->session()->get("order");
+        $consumer_secret = $order["x_secret"];
+        Log::debug("Secret is : ". $consumer_secret);
+        $shop = DB::table('woocommerce_api_keys')
+            ->join('shops','shops.api_key_id', '=','woocommerce_api_keys.key_id')
+            ->where('consumer_secret', $consumer_secret)->first();
+        $rq->session()->put("shop",json_decode(json_encode($shop),true));
+        Log::debug("Shop is : ". json_encode($shop));
+    }
+    protected function createDeal(Request $rq){
+        $order = $rq->session()->get("order");
+        $internal_order = $rq->session()->get("internal_order");
+        $shop = $rq->session()->get("shop");
+        $customer = $rq->session()->get("customer");
+        DB::table('deals')->insert(
+            [
+                'amount' => $order["order"]["order_total"]*100,
+                'currency' => $order["order"]["order_currency"],
+                'shop_id' => $shop["id"],
+                'status' => 1,
+                'internal_order_id' => $internal_order["order"]["id"],
+                'external_order_id' => $order["order"]["order_id"],
+                'external_order_url' => $order["order"]["order_url"],
+                'customer_id' => $customer["customer"]["id"]
+            ]
+        );
+    }
+    protected function getWC(Request $rq){
+        $api = $rq->session()->get("order");
+        $this->getShop($rq);
+        $domain ="https://garan24.ru";//$this->shop->link;
+        $consumer_key = $api["x_key"];
+        $consumer_secret = $api["x_secret"];
+        $options = [
+            'debug'           => true,
+        	'return_as_array' => false,
+        	'validate_url'    => false,
+        	'timeout'         => 30,
+            'ssl_verify'      => false
+        ];
+        $this->wc_client = new WC_API_Client( $domain, $consumer_key,$consumer_secret, $options );
+    }
+    //else
     public function getDelivery(Request $rq){
-        return view('democheckout.delivery',["route"=>$this->getBPRoute("delivery")]);
+        return view('democheckout.delivery',["route"=>$this->getBPRoute("delivery"), "debug"=>"", "goods"=>$this->rawgoods]);
     }
     public function getPaymethod(Request $rq){
-        return view('democheckout.paymethod',["route"=>$this->getBPRoute("paymethod")]);
+        return view('democheckout.paymethod',["route"=>$this->getBPRoute("paymethod"), "debug"=>"", "goods"=>$this->rawgoods]);
     }
     public function getCheckcard(Request $rq){
-        return view('democheckout.payment-form',["route"=>$this->getBPRoute("checkcard")]);
+        return view('democheckout.payment-form',["route"=>$this->getBPRoute("checkcard"), "debug"=>"", "goods"=>$this->rawgoods]);
         $data = [
             "client_orderid"=>"905",
             "order_desc" => "Test Order Description",
@@ -117,7 +251,7 @@ class DemoCheckoutController extends Controller{
 
     }
     public function postPayneteasyresponse(Request $rq){
-        return redirect('/democheckout/thanks',["route"=>$this->getBPRoute("email")]);
+        return redirect('/democheckout/thanks',["route"=>$this->getBPRoute("email"), "debug"=>"", "goods"=>$this->rawgoods]);
     }
     public function getPayneteasyresponse(Request $rq){
         return $this->postPayneteasyresponse($rq);
@@ -159,31 +293,6 @@ class DemoCheckoutController extends Controller{
             "back" => (($c["back"]!==false)?$this->bpmodels[$c["back"]]:false)
         ];
     }
-    protected function getParams(Request $rq){
-        Log::debug($rq->get("data"));
-        $data = $rq->get("data",$rq->getContent());
-        $data = json_decode($data,true);
-        if(empty($data))$data = $rq->all();
-        $log = "";
-        if(empty($data))$data = $rq->all();
-        foreach($data as $k=>$v){
-            if(empty($v))unset($data["{$k}"]);
-            else{
-                $log .= "{$k} = ".Garan24::obj2str($v).", ";
-            }
-        }
-        Log::debug($log);
-        return $data;
-    }
-    protected function getCustomer($data){
-        $person = DB::table('users')
-            ->join('usermeta',function($join){
-                $join->on('users.id', '=','usermeta.user_id')->where('usermeta.meta_key','=','billing_phone');
-            })
-            ->where('users.user_email', $data["email"])
-            ->where('usermeta.meta_value','=',$data["phone"])
-            ->first();
-        return $person;
-    }
+
 }
 ?>

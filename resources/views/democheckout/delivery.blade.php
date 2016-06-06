@@ -1,4 +1,4 @@
-@extends('magnitolkin.cart.magnitolkin')
+@extends('democheckout.layout')
 @section('content')
 <h2><span class="red">Оформление</span> заказа</h2>
 
