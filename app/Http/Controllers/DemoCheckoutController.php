@@ -28,16 +28,19 @@ class DemoCheckoutController extends Controller{
         //print_r($this->rawgoods);
     }
     public function getIndex(Request $rq){
-        return $this->getCheckout($rq);
+        //return $this->postCheckout($rq);
+    }
+    public function postIndex(Request $rq){
+        //return $this->postCheckout($rq);
     }
     public function getCheckout(Request $rq){
+        //return $this->postCheckout($rq);
+    }
+    public function postCheckout(Request $rq){
         $data = $this->getParams($rq);
         $rq->session()->put("order",$this->raworder);
         $rq->session()->put("products",$this->rawgoods);
         return view('democheckout.checkout',["route"=>$this->getBPRoute("email"), "debug"=>"", "goods"=>$this->rawgoods]);
-    }
-    public function postCheckout(Request $rq){
-        return $this->getCheckout($rq);
     }
     public function postPersonal(Request $rq){
         $data = $this->getParams($rq);
@@ -94,6 +97,7 @@ class DemoCheckoutController extends Controller{
     }
     protected function getParams(Request $rq){
         Log::debug("getParams data:".$rq->get("data"));
+        Log::debug("getParams all:".Garan24::obj2str($rq->all()));
         $data = $rq->get("data",$rq->getContent());
         $data = json_decode($data,true);
         if(empty($data))$data = $rq->all();

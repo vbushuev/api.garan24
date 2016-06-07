@@ -9,3 +9,4 @@ Homestead.json
 .env.example
 composer.lock
 *.log
+app/Http/Controllers/bad.DemoCheckoutController.php
