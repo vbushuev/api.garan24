@@ -41,7 +41,7 @@ class DemoCheckoutController extends Controller{
         $this->rawgoods = $this->raworder["order"]["items"];
         $rq->session()->put("order",$this->raworder);
         $rq->session()->put("products",$this->rawgoods);
-        return view('democheckout.checkout',["route"=>$this->getBPRoute("email"), "debug"=>"", "goods"=>$this->rawgoods]);
+        return response()->view('democheckout.checkout',["route"=>$this->getBPRoute("email"), "debug"=>"", "goods"=>$this->rawgoods])->header('Access-Control-Allow-Origin', '*');;
     }
     public function postPersonal(Request $rq){
         $data = $this->getParams($rq);
@@ -69,8 +69,8 @@ class DemoCheckoutController extends Controller{
     public function postDeliverypaymethod(Request $rq){
         $data = $this->getParams($rq);
         $goods= $rq->session()->get("products");
-        $delivery = $data["billing"];
-        $name = $data["fio"];
+        $delivery = isset($data["billing"])?$data["billing"]:['no adress'];
+        $name = isset($data["fio"])?$data["fio"]:['noname'];
         $rq->session()->put("address",$delivery);
         return view('democheckout.deliverypaymethod',["route"=>$this->getBPRoute("paymethod"), "debug"=>"", "goods"=>$goods]);
     }
@@ -78,15 +78,20 @@ class DemoCheckoutController extends Controller{
         return $this->postDeliverypaymethod($rq);
     }
     public function postThanks(Request $rq){
-        $this->getWC($rq);
-        $this->createOrder($rq);
-        $this->createDeal($rq);
+        try{
+            $this->getWC($rq);
+            $this->createOrder($rq);
+            $this->createDeal($rq);
+        }
+        catch(Exception )
         return view('democheckout.thankspage',["route"=>$this->getBPRoute("thanks")]);
     }
     public function getThanks(Request $rq){
         return $this->postThanks($rq);
     }
     public function postPassport(Request $rq){
+        $data = $this->getParams($rq);
+        $rq->session()->put("paydelivery",$data);
         $goods= $rq->session()->get("products");
         return view('democheckout.passport',["route"=>$this->getBPRoute("passport"), "debug"=>"", "goods"=>$goods]);
     }
@@ -97,12 +102,27 @@ class DemoCheckoutController extends Controller{
         return $this->postCard($rq);
     }
     public function postCard(Request $rq){
+        $data = $this->getParams($rq);
+        $pd=[];
+        if(isset($data["payment_types"])){
+            $pd = $data;
+            $rq->session()->put("paydelivery",$data);
+        }
+        else {
+            $pd = $rq->session()->get("paydelivery");
+            $rq->session()->put("passport",$data);
+        }
+        $delivery = $rq->session()->get("address");
         $goods= $rq->session()->get("products");
-        return view('democheckout.card',["route"=>$this->getBPRoute("card"), "debug"=>"", "goods"=>$goods]);
+        return view('democheckout.card',["route"=>$this->getBPRoute("card"), "debug"=>"",
+            "goods"=>$goods,
+            "paydelivery"=>$pd,
+            "delivery"=>$delivery
+        ]);
     }
     protected function getParams(Request $rq){
-        Log::debug("getParams data:".$rq->get("data"));
-        Log::debug("getParams all:".Garan24::obj2str($rq->all()));
+        //Log::debug("getParams data:".$rq->get("data"));
+        //Log::debug("getParams all:".Garan24::obj2str($rq->all()));
         $data = $rq->get("data",$rq->getContent());
         $data = json_decode($data,true);
         if(empty($data))$data = $rq->all();
@@ -137,6 +157,7 @@ class DemoCheckoutController extends Controller{
         $data=["order"=>$order];
         $data["order"]["payment_details"] = [ "method_id" => "garan24","method_title" => "Garan24 Pay","paid" => false ];
         $data["order"]["billing_address"] = $delivery;
+        $data["order"]["shipping_address"] = $delivery;
         $data["order"]["line_items"] = [];
         $data["order"]["customer_id"] = $customer["customer"]["id"];
         $products = $data["order"]["line_items"];

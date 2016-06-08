@@ -12,6 +12,7 @@ window.garan = {
             console.debug("VARS json"+vars.json());
             console.debug("VARS html"+vars.html());
             htmlForm.submit();
+            return false;
         },
         required:function(){
             var args = arguments.length?arguments[0]:{form:$("form:first")}, ret=true;;

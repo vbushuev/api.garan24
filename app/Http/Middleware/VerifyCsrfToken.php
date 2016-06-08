@@ -25,6 +25,7 @@ class VerifyCsrfToken extends BaseVerifier
         "/democheckout/checkout",
         "/democheckout/personal",
         "/democheckout/deliverypaymethod",
+        "/democheckout/passport",
         "/democheckout/thanks",
         "/democheckout/card",
         "/democheckout/payneteasyresponse"

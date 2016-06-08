@@ -6,14 +6,15 @@
     <div class="clearfix"></div>
 </div>
 <script>
+    window.garan_submit_args= {
+        form:$("#order-form-container"),
+        url:"{{$route["next"]["href"]}}"
+    };
     $(document).ready(function(){
-        var a= {
-            form:$("#order-form-container"),
-            url:"{{$route["next"]["href"]}}"
-        };
+
         $("#order-form-container").show();
         $("#btnMakeOrder").click(function(){
-            garan.form.submit(a);
+            garan.form.submit(garan_submit_args);
             //document.location.href = "{{$route["next"]["href"]}}";
         })
         $("#btnReturnToCart").click(function(){

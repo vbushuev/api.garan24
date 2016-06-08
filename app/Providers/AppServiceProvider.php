@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Blade;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -13,7 +14,11 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        //
+        Blade::directive('address', function($a) {
+            //print_r($a);
+            //$str = with($a)['city'].'. '.$a['zip'].', '.$a['address1'];
+            return "<?php echo join(', ',array_values(with({$a})))?>";
+        });
     }
 
     /**
