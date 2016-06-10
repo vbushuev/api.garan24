@@ -137,13 +137,14 @@
                     <!--<script type="text/javascript">Order.addPaymentType(1, 0, "False", "False");</script>-->
                 </div>
             </div>
+            <div class="clearfix"></div>
+            <div id="total_cost">
+                <div class="label">Полная стоимость:</div>
+                <div class="cost_value"><span id="lblTotalPrice">4 881</span> руб.</div>
+            </div>
+            <div class="clearfix"></div>
         </div>
-        <div class="clearfix"></div>
-        <div id="total_cost">
-            <div class="label">Полная стоимость:</div>
-            <div class="cost_value"><span id="lblTotalPrice">4 881</span> руб.</div>
-        </div>
-        <div class="clearfix"></div>
+
         <input type="hidden" id="delivery_type_id" name="delivery_type_id" />
         <input type="hidden" id="delivery_type_name" name="delivery_type_name" />
         <input type="hidden" id="delivery_type_desc" name="delivery_type_desc" />

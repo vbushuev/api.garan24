@@ -23,7 +23,7 @@ window.garan = {
                     $t.parent(".required").effect("shake");
                     $t.focus();
                     ret = false;
-                    return;
+                    return false;
                 }
             });
             return ret;

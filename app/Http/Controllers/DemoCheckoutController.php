@@ -83,7 +83,9 @@ class DemoCheckoutController extends Controller{
             $this->createOrder($rq);
             $this->createDeal($rq);
         }
-        catch(Exception )
+        catch(Exception $e){
+            Log::error($e->getMessage());
+        }
         return view('democheckout.thankspage',["route"=>$this->getBPRoute("thanks")]);
     }
     public function getThanks(Request $rq){
