@@ -5,11 +5,14 @@
 var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
 
 </script>-->
+@if(isset($delivery))
 <h2>Заказ №<span class="red" id="OrderId">33252</span> сформирован</h2>
+@endif
 <style>
     .jumbotron .small {font-size:12pt;}
 </style>
 <div id="cart-container">
+    @if(isset($delivery))
     <div class="jumbotron" style="font-size:12pt;">
         <div class="container">
             <p>
@@ -26,15 +29,7 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
                                 </td>
                             </tr>
                         @endforeach
-                    @else
-                    <tr>
-                        <td style="padding:.4em;">
-                            Morel Tempo Coax 5
-                        </td>
-                        <td style="padding:.4em;">
-                            1 шт.
-                        </td>
-                    </tr>
+
                     @endif
                 </table>
             </p>
@@ -52,19 +47,11 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
             <!--<p class="text-muted small">Для оплаты заказа через 14 дней после его получения введите реквизиты своей банковской карты. Чтобы проверить карту, на ней будет заблокирован 1 рубль, который сразу же будет возвращен.</p>-->
         </div>
     </div>
+    @endif
 <div id="order-form-container">
     <div>
         <div class="page-header">
             <h3>Введите реквизиты Вашей карты:</h3>
-        </div>
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="form-group" id="Cardholder">
-                    <label for="cardholder" class="control-label">Имя Владелца карты:</label>
-                    @include('elements.inputs.text',['name'=>'cardholder','class'=>'cardholder','icon'=>'user','text'=>'CARD HOLDER'])
-                    <p class="text-muted small">Латинскими буквами</p>
-                </div>
-            </div>
         </div>
         <div class="row">
             <div class="col-lg-6">
@@ -79,7 +66,7 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
                 <div class="form-group" id="ExpireDate">
                     <label for="expiredate" class="control-label">Срок действия:</label>
                     @include('elements.inputs.expiredate')
-                    <p class="text-muted small">В формате YY/MM. Как написано на карте.</p>
+                    <p class="text-muted small">В формате MM/ГГ. Как написано на карте.</p>
                 </div>
             </div>
             <div class="col-lg-3">
@@ -89,9 +76,16 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
                     <p class="text-muted small">3 цифры на обороте карты.</p>
                 </div>
             </div>
-
         </div>
-
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group" id="Cardholder">
+                    <label for="cardholder" class="control-label">Имя Владелца карты:</label>
+                    @include('elements.inputs.text',['name'=>'cardholder','class'=>'cardholder','icon'=>'user','text'=>'CARD HOLDER'])
+                    <p class="text-muted small">Латинскими буквами</p>
+                </div>
+            </div>
+        </div>
         <div class="form-group" id="PassportAgree">
             @include('elements.inputs.checkbox',["name"=>"agree1","checked"=>"checked","text"=>"Сохранить мою карту в сервисе Гаран24."])
             <p class="text-muted small">
