@@ -16,20 +16,6 @@
     <script src="https://service.garan24.ru/js/api/1.0/garan24.checkout.js"></script>
 </head>
 <body>
-    <div class="container">
-        <form method="POST" id="garan24-democheckout" action="https://service.garan24.ru/democheckout/checkout">
-            <input type="hidden" name="x_secret" value="cs_89f95570b4bd18759b8501cd16e4756ab03a544c">
-            <input type="hidden" name="x_key" value="ck_7575374a55d17741f3999e8c98725c6471030d6c">
-            <input type="hidden" name="version" value="1.0">
-            <input type="hidden" name="response_url" value="http://garandemoshop.ru">
-            <button type="submit">submit</button>
-        </form>
-    </div>
-    <script>
-        $(document).ready(function(){
-            $("input").attr("type","text");
-            garan.checkout();
-        });
-    </script>
+	<img src="../public/css/img/garan24.logo.svg">
 </body>
 </html>

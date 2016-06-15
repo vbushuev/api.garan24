@@ -11,8 +11,10 @@
 @endsection
 
 @section('content')
-    <div class="title">
-        Garan<sup>24</sup>
+    <div class="title-logo">
+        <span class="g">G</span>
+        <span>aran</span>
+        <span class="a">24</span>
     </div>
 
     <a class="button highlighted" href="/checkout">Part After</a>

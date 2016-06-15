@@ -1,5 +1,5 @@
-@import url("//fonts.googleapis.com/css?family=Lato:400,100");
-@import url("//fonts.googleapis.com/css?family=Roboto+Mono:800,400,100&subset=latin,cyrillic");
+@import url("//fonts.googleapis.com/css?family=Lato:400,300,100");
+@import url("//fonts.googleapis.com/css?family=Roboto+Mono:700,400,100&subset=latin,cyrillic");
 @import url("//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
 * {
   font-weight: 100;
@@ -54,6 +54,49 @@ i {
 }
 .garan24-blue {
   color: #2962ff;
+}
+.title-logo {
+  font-family: 'Lato';
+  font-weight: 100;
+  font-stretch: semi-expanded;
+  font-size: 64px;
+  color: #673ab7;
+  margin: 16px;
+  padding: 0;
+}
+.title-logo span {
+  box-sizing: border-box;
+  border-top: 1px solid #673ab7;
+  border-bottom: 1px solid #4db6ac;
+  display: inline-block;
+  font-size: inherit;
+  font-weight: 300;
+  margin-left: -13px;
+}
+.title-logo .g,
+.title-logo .a-2,
+.title-logo .a-4 {
+  padding: 0 8px;
+}
+.title-logo .g {
+  background-color: #673ab7;
+  border: 1px solid #673ab7;
+  color: #fff;
+}
+.title-logo .a {
+  color: #009688;
+  margin-left: -12px;
+  color: #fff;
+  background-color: #4db6ac;
+  border: 1px solid #4db6ac;
+}
+.title-logo .a-2,
+.title-logo .a-4 {
+  color: #009688;
+  margin-left: -12px;
+  color: #fff;
+  background-color: #4db6ac;
+  border: 1px solid #4db6ac;
 }
 .button {
   -webkit-border-radius: 0.4em;
