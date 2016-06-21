@@ -15,8 +15,8 @@ use WC_API_Client_Resource_Customers;
 use WC_API_Client_Resource_Products;
 
 use \Garan24\Garan24 as Garan24;
-use \Garan24\Gateway\Ariuspay\Sale as AriusSale;
-use \Garan24\Gateway\Ariuspay\Exception as AriuspayException;
+use \Garan24\Deal\Deal as Deal;
+$viewFolder = "/democheckout/";
 
 class CheckoutController extends Controller{
     protected $rawgoods;
@@ -27,21 +27,20 @@ class CheckoutController extends Controller{
         //print_r($this->rawgoods);
     }
     public function getIndex(Request $rq){
-        return $this->postCheckout($rq);
+        $id = $rq->get('id','noindex');
+        if($id=='noindex') return view('public.index');
+        $deal = new Deal();
+        $deal->byId($id);
+        $rq->session()->put("deal_id",$id);
+        return view('/checkout/checkout'
+            ,["route"=>$this->getBPRoute("checkout"), "debug"=>"", "goods"=>$deal->order->getProducts(),"customer"=>[]]
+        );
     }
     public function postIndex(Request $rq){
-        return $this->postCheckout($rq);
-    }
-    public function getCheckout(Request $rq){
-        return $this->postCheckout($rq);
-    }
-    public function postCheckout(Request $rq){
-        $data = $this->getParams($rq);
-        $this->raworder = (!empty($data))?$data:$this->raworder;
-        $this->rawgoods = $this->raworder["order"]["items"];
-        $rq->session()->put("order",$this->raworder);
-        $rq->session()->put("products",$this->rawgoods);
-        return response()->view('democheckout.checkout',["route"=>$this->getBPRoute("email"), "debug"=>"", "goods"=>$this->rawgoods])->header('Access-Control-Allow-Origin', '*');;
+        $data = $rq->getContent();
+        $deal = new Deal();
+        $deal->byJson($data);
+        return $deal->sync();
     }
     public function postPersonal(Request $rq){
         $data = $this->getParams($rq);
