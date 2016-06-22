@@ -11,7 +11,7 @@
 <tr class="cart-item" id="cartItem-{{$good["product_id"]}}">
     <td class="image">
 
-        <img width="70" src="{{$good["product_img"] or ''}}" alt="{{$good["title"] or $good['name']}}">
+        <img width="70" src="{{$good["product_img"] or $good["featured_src"]}}" alt="{{$good["title"] or $good['name']}}">
     </td>
     <td>
         <a class="name" href="{{$good["product_url"] or ''}}" target="_blank">{{$good["title"] or $good["name"]}}</a>

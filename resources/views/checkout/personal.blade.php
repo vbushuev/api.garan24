@@ -1,4 +1,4 @@
-@extends('democheckout.layout')
+@extends('checkout.layout')
 
 @section('content')
 <!--<script>
@@ -8,7 +8,7 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
 <h2><span class="red">Оформление</span> заказа</h2>
 
 <div id="cart-container">
-@include('democheckout.goods',['goods'=>$goods])
+@include('checkout.goods',['goods'=>$goods])
 
 <div id="order-form-container">
     <div>
@@ -17,15 +17,15 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
         </div>
         <div class="form-group" id="PersonLastName">
             <label for="fio['last']" class="control-label">Фамилия:</label>
-            @include('elements.inputs.text',["name"=>"fio['last']","text"=>"Фамилия",'required'=>"required"])
+            @include('elements.inputs.text',["name"=>"fio['last']","text"=>"Фамилия",'required'=>"required","value"=>$customer["billing_address"]["last_name"]])
         </div>
         <div class="form-group" id="PersonFirstName">
             <label for="fio['first']" class="control-label">Ваше имя:</label>
-            @include('elements.inputs.text',["name"=>"fio['first']","text"=>"Имя",'required'=>"required"])
+            @include('elements.inputs.text',["name"=>"fio['first']","text"=>"Имя",'required'=>"required","value"=>$customer["billing_address"]["first_name"]])
         </div>
         <div class="form-group" id="PersonMiddleName">
             <label for="fio['middle']" class="control-label">Отчество:</label>
-            @include('elements.inputs.text',["name"=>"fio['middle']","text"=>"Отчество"])
+            @include('elements.inputs.text',["name"=>"fio['middle']","text"=>"Отчество","value"=>""])
         </div>
         <div id="DeliveryAddressContainer" class="form-group">
             <label class="control-label">Адрес доставки:</label>
@@ -50,7 +50,7 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        @include('elements.inputs.text',["name"=>"billing['state']","text"=>"Район"])
+                        @include('elements.inputs.text',["name"=>"billing['state']","text"=>"Район","value"=>$customer["billing_address"]["state"]])
                     </div>
                 </div>
 
@@ -58,17 +58,17 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
-                        @include('elements.inputs.text',["name"=>"billing['city']","text"=>"Город"])
+                        @include('elements.inputs.text',["name"=>"billing['city']","text"=>"Город","value"=>$customer["billing_address"]["city"]])
                     </div>
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        @include('elements.inputs.text',["name"=>"billing['zip']","text"=>"Почтовый индекс"])
+                        @include('elements.inputs.text',["name"=>"billing['zip']","text"=>"Почтовый индекс","value"=>$customer["billing_address"]["postcode"]])
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                @include('elements.inputs.text',["name"=>"billing['address1']","text"=>"Адрес"])
+                @include('elements.inputs.text',["name"=>"billing['address1']","text"=>"Адрес","value"=>$customer["billing_address"]["address_1"]])
             </div>
             <!--
             <textarea id="billing_address" name="billing_address" cols="20" rows="5" class="form-control"></textarea>
@@ -80,7 +80,7 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
 
     </div>
 
-    @include("democheckout._buttons")
+    @include("checkout._buttons")
 </div>
 
 @endsection

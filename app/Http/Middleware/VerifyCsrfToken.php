@@ -28,6 +28,14 @@ class VerifyCsrfToken extends BaseVerifier
         "/democheckout/passport",
         "/democheckout/thanks",
         "/democheckout/card",
-        "/democheckout/payneteasyresponse"
+        "/democheckout/payneteasyresponse",
+        "/checkout",
+        "/checkout/checkout",
+        "/checkout/personal",
+        "/checkout/deliverypaymethod",
+        "/checkout/passport",
+        "/checkout/thanks",
+        "/checkout/card",
+        "/checkout/payneteasyresponse"
     ];
 }

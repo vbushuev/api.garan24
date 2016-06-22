@@ -16,11 +16,12 @@ use WC_API_Client_Resource_Products;
 
 use \Garan24\Garan24 as Garan24;
 use \Garan24\Deal\Deal as Deal;
-$viewFolder = "/democheckout/";
+use \Garan24\Deal\Customer as Customer;
 
 class CheckoutController extends Controller{
     protected $rawgoods;
     protected $raworder;
+    protected $viewFolder = '/checkout';
     public function __construct(){
         $this->raworder = file_get_contents('../tests/example.order.json');
         $this->raworder = json_decode($this->raworder,true);
@@ -29,10 +30,10 @@ class CheckoutController extends Controller{
     public function getIndex(Request $rq){
         $id = $rq->get('id','noindex');
         if($id=='noindex') return view('public.index');
+        $rq->session()->put("deal_id",$id);
         $deal = new Deal();
         $deal->byId($id);
-        $rq->session()->put("deal_id",$id);
-        return view('/checkout/checkout'
+        return view(preg_replace('/\//m','',$this->viewFolder).'.checkout'
             ,["route"=>$this->getBPRoute("checkout"), "debug"=>"", "goods"=>$deal->order->getProducts(),"customer"=>[]]
         );
     }
@@ -45,25 +46,20 @@ class CheckoutController extends Controller{
     public function postPersonal(Request $rq){
         $data = $this->getParams($rq);
         if(!isset($data["email"])||!isset($data["phone"])){
-            return redirect('/democheckout/checkout');
+            return redirect($this->viewFolder.'checkout');
         }
-        $goods= $rq->session()->get("products");
-        $person = $this->getCustomer($data);
-        Log::debug(Garan24::obj2str($person));
-        $cust="{}";
-        if(isset($person->ID)){
-            $cust = app('App\Http\Controllers\GaranCustomerController')->show($person->user_email);
-        }else{
-            $cust = app('App\Http\Controllers\GaranCustomerController')->create($rq);
-        }
-        Log::debug("Customer: ". Garan24::obj2str($cust));
-        $person = json_decode($cust,true);
-        Log::debug("Person is: ". Garan24::obj2str($person));
-        $rq->session()->put('customer',$person);
-        return view('democheckout.personal',["route"=>$this->getBPRoute("personal"), "debug"=>"", "goods"=>$goods,"customer"=>$person]);
-    }
-    public function getPersonal(Request $rq){
-        return $this->postPersonal($rq);
+        $id = $rq->session()->get("deal_id");
+        $deal = new Deal();
+        $deal->byId($id);
+        $cust = new Customer('{"email":"'.$data["email"].'","phone":"'.$data["phone"].'"}',$deal->getWC());
+        $cust->sync();
+        $rq->session()->put("user_id",$cust->customer_id);
+        return view(preg_replace('/\//m','',$this->viewFolder).'.personal'
+            ,["route"=>$this->getBPRoute("personal")
+            ,"debug"=>""
+            ,"goods"=>$deal->order->getProducts()
+            ,"customer"=>$cust->toArray()
+        ]);
     }
     public function postDeliverypaymethod(Request $rq){
         $data = $this->getParams($rq);
@@ -256,7 +252,7 @@ class CheckoutController extends Controller{
             "expire_year" => "2099",
             "cvv2" => "123",*/
             "purpose" => "www.twitch.tv/dreadztv",
-            "redirect_url" => "https://service.garan24.ru/democheckout/payneteasyresponse",
+            "redirect_url" => "https://service.garan24.ru/".$this->viewFolder."/payneteasyresponse",
             //"server_callback_url" => "http://doc.payneteasy.com/doc/dummy.htm",
             "merchant_data" => "VIP customer",
             "control" => "768eb8162fc361a3e14150ec46e9a6dd8fbfa483"
@@ -282,26 +278,27 @@ class CheckoutController extends Controller{
 
     }
     public function postPayneteasyresponse(Request $rq){
-        return redirect('/democheckout/thanks',["route"=>$this->getBPRoute("email"), "debug"=>"", "goods"=>$this->rawgoods]);
+        return redirect($this->vieFolder.'/thanks',["route"=>$this->getBPRoute("email"), "debug"=>"", "goods"=>$this->rawgoods]);
     }
     public function getPayneteasyresponse(Request $rq){
         return $this->postPayneteasyresponse($rq);
     }
     protected $bpmodels=[
-        "index" => ["text"=>"Продолжить","href"=>"/democheckout/"],
-        "email" => ["text"=>"Продолжить","href"=>"/democheckout/checkout"],
-        "personal" => ["text"=>"Продолжить","href"=>"/democheckout/personal"],
-        "delivery" => ["text"=>"Продолжить","href"=>"/democheckout/delivery"],
-        "paymethod" => ["text"=>"Продолжить","href"=>"/democheckout/paymethod"],
-        "checkcard" => ["text"=>"Продолжить","href"=>"/democheckout/checkcard"],
-        "deliverypaymethod" => ["text"=>"Продолжить","href"=>"/democheckout/deliverypaymethod"],
-        "thanks" => ["text"=>"Продолжить","href"=>"/democheckout/thanks"],
-        "passport" => ["text"=>"Продолжить","href"=>"/democheckout/passport"],
-        "card" => ["text"=>"Подтвердить","href"=>"/democheckout/card"],
+        "index" => ["text"=>"Продолжить","href"=>"/"],
+        "email" => ["text"=>"Продолжить","href"=>"/checkout"],
+        "personal" => ["text"=>"Продолжить","href"=>"/personal"],
+        "delivery" => ["text"=>"Продолжить","href"=>"/delivery"],
+        "paymethod" => ["text"=>"Продолжить","href"=>"/paymethod"],
+        "checkcard" => ["text"=>"Продолжить","href"=>"/checkcard"],
+        "deliverypaymethod" => ["text"=>"Продолжить","href"=>"/deliverypaymethod"],
+        "thanks" => ["text"=>"Продолжить","href"=>"/thanks"],
+        "passport" => ["text"=>"Продолжить","href"=>"/passport"],
+        "card" => ["text"=>"Подтвердить","href"=>"/card"],
     ];
     protected $bpmatrix=[
         "index" => ["condition"=>false,"next"=>"email","back"=>"index"],
         "email" => ["condition"=>false,"next"=>"personal","back"=>"index"],
+        "checkout" => ["condition"=>false,"next"=>"personal","back"=>"index"],
         //"personal" => ["condition"=>false,"next"=>"delivery","back"=>"email"],
         "personal" => ["condition"=>false,"next"=>"deliverypaymethod","back"=>"email"],
         "delivery" => ["condition"=>false,"next"=>"paymethod","back"=>"personal"],
@@ -313,11 +310,11 @@ class CheckoutController extends Controller{
         "card" => ["condition"=>false,"next"=>"thanks","back"=>"deliverypaymethod"]
     ];
     protected function getBPRoute($current,$condition=false){
-        $dir="/democheckout/";
         $c = (!isset($this->bpmatrix[$current]))
             ? $this->bpmatrix["index"]
             : $this->bpmatrix[$current];
         return [
+            "dir" => $this->viewFolder,
             "next" => ($c["condition"]!==false)
                     ? (isset($c["condition"][$condition])?$this->bpmodels[$c["condition"][$condition]]:$this->bpmodels[$c["next"]])
                     : $this->bpmodels[$c["next"]],

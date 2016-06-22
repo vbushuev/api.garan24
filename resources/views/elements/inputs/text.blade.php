@@ -5,5 +5,6 @@
     <input name="{{$name or 'txtField'}}"
         class="form-control {{$class or ''}}"
         type="{{$type or 'text'}}"
-        placeholder="{{$text or 'Текст'}}">
+        placeholder="{{$text or 'Текст'}}"
+        value="{{$value or ''}}">
 </div>

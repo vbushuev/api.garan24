@@ -8,17 +8,15 @@
 <script>
     window.garan_submit_args= {
         form:$("#order-form-container"),
-        url:"{{$route["next"]["href"]}}"
+        url:"{{$route["dir"].$route["next"]["href"]}}"
     };
     $(document).ready(function(){
 
         $("#order-form-container").show();
         $("#btnMakeOrder").click(function(){
             garan.form.submit(garan_submit_args);
-            //document.location.href = "{{$route["next"]["href"]}}";
         })
         $("#btnReturnToCart").click(function(){
-            //document.location.href = "../magnitolkin";
             document.location.href = "{{$route["back"]["href"]}}";
         })
     });
