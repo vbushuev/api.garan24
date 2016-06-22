@@ -1,4 +1,4 @@
-@extends('democheckout.layout')
+@extends('checkout.layout')
 @section('content')
     <style>
         .description, .description_shot {
@@ -12,7 +12,7 @@
     </style>
     <h2><span class="red">Оформление</span> заказа</h2>
     <div id="order-form-container">
-        @include('democheckout.goods',['goods'=>$goods])
+        @include('checkout.goods',['goods'=>$goods])
         <div id="order-options" style="margin-left: 10px;">
             <div id="delivery">
                 <div class="notice">
@@ -151,7 +151,7 @@
         <input type="hidden" id="payment_type_id" name="payment_type_id" />
         <input type="hidden" id="payment_type_name" name="payment_type_name" />
         <input type="hidden" id="payment_type_desc" name="payment_type_desc" />
-        @include("democheckout._buttons")
+        @include("checkout._buttons")
     </div>
     <script>
         /*

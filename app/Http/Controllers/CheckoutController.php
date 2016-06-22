@@ -54,6 +54,8 @@ class CheckoutController extends Controller{
         $cust = new Customer('{"email":"'.$data["email"].'","phone":"'.$data["phone"].'"}',$deal->getWC());
         $cust->sync();
         $rq->session()->put("user_id",$cust->customer_id);
+        $deal->update(["customer_id"=>$cust->id]);
+        Log::debug("Personal info page Order:".$deal->order->__toString());
         return view(preg_replace('/\//m','',$this->viewFolder).'.personal'
             ,["route"=>$this->getBPRoute("personal")
             ,"debug"=>""
@@ -63,14 +65,19 @@ class CheckoutController extends Controller{
     }
     public function postDeliverypaymethod(Request $rq){
         $data = $this->getParams($rq);
-        $goods= $rq->session()->get("products");
-        $delivery = isset($data["billing"])?$data["billing"]:['no adress'];
-        $name = isset($data["fio"])?$data["fio"]:['noname'];
-        $rq->session()->put("address",$delivery);
-        return view('democheckout.deliverypaymethod',["route"=>$this->getBPRoute("paymethod"), "debug"=>"", "goods"=>$goods]);
-    }
-    public function getDeliverypaymethod(Request $rq){
-        return $this->postDeliverypaymethod($rq);
+        $id = $rq->session()->get("deal_id");
+        $deal = new Deal();
+        $deal->byId($id);
+
+        $deal->update($data);
+        return view(
+            preg_replace('/\//m','',$this->viewFolder).'.deliverypaymethod',
+            [
+                "route"=>$this->getBPRoute("deliverypaymethod"),
+                "debug"=>"",
+                "goods"=>$deal->order->getProducts()
+            ]
+        );
     }
     public function postThanks(Request $rq){
         try{
@@ -81,7 +88,7 @@ class CheckoutController extends Controller{
         catch(Exception $e){
             Log::error($e->getMessage());
         }
-        return view('democheckout.thankspage',["route"=>$this->getBPRoute("thanks")]);
+        return view(preg_replace('/\//m','',$this->viewFolder).'.thankspage',["route"=>$this->getBPRoute("thanks")]);
     }
     public function getThanks(Request $rq){
         return $this->postThanks($rq);
@@ -90,7 +97,7 @@ class CheckoutController extends Controller{
         $data = $this->getParams($rq);
         $rq->session()->put("paydelivery",$data);
         $goods= $rq->session()->get("products");
-        return view('democheckout.passport',["route"=>$this->getBPRoute("passport"), "debug"=>"", "goods"=>$goods]);
+        return view(preg_replace('/\//m','',$this->viewFolder).'.passport',["route"=>$this->getBPRoute("passport"), "debug"=>"", "goods"=>$deal->order->getProducts()]);
     }
     public function getPassport(Request $rq){
         return $this->postPassport($rq);
@@ -111,8 +118,8 @@ class CheckoutController extends Controller{
         }
         $delivery = $rq->session()->get("address");
         $goods= $rq->session()->get("products");
-        return view('democheckout.card',["route"=>$this->getBPRoute("card"), "debug"=>"",
-            "goods"=>$goods,
+        return view(preg_replace('/\//m','',$this->viewFolder).'.card',["route"=>$this->getBPRoute("card"), "debug"=>"",
+            "goods"=>$deal->order->getProducts(),
             "paydelivery"=>$pd,
             "delivery"=>$delivery
         ]);
@@ -218,15 +225,8 @@ class CheckoutController extends Controller{
         ];
         $this->wc_client = new WC_API_Client( $domain, $consumer_key,$consumer_secret, $options );
     }
-    //else
-    public function getDelivery(Request $rq){
-        return view('democheckout.delivery',["route"=>$this->getBPRoute("delivery"), "debug"=>"", "goods"=>$this->rawgoods]);
-    }
-    public function getPaymethod(Request $rq){
-        return view('democheckout.paymethod',["route"=>$this->getBPRoute("paymethod"), "debug"=>"", "goods"=>$this->rawgoods]);
-    }
     public function getCheckcard(Request $rq){
-        return view('democheckout.payment-form',["route"=>$this->getBPRoute("checkcard"), "debug"=>"", "goods"=>$this->rawgoods]);
+        return view(preg_replace('/\//m','',$this->viewFolder).'.payment-form',["route"=>$this->getBPRoute("checkcard"), "debug"=>"", "goods"=>$this->rawgoods]);
         $data = [
             "client_orderid"=>"905",
             "order_desc" => "Test Order Description",
