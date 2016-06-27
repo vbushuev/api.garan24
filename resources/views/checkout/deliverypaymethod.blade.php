@@ -32,109 +32,29 @@
                 <div class="clearfix"></div>
                 <div id="delivery_types">
                     <!--<script type="text/javascript">Order.addDeliveryType(2, 0, 0, "False", "False");</script>-->
-
-                    <div class="radio">
-                        <label class="selected">
-                            <input type="radio" id="delivery_type_1" checked="checked" name="delivery_types" onclick="javascript:optionClickDeliveryType(1, this)" data-delivery-id="1">
-                            Доставка курьером по Москве
-                        </label>
-                        <div class="description" style="display:block;">Доставка осуществляется курьерской службой интернет магазина.<br/><strong>Срок</strong> - на следующий рабочий день<br /><strong>Стоимость</strong> - 300руб.</div>
-                    </div>
-                    <!--<script type="text/javascript">Order.addDeliveryType(1, 0, 0, "True", "False");</script>-->
-
-                    <div class="radio">
-                        <label>
-                            <input type="radio" id="delivery_type_0" name="delivery_types" onclick="javascript:optionClickDeliveryType(0, this)" data-delivery-id="0">
-                            Доставка курьером по Москве (экспресс)
-                        </label>
-                        <div class="description">Доставка осуществляется курьерской службой интернет магазина.<br/><strong>Срок</strong> - 3 часа с момента заказа<br /><strong>Стоимость</strong> - 600руб.</div>
-                    </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" id="delivery_type_5" name="delivery_types" onclick="javascript:optionClickDeliveryType(5, this)" data-delivery-id="5">
-                            Доставка курьером за пределы МКАД
-                        </label>
-                        <div class="description">Доставка осуществляется курьерской службой интернет магазина.<br/><strong>Срок</strong> - на следующий рабочий день<br /><strong>Стоимость</strong> - 300руб. + 30руб. за каждый километр от МКАД</div>
-                    </div>
-                    <!--<script type="text/javascript">Order.addDeliveryType(3, 0, 30, "True", "False");</script>-->
-                    <div class="radio">
-                        <label>
-                            <input type="radio" id="delivery_type_2" name="delivery_types" onclick="javascript:optionClickDeliveryType(2, this)" data-delivery-id="2">
-                            Самовывоз
-                        </label>
-                        <div class="description">
-                            Вы самостоятельно получаете заказ в офисе интернет магазина.<br/><strong>Срок</strong> - на следующий рабочий день<br /><strong>Стоимость</strong> - бесплатно
+                    @foreach($delivery as $dt)
+                        <div class="radio">
+                            <label class="selected">
+                                <input type="radio" id="delivery_type_{{$dt["id"]}}" checked="checked" name="delivery_types" onclick="javascript:optionClickDeliveryType({{$dt["id"]}}, this)" data-delivery-id="{{$dt["id"]}}">
+                                {{$dt["name"]}}
+                            </label>
+                            <div class="description" style="display:block;">{{$dt["desc"]}}<br/><strong>Срок</strong> - до {{$dt["timelaps"]}} часов<br /><strong>Стоимость</strong> - {{$dt["price"]}}руб.</div>
                         </div>
-                    </div>
-                    <div class="radio">
-                        <label>
-                            <input type="radio" id="delivery_type_3" name="delivery_types" onclick="javascript:optionClickDeliveryType(3, this)" data-delivery-id="3">
-                            Доставка по России
-                        </label>
-                        <div class="description">Доставка по России осуществляется Почтой России.<br/><strong>Срок</strong> - до 20 дней<br /><strong>Стоимость</strong> - 300руб.</div>
-                    </div>
-                    <!--<script type="text/javascript">Order.addDeliveryType(6, 300, 0, "True", "True");</script>-->
-
-                    <div class="radio">
-                        <label>
-                            <input type="radio" id="delivery_type_4" name="delivery_types" onclick="javascript:optionClickDeliveryType(4, this)" data-delivery-id="4">
-                            Доставка службой BoxBerry
-                        </label>
-                        <div class="description">Доставка производится до ближайшего к Вам пункта выдачи заказов Boxberry.<br/><strong>Срок</strong> - до 10 дней<br /><strong>Стоимость</strong> - 200руб.</div>
-                    </div>
-                    <!--<script type="text/javascript">Order.addDeliveryType(9, 0, 0, "True", "True");</script>-->
-
-
+                    @endforeach
                 </div>
                 <div id="payment_types">
-                    <div class="radio">
-                        <label class="selected">
-                            <input type="radio" id="payment_type_2" checked="checked" name="payment_types" onclick="javascript:optionClickPaymentType(2, this)" data-payment-id="2">
-                            Оплатить картой сейчас
-                        </label>
-                        <div class="description description_shot" style="display:block;">
-                            На следующем экране Вам нужно будет указать реквизиты своей банковской карты, после чего с нее будет списана полная стоимость заказа.
+                    @foreach($payments as $pt)
+                        <div class="radio">
+                            <label class="selected">
+                                <input type="radio" id="payment_type_{{$pt["id"]}}" checked="checked" name="payment_types" onclick="javascript:optionClickPaymentType({{$pt["id"]}}, this)" data-payment-id="{{$pt["id"]}}">
+                                {{$pt["name"]}}
+                            </label>
+                            <div class="description description_shot" style="display:block;">
+                                {{$pt["desc"]}}
+                            </div>
                         </div>
-                    </div>
-                    <!--<script type="text/javascript">Order.addPaymentType(2, 0, "False", "True");</script>-->
+                    @endforeach
 
-                    <div class="radio">
-                        <label>
-                            <input type="radio" id="payment_type_3" name="payment_types" onclick="javascript:optionClickPaymentType(3, this)" data-payment-id="3">
-                            Оплатить наличными при получении
-                        </label>
-                        <div class="description_shot">
-                            Вы оплатите заказ наличными в момент получения курьеру или сотруднику пункта выдачи заказов.
-                        </div>
-                        <div class="description">
-                            Вы оплатите заказ наличными в момент получения курьеру или сотруднику пункта выдачи заказов. Чтобы использовать этот способ оплаты, введите реквизиты своей банковской карты на следующей странице. Для проверки карты на ней будет заблокирован 1 рубль, который сразу же будет возвращен. Если Вы впоследствии откажетесь от получения заказа не по вине магазина, с Вашей карты будет списана стоимость доставки заказа.
-                        </div>
-                    </div>
-                    <!--<script type="text/javascript">Order.addPaymentType(3, 0, "True", "True");</script>-->
-
-                    <div class="radio">
-                        <label>
-                            <input type="radio" id="payment_type_1" name="payment_types" onclick="javascript:optionClickPaymentType(1, this)" data-payment-id="1">
-                            Оплатить картой при получении
-                        </label>
-                        <div class="description_shot">
-                            Вы оплатите заказ картой в момент получения курьеру или сотруднику пункта выдачи заказов.
-                        </div>
-                        <div class="description">
-                            Вы оплатите заказ картой в момент получения курьеру или сотруднику пункта выдачи заказов. Чтобы использовать этот способ оплаты, введите реквизиты своей банковской карты на следующей странице. Для проверки карты на ней будет заблокирован 1 рубль, который сразу же будет возвращен. Если Вы впоследствии откажетесь от получения заказа не по вине магазина, с Вашей карты будет списана стоимость доставки заказа.
-                        </div>
-                    </div>
-
-                    <div class="radio">
-                        <label>
-                            <input type="radio" id="payment_type_0" name="payment_types" onclick="javascript:optionClickPaymentType(0, this)" data-payment-id="0">
-                            Оплатить картой после получения (в течение 14 дней)
-                        </label>
-                        <div class="description  description_shot">
-                            Сумма оплаты будет списана с Вашей карты автоматически через 14 дней после получения заказа. Чтобы использовать этот способ оплаты, введите реквизиты своей банковской карты на следующей странице. Для проверки карты на ней будет заблокирован 1 рубль, который сразу же будет возвращен.
-                        </div>
-                    </div>
-                    <!--<script type="text/javascript">Order.addPaymentType(1, 0, "False", "False");</script>-->
                 </div>
             </div>
             <div class="clearfix"></div>
@@ -223,7 +143,7 @@
             $(t).parent().parent().parent().find("label").removeClass("selected");
             $(t).parent().addClass("selected").parent().find(currentDescription).show();
 
-            window.garan_submit_args.url = (i==0)?"../democheckout/passport":"../democheckout/card";
+            window.garan_submit_args.url = (i==0)?"../checkout/passport":"../checkout/card";
             $("#payment_type_id").val(i);
             $("#payment_type_name").val($(t).parent().text());
             $("#payment_type_desc").val($(t).parent().parent().find(currentDescription).html());
@@ -243,7 +163,7 @@
             caclulateTotal(i);
             $(".delivery-row").show();
 
-            window.garan_submit_args.url = (i==0 || i==1 || i==5)?"../democheckout/thanks":"../democheckout/card";
+            window.garan_submit_args.url = (i==0 || i==1 || i==5)?"../checkout/thanks":"../checkout/card";
             $("#delivery_type_id").val(i);
             $("#delivery_type_name").val($(t).parent().text());
             $("#delivery_type_desc").val($(t).parent().parent().find('.description').html());
@@ -256,3 +176,54 @@
         });
     </script>
 @endsection
+
+
+
+<!--
+<div class="radio">
+    <label class="selected">
+        <input type="radio" id="payment_type_2" checked="checked" name="payment_types" onclick="javascript:optionClickPaymentType(2, this)" data-payment-id="2">
+        Оплатить картой сейчас
+    </label>
+    <div class="description description_shot" style="display:block;">
+        На следующем экране Вам нужно будет указать реквизиты своей банковской карты, после чего с нее будет списана полная стоимость заказа.
+    </div>
+</div>
+
+<div class="radio">
+    <label>
+        <input type="radio" id="payment_type_3" name="payment_types" onclick="javascript:optionClickPaymentType(3, this)" data-payment-id="3">
+        Оплатить наличными при получении
+    </label>
+    <div class="description_shot">
+        Вы оплатите заказ наличными в момент получения курьеру или сотруднику пункта выдачи заказов.
+    </div>
+    <div class="description">
+        Вы оплатите заказ наличными в момент получения курьеру или сотруднику пункта выдачи заказов. Чтобы использовать этот способ оплаты, введите реквизиты своей банковской карты на следующей странице. Для проверки карты на ней будет заблокирован 1 рубль, который сразу же будет возвращен. Если Вы впоследствии откажетесь от получения заказа не по вине магазина, с Вашей карты будет списана стоимость доставки заказа.
+    </div>
+</div>
+
+<div class="radio">
+    <label>
+        <input type="radio" id="payment_type_1" name="payment_types" onclick="javascript:optionClickPaymentType(1, this)" data-payment-id="1">
+        Оплатить картой при получении
+    </label>
+    <div class="description_shot">
+        Вы оплатите заказ картой в момент получения курьеру или сотруднику пункта выдачи заказов.
+    </div>
+    <div class="description">
+        Вы оплатите заказ картой в момент получения курьеру или сотруднику пункта выдачи заказов. Чтобы использовать этот способ оплаты, введите реквизиты своей банковской карты на следующей странице. Для проверки карты на ней будет заблокирован 1 рубль, который сразу же будет возвращен. Если Вы впоследствии откажетесь от получения заказа не по вине магазина, с Вашей карты будет списана стоимость доставки заказа.
+    </div>
+</div>
+
+<div class="radio">
+    <label>
+        <input type="radio" id="payment_type_0" name="payment_types" onclick="javascript:optionClickPaymentType(0, this)" data-payment-id="0">
+        Оплатить картой после получения (в течение 14 дней)
+    </label>
+    <div class="description  description_shot">
+        Сумма оплаты будет списана с Вашей карты автоматически через 14 дней после получения заказа. Чтобы использовать этот способ оплаты, введите реквизиты своей банковской карты на следующей странице. Для проверки карты на ней будет заблокирован 1 рубль, который сразу же будет возвращен.
+    </div>
+</div>
+
+-->

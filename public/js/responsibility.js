@@ -68,7 +68,20 @@ var web = {
         keyval.val(val);
         textval.text(text);
     });
+    console.debug("Get boxberry cities");
+    /*$.ajax({
+        url:"http://api.boxberry.de/json.php?token=17324.prpqcdcf&method=ListCities",
+        dataType:"json",
+        success:function(d,s,x){
+            console.debug(d)
+        },
+        error:function(x,t,e){
+            console.debug(t);
+        }
+    });*/
+    console.debug("Get boxberry cities. ENDs");
     //$('.email').append();
     //$('<i class="fa fa-mobile" aria-hidden="true"></i>').insertBefore( ".phone" );
     //$( '<i class="fa fa-envelope-o"></i>' ).insertBefore( ".email" );
+
 })();

@@ -28,7 +28,7 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
             @include('elements.inputs.text',["name"=>"fio[middle]","text"=>"Отчество","value"=>""])
         </div>
         <div id="DeliveryAddressContainer" class="form-group">
-            <label class="control-label">Адрес доставки:</label>
+            <label class="control-label">Ваш адрес:</label>
             <div class="row">
                 <div class="col-lg-6">
                     <div class="form-group">
@@ -37,13 +37,13 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
                             "name"=>"billing[country]",
                             "text"=>"Страна",
                             "values"=>[
-                                ["key"=>"ru","value"=>"Россия"],
-                                ["key"=>"br","value"=>"Белоруссия"],
-                                ["key"=>"kz","value"=>"Казахстан"],
+                                ["key"=>"RU","value"=>"Россия"],
+                                ["key"=>"BY","value"=>"Белоруссия"],
+                                ["key"=>"KZ","value"=>"Казахстан"],
                                 "divider",
-                                ["key"=>"uk","value"=>"United Kingdom"],
-                                ["key"=>"us","value"=>"United States"],
-                                ["key"=>"lx","value"=>"Luxemburg"]
+                                ["key"=>"GB","value"=>"United Kingdom"],
+                                ["key"=>"US","value"=>"United States"],
+                                ["key"=>"LX","value"=>"Luxemburg"]
                             ]
                         ])
                     </div>
@@ -63,12 +63,12 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
                 </div>
                 <div class="col-lg-6">
                     <div class="form-group">
-                        @include('elements.inputs.text',["name"=>"billing[zip]","text"=>"Почтовый индекс","value"=>$customer["billing_address"]["postcode"]])
+                        @include('elements.inputs.text',["name"=>"billing[postcode]","text"=>"Почтовый индекс","value"=>$customer["billing_address"]["postcode"]])
                     </div>
                 </div>
             </div>
             <div class="form-group">
-                @include('elements.inputs.text',["name"=>"billing[address1]","text"=>"Адрес","value"=>$customer["billing_address"]["address_1"]])
+                @include('elements.inputs.text',["name"=>"billing[address_1]","text"=>"Адрес","value"=>$customer["billing_address"]["address_1"]])
             </div>
             <!--
             <textarea id="billing_address" name="billing_address" cols="20" rows="5" class="form-control"></textarea>

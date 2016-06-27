@@ -1,4 +1,4 @@
-@extends('checkout.layout')
+@extends('checkout.layout',["shop_url"=>$shop_url])
 
 @section('content')
 
@@ -11,7 +11,7 @@
 <div id="order-form-container">
     <div>
         <div class="page-header">
-            <h3>Пожалуйста введите информацию о себе:</h3>
+            <h3>Пожалуйста введите информацию о себе: </h3>
         </div>
         <div class="row">
             <div class="col-lg-6">

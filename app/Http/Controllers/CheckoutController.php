@@ -23,8 +23,8 @@ class CheckoutController extends Controller{
     protected $raworder;
     protected $viewFolder = '/checkout';
     public function __construct(){
-        $this->raworder = file_get_contents('../tests/example.order.json');
-        $this->raworder = json_decode($this->raworder,true);
+        //$this->raworder = file_get_contents('../tests/example.order.json');
+        //$this->raworder = json_decode($this->raworder,true);
         //print_r($this->rawgoods);
     }
     public function getIndex(Request $rq){
@@ -33,15 +33,19 @@ class CheckoutController extends Controller{
         $rq->session()->put("deal_id",$id);
         $deal = new Deal();
         $deal->byId($id);
+        if(!isset($deal->x_secret))  return view('public.index');
         return view(preg_replace('/\//m','',$this->viewFolder).'.checkout'
-            ,["route"=>$this->getBPRoute("checkout"), "debug"=>"", "goods"=>$deal->order->getProducts(),"customer"=>[]]
+            ,["route"=>$this->getBPRoute("checkout"), "debug"=>"", "goods"=>$deal->order->getProducts(),"customer"=>[],"shop_url"=>$deal->getShopUrl()]
         );
     }
     public function postIndex(Request $rq){
         $data = $rq->getContent();
         $deal = new Deal();
         $deal->byJson($data);
-        return $deal->sync();
+        $resp = $deal->sync();
+        Log::debug("Deal response: ".Garan24::obj2str($resp));
+        //if($resp->code==0){return redirect()->away($resp->redirect_url);}
+        return $resp->__toString();
     }
     public function postPersonal(Request $rq){
         $data = $this->getParams($rq);
@@ -55,12 +59,12 @@ class CheckoutController extends Controller{
         $cust->sync();
         $rq->session()->put("user_id",$cust->customer_id);
         $deal->update(["customer_id"=>$cust->id]);
-        Log::debug("Personal info page Order:".$deal->order->__toString());
         return view(preg_replace('/\//m','',$this->viewFolder).'.personal'
             ,["route"=>$this->getBPRoute("personal")
             ,"debug"=>""
             ,"goods"=>$deal->order->getProducts()
             ,"customer"=>$cust->toArray()
+            ,"shop_url"=>$deal->getShopUrl()
         ]);
     }
     public function postDeliverypaymethod(Request $rq){
@@ -68,14 +72,18 @@ class CheckoutController extends Controller{
         $id = $rq->session()->get("deal_id");
         $deal = new Deal();
         $deal->byId($id);
-
         $deal->update($data);
+        Garan24::debug($deal->getDeliveryTypes());
+        Garan24::debug($deal->getPaymentTypes());
         return view(
             preg_replace('/\//m','',$this->viewFolder).'.deliverypaymethod',
             [
                 "route"=>$this->getBPRoute("deliverypaymethod"),
                 "debug"=>"",
                 "goods"=>$deal->order->getProducts()
+                ,"shop_url"=>$deal->getShopUrl()
+                ,"payments" => $deal->getPaymentTypes()
+                ,"delivery" => $deal->getDeliveryTypes()
             ]
         );
     }
@@ -90,38 +98,27 @@ class CheckoutController extends Controller{
         }
         return view(preg_replace('/\//m','',$this->viewFolder).'.thankspage',["route"=>$this->getBPRoute("thanks")]);
     }
-    public function getThanks(Request $rq){
-        return $this->postThanks($rq);
-    }
     public function postPassport(Request $rq){
         $data = $this->getParams($rq);
         $rq->session()->put("paydelivery",$data);
         $goods= $rq->session()->get("products");
         return view(preg_replace('/\//m','',$this->viewFolder).'.passport',["route"=>$this->getBPRoute("passport"), "debug"=>"", "goods"=>$deal->order->getProducts()]);
     }
-    public function getPassport(Request $rq){
-        return $this->postPassport($rq);
-    }
-	public function getCard(Request $rq){
-        return $this->postCard($rq);
-    }
     public function postCard(Request $rq){
         $data = $this->getParams($rq);
-        $pd=[];
-        if(isset($data["payment_types"])){
-            $pd = $data;
-            $rq->session()->put("paydelivery",$data);
-        }
-        else {
-            $pd = $rq->session()->get("paydelivery");
-            $rq->session()->put("passport",$data);
-        }
-        $delivery = $rq->session()->get("address");
-        $goods= $rq->session()->get("products");
-        return view(preg_replace('/\//m','',$this->viewFolder).'.card',["route"=>$this->getBPRoute("card"), "debug"=>"",
+        $id = $rq->session()->get("deal_id");
+        $deal = new Deal();
+        $deal->byId($id);
+        $ptid = $data["payment_type_id"];
+        $dtid = $data["delivery_type_id"];
+
+        return view(preg_replace('/\//m','',$this->viewFolder).'.card',[
+            "route"=>$this->getBPRoute("card"),
+            "debug"=>"",
             "goods"=>$deal->order->getProducts(),
-            "paydelivery"=>$pd,
-            "delivery"=>$delivery
+            "shop_url"=>$deal->getShopUrl(),
+            //"paydelivery"=>$pd,
+            //"delivery"=>$delivery
         ]);
     }
     protected function getParams(Request $rq){
@@ -138,7 +135,7 @@ class CheckoutController extends Controller{
                 $log .= "{$k} = ".Garan24::obj2str($v).", ";
             }
         }
-        Log::debug("getParams request: ".$log);
+        Log::debug("CheckoutController:getParams request: ".Garan24::obj2str($data));
         return $data;
     }
     protected function getCustomer($data){

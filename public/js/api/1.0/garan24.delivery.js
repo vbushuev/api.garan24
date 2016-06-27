@@ -20,6 +20,24 @@ $.extend(window.garan,{
             //garan.delivery.list[d.id]=d;
             garan.delivery.list.push(d);
         },
-        list:[]
+        list:[],
+        boxberry:{
+            callback:function(){
+                document.getElementById('city').innerHTML = result.name;
+                document.getElementById('js-pricedelivery').innerHTML = result.price;
+                document.getElementById('code_pvz').innerHTML = result.id;
+
+                result.name = encodeURIComponent(result.name) // Что бы избежать проблемы с кириллическими символами, на страницах отличными от UTF8, вы можете использовать функцию encodeURIComponent()
+
+                document.getElementById('name').innerHTML =	result.name;
+                document.getElementById('address').innerHTML =	result.address;
+                document.getElementById('workschedule').innerHTML =	result.workschedule;
+                document.getElementById('phone').innerHTML = result.phone;
+                document.getElementById('period').innerHTML = result.period;
+                if (result.prepaid=='Yes') {
+                    alert('Отделение работает только по предоплате!'); 
+                }
+            }
+        }
     }
 });

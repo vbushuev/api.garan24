@@ -17,10 +17,14 @@
         <a class="name" href="{{$good["product_url"] or ''}}" target="_blank">{{$good["title"] or $good["name"]}}</a>
     </td>
     <td>
+    <!--
         <img id="btn_delete_14832" class="button" src="https://magnitolkin.ru/Files/Images/DeleteCartItem.png" alt="Удалить" title="Удалить" onclick="javascript:removeCartItem(14832)">
         <img id="btn_decrement_14832" class="button" src="https://magnitolkin.ru/Files/Images/DecrementCartItemQuantity.png" onclick="javascript:shopItemDecrementQuantity(this, 14832)" alt="Уменьшить количество" title="Уменьшить количество" style="display: none;">
-		<span id="quantity_14832" class="quantity">{{$good["quantity"]}}</span> <span class="quantity">шт.</span>
+    -->
+        <span id="quantity_14832" class="quantity">{{$good["quantity"]}}</span> <span class="quantity">шт.</span>
+    <!--
         <img id="btn_increment_14832" class="button" src="https://magnitolkin.ru/Files/Images/IncerementCartItemQuantity.png" onclick="javascript:shopItemIncrementQuantity(this, 14832)" alt="Увеличить количество" title="Увеличить количество">
+    -->
         <!--<script type="text/javascript">Order.addItemToCart(14832, 4581, 1);</script>-->
     </td>
 
@@ -46,7 +50,8 @@
 <tr class="cart-item delivery-row" style="height:auto;display:none;">
     <td style="padding:.4em;">&nbsp;</td>
     <td style="padding:.4em;"><strong>Доставка заказа</strong></td>
-    <td style="padding:.4em;"><img id="btn_delete_14832" class="button" src="https://magnitolkin.ru/Files/Images/DeleteCartItem.png" alt="Удалить" title="Удалить" onclick="javascript:removeCartItem(14832)"><span id="quantity_14832" class="quantity">1</span> <span class="quantity">шт.</span></td>
+    <td style="padding:.4em;">
+        <span id="quantity_14832" class="quantity">1</span> <span class="quantity">шт.</span></td>
     <td style="padding:.4em;">
         <div class="cost" id="totalDeliveryPrice"></div>
     </td>

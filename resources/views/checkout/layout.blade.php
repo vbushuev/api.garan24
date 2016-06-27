@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" class="filter1">
 <head>
 
-	<title>Demo checkout</title>
+	<title>Garan24 heckout</title>
 	<meta name="robots" content="index, all">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -31,6 +31,9 @@
 	<script src="/js/jquery.color.js"></script>
 	<script src="/js/jquery.redirect.js"></script>
 	<script src="/js/jquery.maskedinput.min.js"></script>
+	<!-- boxberry API -->
+
+	<script type="text/javascript" src="//points.boxberry.ru/js/boxberry.js"> </script/>
 </head>
 <body>
     <div id="OuterTop">
@@ -45,7 +48,7 @@
             <ul id="TopMenuItems">
             </ul>
             <div id="Cart">
-                <div class="checkout"><a class="gold" style="color:rgba(255,162,0,1.00);font-family:'Cabin';" href="https://demostore.garan24.ru">Вернуться к витрине</a></div>
+                <div class="checkout"><a class="gold" style="color:rgba(255,162,0,1.00);font-family:'Cabin';" href="{{$shop_url or '#'}}">Вернуться к витрине</a></div>
                 <div class="clearfix"></div>
             </div>
 
