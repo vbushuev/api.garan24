@@ -1,12 +1,12 @@
-@extends('democheckout.layout')
+@extends('checkout.layout')
 
 @section('content')
 <!--<script>
 var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
 
 </script>-->
-@if(isset($delivery))
-<h2>Заказ №<span class="red" id="OrderId">33252</span> сформирован</h2>
+@if(isset($order_id))
+<h2>Заказ №<span class="red" id="OrderId">{{$order_id}}</span> сформирован</h2>
 @endif
 <style>
     .jumbotron .small {font-size:12pt;}
@@ -35,16 +35,15 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
             </p>
 
             <p>
-                <strong>Адрес доставки:</strong> @address($delivery)
+                <strong>Адрес доставки:</strong> {{$address}}
             </p>
             <p>
-                <strong>Выбранный способ доставки:</strong> {{$paydelivery['delivery_type_name'] or 'Почтой России'}}<br />
+                <strong>Выбранный способ доставки:</strong> {{$delivery['name'] or 'Почтой России'}}<br />
             </p>
             <p>
-                <strong>Выбранный способ оплаты:</strong> {{$paydelivery['payment_type_name'] or 'Наличными при получении'}}<br />
+                <strong>Выбранный способ оплаты:</strong> {{$payment['name'] or 'Наличными при получении'}}<br />
             </p>
-            <p class="text-muted small">{{$paydelivery['payment_type_desc'] or 'Чтобы использовать выбранный способ оплаты, введите реквизиты своей банковской карты. Для проверки карты на ней будет заблокирован 1 рубль, который сразу же будет возвращен. Если Вы впоследствии откажетесь от получения заказа не по вине магазина, с Вашей карты будет списана стоимость доставки заказа.'}}</p>
-            <!--<p class="text-muted small">Для оплаты заказа через 14 дней после его получения введите реквизиты своей банковской карты. Чтобы проверить карту, на ней будет заблокирован 1 рубль, который сразу же будет возвращен.</p>-->
+            <p class="text-muted small">{{$payment['desc'] or 'Чтобы использовать выбранный способ оплаты, введите реквизиты своей банковской карты. Для проверки карты на ней будет заблокирован 1 рубль, который сразу же будет возвращен. Если Вы впоследствии откажетесь от получения заказа не по вине магазина, с Вашей карты будет списана стоимость доставки заказа.'}}</p>
         </div>
     </div>
     @endif
@@ -94,7 +93,7 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
         </div>
     </div>
 
-    @include("magnitolkin.cart._buttons")
+    @include("checkout._buttons")
 </div>
 
 @endsection

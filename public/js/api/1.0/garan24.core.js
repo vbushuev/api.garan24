@@ -17,8 +17,11 @@ window.garan = {
         required:function(){
             var args = arguments.length?arguments[0]:{form:$("form:first")}, ret=true;;
             args.form.find(".input-group.required input:visible,.input-group.required select:visible,.input-group.required textarea:visible").each(function(){
-                var $t = $(this);
-                if($t.val().length==0){
+                var $t = $(this), check = true,val = $t.val(),
+                    emailRegEx = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+                check = check&($t.val().length>0);
+                if($t.hasClass("email"))check = check&emailRegEx.test(val);
+                if(!check){
                     //$t.hasClass("alert")?null:$t.addClass('alert');
                     $t.parent(".required").effect("shake");
                     $t.focus();

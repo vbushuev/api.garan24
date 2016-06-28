@@ -32,6 +32,7 @@ var web = {
     );
     */
     //$.mask.definitions['~']='\+7';
+    
     $(".phone").mask("+7(999) 999 99 99");//.insertBefor
     $(".postcode").mask("999999");//.insertBefor
     $(".passport-seria").mask("9999");//.insertBefor

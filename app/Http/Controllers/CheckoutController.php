@@ -49,6 +49,7 @@ class CheckoutController extends Controller{
     }
     public function postPersonal(Request $rq){
         $data = $this->getParams($rq);
+        if($data===false)redirect($this->vieFolder.'/checkout');
         if(!isset($data["email"])||!isset($data["phone"])){
             return redirect($this->viewFolder.'checkout');
         }
@@ -69,6 +70,7 @@ class CheckoutController extends Controller{
     }
     public function postDeliverypaymethod(Request $rq){
         $data = $this->getParams($rq);
+        if($data===false)redirect($this->vieFolder.'/checkout');
         $id = $rq->session()->get("deal_id");
         $deal = new Deal();
         $deal->byId($id);
@@ -88,40 +90,53 @@ class CheckoutController extends Controller{
         );
     }
     public function postThanks(Request $rq){
-        try{
-            $this->getWC($rq);
-            $this->createOrder($rq);
-            $this->createDeal($rq);
-        }
-        catch(Exception $e){
-            Log::error($e->getMessage());
-        }
-        return view(preg_replace('/\//m','',$this->viewFolder).'.thankspage',["route"=>$this->getBPRoute("thanks")]);
+        $data = $this->getParams($rq);
+        if($data===false)redirect($this->vieFolder.'/checkout');
+        $id = $rq->session()->get("deal_id");
+        $deal = new Deal();
+        $deal->byId($id);
+        return redirect()->away($deal->response_url);
     }
     public function postPassport(Request $rq){
         $data = $this->getParams($rq);
-        $rq->session()->put("paydelivery",$data);
-        $goods= $rq->session()->get("products");
+        if($data===false)redirect($this->vieFolder.'/checkout');
+        $id = $rq->session()->get("deal_id");
+        $deal = new Deal();
+        $deal->byId($id);
         return view(preg_replace('/\//m','',$this->viewFolder).'.passport',["route"=>$this->getBPRoute("passport"), "debug"=>"", "goods"=>$deal->order->getProducts()]);
     }
     public function postCard(Request $rq){
         $data = $this->getParams($rq);
+        if($data===false)redirect($this->vieFolder.'/checkout');
         $id = $rq->session()->get("deal_id");
         $deal = new Deal();
         $deal->byId($id);
-        $ptid = $data["payment_type_id"];
-        $dtid = $data["delivery_type_id"];
-
+        $deal->update([
+            "payment_id"=>$data["payment_type_id"],
+            "delivery_id"=>$data["delivery_type_id"],
+        ]);
         return view(preg_replace('/\//m','',$this->viewFolder).'.card',[
             "route"=>$this->getBPRoute("card"),
             "debug"=>"",
             "goods"=>$deal->order->getProducts(),
             "shop_url"=>$deal->getShopUrl(),
-            //"paydelivery"=>$pd,
-            //"delivery"=>$delivery
+            "order_id"=>$deal->order->id,
+            "address"=>$deal->getCustomer()->toAddressString(),
+            "payment"=>[
+                "id"=>$data["payment_type_id"],
+                "name"=>$data["payment_type_name"],
+                "desc"=>$data["payment_type_desc"]
+            ],
+            "delivery"=>[
+                "id"=>$data["delivery_type_id"],
+                "name"=>$data["delivery_type_name"],
+                "desc"=>$data["delivery_type_desc"]
+            ]
         ]);
     }
     protected function getParams(Request $rq){
+        $id = $rq->session()->get("deal_id","session_expired");
+        if($id=="session_expired") return false;
         //Log::debug("getParams data:".$rq->get("data"));
         //Log::debug("getParams all:".Garan24::obj2str($rq->all()));
         $data = $rq->get("data",$rq->getContent());
@@ -137,148 +152,6 @@ class CheckoutController extends Controller{
         }
         Log::debug("CheckoutController:getParams request: ".Garan24::obj2str($data));
         return $data;
-    }
-    protected function getCustomer($data){
-        $person = DB::table('users')
-            ->join('usermeta',function($join){
-                $join->on('users.id', '=','usermeta.user_id')->where('usermeta.meta_key','=','billing_phone');
-            })
-            ->where('users.user_email', $data["email"])
-            ->where('usermeta.meta_value','like','%'.$data["phone"])
-            ->first();
-        return $person;
-    }
-    protected $wc_client;
-    protected function createOrder(Request $rq){
-        $resource = new WC_API_Client_Resource_Orders($this->wc_client);
-        $customer = $rq->session()->get("customer");
-        $products = $rq->session()->get("products");
-        $order = $rq->session()->get("order");
-        $delivery = $rq->session()->get("address");
-        $data=["order"=>$order];
-        $data["order"]["payment_details"] = [ "method_id" => "garan24","method_title" => "Garan24 Pay","paid" => false ];
-        $data["order"]["billing_address"] = $delivery;
-        $data["order"]["shipping_address"] = $delivery;
-        $data["order"]["line_items"] = [];
-        $data["order"]["customer_id"] = $customer["customer"]["id"];
-        $products = $data["order"]["line_items"];
-        $items=[];
-        foreach($products as $key => $val) {
-            $item=[];
-            $item["type"]="external";
-            Log::debug("Product check ". json_encode($item));
-            $p = $this->createProduct($item);
-            $item["product_id"] = $p->product->id;
-            $items[]=$item;
-        }
-        $data["order"]["line_items"]=$items;
-        $res = $resource->create($data);
-
-        $internal_order=json_decode($res->http->response->body,true);
-        $rq->session()->put("internal_order",$internal_order);
-        Log::debug("Order is : ". Garan24::obj2str($internal_order));
-        return $internal_order;
-    }
-    protected function getShop(Request $rq){
-        $order = $rq->session()->get("order");
-        $consumer_secret = $order["x_secret"];
-        Log::debug("Secret is : ". $consumer_secret);
-        $shop = DB::table('woocommerce_api_keys')
-            ->join('shops','shops.api_key_id', '=','woocommerce_api_keys.key_id')
-            ->where('consumer_secret', $consumer_secret)->first();
-        $rq->session()->put("shop",json_decode(json_encode($shop),true));
-        Log::debug("Shop is : ". json_encode($shop));
-    }
-    protected function createDeal(Request $rq){
-        $order = $rq->session()->get("order");
-        $internal_order = $rq->session()->get("internal_order");
-        $shop = $rq->session()->get("shop");
-        $customer = $rq->session()->get("customer");
-        DB::table('deals')->insert(
-            [
-                'amount' => $order["order"]["order_total"]*100,
-                'currency' => $order["order"]["order_currency"],
-                'shop_id' => $shop["id"],
-                'status' => 1,
-                'internal_order_id' => $internal_order["order"]["id"],
-                'external_order_id' => $order["order"]["order_id"],
-                'external_order_url' => $order["order"]["order_url"],
-                'customer_id' => $customer["customer"]["id"]
-            ]
-        );
-    }
-    protected function getWC(Request $rq){
-        $api = $rq->session()->get("order");
-        $this->getShop($rq);
-        $domain ="https://garan24.ru";//$this->shop->link;
-        $consumer_key = $api["x_key"];
-        $consumer_secret = $api["x_secret"];
-        $options = [
-            'debug'           => true,
-        	'return_as_array' => false,
-        	'validate_url'    => false,
-        	'timeout'         => 30,
-            'ssl_verify'      => false
-        ];
-        $this->wc_client = new WC_API_Client( $domain, $consumer_key,$consumer_secret, $options );
-    }
-    public function getCheckcard(Request $rq){
-        return view(preg_replace('/\//m','',$this->viewFolder).'.payment-form',["route"=>$this->getBPRoute("checkcard"), "debug"=>"", "goods"=>$this->rawgoods]);
-        $data = [
-            "client_orderid"=>"905",
-            "order_desc" => "Test Order Description",
-            "first_name" => "John",
-            "last_name" => "Smith",
-            "ssn" => "1267",
-            "birthday" => "19820115",
-            "address1" => "100 Main st",
-            "city" => "Seattle",
-            "state" => "WA",
-            "zip_code" => "98102",
-            "country" => "US",
-            "phone" => "+12063582043",
-            "cell_phone" => "%2B19023384543",
-            "amount" => "10.42",
-            "email" => "john.smith@gmail.com",
-            "currency" => "RUB",
-            "ipaddress" => "65.153.12.232",
-            "site_url" => "www.google.com",
-            /*"credit_card_number" => "4444555566661111",
-            "card_printed_name" => "CARD HOLDER",
-            "expire_month" => "12",
-            "expire_year" => "2099",
-            "cvv2" => "123",*/
-            "purpose" => "www.twitch.tv/dreadztv",
-            "redirect_url" => "https://service.garan24.ru/".$this->viewFolder."/payneteasyresponse",
-            //"server_callback_url" => "http://doc.payneteasy.com/doc/dummy.htm",
-            "merchant_data" => "VIP customer",
-            "control" => "768eb8162fc361a3e14150ec46e9a6dd8fbfa483"
-        ];
-        $request = new \Garan24\Gateway\Ariuspay\SaleRequest($data);
-        $connector = new \Garan24\Gateway\Ariuspay\Connector();
-        $connector->setRequest($request);
-        $connector::setLogger("default");
-        try{
-            //echo $obj->getRequest()->__toString();//call();
-            $connector->call();
-            return redirect()->away($connector->getResponse()->getRedirectUrl());
-        }
-        catch(\Garan24\Gateway\Aruispay\Exception $e){
-            Log::error("Exception in AruisPay gateway:".$e->getMessage());
-        }
-        catch(\Garan24\Gateway\Exception $e){
-            Log::error("Exception in gateway:".$e->getMessage());
-        }
-        catch(Exception $e){
-            Log::error("Exception :".$e->getMessage());
-        }
-
-    }
-    public function postPayneteasyresponse(Request $rq){
-        return redirect($this->vieFolder.'/thanks',["route"=>$this->getBPRoute("email"), "debug"=>"", "goods"=>$this->rawgoods]);
-    }
-    public function getPayneteasyresponse(Request $rq){
-        return $this->postPayneteasyresponse($rq);
     }
     protected $bpmodels=[
         "index" => ["text"=>"Продолжить","href"=>"/"],

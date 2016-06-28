@@ -28,7 +28,7 @@
         <!--<script type="text/javascript">Order.addItemToCart(14832, 4581, 1);</script>-->
     </td>
 
-    <td><div class="cost"><span class="productPrice">{{$good["regular_price"] or $good["price"]}}</span> руб.</div></td>
+    <td><div class="cost"><span class="productPrice">{{$good["quantity"]*$good["regular_price"]}}</span> руб.</div></td>
 </tr>
 @endforeach
 @else
