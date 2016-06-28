@@ -19,8 +19,8 @@ class AppServiceProvider extends ServiceProvider
             //$str = with($a)['city'].'. '.$a['zip'].', '.$a['address1'];
             return "<?php echo join(', ',array_values(with({$a})))?>";
         });
-        Blade::directive('timelaps', function($a) {
-            return "<?php echo 'до {$a} часов'?>";
+        Blade::directive('enco', function($a) {
+            return "<?php htmlspecialchars_decode({$a});?>";
         });
     }
 

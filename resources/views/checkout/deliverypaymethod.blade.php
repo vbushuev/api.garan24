@@ -38,7 +38,7 @@
                                 <input type="radio" id="delivery_type_{{$dt["id"]}}" checked="checked" name="delivery_types" onclick="javascript:optionClickDeliveryType({{$dt["id"]}}, this)" data-delivery-id="{{$dt["id"]}}">
                                 {{$dt["name"]}}
                             </label>
-                            <div class="description" style="display:block;">{{$dt["desc"]}}<br/><strong>Срок</strong> - до {{$dt["timelaps"]}} часов<br /><strong>Стоимость</strong> - {{$dt["price"]}}руб.</div>
+                            <div class="description" style="display:block;">{!!$dt["desc"]!!}<br/><strong>Срок</strong> - до {{$dt["timelaps"]}} часов<br /><strong>Стоимость</strong> - {{$dt["price"]}}руб.</div>
                         </div>
                     @endforeach
                 </div>
