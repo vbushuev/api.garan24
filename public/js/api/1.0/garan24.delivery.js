@@ -22,8 +22,10 @@ $.extend(window.garan,{
         },
         list:[],
         boxberry:{
-            callback:function(){
-                document.getElementById('city').innerHTML = result.name;
+            token:'gTVJ0bB4bEy68vCaEqNO3Q==',
+            callback:function(boxres){
+                console.debug(boxres);
+                /*document.getElementById('city').innerHTML = result.name;
                 document.getElementById('js-pricedelivery').innerHTML = result.price;
                 document.getElementById('code_pvz').innerHTML = result.id;
 
@@ -35,8 +37,8 @@ $.extend(window.garan,{
                 document.getElementById('phone').innerHTML = result.phone;
                 document.getElementById('period').innerHTML = result.period;
                 if (result.prepaid=='Yes') {
-                    alert('Отделение работает только по предоплате!'); 
-                }
+                    alert('Отделение работает только по предоплате!');
+                }*/
             }
         }
     }

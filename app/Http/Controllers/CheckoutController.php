@@ -27,6 +27,14 @@ class CheckoutController extends Controller{
         //$this->raworder = json_decode($this->raworder,true);
         //print_r($this->rawgoods);
     }
+    public function getDesign(Request $rq){
+        $deal = new Deal();
+        $deal->byId("500");
+        return view(
+            preg_replace('/\//m','',$this->viewFolder).'.design',
+            ["route"=>$this->getBPRoute("checkout"), "debug"=>"", "goods"=>$deal->order->getProducts(),"customer"=>[],"shop_url"=>$deal->getShopUrl()]
+        );
+    }
     public function getIndex(Request $rq){
         $id = $rq->get('id','noindex');
         if($id=='noindex') return view('public.index');
@@ -95,7 +103,12 @@ class CheckoutController extends Controller{
         $id = $rq->session()->get("deal_id");
         $deal = new Deal();
         $deal->byId($id);
-        return redirect()->away($deal->response_url);
+        $resp = $deal->finish();
+        return redirect()->away($deal->response_url)->with($resp->__toString());//->with($resp->toArray());
+        return response($resp->__toString())
+            ->header('Content-Type', "application/json")
+            ->header('Status', "302")
+            ->header("Location",$deal->response_url);
     }
     public function postPassport(Request $rq){
         $data = $this->getParams($rq);
@@ -104,6 +117,9 @@ class CheckoutController extends Controller{
         $deal = new Deal();
         $deal->byId($id);
         return view(preg_replace('/\//m','',$this->viewFolder).'.passport',["route"=>$this->getBPRoute("passport"), "debug"=>"", "goods"=>$deal->order->getProducts()]);
+    }
+    public function getCard(Request $rq){
+        return $this->postCard($rq);
     }
     public function postCard(Request $rq){
         $data = $this->getParams($rq);

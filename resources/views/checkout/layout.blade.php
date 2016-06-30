@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" class="filter1">
 <head>
 
-	<title>Garan24 heckout</title>
+	<title>Garan24 checkout</title>
 	<meta name="robots" content="index, all">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
@@ -19,9 +19,6 @@
 	<link rel="Stylesheet" href="/demo/Styles.css" type="text/css">
 	<link rel="Stylesheet" href="/demo/OrderProcess.css" type="text/css">
 	<!--
-
-
-
 		<link rel="stylesheet" href="../magnitolkin_ru/bootstrap.min.css">
 		<link rel="stylesheet" href="../magnitolkin_ru/bootstrap-theme.min.css">
 	-->
@@ -32,8 +29,6 @@
 	<script src="/js/jquery.redirect.js"></script>
 	<script src="/js/jquery.maskedinput.min.js"></script>
 	<!-- boxberry API -->
-
-	<script type="text/javascript" src="//points.boxberry.ru/js/boxberry.js"> </script/>
 </head>
 <body>
     <div id="OuterTop">
