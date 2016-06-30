@@ -1,13 +1,15 @@
+@import url("//fonts.googleapis.com/css?family=Open+Sans:700,400,300,100&subset=latin,cyrillic");
+@import url("//fonts.googleapis.com/css?family=Lato:400,300,100");
 ﻿html { height: 100%; overflow-y: scroll; }
-body { margin: 0; padding: 0; height: 100%; font-family: Arial, Tahoma, Sans-Serif; color: #232323; background-color: #f8f8f8; }
+body { margin: 0; padding: 0; height: 100%; font-family:'Lato',  'Open Sans'; color: #232323; background-color: #f8f8f8; font-size: 16pt;}
 
-h1 { font-size: 18px; }
-h2 { font-size: 16px; }
-h3 { font-size: 16px; font-weight: normal; }
+h1 { font-size: 20pt; font-weight:300;text-transform: uppercase;}
+h2 { font-size: 18pt;font-weight:100;text-transform: uppercase;}
+h3 { font-size: 16pt; font-weight: 100; text-transform: uppercase;}
 h1 a, h2 a, h3 a { color: #232323; }
 
 img { border: 0; }
-input, select, textarea { color: #232323; font-family: Arial, Tahoma, Sans-Serif; }
+input, select, textarea { color: #232323;}
 a { text-decoration: underline; }
 a:hover { text-decoration: none; }
 
@@ -77,11 +79,12 @@ ul.clear { list-style-type: none; padding: 0; margin: 0 0 0 10px; }
 #EPaymentTypes { position: absolute; background: url('/Files/Images/EPaymentTypes.png') no-repeat; width: 171px; height: 32px; top: 30px; right: 20px; }
 
 #OuterTop { width: 1200px; min-height: 100%; height: auto !important; background-color: #ffffff; margin: 0 auto; }
-#TopMenu { /*background: url('/Files/Images/TopMenuBg.gif') repeat-x;*/ background-color: #373737; height: 45px; width: 100%; position: relative; }
+#TopMenu { /*background: url('/Files/Images/TopMenuBg.gif') repeat-x;*/ background-color: #373737; height: 3em;line-height: 3em;vertical-align: middle;width: 100%; position: relative; }
 
-#TopMenuItems { text-shadow: 1px 1px 1px #111111; font-size: 14px; list-style-type: none; position: absolute; top: 15px; left: 300px; margin: 0; padding: 0; }
+#TopMenuItems  { font-size: 14pt; list-style-type: none; position: absolute; left: 30px; margin: 0; padding: 0; color:rgba(255,255,255,.6)}
 /*#TopMenuItems { text-shadow: 1px 1px 1px #a8a8a8; font-size: 14px; list-style-type: none; position: absolute; top: 15px; left: 300px; margin: 0; padding: 0; }*/
-#TopMenuItems li { float: left; margin-right: 40px; }
+#TopMenuItems li { float: left; margin-right: 40px; font-size: 300;}
+#TopMenuItems li.active { color:rgba(255,255,255,1); font-size: 400;}
 #TopMenuItems li a { color: #ffffff; text-decoration: none; }
 /*#TopMenuItems li a { color: #232323; text-decoration: none; }*/
 #TopMenuItems li a:hover { text-decoration: underline; }

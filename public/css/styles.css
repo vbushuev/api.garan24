@@ -1,9 +1,10 @@
 @import url("//fonts.googleapis.com/css?family=Lato:400,300,100");
 @import url("//fonts.googleapis.com/css?family=Roboto+Mono:700,400,100&subset=latin,cyrillic");
+@import url("//fonts.googleapis.com/css?family=Open+Sans:700,400,100&subset=latin,cyrillic");
 @import url("//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
 * {
   font-weight: 100;
-  font-family: 'Lato', 'Roboto Mono';
+  font-family: 'Open Sans', 'Roboto Mono';
   font-size: 18pt;
 }
 html,
@@ -265,4 +266,14 @@ label {
   text-align: center;
   font-size: 14px;
   color: #808080;
+}
+#TopMenuItems {
+  text-shadow: 0;
+  font-size: 14px;
+  list-style-type: none;
+  position: absolute;
+  top: 15px;
+  left: 40px;
+  margin: 0;
+  padding: 0;
 }

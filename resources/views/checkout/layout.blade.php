@@ -41,6 +41,15 @@
         </div>
         <div id="TopMenu">
             <ul id="TopMenuItems">
+				<li class="active">
+					Контактная информация
+				</li>
+				<li>
+					Способ оплаты и доставки
+				</li>
+				<li>
+					Оплата
+				</li>
             </ul>
             <div id="Cart">
                 <div class="checkout"><a class="gold" style="color:rgba(255,162,0,1.00);font-family:'Cabin';" href="{{$shop_url or '#'}}">Вернуться к витрине</a></div>
