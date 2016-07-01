@@ -4,12 +4,11 @@
 
 <h2><span class="red">Оформление</span> заказа</h2>
 
-<div id="cart-container">
+<!--<div id="cart-container">-->
 
-@include('checkout.goods',['goods'=>$goods])
 
-<div id="order-form-container">
-    <div>
+
+    <div id="order-form-container">
         <div class="page-header">
             <h3>Пожалуйста введите информацию о себе: </h3>
         </div>
@@ -33,11 +32,12 @@
         </div>
 
         <div class="form-group">
-            @include('elements.inputs.checkbox',["name"=>"agree1","text"=>"Я согласен с Условиями использования сервиса Гаран24."])
-            <p class="text-muted small">Приняв Условия, Вы присоединяетесь к <a href="https://garan24.ru/terms" target="__blank">Договору</a> на обслуживание клиентов сервиса Гаран24.</p>
+            <p class="text-muted small">
+                Нажимая кнопку "Продолжить", Вы присоединяетесь к <a href="https://garan24.ru/terms" target="__blank">Договору</a> на обслуживание клиентов сервиса Гаран24.</p>
         </div>
+        @include("checkout._buttons")
     </div>
-    @include("checkout._buttons")
-</div>
 
+<!--</div>-->
+@include('checkout.goods',['goods'=>$goods])
 @endsection

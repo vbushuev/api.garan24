@@ -37,10 +37,11 @@
                             <label class="selected">
                                 <input type="radio" id="delivery_type_{{$dt["id"]}}" checked="checked" name="delivery_types" onclick="javascript:optionClickDeliveryType({{$dt["id"]}}, this)" data-delivery-id="{{$dt["id"]}}">
                                 {{$dt["name"]}}
-                                @if($dt["id"]=4)
-                                    @include('checkout._boxberry')
-                                @endif
+
                             </label>
+                            @if($dt["id"]=4)
+                                @include('checkout._boxberry')
+                            @endif
                             <div class="description" style="display:block;">
                                 {{{$dt["desc"]}}}<br/>
                                 <strong>Срок</strong> - до {{$dt["timelaps"]}} часов<br />
@@ -126,12 +127,12 @@
          * @param mixed   s: sections delimiter
          * @param mixed   c: decimal delimiter
          */
-        Number.prototype.format = function(n, x, s, c) {
-            var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
-                num = this.toFixed(Math.max(0, ~~n));
+         Number.prototype.format = function(n, x, s, c) {
+             var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+                 num = this.toFixed(Math.max(0, ~~n));
 
-            return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
-        };
+             return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+         };
         function caclulateTotal(i){
             var totalDelivery = isNaN(garan.delivery.list[i].cost)?garan.delivery.list[i].cost:parseInt(garan.delivery.list[i].cost);
             var total = 0;
@@ -173,16 +174,17 @@
             var selected_payment = $("#payment_types input:checked");
             var selected_delivery = $("#delivery_types input:checked");
             $("#delivery_type_id").val(selected_delivery.attr("data-delivery-id"));
-            $("#delivery_type_name").val(selected_delivery.parent().text());
+            $("#delivery_type_name").val(selected_delivery.parent().text().replace(/(.+?)\</,"$1"));
             $("#delivery_type_desc").val(selected_delivery.parent().parent().find(".description").html());
+            console.debug(selected_delivery.parent().text().replace(/(.+?)\</,"$1"));
 
             $("#payment_type_id").val(selected_payment.attr("data-payment-id"));
             $("#payment_type_name").val(selected_payment.parent().text());
             $("#payment_type_desc").val(selected_payment.parent().parent().find(currentDescription).html());
         }
         $(document).ready(function(){
-            optionClickPaymentType(2);
-            optionClickDeliveryType(1);
+            optionClickPaymentType({{$$payments[0]["id"] or '2'}});
+            optionClickDeliveryType({{$delivery[0]["id"] or '1'}});
             //caclulateTotal(1);
         });
     </script>

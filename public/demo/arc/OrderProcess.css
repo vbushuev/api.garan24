@@ -1,22 +1,9 @@
-#checkout-cart-content{display: table-cell; font-family: 'Lato','Open Sans';border:solid .05em #ccc;padding:1em; padding:10px;margin:30px;}
-#order-form-container {display: table-cell;;width:60%;margin:0;padding:1em;}
-#checkout-cart-content ul.cart-item{list-style: none;display: block;margin-bottom: 1em;}
-#checkout-cart-content ul.cart-item li{display:inline-block;margin: 0;height:100px;}
-#checkout-cart-content ul.cart-item li a{ text-decoration: none;font-weight: 400;}
-#checkout-cart-content ul.cart-item li a:hover{ font-weight: 700;}
-#checkout-cart-content ul.cart-item li.image {text-align: center;width:30%; border: dotted 1px #ccc;}
-#checkout-cart-content ul.cart-item li.name {text-align: right;padding-left: 1em;width:60%;}
-
-#cart-container { border: none; color: #333333; }
-
-
-#cart-container .cart-content-header {text-align: left; font-weight: 300;}
-#cart-container .cart-item { border:none;}
-#cart-container .cart-item a{ text-decoration: none;font-weight: 400;}
-#cart-container .cart-item a:hover{ font-weight: 700;}
+#cart-container { border: none; font-family: Tahoma; color: #333333; }
+#cart-container .cart-content-header { font-weight: bold; font-size: 12px; text-align: left; height: 25px; }
+#cart-container .cart-item { height: 100px; }
 #cart-container .cart-item>td { vertical-align: middle; }
-#cart-container .cart-item .image {text-align: center;}
-#cart-container .cart-item .name { font-size: 18pt; color: #333333; }
+#cart-container .cart-item .image {text-align: center; }
+#cart-container .cart-item .name { font-size: 18px; color: #333333; }
 #cart-container .cart-item .quantity { font-size: 18px; color: #333333; position: relative; bottom: 2px; }
 #cart-container .cart-item .cost { font-size: 18px; text-align: right; position: relative; bottom: 1px; }
 #cart-container .button { cursor: pointer; }
@@ -131,7 +118,7 @@
 .pay-secure-icon { background: url('/Files/Images/Secure_32.png') no-repeat center; width: 64px; height: 64px; }
 .pay-alfa-bank-logo { background: url('/Files/Images/AlfaBankLogo.gif') no-repeat center; width: 100px; height: 100px; }
 
-
+#order-form-container { display: none; }
 #OrderForm { }
 #OrderForm .inner { margin: 35px; float: left; }
 #OrderForm .divider { border-left: 1px solid; height: 300px; width: 1px; float: left; margin-top: 20px; }

@@ -43,7 +43,7 @@ class CheckoutController extends Controller{
         $deal->byId($id);
         if(!isset($deal->x_secret))  return view('public.index');
         return view(preg_replace('/\//m','',$this->viewFolder).'.checkout'
-            ,["route"=>$this->getBPRoute("checkout"), "debug"=>"", "goods"=>$deal->order->getProducts(),"customer"=>[],"shop_url"=>$deal->getShopUrl()]
+            ,["route"=>$this->getBPRoute("checkout"),"section" => 'contact', "debug"=>"", "goods"=>$deal->order->getProducts(),"customer"=>[],"shop_url"=>$deal->getShopUrl()]
         );
     }
     public function postIndex(Request $rq){
@@ -70,6 +70,7 @@ class CheckoutController extends Controller{
         $deal->update(["customer_id"=>$cust->id]);
         return view(preg_replace('/\//m','',$this->viewFolder).'.personal'
             ,["route"=>$this->getBPRoute("personal")
+            ,"section" => 'contact'
             ,"debug"=>""
             ,"goods"=>$deal->order->getProducts()
             ,"customer"=>$cust->toArray()
@@ -89,6 +90,7 @@ class CheckoutController extends Controller{
             preg_replace('/\//m','',$this->viewFolder).'.deliverypaymethod',
             [
                 "route"=>$this->getBPRoute("deliverypaymethod"),
+                "section" => 'delivery',
                 "debug"=>"",
                 "goods"=>$deal->order->getProducts()
                 ,"shop_url"=>$deal->getShopUrl()
@@ -133,6 +135,7 @@ class CheckoutController extends Controller{
         ]);
         return view(preg_replace('/\//m','',$this->viewFolder).'.card',[
             "route"=>$this->getBPRoute("card"),
+            "section" => 'payment',
             "debug"=>"",
             "goods"=>$deal->order->getProducts(),
             "shop_url"=>$deal->getShopUrl(),

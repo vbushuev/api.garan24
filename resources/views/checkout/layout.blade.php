@@ -41,18 +41,18 @@
         </div>
         <div id="TopMenu">
             <ul id="TopMenuItems">
-				<li class="active">
-					Контактная информация
+				<li @if(isset($section)&&$section=="contact") class="active" @endif>
+					Контактная информация&nbsp;>
 				</li>
-				<li>
-					Способ оплаты и доставки
+				<li @if(isset($section)&&$section=="delivery") class="active" @endif>
+					Способ оплаты и доставки&nbsp;>
 				</li>
-				<li>
+				<li @if(isset($section)&&$section=="payment") class="active" @endif>
 					Оплата
 				</li>
             </ul>
             <div id="Cart">
-                <div class="checkout"><a class="gold" style="color:rgba(255,162,0,1.00);font-family:'Cabin';" href="{{$shop_url or '#'}}">Вернуться к витрине</a></div>
+                <div class="checkout"><a class="gold" style="color:rgba(255,162,0,1.00);" href="{{$shop_url or '#'}}">Вернуться к витрине</a></div>
                 <div class="clearfix"></div>
             </div>
 

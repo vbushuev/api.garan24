@@ -17,7 +17,8 @@
             garan.form.submit(garan_submit_args);
         })
         $("#btnReturnToCart").click(function(){
-            document.location.href = "{{$route["back"]["href"]}}";
+            history.go(-1);
+            //document.location.href = "..{{$route["back"]["href"]}}";
         })
     });
 </script>
