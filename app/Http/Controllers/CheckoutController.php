@@ -106,6 +106,36 @@ class CheckoutController extends Controller{
         $deal = new Deal();
         $deal->byId($id);
         $resp = $deal->finish();
+        $resp_str = $resp->__toString();
+        Garan24::debug("Response :".$resp_str);
+
+        try{
+            $result = file_get_contents($deal->response_url, null, stream_context_create(array(
+                'http' => array(
+                    'method' => 'POST',
+                    'header' => array('Content-Type: application/json'."\r\n"
+                    . 'Authorization: username:key'."\r\n"
+                    . 'Content-Length: ' . strlen($resp_str) . "\r\n"),
+                    'content' => $resp_str)
+                    )
+                )
+            );
+        }
+        catch(\Exception $e){
+            Log::error($e);
+        }
+        return view(
+            preg_replace('/\//m','',$this->viewFolder).'.thankspage',
+            [
+                "route"=>$this->getBPRoute("thanks"),
+                "section" => 'thanks',
+                "debug"=>"",
+                "goods"=>$deal->order->getProducts()
+                ,"shop_url"=>$deal->getShopUrl()
+                ,"payments" => $deal->getPaymentTypes()
+                ,"delivery" => $deal->getDeliveryTypes()
+            ]
+        );
         return redirect()->away($deal->response_url)->with($resp->__toString());//->with($resp->toArray());
         return response($resp->__toString())
             ->header('Content-Type', "application/json")
@@ -121,18 +151,23 @@ class CheckoutController extends Controller{
         return view(preg_replace('/\//m','',$this->viewFolder).'.passport',["route"=>$this->getBPRoute("passport"), "debug"=>"", "goods"=>$deal->order->getProducts()]);
     }
     public function getCard(Request $rq){
+        $id = $rq->get('id','noindex');
+        if($id=='noindex') return view('public.index');
+        $rq->session()->put("deal_id",$id);
         return $this->postCard($rq);
     }
     public function postCard(Request $rq){
         $data = $this->getParams($rq);
-        if($data===false)redirect($this->vieFolder.'/checkout');
+        if($data===false)redirect($this->viewFolder.'/checkout');
         $id = $rq->session()->get("deal_id");
         $deal = new Deal();
         $deal->byId($id);
-        $deal->update([
-            "payment_id"=>$data["payment_type_id"],
-            "delivery_id"=>$data["delivery_type_id"],
-        ]);
+        if(isset($data["payment_type_id"])&&isset($data["delivery_type_id"])){
+            $deal->update([
+                "payment_id"=>$data["payment_type_id"],
+                "delivery_id"=>$data["delivery_type_id"],
+            ]);
+        }
         return view(preg_replace('/\//m','',$this->viewFolder).'.card',[
             "route"=>$this->getBPRoute("card"),
             "section" => 'payment',
@@ -141,16 +176,8 @@ class CheckoutController extends Controller{
             "shop_url"=>$deal->getShopUrl(),
             "order_id"=>$deal->order->id,
             "address"=>$deal->getCustomer()->toAddressString(),
-            "payment"=>[
-                "id"=>$data["payment_type_id"],
-                "name"=>$data["payment_type_name"],
-                "desc"=>$data["payment_type_desc"]
-            ],
-            "delivery"=>[
-                "id"=>$data["delivery_type_id"],
-                "name"=>$data["delivery_type_name"],
-                "desc"=>$data["delivery_type_desc"]
-            ]
+            "payment"=>$deal->payment,
+            "delivery"=>$deal->delivery
         ]);
     }
     protected function getParams(Request $rq){

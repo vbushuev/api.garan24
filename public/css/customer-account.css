@@ -1,0 +1,33 @@
+@import url("//fonts.googleapis.com/css?family=Lato:400,300,100");
+@import url("//fonts.googleapis.com/css?family=Roboto+Mono:700,400,100&subset=latin,cyrillic");
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
+.garan-customer-order-statuses {
+  list-style: none;
+  font-weight: 300;
+  font-family: 'Lato', 'Roboto Mono';
+  font-size: 18pt;
+  margin: 2px;
+}
+.garan-customer-order-statuses li {
+  display: inline-block;
+  font-size: 10pt;
+  cursor: pointer;
+  background-color: rgba(0,0,0,0.1);
+  color: rgba(255,255,255,0.8);
+  padding: 2px 4px;
+  margin-right: 2px;
+}
+.garan-customer-order-statuses .garan-active {
+  padding: 2px;
+  color: #fff;
+  background-color: #43a047;
+}
+.garan-customer-header {
+  text-align: right;
+}
+.garan-customer-header .garan-myaccount_user {
+  display: inline-block;
+}
+.garan-customer-header .garan-customer-actions {
+  display: inline-block;
+}
