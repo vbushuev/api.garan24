@@ -68,7 +68,8 @@
             <div class="clearfix"></div>
             <div id="total_cost">
                 <div class="label">Полная стоимость:</div>
-                <div class="cost_value"><span id="lblTotalPrice">4 881</span> руб.</div>
+                <div class="cost_value"><span id="lblTotalPrice">0</span> руб.</div>
+                <input type="hidden" name="TotalAmountHidden"/>
             </div>
             <div class="clearfix"></div>
         </div>
@@ -142,6 +143,7 @@
             total += isNaN(garan.delivery.list[i].cost)?0:parseInt(garan.delivery.list[i].cost);
             $("#totalDeliveryPrice").html(isNaN(totalDelivery)?totalDelivery:totalDelivery.format(0,3,' ','.')+" руб.");
             $("#lblTotalPrice").html(total.format(0,3,' ','.'));
+            $("#TotalAmountHidden").val(total);
         }
         function optionClickPaymentType(i,t){
             currentPay = i;

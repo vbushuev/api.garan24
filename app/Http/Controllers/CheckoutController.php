@@ -57,7 +57,7 @@ class CheckoutController extends Controller{
     }
     public function postPersonal(Request $rq){
         $data = $this->getParams($rq);
-        if($data===false)redirect($this->vieFolder.'/checkout');
+        if($data===false)redirect($this->viewFolder.'/checkout');
         if(!isset($data["email"])||!isset($data["phone"])){
             return redirect($this->viewFolder.'checkout');
         }
@@ -79,7 +79,7 @@ class CheckoutController extends Controller{
     }
     public function postDeliverypaymethod(Request $rq){
         $data = $this->getParams($rq);
-        if($data===false)redirect($this->vieFolder.'/checkout');
+        if($data===false)redirect($this->viewFolder.'/checkout');
         $id = $rq->session()->get("deal_id");
         $deal = new Deal();
         $deal->byId($id);
@@ -101,7 +101,7 @@ class CheckoutController extends Controller{
     }
     public function postThanks(Request $rq){
         $data = $this->getParams($rq);
-        if($data===false)redirect($this->vieFolder.'/checkout');
+        if($data===false)redirect($this->viewFolder.'/checkout');
         $id = $rq->session()->get("deal_id");
         $deal = new Deal();
         $deal->byId($id);
@@ -124,18 +124,17 @@ class CheckoutController extends Controller{
         catch(\Exception $e){
             Log::error($e);
         }
-        return view(
-            preg_replace('/\//m','',$this->viewFolder).'.thankspage',
-            [
-                "route"=>$this->getBPRoute("thanks"),
-                "section" => 'thanks',
-                "debug"=>"",
-                "goods"=>$deal->order->getProducts()
-                ,"shop_url"=>$deal->getShopUrl()
-                ,"payments" => $deal->getPaymentTypes()
-                ,"delivery" => $deal->getDeliveryTypes()
-            ]
-        );
+        return view(preg_replace('/\//m','',$this->viewFolder).'thanks',[
+            "route"=>$this->getBPRoute("thanks"),
+            "section" => 'payment',
+            "debug"=>"",
+            "goods"=>$deal->order->getProducts(),
+            "shop_url"=>$deal->getShopUrl(),
+            "order_id"=>$deal->order->id,
+            "address"=>$deal->getCustomer()->toAddressString(),
+            "payment"=>$deal->payment,
+            "delivery"=>$deal->delivery
+        ]);
         return redirect()->away($deal->response_url)->with($resp->__toString());//->with($resp->toArray());
         return response($resp->__toString())
             ->header('Content-Type', "application/json")
@@ -144,7 +143,7 @@ class CheckoutController extends Controller{
     }
     public function postPassport(Request $rq){
         $data = $this->getParams($rq);
-        if($data===false)redirect($this->vieFolder.'/checkout');
+        if($data===false)redirect($this->viewFolder.'/checkout');
         $id = $rq->session()->get("deal_id");
         $deal = new Deal();
         $deal->byId($id);
@@ -172,6 +171,7 @@ class CheckoutController extends Controller{
             "route"=>$this->getBPRoute("card"),
             "section" => 'payment',
             "debug"=>"",
+            "amount"=>(isset($data["TotalAmountHidden"])?$data["TotalAmountHidden"]:"0"),
             "goods"=>$deal->order->getProducts(),
             "shop_url"=>$deal->getShopUrl(),
             "order_id"=>$deal->order->id,

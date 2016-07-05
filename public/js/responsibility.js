@@ -18,6 +18,16 @@ var web = {
         return ret;
     }
 };
+function moveCaretToStart(el) {
+    if (typeof el.selectionStart == "number") {
+        el.selectionStart = el.selectionEnd = 0;
+    } else if (typeof el.createTextRange != "undefined") {
+        el.focus();
+        var range = el.createTextRange();
+        range.collapse(true);
+        range.select();
+    }
+}
 (function(){
     /*
     $.animate(
@@ -32,7 +42,7 @@ var web = {
     );
     */
     //$.mask.definitions['~']='\+7';
-    
+
     $(".phone").mask("+7(999) 999 99 99");//.insertBefor
     $(".postcode").mask("999999");//.insertBefor
     $(".passport-seria").mask("9999");//.insertBefor
@@ -50,6 +60,9 @@ var web = {
             icon.removeClass('fa-check-square-o');
             icon.addClass('fa-square-o');
         }
+    });
+    $("input[type=text]").on("focus",function(){
+        moveCaretToStart($(this).get());
     });
     $(".combo .dropdown-menu li a").css("cursor","pointer").click(function(){
         var $t=$(this),

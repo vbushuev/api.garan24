@@ -4,9 +4,11 @@
 <div id="OrderingSuccessContainer">
     <div class="jumbotron">
         <div class="container">
-            <h2>Заказ № <span class="red" id="OrderId">33252</span> оформлен!</h2>
-            <p>В ближайшее время с Вами свяжется наш менеджер.</p>
-            <p>Отследить состояние заказа, а также выполнить другие действия можно <a id="OrderPath" href="https://garan24.ru/my-account/">в личном кабинете Гаран24</a></a>.</p>
+            @if(isset($order_id))
+            <h2>Заказ № <span class="red" id="OrderId">{{$order_id}}</span> оформлен!</h2>
+            @endif
+            <p>В ближайшее время с Вами свяжется наш менеджер для подтверждения заказа.</p>
+            <p>Отследить состояние заказа, а также выполнить другие действия можно <a id="OrderPath" target="__blank" href="https://garan24.ru/my-account/">в личном кабинете Гаран24</a></a>.</p>
         </div>
     </div>
 </div>

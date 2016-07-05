@@ -35,6 +35,10 @@ var ymaps = {init:function(){}},Order={getCartItems:function(){return [];}};
             </p>
 
             <p>
+                <strong>Сумма заказа:</strong> {{$amount}}
+            </p>
+
+            <p>
                 <strong>Адрес доставки:</strong> {{$address}}
             </p>
             <p>
