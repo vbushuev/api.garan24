@@ -42,9 +42,9 @@ class CheckoutController extends Controller{
         $deal = new Deal();
         $deal->byId($id);
         if(!isset($deal->x_secret))  return view('public.index');
-        return view(preg_replace('/\//m','',$this->viewFolder).'.checkout'
+        return response()->view(preg_replace('/\//m','',$this->viewFolder).'.checkout'
             ,["route"=>$this->getBPRoute("checkout"),"section" => 'contact', "debug"=>"", "goods"=>$deal->order->getProducts(),"customer"=>[],"shop_url"=>$deal->getShopUrl()]
-        );
+        )->header('Access-Control-Allow-Origin', '*');
     }
     public function postIndex(Request $rq){
         $data = $rq->getContent();
