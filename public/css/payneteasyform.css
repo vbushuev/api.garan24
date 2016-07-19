@@ -1,0 +1,81 @@
+@import url("//fonts.googleapis.com/css?family=Lato");
+@import url("//fonts.googleapis.com/css?family=Open+Sans&subset=latin,cyrillic");
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
+html{
+    font-family: "Open Sans";
+    font-size: 1em;
+    font-weight: 100;
+    color:rgba(0,0,0,.7);
+}
+.container{
+    text-align: center;
+}
+.container .main{
+    display: inline-block;
+}
+.container .main .form-title{}
+.container .main .form-ul{
+    list-style: none;
+    width:640px;
+}
+.container .main .form-ul .form-li{
+    text-align: right;
+    height:3em;
+    vertical-align: middle;
+    width:640px;
+}
+.container .main .form-ul .form-li label{
+}
+
+.container .main .form-ul .form-li input,.container .main .form-ul .form-li select{
+    height:2em;
+    line-height: 2em;
+    padding: 0 .2em;
+    font-size: 110%;
+    font-family: 'Lato';
+}
+.container .main .form-ul .form-li .form-amount{
+    font-weight: 700;
+}
+.container .main .form-ul .form-li input{
+    min-width: 20em;
+}
+.container .main .form-ul .form-li-buttons{
+    text-align: right;
+    height:3em;
+    vertical-align: middle;
+
+}
+.container .main .form-ul .form-li-buttons .form-secure-connection{
+    color:rgba(76,175,80 ,1);
+    margin:0 1em;
+}
+.container .main .form-ul .form-li-buttons .form-button{
+    border:solid 1px rgba(85,125,161,.8);
+    background-color: rgba(0,0,0,0);
+    color:rgba(85,125,161,.8);
+    height:2em;
+    line-height: 2em;
+    text-align: center;
+    font-family: 'Roboto Mono';
+    font-weight: 300;
+    font-size: 1.2em;
+    width:8em;
+    margin:0 .5em;
+    cursor:pointer;
+}
+.container .main .form-ul .form-li-buttons .form-button:hover{
+    border-color: rgba(85,125,161,1);
+    color:rgba(85,125,161,1);
+}
+.container .main .form-ul .form-li-buttons .form-button.form-button-cancel{}
+.container .main .form-ul .form-li-buttons .form-button.form-button-ok{
+    border:solid 1px rgba(85,125,161,.8);
+    background-color: rgba(85,125,161,.8);
+    color:rgba(255,255,255,.8);
+}
+.container .main .form-ul .form-li-buttons .form-button.form-button-ok:hover{
+    border:solid 1px rgba(85,125,161,1);
+    background-color: rgba(85,125,161,1);
+    color:rgba(255,255,255,1);
+}

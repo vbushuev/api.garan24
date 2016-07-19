@@ -15,11 +15,25 @@ window.garan = {
             return false;
         },
         required:function(){
-            var args = arguments.length?arguments[0]:{form:$("form:first")}, ret=true;;
+            var args = arguments.length?arguments[0]:{form:$("form:first")}, ret=true;
+            console.debug("required list-group "+$(".list-group.required").length);
+            console.debug("required list-group active"+$(".list-group.required").find(".list-group-item.active").length);
+            args.form.find(".list-group.required").each(function(){
+                var $t = $(this), check = true,val = $t.val();
+                check = check&($t.find(".list-group-item.active").length);
+                console.debug(".list-group-item.active["+check+"] "+$t.find(".list-group-item.active").length)
+                if(!check){
+                    $t.effect("shake");
+                    ret = false;
+                    return false;
+                }
+            });
+            if(!ret) return ret;
             args.form.find(".input-group.required input:visible,.input-group.required select:visible,.input-group.required textarea:visible").each(function(){
                 var $t = $(this), check = true,val = $t.val(),
                     emailRegEx = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-                check = check&($t.val().length>0);
+
+                check = check&(val.length>0);
                 if($t.hasClass("email"))check = check&emailRegEx.test(val);
                 if(!check){
                     //$t.hasClass("alert")?null:$t.addClass('alert');
@@ -329,3 +343,17 @@ window.garan = {
 (function(){
 
 })();
+/**
+ * Number.prototype.format(n, x, s, c)
+ *
+ * @param integer n: length of decimal
+ * @param integer x: length of whole part
+ * @param mixed   s: sections delimiter
+ * @param mixed   c: decimal delimiter
+ */
+ Number.prototype.format = function(n, x, s, c) {
+     var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+         num = this.toFixed(Math.max(0, ~~n));
+
+     return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+ };

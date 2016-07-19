@@ -28,6 +28,20 @@ function moveCaretToStart(el) {
         range.select();
     }
 }
+function calculateTotal(){
+    var total = 0;
+    $(".cart-item .amount:not(.total-amount)").each(function(){
+        var amt = $(this).text().replace(/\s+/ig,'').replace(/[а-я]+\./ig,'');
+        console.debug("total["+total+"] => item cost:["+amt+"] isNaN:"+isNaN(amt));
+        total+=(amt.length&&!isNaN(amt))?parseFloat(amt):0;
+    });
+    $("#cart-total-price").html(total.format(2,3,' ','.')+" руб.");
+    var shipping = $("#ShippingAmountHidden").val().replace(/\s+/ig,'').replace(/[а-я]+\./ig,'');
+    console.debug("total["+total+"] => item cost:["+shipping+"] isNaN:"+isNaN(shipping));
+    total+=(shipping.length&&!isNaN(shipping))?parseFloat(shipping):0;
+    $("#total-price").html(total.format(2,3,' ','.')+" руб.");
+    $("#shipping-price").val(total.format(2,3,' ','.')+" руб.");
+}
 (function(){
     /*
     $.animate(
@@ -45,11 +59,12 @@ function moveCaretToStart(el) {
 
     $(".phone").mask("+7(999) 999 99 99");//.insertBefor
     $(".postcode").mask("999999");//.insertBefor
-    $(".passport-seria").mask("9999");//.insertBefor
-    $(".passport-number").mask("999999");
-    $(".passport-code").mask("999-999");
+    //$(".passport-seria").mask("9999");//.insertBefor
+    //$(".passport-number").mask("999999");
+    //$(".passport-code").mask("999-999");
     $(".pan").mask("9999 9999 9999 9999");
     $(".expiredate").mask("99/99");
+    $(".date").mask("99.99.9999");
     $(".input-group input").blur(function(){
         var $t = $(this),icon = $t.parent().find('i.fa');
         if(icon.hasClass('fa-square-o')&&$t.val().length){
@@ -61,7 +76,7 @@ function moveCaretToStart(el) {
             icon.addClass('fa-square-o');
         }
     });
-    $("input[type=text]").on("focus",function(){
+    $("input").on("focus",function(){
         moveCaretToStart($(this).get());
     });
     $(".combo .dropdown-menu li a").css("cursor","pointer").click(function(){
@@ -82,20 +97,25 @@ function moveCaretToStart(el) {
         keyval.val(val);
         textval.text(text);
     });
-    console.debug("Get boxberry cities");
-    /*$.ajax({
-        url:"http://api.boxberry.de/json.php?token=17324.prpqcdcf&method=ListCities",
-        dataType:"json",
-        success:function(d,s,x){
-            console.debug(d)
-        },
-        error:function(x,t,e){
-            console.debug(t);
-        }
-    });*/
-    console.debug("Get boxberry cities. ENDs");
-    //$('.email').append();
-    //$('<i class="fa fa-mobile" aria-hidden="true"></i>').insertBefore( ".phone" );
-    //$( '<i class="fa fa-envelope-o"></i>' ).insertBefore( ".email" );
+    calculateTotal();
+    /*helper section*/
+    $(".helper").on("mouseover",function(){
+        $(".helper-text").show();
+    }).on("mouseout",function(){
+        $(".helper-text").hide();
+    }).on("click",function(){
+        var sec = $(".helped.active:last").attr("data-helper");
+        $(".helper-box-item."+sec).slideDown();
+    });
+    $(".helper-box-item-close").on("click",function(){
+        $(this).parent(".helper-box-item").slideUp();
+    });
+    $(".list-group-item").on("click",function(){
+        var $t = $(this), $i = $t.find(".fa"), $p = $t.parent(".list-group");
+        $p.find(".list-group-item").removeClass("active");
+        $p.find(".list-group-item .fa").removeClass("fa-check-square-o").removeClass("fa-square-o").addClass("fa-square-o");
+        $t.addClass("active");
+        $i.removeClass("fa-square-o").addClass("fa-check-square-o");
+    });
 
 })();
