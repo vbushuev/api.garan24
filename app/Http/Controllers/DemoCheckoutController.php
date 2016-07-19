@@ -78,14 +78,9 @@ class DemoCheckoutController extends Controller{
         return $this->postDeliverypaymethod($rq);
     }
     public function postThanks(Request $rq){
-        try{
-            $this->getWC($rq);
-            $this->createOrder($rq);
-            $this->createDeal($rq);
-        }
-        catch(Exception $e){
-            Log::error($e->getMessage());
-        }
+        $this->getWC($rq);
+        $this->createOrder($rq);
+        $this->createDeal($rq);
         return view('democheckout.thankspage',["route"=>$this->getBPRoute("thanks")]);
     }
     public function getThanks(Request $rq){
@@ -159,7 +154,6 @@ class DemoCheckoutController extends Controller{
         $data=["order"=>$order];
         $data["order"]["payment_details"] = [ "method_id" => "garan24","method_title" => "Garan24 Pay","paid" => false ];
         $data["order"]["billing_address"] = $delivery;
-        $data["order"]["shipping_address"] = $delivery;
         $data["order"]["line_items"] = [];
         $data["order"]["customer_id"] = $customer["customer"]["id"];
         $products = $data["order"]["line_items"];

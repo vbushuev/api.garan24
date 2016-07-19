@@ -29,12 +29,13 @@ class WebController extends Controller{
     protected $_host = "https://garan24.ru/service/public/";
 
     public function getIndex(Request $rq){
+        return redirect("/checkout/card");
         return view('public.index');
     }
     public function getPayneteasy(Request $rq){
         return view('payneteasy.index');
     }
-    /*public function getCheckout(Request $rq){
+    public function getCheckout(Request $rq){
         $order = $rq->input('order',[
             ['img'=>'http://demostore.garan24.ru/wp-content/uploads/2016/04/jacket-180x180.jpg','name' => 'jacket','price' => '79','currency'=>'rub','quantity' => '1'],
             ['img'=>'http://demostore.garan24.ru/wp-content/uploads/2016/04/x._V293494175_-300x300.jpg','name' => 'Shoes','price' => '129','currency'=>'rub','quantity' => '3']
@@ -43,7 +44,7 @@ class WebController extends Controller{
             'order' => $order
         ];
         return view('public.checkout',$vd);
-    }*/
+    }
     public function postProcesspay(Request $rq,$test_data=""){
         $order_rq = (!empty($test_data))?$test_data:$rq->getContent();
         $this->request = (substr($order_rq,0,1)=="{")?json_decode($order_rq,true):$rq->all();

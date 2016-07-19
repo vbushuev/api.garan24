@@ -60,7 +60,7 @@ class GaranCustomerController extends Controller
             $customer = [
                 "customer"=>[
                     "email"=>$rq->input("email"),
-                    "password"=>$rq->input("phone"),
+                    "password"=>$rq->input("email"),
                     "username"=>$rq->input("email"),
                     "billing_address"=>[
                         "phone"=>$rq->input("phone")
@@ -129,26 +129,7 @@ class GaranCustomerController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $res = ["code"=>"0","message"=>""];
-        if(!$this->resource_avaliable) return json_encode($res);
-        try{
-            $data = [
-                "customer"=>[
-                    "email"=>$rq->input("email"),
-                    "billing_address"=>[
-                    ]
-                ]
-            ];
-            return $this->resource->update($data)->http->response->body;
-        }catch ( WC_API_Client_Exception $e ) {
-            $res["code"] = $e->getCode();
-            $res["message"] = $e->getMessage();
-            if ( $e instanceof WC_API_Client_HTTP_Exception ) {
-                $res["request"] = $e->get_request();
-                $res["response"] = $e->get_response();
-            }
-        }
-        return json_encode($res);
+        //
     }
     /**
      * Remove the specified resource from storage.

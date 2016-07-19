@@ -40,10 +40,17 @@ class ServicesController extends Controller{
 		"failed" => 0,
     ];
     public function Statuses(Request $rq){
-        return response()->json($this->statuses);
+        return response()->json($this->statuses)->header('Access-Control-Allow-Origin', '*');
     }
     public function StatusByWC($wc_status){
-        return response()->json($this->wcstatuses[$wc_status]);
+        return response()->json($this->wcstatuses[$wc_status])->header('Access-Control-Allow-Origin', '*');
+    }
+    public function ShippingBoxberry(Request $rq){
+        Log::debug("ShippingBoxberry: ".$rq->getContent());
+        $jr = json_decode($rq->getContent(),true);
+        $m = $jr["method"];
+        $bb = new \Garan24\Delivery\BoxBerry\BoxBerry();
+        return response($bb->$m($jr["data"]))->header('Access-Control-Allow-Origin', '*');
     }
 }
 ?>
