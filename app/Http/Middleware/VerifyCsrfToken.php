@@ -40,6 +40,7 @@ class VerifyCsrfToken extends BaseVerifier
         "/checkout/card",
         "/checkout/payout",
         "/checkout/payoutresponse",
+        "/checkout/payment",
         "/shipping/bb",
     ];
 }

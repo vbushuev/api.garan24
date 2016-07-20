@@ -10,6 +10,7 @@
         @include('elements.inputs.mobile',["text"=>"Номер мобильного телефона",'required'=>"required"])
     </div>
     @include("$viewFolder._buttons")
+    <br />
     <p class="text-muted small">
         Нажимая кнопку "Продолжить", Вы присоединяетесь к <a href="https://garan24.ru/terms" target="__blank">Договору</a> на обслуживание клиентов сервиса Гаран24.
     </p>

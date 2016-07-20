@@ -30,10 +30,7 @@
     <input type="hidden" id="boxberry_address_1" name="billing[address_1]" value="" />
     <input type="hidden" id="boxberry_postcode" name="billing[postcode]" value="" />
     <input type="hidden" id="shipping_price" name="shipping_price" value="" />
-    <input type="hidden" id="TotalAmountHidden" name="TotalAmountHidden"/>
-    <input type="hidden" id="ShippingAmountHidden" name="shipping_cost" value="@if(isset($deal->shipping_cost)&&strlen($deal->shipping_cost)>0)
-        @amount($deal->shipping_cost)
-    @endif"/>
+
     </div>
     @include("$viewFolder._buttons")
     <script>
@@ -50,7 +47,7 @@
                         data:{Zip:v}
                     }),
                     beforeSend:function(){
-                        $m.html('<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span>Уточняю стоимость ...</span>');
+                        //$m.html('<i class="fa fa-spinner fa-spin fa-3x fa-fw"></i><span>Уточняю стоимость ...</span>');
                     },
                     success:function(d,s,x){
                         console.debug(d);
@@ -100,7 +97,7 @@
             }
         }
         $(document).ready(function(){
-            $("#shipping_postcode,#shipping_city,#shipping_address_1").on("change keyup blur",function(){
+            $("#shipping_postcode").on("change keyup blur",function(){
                 getShippingCost();
             });
             if(!$("#ShippingAmountHidden").val().length){

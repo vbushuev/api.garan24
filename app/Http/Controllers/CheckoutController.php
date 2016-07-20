@@ -168,6 +168,35 @@ class CheckoutController extends Controller{
             ]
         );
     }
+    public function getPayment(Request $rq){
+        $this->postPayment($rq);
+    }
+    public function postPayment(Request $rq){
+        Log::debug(__CLASS__.".".__METHOD__);
+        $data = $this->getParams($rq);
+        if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
+        if(isset($data["payment_type_id"])&&isset($data["delivery_type_id"])){
+            $data["payment_id"]=$data["payment_type_id"];
+            $data["delivery_id"]=$data["delivery_type_id"];
+        }
+        $deal = new Deal([
+            "id"=>$rq->session()->get("deal_id"),
+            "data"=>$data
+        ]);
+        return view(
+            $this->viewFolder.'.payment',
+            [
+                "route"=>$this->getBPRoute("payment"),
+                "section" => 'payment',
+                "viewFolder"=>$this->viewFolder,"debug"=>"",
+                "customer"=>($deal->getCustomer()!==null)?$deal->getCustomer()->toArray():[],
+                "shop_url"=>$deal->getShopUrl(),
+                "goods"=>$deal->order->getProducts(),
+                "amount"=>($deal->order->order_total+$deal->shipping_cost),
+                "deal"=>$deal
+            ]
+        );
+    }
     public function getCard(Request $rq){
         return $this->postCard($rq);
     }
@@ -404,6 +433,7 @@ class CheckoutController extends Controller{
         "address" => ["text"=>"Продолжить","href"=>"/address"],
         "thanks" => ["text"=>"Продолжить","href"=>"/thanks"],
         "passport" => ["text"=>"Продолжить","href"=>"/passport"],
+        "payment" => ["text"=>"Продолжить","href"=>"/payment"],
         "card2" => ["text"=>"Продолжить","href"=>"/cardpayneteasy"],
         "card" => ["text"=>"Оплатить","href"=>"/card"],
         "payout" => ["text"=>"Подтвердить","href"=>"/payout"],
@@ -421,7 +451,8 @@ class CheckoutController extends Controller{
         "paymethod" => ["condition"=>["credit"=>"passport"],"next"=>"card","back"=>"delivery"],
         "checkcard" => ["condition"=>false,"next"=>"thanks","back"=>"deliverypaymethod"],
         "thanks" => ["condition"=>false,"next"=>"card","back"=>"passport"],
-        "passport" => ["condition"=>false,"next"=>"thanks","back"=>"deliverypaymethod"],
+        "passport" => ["condition"=>false,"next"=>"payment","back"=>"deliverypaymethod"],
+        "payment" => ["condition"=>false,"next"=>"card","back"=>"passport"],
         "card" => ["condition"=>false,"next"=>"thanks","back"=>"deliverypaymethod"],
         //"card2" => ["condition"=>false,"next"=>"payout","back"=>"deliverypaymethod"]
         "card2" => ["condition"=>false,"next"=>"thanks","back"=>"passport"]

@@ -14,6 +14,10 @@
         <label for="fio['middle']" class="control-label">Отчество:</label>
         @include('elements.inputs.text',["name"=>"fio[middle]","text"=>"Отчество","icon"=>"user","value"=>isset($deal->getCustomer()->fio_middle)?$deal->getCustomer()->fio_middle:""])
     </div>
+    <div class="form-group" id="PersonBirthdate">
+        <label for="passport['date']" class="control-label">Дата рождения:</label>
+        @include('elements.inputs.text',['name'=>'fio[birthdate]',"icon"=>"calendar","class"=>"date","text"=>"Дата рождения","value"=>""])
+    </div>
     <h3><i class="first">Паспорт</i>:</h3>
     <div class="row">
         <div class="col-lg-6">
@@ -25,16 +29,16 @@
         <div class="col-lg-6">
             <div class="form-group" id="PassportDate">
                 <label for="passport['date']" class="control-label">Дата выдачи:</label>
-                @include('elements.inputs.date',['name'=>'passport["date"]',"text"=>"Дата выдачи","value"=>isset($customer["passport"]["date"])?$customer["passport"]["date"]:""])
+                @include('elements.inputs.text',['name'=>'passport[date]',"icon"=>"calendar","class"=>"date","text"=>"Дата выдачи","value"=>isset($customer["passport"]["date"])?$customer["passport"]["date"]:""])
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="form-group" id="PassportLocale">
-                <label for="passport['where']" class="control-label-left">Кем выдан:</label>
-                <textarea id="passport['where']" name="passport['where']" class="form-control" placeholder="Кем выдан" rows="3">
-                    {{isset($customer["passport"]["where"])?$customer["passport"]["where"]:""}}
+                <label for="passport[where]" class="control-label-left">Кем выдан:</label>
+                <textarea id="passport[where]" name="passport[where]" class="form-control" placeholder="Кем выдан" rows="3">
+                    {{isset($customer["passport"]["where"])?urldecode($customer["passport"]["where"]):""}}
                 </textarea>
             </div>
         </div>
