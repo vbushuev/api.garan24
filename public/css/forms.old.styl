@@ -1,0 +1,70 @@
+button,.button
+    border-radius(.2em)
+    font-size 12pt
+    font-weight 400
+    display inline-block
+    cursor pointer
+    background-color rgba(255,255,255,.75)
+    border solid rgb(99, 158, 20) 1px
+    width    8em
+    height 2.2em
+    line-height 2.2em
+    margin .1em
+    color rgba(150,88,138,1)
+    :hover
+        background-color rgba(0,0,0,.4)
+button.highlighted,.button.highlighted
+    background-color rgb(99, 158, 20,.75)
+    border none
+    color rgba(255,255,255,1)
+    :hover
+        background-color rgb(99, 158, 20,1)
+button.alert
+    background-color rgba(255,0,0,.75)
+    color rgba(255,255,255,1)
+    :hover
+        background-color rgba(255,0,0,1)
+input,select
+    border-radius(.2em)
+    display inline-block
+    font-size 12pt
+    border solid 1px grey
+    width    14em
+    height 2.2em
+    line-height 2.2em
+    margin .1em
+    padding-left .02em
+    color rgba(150,88,138,1)
+    position relative
+//input[type="email"],
+.alert
+    border solid 2px rgba(255, 0, 0, 0.8)
+    background-color: rgba(0, 255, 0, 0.3)
+.required
+    font-weight 400
+input.email::before
+        //font-family 'FontAwesome'
+        //position absolute
+        //top 0px
+        //left -5px
+        //content "\f007"
+        content "EMAIL:"
+
+input.address-line
+    width 18em
+input.city,input.state
+    width 6em
+input.postcode
+    width: 6em
+select.country
+    width 8em
+select.titles
+    width 4em
+    font-size 12pt
+.form-submit
+    margin 1em
+    text-align center
+.disabled
+    position relative
+#foward
+    float right

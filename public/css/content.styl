@@ -1,0 +1,51 @@
+//main: style.styl
+.container
+    .content
+        text-align center
+        display inline-block
+        width 100%
+        section
+            padding 1em
+            width 60%
+            margin 0 20% 2em 20%
+            text-align left
+            .title
+                font-size 36pt
+                margin-bottom .6em
+                border-bottom solid rgba(0,0,0,.2) 1px
+            table.review-order
+                border-radius(.4em)
+                border 1px solid rgba(0,0,0,.1)
+                text-align center
+                width 100%
+                border-collapse separate
+                tr th
+                    padding .2em
+                tr td
+                    border 1px solid rgba(0,0,0,.1)
+                    padding .4em
+                    font-family: 'Roboto Mono'
+                    font-size: 80%
+                    .fa
+                        color $fontColor
+
+    .columns
+        display inline-block
+
+        .title
+            font-size 28px
+            border-bottom solid 1px grey
+            margin-bottom 2em
+            padding-bottom .6em
+
+    .col-left,.col-right
+        display table-cell
+        text-align left
+        width 20.4em
+        padding 0 1em
+    .order-item
+        position relative
+        span
+            font-weight 400
+        .item-name
+            font-size 24pt

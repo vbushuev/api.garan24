@@ -1,0 +1,98 @@
+// out: styles.css
+@import "fonts.styl"
+$fontColor = rgba(255,162,0,1)
+$garanBlue = #2962FF//rgba(255,0,0,1)
+$garanRed = #D50000//rgba(255,0,0,1)
+border-radius()
+   -webkit-border-radius arguments
+   -moz-border-radius arguments
+   border-radius arguments
+*
+    font-weight 100
+    font-family 'Lato','Roboto Mono'
+    font-size 18pt
+    
+html,body
+    height 100%
+body
+    margin 0
+    padding 0
+    width 100%
+    display table
+    color rgba(0,0,0,1)
+    z-index 0
+    position relative
+a
+    text-decoration none
+    color rgba(150,88,138,.75)
+    font-weight 700
+a:hover
+    //color rgba(150,88,138,1)
+hr
+    color rgba(0,0,0,.4)
+    margin .2em 35% 1em 35%
+.container
+    text-align center
+    display table-cell
+    vertical-align middle
+    position relative
+.overlay
+    display none
+.nodisplay
+    display none
+// own styles
+i
+    font-style: normal;
+.smaller
+    font-size: 80%;
+.bigger
+    font-size 120%
+// Colors
+.garan24-red
+    color $garanRed
+.garan24-blue
+    color $garanBlue
+.title-logo
+    font-family 'Lato'
+    font-weight 100
+    font-stretch semi-expanded
+    font-size 64px
+    color rgba(103,58,183,1)
+    margin 16px
+    padding 0
+    span
+        box-sizing border-box
+        border-top 1px solid rgba(103,58,183,1)
+        border-bottom 1px solid rgba(77,182,172 ,1)
+        display inline-block
+        font-size inherit
+        font-weight 300
+        margin-left -13px
+    .g,.a-2,.a-4
+        padding 0 8px
+    .g
+        //background-color rgba(255,162,0,1)
+        background-color rgba(103,58,183,1)
+        border 1px solid rgba(103,58,183,1)
+        color rgba(255,255,255,1)
+    .a
+        color rgba(0,150,136 ,1)
+        margin-left -12px
+        color rgba(255,255,255,1)
+        background-color rgba(77,182,172 ,1)
+        border 1px solid rgba(77,182,172 ,1)
+    .a-2,.a-4
+        //background-color rgba(220,231,117 ,1)
+        //border 1px solid rgba(220,231,117 ,1)
+        color rgba(0,150,136 ,1)
+        margin-left -12px
+        color rgba(255,255,255,1)
+        background-color rgba(77,182,172 ,1)
+        border 1px solid rgba(77,182,172 ,1)
+
+
+@import "forms.styl"
+@import "nav.styl"
+@import "content.styl"
+@import "footer.styl"
+@import "checkout.styl"

@@ -2,16 +2,14 @@
 @import url("//fonts.googleapis.com/css?family=Roboto+Mono&subset=latin,cyrillic");
 @import url("//fonts.googleapis.com/css?family=Open+Sans&subset=latin,cyrillic");
 @import url("//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
-* {
-  font-weight: 300;
-  font-family: 'Open Sans';
-  font-size: 14pt;
-}
 html,
 body {
   height: 100%;
 }
 body {
+  font-weight: 300;
+  font-family: 'Open Sans';
+  font-size: 14pt;
   margin: 0;
   padding: 0;
   width: 100%;
@@ -56,11 +54,26 @@ body .container ul {
 body .container ul li {
   display: inline-block;
 }
+body .container .row {
+  margin-left: 0;
+  margin-right: 0;
+}
+body .container .control-label {
+  display: none;
+}
+body .container input,
+body .container select,
+body .container textarea {
+  font-size: 14pt;
+}
 body .container .hide {
   display: none;
 }
 body .container .small {
-  font-size: 12pt;
+  font-size: 10pt;
+}
+body .container .small a {
+  font-size: 10pt;
 }
 body .container .attention {
   font-size: 110%;
@@ -176,6 +189,8 @@ body .container .cart {
 }
 body .container .cart-item {
   margin-bottom: 1.4em;
+  cursor: pointer;
+  font-size: 12pt;
 }
 body .container .cart-item * {
   margin: 0;
@@ -183,14 +198,14 @@ body .container .cart-item * {
 }
 body .container .cart-item .image {
   display: inline-block;
+  text-align: center;
 }
 body .container .cart-item .image img {
-  height: 100px;
-  width: 100px;
+  height: 3em;
+  width: 3em;
 }
 body .container .cart-item .name {
-  padding-left: 0.4em;
-  font-size: 12pt;
+  padding-left: 0em;
 }
 body .container .cart-item .quantity {
   font-weight: 700;
@@ -201,8 +216,23 @@ body .container .cart-item .amount {
   font-family: 'Lato', 'Open Sans';
 }
 body .container .cart-item .total {
-  display: block;
-  float: left;
+  text-align: right;
+}
+body .container #cart-total {
+  border-top: dotted 1px #557da1;
+  margin-top: 2.4em;
+}
+body .container #cart-shipping {
+  border: none;
+}
+body .container #cart-shipping-total {
+  border-top: dotted 1px #557da1;
+  margin-top: 1em;
+  color: #557da1;
+}
+body .container #cart-shipping-total * {
+  font-size: 16pt;
+  font-weight: 700;
 }
 body .container .form .fa {
   color: #557da1;
@@ -212,20 +242,6 @@ body .container .list-group-item-text {
 }
 body .container .list-group-item.active .fa {
   color: #fff;
-}
-body .container #cart-total {
-  margin-top: 2.4em;
-}
-body .container #cart-shipping {
-  border: none;
-}
-body .container #cart-shipping-total {
-  border-top: dotted 1px #557da1;
-  margin-top: 1em;
-}
-body .container #cart-shipping-total * {
-  font-size: 16pt;
-  font-weight: 700;
 }
 body .container #header {
   font-size: 12pt;

@@ -1,0 +1,245 @@
+// out: co.css
+@import "fonts.styl"
+$fontColor = rgba(255,162,0,1)
+$garanBlue = #2962FF//rgba(255,0,0,1)
+$garanRed = #D50000//rgba(255,0,0,1)
+border-radius()
+   -webkit-border-radius arguments
+   -moz-border-radius arguments
+   border-radius arguments
+
+html,body
+    height 100%
+body
+    font-weight 300
+    font-family 'Open Sans'
+    font-size 14pt
+    margin 0
+    padding 0
+    width 100%
+    .ui-dialog-titlebar
+        display: none;
+    .container
+        h1,h2,h3
+            font-weight: 500;
+            text-transform: uppercase;
+            margin-bottom: 1em;
+            .first
+                font-weight: 700;
+                font-style: normal;
+                font-size: inherit;
+        h1
+            font-size: 20pt
+            text-align: center;
+            height:2em;
+            line-height: 2em;
+            border-bottom: dotted 1px rgba(85,125,161,1);
+        h2
+            font-size: 18pt
+        h3
+            font-size: 16pt
+        h4
+            font-weight: 700;
+            font-size: 15pt;
+        ul
+            list-style: none;
+            li
+                display: inline-block;
+        .row
+            margin-left: 0;
+            margin-right: 0;
+        /*
+        No labels
+        */
+        .control-label
+            display: none;
+
+        input,select,textarea
+            font-size: 14pt;
+
+        .hide
+            display: none;
+        .small
+            font-size: 10pt;
+            a
+                font-size: 10pt;
+        .attention
+            font-size: 110%;
+            font-weight: 700;
+            display: block;
+            background-color: rgba(100,255,218 ,1);
+            padding:.4em;
+            text-align: center;
+        .scale
+            width: 100%;
+            padding:0;
+            .scale-item
+                font-size: 10pt;
+                width:24.5%;
+                margin: 0;
+                height: 3em;
+                line-height: 3em;
+                border: dotted 1px rgba(0,0,0,.3);
+                color: rgba(0,0,0,.3);
+                padding: 0 1em;
+                position: relative;
+                .fa
+                    display: none;
+
+            .scale-item.active
+                background-color: rgba(174,213,129 ,1);
+                color: rgba(255,255,255,1);
+                border: solid 1px rgba(174,213,129 ,1);
+                .fa
+                    display: inline-block;
+                    position: absolute;
+                    right:1em;
+                    top: 1em;
+        .helper-box
+            display:block;
+            position: relative;
+            min-height: 3em;
+            .helper-box-item
+                display: none;
+        .helper
+            display: inline-block;
+            background-color: rgba(85,125,161,1);
+            color: rgba(255,255,255,.6);
+            border-radius: (1em);
+            min-width:2em;
+            text-align: center;
+            height: 2em;
+            line-height: 2em;
+            position: absolute;
+            right: 1em;
+            top: 1em;
+            cursor:pointer;
+            z-index: 100;
+        .helper:hover
+            color: rgba(255,255,255,1);
+            text-decoration: none;
+        .helper-text
+            background-color: rgba(85,125,161,1);
+            color: rgba(255,255,255,1);
+            position: absolute;
+            top: 3em;
+            right: 1em;
+            padding: 1em;
+        .helper-box-item
+            background-color: rgba(175,180,43 ,1);
+            position: relative;
+            z-index: 1000;
+            color: #fff;
+            padding: 2em;
+            font-size: 12pt;
+            text-indent: 2em;
+        .helper-box-item-close
+            border: solid 1px rgba(175,180,43 ,1);
+            position: absolute;
+            top:.4em;
+            right:.4em;
+            color: rgba(255,255,255,1);
+            border-radius: (1em);
+            height: 1.4em;
+            line-height: 1.4em;
+            width:1.4em;
+            text-align: center;
+            display: inline-block;
+            text-indent: 0;
+        .helper-box-item-close:hover
+            border: solid 1px rgba(255,255,255,1);
+
+        .input-group-addon
+            background-color: rgba(0,0,0,0);
+            .fa
+                color: rgba(85,125,161,1);
+        /* Cart*/
+        .cart
+            border:dotted 1px rgba(100,255,218 ,1);
+            padding: 0 1em;
+        .cart-item
+            margin-bottom: 1.4em;
+            cursor: pointer;
+            font-size: 12pt;
+            *
+                margin: 0;
+                padding:0;
+
+            .image
+                display: inline-block;
+                text-align: center;
+                img
+                    height: 3em;
+                    width: 3em;
+            .name
+                padding-left: 0em;
+            .quantity
+                font-weight: 700;
+            .amount
+                text-align: right;
+                font-weight: 700;
+                font-family: 'Lato', 'Open Sans';
+            .total
+                text-align: right;
+        #cart-total
+            border-top:dotted 1px rgba(85,125,161,1);
+            margin-top: 2.4em;
+        #cart-shipping
+            border: none;
+        #cart-shipping-total
+            border-top:dotted 1px rgba(85,125,161,1);
+            margin-top: 1em;
+            color: rgba(85,125,161,1);
+            *
+                font-size: 16pt;
+                font-weight: 700;
+        .form
+            .fa
+                color: rgba(85,125,161,1);
+        .list-group-item-text
+            text-indent: 1.4em;
+        .list-group-item.active .fa
+            color: rgba(255,255,255,1);
+
+        #header
+            font-size: 12pt
+            padding: 0;
+            .nav
+                background-color rgba(85,125,161,1)
+                list-style: none;
+                color: rgba(255,255,255,.8);
+                text-align: right;
+                padding-bottom: .5em;
+                .nav-item
+                    height: 2em;
+                    line-height: 2em;
+                    display: inline-block;
+                    font-size: 12pt;
+                    a
+                        color rgba(174,213,129 ,1)
+                        font-size: 12pt;
+                    a:hover
+                        background: none;
+                        text-decoration: underline;
+        #content
+            background-color rgba(0,0,0,0)
+            .cart
+                padding-right: 2em;
+                margin-bottom: 2em;
+
+            .message
+                background-color: rgba(185,246,202 ,1);
+                border-radius(.5em);
+                padding:1em;
+                text-indent: 2em;
+            .message-alert
+                background-color: rgba(233,30,99 ,1);
+                color: rgba(255,255,255,1);
+        #footer
+            margin-top: 2em;
+
+            color:#fff;
+            background-color rgba(55,71,79 ,1);
+            text-align: center;
+            p,a
+                font-size: 10pt;

@@ -1,0 +1,66 @@
+//main: style.styl
+$fontColor = rgba(99, 158, 20,1)
+.button
+    border-radius(.4em)
+    font-size 11pt
+    font-weight 100
+    display inline-block
+    text-align center
+    cursor pointer
+    width    14em
+    height 2.2em
+    line-height 2.2em
+    margin 0 .4em .4em 0
+    text-transform uppercase
+    color $fontColor
+    border  solid $fontColor 1px
+    background-color rgba(255,255,255,1)
+    text-decoration none !important
+.button:hover
+    background-color $fontColor
+    border solid rgba(255, 255, 255,1) 1px
+    color rgba(255,255,255,1)
+.button.alert
+    background-color red
+    border  solid red 1px
+    color rgba(255,255,255,1)
+.button.alert:hover
+    background-color rgba(255,255,255,1)
+    color red
+input,select
+    border-radius(.2em)
+    font-family Roboto-Mono
+    font-weight 100
+    display inline-block
+    font-size 12pt
+    border solid rgba(0,0,0,.2) 1px
+    width    14em
+    height 1.8em
+    line-height 1.8em
+    padding-left .2em
+    color rgba(0,0,0,.7)
+    position relative
+label
+    display block
+    font-family Roboto-Mono
+    font-size 10pt
+    text-transform uppercase
+    color rgba(0,0,0,.7)
+    margin-bottom .2em
+.required label
+    font-weight 800
+.required label:after
+    content "*"
+
+.input-group
+    margin 0 .6em .6em 0
+.input-form
+    border-radius(.4em)
+    background-color rgba(0,0,0,.05)
+    border solid 1px rgba(0,0,0,.1)
+    margin 0
+    padding .5em
+    h3
+        margin 0 0 .4em 0
+        color rgba(0,0,0,.7)
+        font-family 'Roboto Mono'
