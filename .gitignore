@@ -10,3 +10,4 @@ composer.lock
 *.log
 app/Http/Controllers/bad.DemoCheckoutController.php
 composer.lock
+deployment-config.json

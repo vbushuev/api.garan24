@@ -281,11 +281,12 @@ body .container #content .message {
   -moz-border-radius: 0.5em;
   border-radius: 0.5em;
   padding: 1em;
-  text-indent: 2em;
+  font-size: 12pt;
 }
 body .container #content .message-alert {
   background-color: #e91e63;
   color: #fff;
+  text-indent: 1em;
 }
 body .container #footer {
   margin-top: 2em;

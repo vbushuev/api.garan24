@@ -104,7 +104,7 @@ class CheckoutController extends Controller{
         }
         $deal->update($data);
         return view(
-            $this->viewFolder.'.deliverypaymethod',
+            $this->viewFolder.'.deliverymethod',
             [
                 "route"=>$this->getBPRoute("deliverypaymethod"),
                 "section" => 'delivery',
@@ -115,6 +115,28 @@ class CheckoutController extends Controller{
                 "shop_url"=>$deal->getShopUrl(),
                 "payments" => $deal->getPaymentTypes(),
                 "delivery" => $deal->getDeliveryTypes()
+            ]
+        );
+    }
+    public function getAddress(Request $rq){
+        return $this->postAddress($rq);
+    }
+    public function postAddress(Request $rq){
+        Log::debug(__CLASS__.".".__METHOD__);
+        $data = $this->getParams($rq);
+        if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
+        $deal = new Deal([
+            "id"=>$rq->session()->get("deal_id"),
+            "data"=>$data
+        ]);
+        return view(
+            $this->viewFolder.'.address',
+            [
+                "route"=>$this->getBPRoute("address"),
+                "section" => 'delivery',
+                "viewFolder"=>$this->viewFolder,"debug"=>"",
+                "shop_url"=>$deal->getShopUrl(),
+                "deal"=>$deal
             ]
         );
     }
@@ -257,10 +279,11 @@ class CheckoutController extends Controller{
     public function postThanks(Request $rq){
         Log::debug(__CLASS__.".".__METHOD__);
         $data = $this->getParams($rq);
+        /*
         if($data["cvv"]!="123"){
-            //return redirect("/checkout/card")->with('status','Вашу карту не удалось проверить. Повторите попытку или воспользуйтесь другой картой.');//$this->postCard($rq);
             return redirect()->back()->with('status','Вашу карту не удалось проверить. Повторите попытку или воспользуйтесь другой картой.');
         }
+        */
         if($data===false||!$rq->session()->has("deal_id"))redirect('/checkout');
         $deal = new Deal(["id"=>$rq->session()->get("deal_id")]);
         $resp = $deal->finish();
@@ -319,49 +342,6 @@ class CheckoutController extends Controller{
         Log::debug("CheckoutController:getParams request: ".Garan24::obj2str($data));
         return $data;
     }
-    protected $bpmodels=[
-        "index" => ["text"=>"Продолжить","href"=>"/"],
-        "email" => ["text"=>"Продолжить","href"=>"/checkout"],
-        "personal" => ["text"=>"Продолжить","href"=>"/personal"],
-        "delivery" => ["text"=>"Продолжить","href"=>"/delivery"],
-        "paymethod" => ["text"=>"Продолжить","href"=>"/paymethod"],
-        "checkcard" => ["text"=>"Продолжить","href"=>"/checkcard"],
-        "deliverypaymethod" => ["text"=>"Продолжить","href"=>"/deliverypaymethod"],
-        "thanks" => ["text"=>"Подтвердить","href"=>"/thanks"],
-        "passport" => ["text"=>"Продолжить","href"=>"/passport"],
-        "card2" => ["text"=>"Подтвердить","href"=>"/cardpayneteasy"],
-        "card" => ["text"=>"Подтвердить","href"=>"/card"],
-        "payout" => ["text"=>"Подтвердить","href"=>"/payout"],
-    ];
-    protected $bpmatrix=[
-        "index" => ["condition"=>false,"next"=>"email","back"=>"index"],
-        "email" => ["condition"=>false,"next"=>"personal","back"=>"index"],
-        "checkout" => ["condition"=>false,"next"=>"deliverypaymethod","back"=>"index"],
-        //"personal" => ["condition"=>false,"next"=>"delivery","back"=>"email"],
-        "personal" => ["condition"=>false,"next"=>"deliverypaymethod","back"=>"email"],
-        "delivery" => ["condition"=>false,"next"=>"paymethod","back"=>"personal"],
-        "deliverypaymethod" => ["condition"=>["credit"=>"passport"],"next"=>"passport","back"=>"email"],
-        "paymethod" => ["condition"=>["credit"=>"passport"],"next"=>"card","back"=>"delivery"],
-        "checkcard" => ["condition"=>false,"next"=>"thanks","back"=>"deliverypaymethod"],
-        "thanks" => ["condition"=>false,"next"=>"index","back"=>false],
-        "passport" => ["condition"=>false,"next"=>"card","back"=>"deliverypaymethod"],
-        "card" => ["condition"=>false,"next"=>"thanks","back"=>"deliverypaymethod"],
-        //"card2" => ["condition"=>false,"next"=>"payout","back"=>"deliverypaymethod"]
-        "card2" => ["condition"=>false,"next"=>"thanks","back"=>"passport"]
-    ];
-    protected function getBPRoute($current,$condition=false){
-        $c = (!isset($this->bpmatrix[$current]))
-            ? $this->bpmatrix["index"]
-            : $this->bpmatrix[$current];
-        return [
-            "dir" => "/checkout",
-            //"dir" => $this->viewFolder,
-            "next" => ($c["condition"]!==false)
-                    ? (isset($c["condition"][$condition])?$this->bpmodels[$c["condition"][$condition]]:$this->bpmodels[$c["next"]])
-                    : $this->bpmodels[$c["next"]],
-            "back" => (($c["back"]!==false)?$this->bpmodels[$c["back"]]:false)
-        ];
-    }
     protected function payout($deal){
         $saleData = [
             "client_orderid" => $deal->order->id,
@@ -400,5 +380,52 @@ class CheckoutController extends Controller{
         $connector->call();
         return $connector->getResponse();
     }
+    protected function getBPRoute($current,$condition=false){
+        $c = (!isset($this->bpmatrix[$current]))
+            ? $this->bpmatrix["index"]
+            : $this->bpmatrix[$current];
+        return [
+            "dir" => "/checkout",
+            //"dir" => $this->viewFolder,
+            "next" => ($c["condition"]!==false)
+                    ? (isset($c["condition"][$condition])?$this->bpmodels[$c["condition"][$condition]]:$this->bpmodels[$c["next"]])
+                    : $this->bpmodels[$c["next"]],
+            "back" => (($c["back"]!==false)?$this->bpmodels[$c["back"]]:false)
+        ];
+    }
+    protected $bpmodels=[
+        "index" => ["text"=>"Продолжить","href"=>"/"],
+        "email" => ["text"=>"Продолжить","href"=>"/checkout"],
+        "personal" => ["text"=>"Продолжить","href"=>"/personal"],
+        "delivery" => ["text"=>"Продолжить","href"=>"/delivery"],
+        "paymethod" => ["text"=>"Продолжить","href"=>"/paymethod"],
+        "checkcard" => ["text"=>"Продолжить","href"=>"/checkcard"],
+        "deliverypaymethod" => ["text"=>"Продолжить","href"=>"/deliverypaymethod"],
+        "address" => ["text"=>"Продолжить","href"=>"/address"],
+        "thanks" => ["text"=>"Продолжить","href"=>"/thanks"],
+        "passport" => ["text"=>"Продолжить","href"=>"/passport"],
+        "card2" => ["text"=>"Продолжить","href"=>"/cardpayneteasy"],
+        "card" => ["text"=>"Оплатить","href"=>"/card"],
+        "payout" => ["text"=>"Подтвердить","href"=>"/payout"],
+    ];
+    protected $bpmatrix=[
+        "index" => ["condition"=>false,"next"=>"email","back"=>"index"],
+        "email" => ["condition"=>false,"next"=>"personal","back"=>"index"],
+        "checkout" => ["condition"=>false,"next"=>"deliverypaymethod","back"=>"index"],
+        //"personal" => ["condition"=>false,"next"=>"delivery","back"=>"email"],
+        "personal" => ["condition"=>false,"next"=>"deliverypaymethod","back"=>"email"],
+        "delivery" => ["condition"=>false,"next"=>"paymethod","back"=>"personal"],
+        "deliverypaymethod" => ["condition"=>false,"next"=>"address","back"=>"email"],
+        "address" => ["condition"=>false,"next"=>"passport","back"=>"deliverypaymethod"],
+        "deliverymethod" => ["condition"=>false,"next"=>"address","back"=>"email"],
+        "paymethod" => ["condition"=>["credit"=>"passport"],"next"=>"card","back"=>"delivery"],
+        "checkcard" => ["condition"=>false,"next"=>"thanks","back"=>"deliverypaymethod"],
+        "thanks" => ["condition"=>false,"next"=>"card","back"=>"passport"],
+        "passport" => ["condition"=>false,"next"=>"thanks","back"=>"deliverypaymethod"],
+        "card" => ["condition"=>false,"next"=>"thanks","back"=>"deliverypaymethod"],
+        //"card2" => ["condition"=>false,"next"=>"payout","back"=>"deliverypaymethod"]
+        "card2" => ["condition"=>false,"next"=>"thanks","back"=>"passport"]
+    ];
+
 }
 ?>

@@ -17,7 +17,7 @@
         var price = parseInt(bb.price);
         $("#ShippingAmountHidden").val(bb.price);
 
-        $("#cart-shipping .name").html(delivery_address);
+        $("#cart-shipping .total").html(delivery_address);
         $("#cart-shipping .amount").html(price.format(0,3,' ','.')+" руб.");
         calculateTotal();
         var shipping = bb.address.split(",");

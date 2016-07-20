@@ -39,6 +39,9 @@ $.extend(window.garan,{
                 if (result.prepaid=='Yes') {
                     alert('Отделение работает только по предоплате!');
                 }*/
+            },
+            calculateCost:function(){
+                
             }
         }
     }

@@ -33,6 +33,8 @@ class VerifyCsrfToken extends BaseVerifier
         "/checkout/checkout",
         "/checkout/personal",
         "/checkout/deliverypaymethod",
+        "/checkout/deliverymethod",
+        "/checkout/address",
         "/checkout/passport",
         "/checkout/thanks",
         "/checkout/card",
