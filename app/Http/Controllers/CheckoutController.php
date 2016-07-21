@@ -308,11 +308,10 @@ class CheckoutController extends Controller{
     public function postThanks(Request $rq){
         Log::debug(__CLASS__.".".__METHOD__);
         $data = $this->getParams($rq);
-        /*
         if($data["cvv"]!="123"){
             return redirect()->back()->with('status','Вашу карту не удалось проверить. Повторите попытку или воспользуйтесь другой картой.');
         }
-        */
+
         if($data===false||!$rq->session()->has("deal_id"))redirect('/checkout');
         $deal = new Deal(["id"=>$rq->session()->get("deal_id")]);
         $resp = $deal->finish();
