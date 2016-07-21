@@ -89,6 +89,7 @@ body .container .scale {
   padding: 0;
   margin: 0;
   background-color: #aed581;
+  pointer-events: none;
 }
 body .container .scale .scale-item {
   display: inline-block;
@@ -104,9 +105,6 @@ body .container .scale .scale-item {
 body .container .scale .scale-item .fa {
   color: rgba(255,255,255,0.5);
 }
-body .container .scale .scale-item .fa-check-circle-o {
-  display: none;
-}
 body .container .scale .scale-item .fa-2x {
   position: absolute;
   right: 0;
@@ -119,12 +117,6 @@ body .container .scale .scale-item.active {
 body .container .scale .scale-item.active .fa {
   font-weight: 300;
   color: #fff;
-}
-body .container .scale .scale-item.active .fa-check-circle-o {
-  display: inline-block;
-}
-body .container .scale .scale-item.active .fa-check-circle-o::last-child {
-  display: none;
 }
 body .form {
   position: relative;

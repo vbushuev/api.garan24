@@ -329,7 +329,7 @@ class CheckoutController extends Controller{
         }
         return view($this->viewFolder.'.thanks',[
             "route"=>$this->getBPRoute("thanks"),
-            "section" => 'payment',
+            "section" => 'thanks',
             "deal" => $deal,
             "title"=>'<i class="first">Заказ</i> №'.$deal->order->id.' подтвержден',
             "viewFolder"=>$this->viewFolder,"debug"=>"",
