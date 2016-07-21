@@ -35,7 +35,13 @@
                 var val = $(this).attr("data-id");
                 if(val==4){
                     window.garan_submit_args.url = window.garan_submit_args.url.replace(/address/i,"passport");
-                }else window.garan_submit_args.url = window.garan_submit_args.url.replace(/passport/i,"address");
+                }else {
+                    window.garan_submit_args.url = window.garan_submit_args.url.replace(/passport/i,"address");
+                    $("#ShippingAmountHidden").val('');
+
+                    $("#cart-shipping .total").html('');
+                    $("#cart-shipping .amount").html('');
+                }
                 $("#delivery_type_id").val(val);
                 console.debug($(".row.payment"));
                 return false;

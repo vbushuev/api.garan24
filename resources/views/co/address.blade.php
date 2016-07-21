@@ -16,11 +16,11 @@
         @include('elements.inputs.text',["id"=>"shipping_postcode","required"=>"required","icon"=>"map-marker","name"=>"billing[postcode]","text"=>"Почтовый индекс","value"=>$deal->getCustomer()->toArray()["billing_address"]["postcode"]])
     </div>
     <div class="form-group">
-        <label for="billing[postcode]" class="control-label">Ваш город:</label>
+        <label for="billing[city]" class="control-label">Ваш город:</label>
         @include('elements.inputs.text',["id"=>"shipping_city","icon"=>"bank","name"=>"billing[city]","text"=>"Город","value"=>$deal->getCustomer()->toArray()["billing_address"]["city"]])
     </div>
     <div class="form-group">
-        <label for="billing[postcode]" class="control-label">Улица и дом:</label>
+        <label for="billing[address_1]" class="control-label">Улица и дом:</label>
         @include('elements.inputs.text',["id"=>"shipping_address_1","icon"=>"building-o","name"=>"billing[address_1]","text"=>"Адрес","value"=>$deal->getCustomer()->toArray()["billing_address"]["address_1"]])
     </div>
     <div class="garan-message" style="margin-bottom:2em;"></div>
@@ -74,8 +74,8 @@
                                     $("#ShippingAmountHidden").val(price);
                                     $m.html("Стоимость доставки <strong>"+price.format(2)+" руб.</strong>");
                                     calculateTotal();
-                                    var delivery_address = 'Доставка <b>Boxberry</b> курьером';
-                                    delivery_address+= "<br /><small>"+$("#shipping_city").val()+", "+$("#shipping_postcode").val()+", "+$("#shipping_address_1").val()+"</small>";
+                                    var delivery_address = 'Доставка <b>Boxberry Курьер</b>';
+                                    delivery_address+= "<br /><small class='shipping-city'>"+$("#shipping_city").val()+"</small>, "+$("#shipping_postcode").val()+", <small class='shipping-address-1'>"+$("#shipping_address_1").val()+"</small>";
                                     price = parseInt(price);
                                     $("#cart-shipping .total").html(delivery_address);
                                     $("#cart-shipping .amount").html(price.format(0,3,' ','.')+" руб.");
@@ -100,12 +100,18 @@
             $("#shipping_postcode").on("change keyup blur",function(){
                 getShippingCost();
             });
+            $("#shipping_city").on("change keyup blur",function(){
+                $(".shipping-city").text($(this).val());
+            });
+            $("#shipping_address_1").on("change keyup blur",function(){
+                $(".shipping-address-1").text($(this).val());
+            });
             $("#forward").click(function(){
                 if(!$("#ShippingAmountHidden").val().length){
                     getShippingCost(garan.form.submit(garan_submit_args));
                 }
             });
-            if(!$("#ShippingAmountHidden").val().length){
+            if($("#shipping_postcode").val().length){
                 getShippingCost();
             }
         });

@@ -126,7 +126,7 @@ class CheckoutController extends Controller{
         $data = $this->getParams($rq);
         if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
         $deal = new Deal([
-            "id"=>$rq->cookie("deal_id"),
+            "id"=>$data["deal_id"],
             "data"=>$data
         ]);
         //if($deal->delivery["id"]==6) {
@@ -152,7 +152,7 @@ class CheckoutController extends Controller{
         $data = $this->getParams($rq);
         if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
         $deal = new Deal([
-            "id"=>$rq->cookie("deal_id"),
+            "id"=>$data["deal_id"],
             "data"=>$data
         ]);
         return view(
@@ -180,7 +180,7 @@ class CheckoutController extends Controller{
             $data["delivery_id"]=$data["delivery_type_id"];
         }
         $deal = new Deal([
-            "id"=>$rq->session()->get("deal_id"),
+            "id"=>$data["deal_id"],
             "data"=>$data
         ]);
         return view(
@@ -204,12 +204,8 @@ class CheckoutController extends Controller{
         Log::debug(__CLASS__.".".__METHOD__);
         $data = $this->getParams($rq);
         if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
-        if(isset($data["payment_type_id"])&&isset($data["delivery_type_id"])){
-            $data["payment_id"]=$data["payment_type_id"];
-            $data["delivery_id"]=$data["delivery_type_id"];
-        }
         $deal = new Deal([
-            "id"=>$rq->session()->get("deal_id"),
+            "id"=>$data["deal_id"],
             "data"=>$data
         ]);
         $deal->client_ip = $rq->ip();
@@ -247,7 +243,7 @@ class CheckoutController extends Controller{
         Log::debug(__CLASS__.".".__METHOD__);
         $data = $this->getParams($rq);
         if(!$data) return view('checkout.ups');
-        $deal = new Deal(["id"=>$rq->session()->get("deal_id")]);
+        $deal = new Deal(["id"=>$data["deal_id"]]);
         $deal->client_ip = $rq->ip();
         try{
             $response = $this->payout($deal);
@@ -311,9 +307,8 @@ class CheckoutController extends Controller{
         if($data["cvv"]!="123"){
             return redirect()->back()->with('status','Вашу карту не удалось проверить. Повторите попытку или воспользуйтесь другой картой.');
         }
-
         if($data===false||!$rq->session()->has("deal_id"))redirect('/checkout');
-        $deal = new Deal(["id"=>$rq->session()->get("deal_id")]);
+        $deal = new Deal(["id"=>$data["deal_id"],"data"=>$data]);
         $resp = $deal->finish();
         $resp_str = $resp->__toString();
         Garan24::debug("Response :".$resp_str);
@@ -354,7 +349,7 @@ class CheckoutController extends Controller{
     }
 
     protected function getParams(Request $rq){
-        if($rq->cookie("deal_id","nodata")=="nodata") return false;
+        if($rq->cookie("deal_id","nodata")=="nodata" && !$rq->session()->has("deal_id")) return false;
         $data = $rq->get("data",$rq->getContent());
         $data = json_decode($data,true);
         if(empty($data))$data = $rq->all();
@@ -366,6 +361,8 @@ class CheckoutController extends Controller{
                 $log .= "{$k} = ".Garan24::obj2str($v).", ";
             }
         }
+        $data = array_merge($data,["deal_id" => $rq->session()->get("deal_id"),"deal_id_source" => "session"]);
+        if(strlen($data["deal_id"])<=0)$data = array_merge($data,["deal_id" => $rq->cookie("deal_id"),"deal_id_source" => "cookie"]);
         Log::debug("CheckoutController:getParams request: ".Garan24::obj2str($data));
         return $data;
     }
