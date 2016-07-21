@@ -87,6 +87,41 @@ body
             width: 100%;
             padding:0;
             margin: 0;
+            background-color: rgba(174,213,129 ,1);
+            .scale-item
+                display: inline-block;
+                font-size: 16pt;
+                width:25%;
+                margin: 0;
+                height: 3em;
+                line-height: 3em;
+                text-align: center;
+                position: relative;
+                color: rgba(255,255,255,.5);
+                .fa
+                    color: rgba(255,255,255,.5);
+                .fa-check-circle-o
+                    display: none;
+                .fa-2x
+                    position: absolute;
+                    right:0;
+                    top: .25em;
+            .scale-item.active
+                font-weight: 700;
+                color: rgba(255,255,255,1);
+                .fa
+                    font-weight: 300;
+                    color: rgba(255,255,255,1);
+                .fa-check-circle-o
+                    display: inline-block;
+                .fa-check-circle-o::last-child
+                    display: none;
+
+        /*
+        .scale
+            width: 100%;
+            padding:0;
+            margin: 0;
             .scale-item
                 display: inline-block;
                 font-size: 10pt;
@@ -106,7 +141,8 @@ body
                 position: absolute;
                 right: -3em; top: 0;
                 border: 1.5em solid transparent;
-                border-left: 1.5em solid rgba(174,213,129 ,1);*/
+                border-left: 1.5em solid rgba(174,213,129 ,1);
+        */
             /* tiangle box
             .arrow_box
                 position: relative;
@@ -284,6 +320,10 @@ body
                     a:hover
                         background: none;
                         text-decoration: underline;
+                .nav-item.logo
+                    float:left;
+                    font-size: 16pt;
+                    margin-left: 1em;
         #content
             background-color rgba(0,0,0,0)
             .cart

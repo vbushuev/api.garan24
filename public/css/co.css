@@ -88,33 +88,44 @@ body .container .scale {
   width: 100%;
   padding: 0;
   margin: 0;
+  background-color: #aed581;
 }
 body .container .scale .scale-item {
   display: inline-block;
-  font-size: 10pt;
+  font-size: 16pt;
   width: 25%;
   margin: 0;
   height: 3em;
   line-height: 3em;
   text-align: center;
   position: relative;
-  border: dotted 1px #aed581;
-  color: rgba(0,0,0,0.3);
+  color: rgba(255,255,255,0.5);
+}
+body .container .scale .scale-item .fa {
+  color: rgba(255,255,255,0.5);
+}
+body .container .scale .scale-item .fa-check-circle-o {
+  display: none;
+}
+body .container .scale .scale-item .fa-2x {
+  position: absolute;
+  right: 0;
+  top: 0.25em;
 }
 body .container .scale .scale-item.active {
-  background-color: #aed581;
+  font-weight: 700;
   color: #fff;
 }
-body .container .scale .scale-item.active::after {
-  content: '';
-  position: absolute;
-  right: -3em;
-  top: 0;
-  border: 1.5em solid transparent;
-  border-left: 1.5em solid #aed581;
-*
+body .container .scale .scale-item.active .fa {
+  font-weight: 300;
+  color: #fff;
 }
-*
+body .container .scale .scale-item.active .fa-check-circle-o {
+  display: inline-block;
+}
+body .container .scale .scale-item.active .fa-check-circle-o::last-child {
+  display: none;
+}
 body .form {
   position: relative;
 }
@@ -303,6 +314,11 @@ body #header .nav .nav-item a {
 body #header .nav .nav-item a:hover {
   background: none;
   text-decoration: underline;
+}
+body #header .nav .nav-item.logo {
+  float: left;
+  font-size: 16pt;
+  margin-left: 1em;
 }
 body #content {
   background-color: rgba(0,0,0,0);

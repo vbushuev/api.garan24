@@ -48,19 +48,20 @@
 <div id="wrapper" class="container">
 	<div id="header" class="row">
 		<ul class="nav">
+			<li class="nav-item logo">ГАРАН <code>24</code></li>
 			<li class="nav-item"><a href="{{$shop_url or '#'}}">Вернуться к витрине</a></li>
 		</ul>
 		@include($viewFolder.'.scale')
 
 	</div>
 	<div id="content" class="row">
-		<h1>
+		<!--<h1>
 			@if(isset($title))
 				{!!$title!!}
 			@else
 				<i class="first">Оформление</i> заказа
 			@endif
-		</h1>
+		</h1>-->
 		@if(isset($deal))
 		<div class="cart col-xs-12 col-sm-12 col-md-6 col-lg-6">
 			@include($viewFolder.'.goods',['goods'=>$deal->order->getProducts()])
