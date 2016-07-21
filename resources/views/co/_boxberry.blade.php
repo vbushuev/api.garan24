@@ -10,10 +10,11 @@
         $("#boxberry_period").val(bb.period);
         $("#boxberry_id").val(bb.id);
 
-        var delivery_address = 'Доставка <b>Boxberry</b> <strong>'+bb.name+'</strong>';
+        var delivery_address = 'Доставка <b>Boxberry</b> ПВЗ <strong>'+bb.name+'</strong>';
         delivery_address+= "<br /><small>"+bb.address+"</small>";
-        delivery_address+= "<br /><small>"+bb.workschedule+" тел. "+bb.phone+"</small>";
-        delivery_address+= "<br /><small><b>Срок: "+bb.period+" дн.</b></small>";
+        delivery_address+= "<br /><small>"+bb.workschedule+"</small>";
+        delivery_address+= "<br /><small>тел. "+bb.phone+"</small>";
+        delivery_address+= "<br /><small>Срок: "+bb.period+" дн.</small>";
         var price = parseInt(bb.price);
         $("#ShippingAmountHidden").val(bb.price);
 

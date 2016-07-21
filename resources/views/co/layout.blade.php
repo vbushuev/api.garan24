@@ -51,7 +51,7 @@
 			<li class="nav-item"><a href="{{$shop_url or '#'}}">Вернуться к витрине</a></li>
 		</ul>
 		@include($viewFolder.'.scale')
-		@include($viewFolder.'.helper')
+
 	</div>
 	<div id="content" class="row">
 		<h1>
@@ -69,7 +69,7 @@
 		<!--<div class="empty col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>-->
 
 		<div id="form" class="form col-xs-12 col-sm-12 col-md-6 col-lg-6">
-			
+			@include($viewFolder.'.helper')
 			@yield('content')
 		</div>
 	</div>

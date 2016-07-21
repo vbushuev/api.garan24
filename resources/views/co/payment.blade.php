@@ -2,7 +2,7 @@
 @section('content')
 <input type="hidden" id="TotalAmountHidden" name="TotalAmountHidden"/>
 <input type="hidden" id="ShippingAmountHidden" name="shipping_cost" value="{{$deal->shipping_cost or ''}}"/>
-    <h2><i class="first">Спасибо</i> за заказ!</h2>
+    <!--<h2><i class="first">Спасибо</i> за заказ!</h2>-->
     <p>Ваш заказ оформлен и его уже начали собирать. В некоторых случаях с Вами свяжется наш менеджер для уточнения деталей.</p>
     <h3><i class="first">Еще</i> раз проверьте параметры заказа:</h3>
     <div class="message">

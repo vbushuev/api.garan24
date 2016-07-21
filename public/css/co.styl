@@ -3,11 +3,22 @@
 $fontColor = rgba(255,162,0,1)
 $garanBlue = #2962FF//rgba(255,0,0,1)
 $garanRed = #D50000//rgba(255,0,0,1)
+//functions
 border-radius()
    -webkit-border-radius arguments
    -moz-border-radius arguments
    border-radius arguments
-
+background-transition()
+   -webkit-transition opacity arguments ease-in//opacity 400ms ease-in;
+   -moz-transition opacity arguments ease-in//opacity 400ms ease-in;
+   transition  opacity arguments ease-in//opacity 400ms ease-in;
+background-blur()
+    -webkit-filter blur(arguments)
+    -moz-filter blur(arguments)
+    -o-filter blur(arguments)
+    -ms-filter blur(arguments)
+    filter blur(arguments)
+//main styles
 html,body
     height 100%
 body
@@ -82,22 +93,10 @@ body
                 margin: 0;
                 height: 3em;
                 line-height: 3em;
-                border: none;// dotted 1px rgba(0,0,0,.3);
-                color: rgba(0,0,0,.3);
                 text-align: center;
                 position: relative;
-                //background-color: rgba(220,237,200 ,1);
-                .fa
-                    display: none;
-                    position: absolute;
-                    right:1em;
-                    top: 1em;
-            /*.scale-item::after
-                content: '';
-                position: absolute;
-                right: -3em; top: 0;
-                border: 1.5em solid transparent;
-                border-left: 1.5em solid rgba(220,237,200 ,1);*/
+                border: dotted 1px rgba(174,213,129 ,1);
+                color: rgba(0,0,0,.3);
             .scale-item.active
                 background-color: rgba(174,213,129 ,1);
                 color: rgba(255,255,255,1);
@@ -106,7 +105,32 @@ body
                 position: absolute;
                 right: -3em; top: 0;
                 border: 1.5em solid transparent;
-                border-left: 1.5em solid rgba(174,213,129 ,1);
+                border-left: 1.5em solid rgba(174,213,129 ,1);*/
+            /* tiangle box
+            .arrow_box
+                position: relative;
+                background: #fff;
+                border: 1px dotted #000;
+            .arrow_box:after, .arrow_box:before
+                left: 100%;
+                top: 50%;
+                border: solid transparent;
+                content: " ";
+                height: 0;
+                width: 0;
+                position: absolute;
+                pointer-events: none;
+            .arrow_box:after
+                border-color: rgba(255, 255, 255, 0);
+                border-left-color: #fff;
+                border-width: 20px;
+                margin-top: -20px;
+            .arrow_box:before
+                border-color: rgba(174,213,129 ,1);
+                border-left-color: rgba(174,213,129 ,1);
+                border-width: 21px;
+                margin-top: -21px;
+             tiangle box end*/
         .form
             position: relative;
             .fa
@@ -115,12 +139,8 @@ body
                 color: rgba(255,255,255,.6);
             .helper:hover .fa
                 color: rgba(255,255,255,1);
-        .helper-box
-            display:block;
-            position: relative;
-            min-height: 3em;
-            .helper-box-item
-                display: none;
+
+        /* Modal helper boxes*/
         .helper
             display: inline-block;
             background-color: rgba(85,125,161,1);
@@ -131,8 +151,8 @@ body
             height: 2em;
             line-height: 2em;
             position: absolute;
-            right: 1em;
-            top: 1em;
+            right: .5em;
+            top: .5em;
             cursor:pointer;
             z-index: 100;
         .helper:hover
@@ -145,30 +165,54 @@ body
             top: 3em;
             right: 1em;
             padding: 1em;
+            z-index: 100;
+            border-radius: (.5em);
+        .helper-box
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0,0,0,0.3);
+            //background-blur(5px);
+            z-index: 9998;
+            background-transition(400ms);
+            display: none;
+            pointer-events: none;
+        .helper-box:target
+            display: block;
+            pointer-events: auto;
+
         .helper-box-item
-            background-color: rgba(175,180,43 ,1);
+            background-color: rgba(255,255,255,1);
+            display: none;
             position: relative;
-            z-index: 1000;
-            color: #fff;
-            padding: 2em;
+            z-index: 9999;
+            color: rgba(0,0,0,1);
+            width: 40em;
+            margin:10% auto;
+            padding: 4em;
             font-size: 12pt;
             text-indent: 2em;
+            border-radius: (1em);
         .helper-box-item-close
-            border: solid 1px rgba(175,180,43 ,1);
+            border: solid 1px rgba(255,255,255,1);
             position: absolute;
             top:.4em;
             right:.4em;
-            color: rgba(255,255,255,1);
+            color: rgba(0,0,0,1);
             border-radius: (1em);
             height: 1.4em;
             line-height: 1.4em;
             width:1.4em;
             text-align: center;
             display: inline-block;
+            padding-bottom: .2em;
             text-indent: 0;
+        .helper-box-item-close .fa
+            color: rgba(0,0,0,1);
         .helper-box-item-close:hover
-            border: solid 1px rgba(255,255,255,1);
-
+            border: solid 1px rgba(0,0,0,1);
         .input-group-addon
             background-color: rgba(0,0,0,0);
             .fa

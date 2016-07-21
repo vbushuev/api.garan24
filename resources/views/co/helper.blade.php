@@ -1,6 +1,6 @@
-<div class="helper-box">
-    <a href="#" class="helper"><i class="fa fa-question"></i></a>
-    <div class="helper-text" style="display:none;">Выпервые здесь? Нажми!</div>
+<a href="#helper-message" class="helper"><i class="fa fa-question"></i></a>
+<div class="helper-text" style="display:none;">Впервые здесь? Нажмите здесь!</div>
+<div id="helper-message" class="helper-box">
     <div class="helper-box-item helper-contact">
         <a href="#" class="helper-box-item-close"><i class="fa fa-close"></i></a>
         Вы вводите Ваши контактные данные, что бы мы могли связаться с Вами и скорее доставить Ваши покупки!
@@ -15,6 +15,6 @@
     </div>
     <div class="helper-box-item helper-payment">
         <a href="#" class="helper-box-item-close"><i class="fa fa-close"></i></a>
-        Почти все! Ваш заказ уже оформлен осталось подтвердить его, оплатив картой сразу полностью или введите реквизиты карты для оплаты оплаты после доставки. 
+        Почти все! Ваш заказ уже оформлен осталось подтвердить его, оплатив картой сразу полностью или введите реквизиты карты для оплаты оплаты после доставки.
     </div>
 </div>

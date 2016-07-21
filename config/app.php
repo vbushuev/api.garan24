@@ -39,7 +39,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://www.plugin.garan24.ru'),
+    'url' => env('APP_URL', 'https://service.garan24.ru'),
 
     /*
     |--------------------------------------------------------------------------

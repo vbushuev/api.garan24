@@ -4,19 +4,23 @@
     <p>
         <strong>Выбранный способ оплаты:</strong> {{$deal->payment['name'] or 'Наличными при получении'}}<br />
     </p>-->
-    <div class="message @if (session('status')) message-alert @endif">
+
         @if (session('status'))
+        <div class="message  message-alert">
             {{ session('status') }}
+        </div>
         @elseif($payment['id'] == 1 )
+        <div class="message">
             Для подтверждения заказа система Гаран24 заблокирует на Вашей карте 1 руб. и сразу отменит операцию.
+        </div>
         @else
-            Вам нужно указать реквизиты своей банковской карты для оплаты полной стоимости заказа.
+            <h3><i class="first">Оплата</i> онлайн</h3>
         @endif
-    </div>
+
 
     <div class="row">
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                <label for="card_amount" class="control-label-">Сумма платежа:</label>
+            <label for="card_amount" class="control-label-">Сумма платежа:</label>
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             @if($payment['id'] == 1 )
@@ -26,6 +30,16 @@
             @endif
         </div>
     </div>
+    @if($payment['id'] == 2 )
+    <div class="row">
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <label for="card_amount" class="control-label-">Назначение платежа:</label>
+        </div>
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            Оплата заказа № {{$deal->order->id}}
+        </div>
+    </div>
+    @endif
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="form-group" id="Pan">
@@ -62,11 +76,12 @@
     </div>
 
     @include("$viewFolder._buttons")
+    <br />
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <img src="../magnitolkin_ru/SecureCodeByMasterCard.png" alt="SecureCode by MasterCard" title="Безопасные покупки с MasterCard"/>
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align:center;">
+            <img width="72px" src="../magnitolkin_ru/SecureCodeByMasterCard.png" alt="SecureCode by MasterCard" title="Безопасные покупки с MasterCard"/>
             &nbsp;
-            <img src="../magnitolkin_ru/VerifiedByVISA.png" alt="Verified by VISA" title="Безопасные покупки с VISA">
+            <img width="72px" src="../magnitolkin_ru/VerifiedByVISA.png" alt="Verified by VISA" title="Безопасные покупки с VISA">
         </div>
     </div>
 @endsection

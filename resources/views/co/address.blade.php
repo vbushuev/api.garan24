@@ -10,7 +10,7 @@
         color: rgba(197,17,98 ,1);
     }
 </style>
-    <h3><i class="first">Ваш</i> адрес: </h3>
+    <h3><i class="first">Адрес</i> доставки:</h3>
     <div class="form-group">
         <label for="billing[postcode]" class="control-label">Ваш почтовый индекс:</label>
         @include('elements.inputs.text',["id"=>"shipping_postcode","required"=>"required","icon"=>"map-marker","name"=>"billing[postcode]","text"=>"Почтовый индекс","value"=>$deal->getCustomer()->toArray()["billing_address"]["postcode"]])
@@ -100,11 +100,13 @@
             $("#shipping_postcode").on("change keyup blur",function(){
                 getShippingCost();
             });
-            if(!$("#ShippingAmountHidden").val().length){
-                $("#forward").click(function(){
+            $("#forward").click(function(){
+                if(!$("#ShippingAmountHidden").val().length){
                     getShippingCost(garan.form.submit(garan_submit_args));
-                    ;
-                });
+                }
+            });
+            if(!$("#ShippingAmountHidden").val().length){
+                getShippingCost();
             }
         });
     </script>

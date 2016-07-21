@@ -32,7 +32,11 @@
             $(".row.payment").hide();
             //$("#forward").prop('disabled', true);
             $("#delivery_types .list-group-item").on("click",function(){
-                $("#delivery_type_id").val($(this).attr("data-id"));
+                var val = $(this).attr("data-id");
+                if(val==4){
+                    window.garan_submit_args.url = window.garan_submit_args.url.replace(/address/i,"passport");
+                }else window.garan_submit_args.url = window.garan_submit_args.url.replace(/passport/i,"address");
+                $("#delivery_type_id").val(val);
                 console.debug($(".row.payment"));
                 return false;
             });

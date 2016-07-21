@@ -126,19 +126,23 @@ class CheckoutController extends Controller{
         $data = $this->getParams($rq);
         if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
         $deal = new Deal([
-            "id"=>$rq->session()->get("deal_id"),
+            "id"=>$rq->cookie("deal_id"),
             "data"=>$data
         ]);
-        return view(
-            $this->viewFolder.'.address',
-            [
-                "route"=>$this->getBPRoute("address"),
-                "section" => 'delivery',
-                "viewFolder"=>$this->viewFolder,"debug"=>"",
-                "shop_url"=>$deal->getShopUrl(),
-                "deal"=>$deal
-            ]
-        );
+        //if($deal->delivery["id"]==6) {
+            return view(
+                $this->viewFolder.'.address',
+                [
+                    "route"=>$this->getBPRoute("address"),
+                    "section" => 'delivery',
+                    "viewFolder"=>$this->viewFolder,"debug"=>"",
+                    "shop_url"=>$deal->getShopUrl(),
+                    "deal"=>$deal
+                ]
+            );
+
+        //return redirect()->action("CheckoutController@postPassport");
+        //return redirect('checkout/passport');
     }
     public function getPassport(Request $rq){
         $this->postPassport($rq);
@@ -147,12 +151,8 @@ class CheckoutController extends Controller{
         Log::debug(__CLASS__.".".__METHOD__);
         $data = $this->getParams($rq);
         if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
-        if(isset($data["payment_type_id"])&&isset($data["delivery_type_id"])){
-            $data["payment_id"]=$data["payment_type_id"];
-            $data["delivery_id"]=$data["delivery_type_id"];
-        }
         $deal = new Deal([
-            "id"=>$rq->session()->get("deal_id"),
+            "id"=>$rq->cookie("deal_id"),
             "data"=>$data
         ]);
         return view(
@@ -355,8 +355,7 @@ class CheckoutController extends Controller{
     }
 
     protected function getParams(Request $rq){
-        $id = $rq->session()->get("deal_id","session_expired");
-        if($id=="session_expired" && $rq->cookie("deal_id","nodata")=="nodata") return false;
+        if($rq->cookie("deal_id","nodata")=="nodata") return false;
         $data = $rq->get("data",$rq->getContent());
         $data = json_decode($data,true);
         if(empty($data))$data = $rq->all();

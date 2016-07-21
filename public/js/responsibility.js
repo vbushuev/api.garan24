@@ -31,9 +31,11 @@ function moveCaretToStart(el) {
 function calculateTotal(){
     var total = 0;
     $(".cart-item .amount:not(.total-amount)").each(function(){
-        var amt = $(this).text().replace(/\s+/ig,'').replace(/[а-я]+\./ig,'');
-        console.debug("total["+total+"] => item cost:["+amt+"] isNaN:"+isNaN(amt));
-        total+=(amt.length&&!isNaN(amt))?parseFloat(amt):0;
+        var $t = $(this),amt = $t.text().replace(/\s+/ig,'').replace(/[а-я]+\./ig,''),
+            qnt = $t.prev(".quantity").text().replace(/\s+/ig,'').replace(/[а-я\.]+\./ig,'');
+
+        console.debug("total["+total+"] => item cost:["+amt+" x "+qnt+"] isNaN:"+isNaN(amt));
+        total+=(amt.length&&!isNaN(amt))?parseFloat(amt)*qnt:0;
     });
     $("#cart-total-price").html(total.format(2,3,' ','.')+" руб.");
     var shipping = $("#ShippingAmountHidden").val();
@@ -79,7 +81,7 @@ function calculateTotal(){
             icon.addClass('fa-square-o');
         }
     });
-    $("input").on("focus",function(){
+    $("input,textarea").on("focus",function(){
         moveCaretToStart($(this).get());
     });
     $(".combo .dropdown-menu li a").css("cursor","pointer").click(function(){
@@ -108,11 +110,11 @@ function calculateTotal(){
         $(".helper-text").hide();
     }).on("click",function(){
         var sec = $(".helped.active:last").attr("data-helper");
-        $(".helper-box-item."+sec).slideDown();
+        $(".helper-box-item."+sec).show();
     });
-    $(".helper-box-item-close").on("click",function(){
+    /*$(".helper-box-item-close").on("click",function(){
         $(this).parent(".helper-box-item").slideUp();
-    });
+    });*/
     $(".list-group-item").on("click",function(){
         var $t = $(this), $i = $t.find(".fa"), $p = $t.parent(".list-group");
         $p.find(".list-group-item").removeClass("active");

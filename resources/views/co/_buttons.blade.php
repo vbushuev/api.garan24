@@ -20,7 +20,8 @@
         });
         $("#back").click(function(){
             //history.go(-1);
-            document.location.href = "{{$route["dir"].$route["back"]["href"]}}";
+            garan_submit_args.url="{{$route["dir"].$route["back"]["href"]}}";
+            garan.form.submit(garan_submit_args);
         })
     });
 </script>

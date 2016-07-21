@@ -18,7 +18,7 @@ Route::resource('order', 'GaranOrderController');
 Route::resource('product', 'GaranProductController');
 Route::controller('magnitolkin', 'MagnitolkinController');
 Route::controller('democheckout', 'DemoCheckoutController');
-Route::controller('/checkout', 'CheckoutController');
+Route::controller('checkout', 'CheckoutController');
 Route::match(['get','post'],'/shipping/bb', 'ServicesController@ShippingBoxberry');
 Route::match(['get','post'],'/statuses', 'ServicesController@Statuses');
 Route::match(['get','post'],'/statuses/{wc_status}', 'ServicesController@StatusByWC');
