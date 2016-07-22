@@ -17,15 +17,11 @@ use WC_API_Client_Resource_Products;
 use \Garan24\Garan24 as Garan24;
 use \Garan24\Deal\Deal as Deal;
 use \Garan24\Deal\Customer as Customer;
-/*
-- проггрес бар ()
-- знак вопроса подвинуть, и тексты сразу
-*/
 
-class CheckoutController extends Controller{
+class MailController extends Controller{
     protected $rawgoods;
     protected $raworder;
-    protected $viewFolder = 'co';
+    protected $viewFolder = 'mail';
     protected $thishost = "https://service.garan24.ru";
     public function __construct(){
         Garan24::$DB["host"] = "151.248.117.239";
@@ -33,120 +29,14 @@ class CheckoutController extends Controller{
         //$this->raworder = json_decode($this->raworder,true);
         //print_r($this->rawgoods);
     }
-    public function getDesign(Request $rq){
-        $deal = new Deal();
-        $deal->byId("500");
-        return view(
-            $this->viewFolder.'.design',
-            ["viewFolder"=>$this->viewFolder,"debug"=>"","section"=>"contact"]
-        );
-    }
-    public function getIndex(Request $rq){
-        Log::debug(__CLASS__.".".__METHOD__);
-        $id = $rq->get('id','noindex');
-        if($id=="noindex") return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
-        $rq->session()->put("deal_id",$id);
-        $deal = new Deal(["id"=>$id]);
-        if(!isset($deal->x_secret))  return view('public.index');
-        return response()->view($this->viewFolder.'.checkout',[
-            "route"=>$this->getBPRoute("checkout"),
-            "section" => 'contact',
-            "viewFolder"=>$this->viewFolder,"debug"=>"",
-            "goods"=>$deal->order->getProducts(),
-            "customer"=>[],
-            "deal"=>$deal,
-            "shop_url"=>$deal->getShopUrl()
-        ]
-        )->header('Access-Control-Allow-Origin', '*')->cookie("deal_id",$id);
-    }
-    public function postIndex(Request $rq){
-        Log::debug(__CLASS__.".".__METHOD__);
-        $data = $rq->getContent();
-        $deal = new Deal();
-        Log::debug("In request:".$data);
-        $deal->byJson($data);
-        $resp = $deal->sync();
-        Log::debug("Deal response: ".Garan24::obj2str($resp));
-        //if($resp->code==0){return redirect()->away($resp->redirect_url);}
-        return $resp->__toString();
-    }
-    public function postPersonal(Request $rq){
-        $data = $this->getParams($rq);
-        if($data===false||!$rq->session()->has("deal_id"))return redirect()-back();
-        if(!isset($data["email"])||!isset($data["phone"])){
-            return redirect()-back();
-        }
-        //$id = $rq->session()->get("deal_id");
-        $id = $rq->cookie("deal_id");
-        $deal = new Deal(["id"=>$id]);
-        $cust = new Customer('{"email":"'.$data["email"].'","phone":"'.$data["phone"].'"}',$deal->getWC());
-        $cust->sync();
-        $rq->session()->put("user_id",$cust->customer_id);
-        $deal->update(["customer_id"=>$cust->id]);
-        return view($this->viewFolder.'.personal'
-            ,["route"=>$this->getBPRoute("personal")
-            ,"section" => 'contact'
-            ,"debug"=>""
-            ,"goods"=>$deal->order->getProducts()
-            ,"customer"=>$cust->toArray()
-            ,"shop_url"=>$deal->getShopUrl()
-        ]);
-    }
-    public function getDeliverypaymethod(Request $rq){
-        return $this->postDeliverypaymethod($rq);
-    }
-    public function postDeliverypaymethod(Request $rq){
-        Log::debug(__CLASS__.".".__METHOD__);
-        $data = $this->getParams($rq);
-        if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
-        $deal = new Deal(["id"=>$rq->cookie("deal_id")]);
-        if(isset($data["email"])&&isset($data["phone"])){
-            $cust = new Customer('{"email":"'.$data["email"].'","phone":"'.$data["phone"].'"}',$deal->getWC());
-            $cust->sync();
-            $rq->session()->put("user_id",$cust->customer_id);
-            $deal->update(["customer_id"=>$cust->id]);
-        }
-        $deal->update($data);
-        return view(
-            $this->viewFolder.'.deliverymethod',
-            [
-                "route"=>$this->getBPRoute("deliverypaymethod"),
-                "section" => 'delivery',
-                "viewFolder"=>$this->viewFolder,"debug"=>"",
-                "goods"=>$deal->order->getProducts(),
-                "deal"=>$deal,
-                "customer"=>$deal->getCustomer()->toArray(),
-                "shop_url"=>$deal->getShopUrl(),
-                "payments" => $deal->getPaymentTypes(),
-                "delivery" => $deal->getDeliveryTypes()
-            ]
-        );
-    }
-    public function getAddress(Request $rq){
-        return $this->postAddress($rq);
-    }
-    public function postAddress(Request $rq){
+    public function getWelcome(Request $rq){
         Log::debug(__CLASS__.".".__METHOD__);
         $data = $this->getParams($rq);
         if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
         $deal = new Deal([
             "id"=>$data["deal_id"],
-            "data"=>$data
         ]);
-        //if($deal->delivery["id"]==6) {
-            return view(
-                $this->viewFolder.'.address',
-                [
-                    "route"=>$this->getBPRoute("address"),
-                    "section" => 'delivery',
-                    "viewFolder"=>$this->viewFolder,"debug"=>"",
-                    "shop_url"=>$deal->getShopUrl(),
-                    "deal"=>$deal
-                ]
-            );
-
-        //return redirect()->action("CheckoutController@postPassport");
-        //return redirect('checkout/passport');
+        return view($this->viewFolder.'.welcome',["viewFolder"=>$this->viewFolder,"deal"=>$deal]);
     }
     public function getPassport(Request $rq){
         $this->postPassport($rq);

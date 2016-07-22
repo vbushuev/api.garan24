@@ -50,6 +50,7 @@ body
             font-size: 18pt
         h3
             font-size: 16pt
+            padding-right: 2em;
         h4
             font-weight: 700;
             font-size: 15pt;
@@ -58,9 +59,29 @@ body
             li
                 display: inline-block;
                 list-style-position: inside;
+        .mail
+            background-color: rgba(85,125,161,1);
+            color: rgba(255,255,255,1);
+            text-align: center;
+            height: 3em;
+            line-height: 3em;
         .row
             margin-left: 0;
             margin-right: 0;
+        .brand
+            color: rgba(85,125,161,1);
+            font-weight: 700;
+            text-transform: uppercase;
+        .text
+            text-indent: 2em;
+        .data
+            padding:1em;
+            line-height: 2em;
+            font-size: 110%;
+        .bye
+            margin: 1em auto;
+            text-align: center;
+            font-size: 110%;
         /*
         No labels
         */
@@ -214,7 +235,18 @@ body
         .helper-box:target
             display: block;
             pointer-events: auto;
-
+        .helper-box-item-lg
+            background-color: rgba(255,255,255,1);
+            position: relative;
+            z-index: 9999;
+            color: rgba(0,0,0,1);
+            margin:4% 4em;
+            height:92%
+            padding: 4em;
+            font-size: 12pt;
+            text-indent: 2em;
+            border-radius: (1em);
+            overflow: scroll;
         .helper-box-item
             background-color: rgba(255,255,255,1);
             display: none;

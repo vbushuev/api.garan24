@@ -43,6 +43,7 @@ body .container h2 {
 }
 body .container h3 {
   font-size: 16pt;
+  padding-right: 2em;
 }
 body .container h4 {
   font-weight: 700;
@@ -55,9 +56,34 @@ body .container ul li {
   display: inline-block;
   list-style-position: inside;
 }
+body .container .mail {
+  background-color: #557da1;
+  color: #fff;
+  text-align: center;
+  height: 3em;
+  line-height: 3em;
+}
 body .container .row {
   margin-left: 0;
   margin-right: 0;
+}
+body .container .brand {
+  color: #557da1;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+body .container .text {
+  text-indent: 2em;
+}
+body .container .data {
+  padding: 1em;
+  line-height: 2em;
+  font-size: 110%;
+}
+body .container .bye {
+  margin: 1em auto;
+  text-align: center;
+  font-size: 110%;
 }
 body .container .control-label {
   display: none;
@@ -180,6 +206,21 @@ body .helper-box {
 body .helper-box:target {
   display: block;
   pointer-events: auto;
+}
+body .helper-box-item-lg {
+  background-color: #fff;
+  position: relative;
+  z-index: 9999;
+  color: #000;
+  margin: 4% 4em;
+  height: 92%;
+  padding: 4em;
+  font-size: 12pt;
+  text-indent: 2em;
+  -webkit-border-radius: 1em;
+  -moz-border-radius: 1em;
+  border-radius: 1em;
+  overflow: scroll;
 }
 body .helper-box-item {
   background-color: #fff;

@@ -52,5 +52,14 @@ class ServicesController extends Controller{
         $bb = new \Garan24\Delivery\BoxBerry\BoxBerry();
         return response($bb->$m($jr["data"]))->header('Access-Control-Allow-Origin', '*');
     }
+    public function CrossDomain(Request $rq){
+        Log::debug("CrossDomain: ".$rq->getContent());
+        $url = $rq->input("_href",false);
+        $result ="";
+        if($url!==false){
+            $result = file_get_contents($url);
+        }
+        return response($result)->header('Access-Control-Allow-Origin', '*');
+    }
 }
 ?>

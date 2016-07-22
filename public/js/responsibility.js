@@ -122,5 +122,24 @@ function calculateTotal(){
         $t.addClass("active");
         $i.removeClass("fa-square-o").addClass("fa-check-square-o");
     });
+    $("a").each(function(){
+        var $t=$(this), mesid=$t.attr("href").replace(/[\/\:\.\-]+/ig,"_"),_ahref =encodeURIComponent($t.attr("href"));
+        if($t.attr("target")=="__blank"){ // only external links
+            $t.attr("href","#"+mesid).removeAttr("target");
+            $.ajax({
+                url:"//service.garan24.ru/crd?_href="+_ahref,
+                success:function(d,s,x){
+                    var cont = $(d).find("#post-110").html();
+                    if(cont.length==0)cont=$(d).find("body");
+                    console.debug(cont);
 
+                    $("body").append('<div id="'+mesid+'" class="helper-box">'
+                        +'<div class="helper-box-item-lg">'
+                        +'<a href="#" class="helper-box-item-close"><i class="fa fa-close"></i></a>'+cont
+                    +'</div></div>');
+                },
+                error:function(x,t,e){}
+            });
+        }
+    });
 })();
