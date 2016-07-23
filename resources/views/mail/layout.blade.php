@@ -61,9 +61,11 @@
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				<a href="//garan24.ru" title="Вернуться на главную страницу">Гаран24© 2016</a>
+				<p class="small">Это автоматическая рассылка. Пожалуйста, не отвечайте на нее.</p>
 			</div>
 		</div>
 	</div>
+
 </div>
 </body>
 </html>

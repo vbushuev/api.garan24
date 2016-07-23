@@ -34,7 +34,7 @@ class MailController extends Controller{
         $data = $this->getParams($rq);
         if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
         $deal = new Deal([
-            "id"=>$data["deal_id"],
+            "id"=>$data["id"],
         ]);
         return view($this->viewFolder.'.welcome',["viewFolder"=>$this->viewFolder,"deal"=>$deal]);
     }

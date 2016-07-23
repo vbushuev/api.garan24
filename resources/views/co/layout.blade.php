@@ -66,13 +66,14 @@
 		<div class="cart col-xs-12 col-sm-12 col-md-6 col-lg-6">
 			@include($viewFolder.'.goods',['goods'=>$deal->order->getProducts()])
 		</div>
-		@endif
-		<!--<div class="empty col-xs-12 col-sm-12 col-md-1 col-lg-1"></div>-->
-
 		<div id="form" class="form col-xs-12 col-sm-12 col-md-6 col-lg-6">
 			@include($viewFolder.'.helper')
+		@else
+		<div id="form" class="form col-xs-12 col-sm-12 col-md-12 col-lg-12">
+		@endif
 			@yield('content')
 		</div>
+
 	</div>
 	<div id="footer">
 		<div class="row">

@@ -1,45 +1,14 @@
-<div class="scale">
-    <div class="scale-item helped @if(isset($section)&&in_array($section,["contact","delivery","passport","payment","thanks"]))active @endif" data-helper="helper-contact">
-        @if(isset($section))
-            @if(in_array($section,["delivery","passport","payment","thanks"]))
-            <i class="fa fa-check-circle-o" aria-hidden="true"></i>
-            @elseif($section=="contact")
-            <i class="fa fa-circle-o" aria-hidden="true"></i>
-            @endif
-        @endif
+<div class="scale-2">
+    <div class="scale-2-item helped @if(isset($section)) @if(in_array($section,["delivery","passport","payment","thanks"]))active-last @elseif(isset($section)&&$section=="contact")active @endif @endif" data-helper="helper-contact">
         Контакты
-        <i class="fa fa-angle-right fa-2x" aria-hidden="true"></i>
     </div><!--
-    --><div class="scale-item helped @if(isset($section)&&in_array($section,["delivery","passport","payment","thanks"]))active @endif" data-helper="helper-shipping">
-        @if(isset($section))
-            @if(in_array($section,["passport","payment","thanks"]))
-            <i class="fa fa-check-circle-o" aria-hidden="true"></i>
-            @elseif($section=="delivery")
-            <i class="fa fa-circle-o" aria-hidden="true"></i>
-            @endif
-        @endif
+    --><div class="scale-2-item helped @if(isset($section)) @if(in_array($section,["passport","payment","thanks"]))active-last @elseif(isset($section)&&$section=="delivery")active @endif @endif" data-helper="helper-shipping">
         Доставка
-        <i class="fa  fa-angle-right fa-2x" aria-hidden="true"></i>
     </div><!--
-    --><div class="scale-item helped @if(isset($section)&&in_array($section,["passport","payment","thanks"]))active @endif" data-helper="helper-passport">
-        @if(isset($section))
-            @if(in_array($section,["payment","thanks"]))
-            <i class="fa fa-check-circle-o" aria-hidden="true"></i>
-            @elseif($section=="passport")
-            <i class="fa fa-circle-o" aria-hidden="true"></i>
-            @endif
-        @endif
+    --><div class="scale-2-item helped @if(isset($section)) @if(in_array($section,["payment","thanks"]))active-last @elseif(isset($section)&&$section=="passport")active @endif @endif" data-helper="helper-passport">
         Паспорт
-        <i class="fa  fa-angle-right fa-2x" aria-hidden="true"></i>
     </div><!--
-    --><div class="scale-item helped @if(isset($section)&&in_array($section,["payment","thanks"]))active @endif" data-helper="helper-payment">
-        @if(isset($section))
-            @if(in_array($section,["thanks"]))
-            <i class="fa fa-check-circle-o" aria-hidden="true"></i>
-            @elseif($section=="payment")
-            <i class="fa fa-circle-o" aria-hidden="true"></i>
-            @endif
-        @endif
+    --><div class="scale-2-item helped @if(isset($section)) @if(in_array($section,["thanks"]))active-last @elseif(isset($section)&&$section=="payment")active @endif @endif" data-helper="helper-payment">
         Оплата
     </div>
 </div>

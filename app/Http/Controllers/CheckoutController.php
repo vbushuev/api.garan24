@@ -38,7 +38,7 @@ class CheckoutController extends Controller{
         $deal->byId("500");
         return view(
             $this->viewFolder.'.design',
-            ["viewFolder"=>$this->viewFolder,"debug"=>"","section"=>"contact"]
+            ["viewFolder"=>$this->viewFolder,"debug"=>"","section"=>"passport"]
         );
     }
     public function getIndex(Request $rq){
