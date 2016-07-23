@@ -34,7 +34,6 @@ body .container h3 {
 body .container h1 {
   font-size: 20pt;
   text-align: center;
-  height: 2em;
   line-height: 2em;
   border-bottom: dotted 1px #557da1;
 }
