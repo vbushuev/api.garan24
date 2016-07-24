@@ -67,21 +67,10 @@ class MailController extends Controller{
     }
 
     protected function getParams(Request $rq){
-        if($rq->cookie("deal_id","nodata")=="nodata" && !$rq->session()->has("deal_id")) return false;
-        $data = $rq->get("data",$rq->getContent());
-        $data = json_decode($data,true);
-        if(empty($data))$data = $rq->all();
-        $log = "";
-        if(empty($data))$data = $rq->all();
-        foreach($data as $k=>$v){
-            if(empty($v))unset($data["{$k}"]);
-            else{
-                $log .= "{$k} = ".Garan24::obj2str($v).", ";
-            }
-        }
-        $data = array_merge($data,["deal_id" => $rq->session()->get("deal_id"),"deal_id_source" => "session"]);
-        if(strlen($data["deal_id"])<=0)$data = array_merge($data,["deal_id" => $rq->cookie("deal_id"),"deal_id_source" => "cookie"]);
-        Log::debug("CheckoutController:getParams request: ".Garan24::obj2str($data));
+        $data = [
+            "id" => $rq->input("id")
+        ];
+        Log::debug("MailController:getParams request: ".Garan24::obj2str($data));
         return $data;
     }
 }
