@@ -86,7 +86,20 @@ body
         */
         .control-label
             display: none;
-
+        /*
+        .btn-success
+            background-color: #5cb85c;
+            color: #fff;
+            border-color: #4cae4c;
+        .btn-info
+            color: #fff;
+            background-color: #5bc0de;
+            border-color: #46b8da;
+        .btn-primary
+            color: #fff;
+            background-color:  rgba(85,125,161,1);
+            border-color: rgba(80,112,152,1);
+        */
         input,select,textarea
             font-size: 14pt;
 
@@ -170,7 +183,8 @@ body
         .scale-2-item:first-child:before
             border-left-color: rgba(167,255,235 ,1);
         .scale-2-item:last-child:after
-            border-left-color: rgba(255,255,255,1);
+            //border-left-color: rgba(255,255,255,1);
+            border-left-color: transparent;
         .active.scale-2-item,.active-last.scale-2-item
             background-color: rgba(174,213,129 ,1);
             color: rgba(255,255,255,1);
@@ -180,6 +194,10 @@ body
         .active-last.scale-2-item:after,.active-last.scale-2-item:first-child:before,
         .active.scale-2-item:after,.active.scale-2-item:first-child:before
             border-left-color: rgba(174,213,129 ,1);
+        .active.scale-2-item:last-child:after,
+        .active-last.scale-2-item:last-child:after{
+            border-left-color: transparent;
+        }
         /*
         .scale
             width: 100%;

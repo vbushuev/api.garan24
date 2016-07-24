@@ -31,47 +31,29 @@ class MailController extends Controller{
     }
     public function getWelcome(Request $rq){
         Log::debug(__CLASS__.".".__METHOD__);
-        $data = $this->getParams($rq);
-        if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
-        $deal = new Deal([
-            "id"=>$data["id"],
-        ]);
+        $deal = new Deal(["id"=>$rq->input("id")]);
         return view($this->viewFolder.'.welcome',["viewFolder"=>$this->viewFolder,"deal"=>$deal]);
+    }
+    public function getOrderprocess(Request $rq){
+        Log::debug(__CLASS__.".".__METHOD__);
+        $deal = new Deal(["id"=>$rq->input("id")]);
+        if($deal->payment["id"]==2) return view($this->viewFolder.'.orderpayondelivery',["viewFolder"=>$this->viewFolder,"deal"=>$deal]);
+        return view($this->viewFolder.'.orderpayondelivery',["viewFolder"=>$this->viewFolder,"deal"=>$deal]);
     }
     public function getOrderpayondelivery(Request $rq){
         Log::debug(__CLASS__.".".__METHOD__);
-        $data = $this->getParams($rq);
-        if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
-        $deal = new Deal([
-            "id"=>$data["id"],
-        ]);
+        $deal = new Deal(["id"=>$rq->input("id")]);
         return view($this->viewFolder.'.orderpayondelivery',["viewFolder"=>$this->viewFolder,"deal"=>$deal]);
     }
     public function getOrderpayonline(Request $rq){
         Log::debug(__CLASS__.".".__METHOD__);
-        $data = $this->getParams($rq);
-        if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
-        $deal = new Deal([
-            "id"=>$data["id"],
-        ]);
+        $deal = new Deal(["id"=>$rq->input("id")]);
         return view($this->viewFolder.'.orderpayonline',["viewFolder"=>$this->viewFolder,"deal"=>$deal]);
     }
     public function getOrderpayed(Request $rq){
         Log::debug(__CLASS__.".".__METHOD__);
-        $data = $this->getParams($rq);
-        if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
-        $deal = new Deal([
-            "id"=>$data["id"],
-        ]);
+        $deal = new Deal(["id"=>$rq->input("id")]);
         return view($this->viewFolder.'.orderpayed',["viewFolder"=>$this->viewFolder,"deal"=>$deal]);
-    }
-
-    protected function getParams(Request $rq){
-        $data = [
-            "id" => $rq->input("id")
-        ];
-        Log::debug("MailController:getParams request: ".Garan24::obj2str($data));
-        return $data;
     }
 }
 ?>

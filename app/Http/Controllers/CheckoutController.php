@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Log;
 use DB;
+use Mail;
 use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -38,7 +39,7 @@ class CheckoutController extends Controller{
         $deal->byId("500");
         return view(
             $this->viewFolder.'.design',
-            ["viewFolder"=>$this->viewFolder,"debug"=>"","section"=>"passport"]
+            ["viewFolder"=>$this->viewFolder,"debug"=>"","section"=>"thanks"]
         );
     }
     public function getIndex(Request $rq){
@@ -99,14 +100,18 @@ class CheckoutController extends Controller{
         Log::debug(__CLASS__.".".__METHOD__);
         $data = $this->getParams($rq);
         if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
-        $deal = new Deal(["id"=>$rq->cookie("deal_id")]);
+        $deal = new Deal(["id"=>$data["deal_id"],"data"=>$data]);
         if(isset($data["email"])&&isset($data["phone"])){
+            Log::debug("Appending customer. ".'{"email":"'.$data["email"].'","phone":"'.$data["phone"].'"}');
             $cust = new Customer('{"email":"'.$data["email"].'","phone":"'.$data["phone"].'"}',$deal->getWC());
             $cust->sync();
             $rq->session()->put("user_id",$cust->customer_id);
-            $deal->update(["customer_id"=>$cust->id]);
+            $deal->update(["customer_id"=>$cust->customer_id]);
         }
         $deal->update($data);
+        Mail::send('mail.welcome',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($data){
+            $message->to($data["email"])->subject("ГАРАН24");
+        });
         return view(
             $this->viewFolder.'.deliverymethod',
             [
@@ -115,7 +120,7 @@ class CheckoutController extends Controller{
                 "viewFolder"=>$this->viewFolder,"debug"=>"",
                 "goods"=>$deal->order->getProducts(),
                 "deal"=>$deal,
-                "customer"=>$deal->getCustomer()->toArray(),
+                "customer"=>$cust->toArray(),
                 "shop_url"=>$deal->getShopUrl(),
                 "payments" => $deal->getPaymentTypes(),
                 "delivery" => $deal->getDeliveryTypes()

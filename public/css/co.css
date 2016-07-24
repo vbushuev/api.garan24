@@ -188,7 +188,7 @@ body .container .scale-2-item:first-child:before {
   border-left-color: #a7ffeb;
 }
 body .container .scale-2-item:last-child:after {
-  border-left-color: #fff;
+  border-left-color: transparent;
 }
 body .container .active.scale-2-item,
 body .container .active-last.scale-2-item {
@@ -204,6 +204,10 @@ body .container .active-last.scale-2-item:first-child:before,
 body .container .active.scale-2-item:after,
 body .container .active.scale-2-item:first-child:before {
   border-left-color: #aed581;
+}
+body .container .active.scale-2-item:last-child:after,
+body .container .active-last.scale-2-item:last-child:after {
+  border-left-color: transparent;
 }
 body .form {
   position: relative;
