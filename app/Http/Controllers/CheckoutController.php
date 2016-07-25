@@ -109,9 +109,7 @@ class CheckoutController extends Controller{
             $deal->update(["customer_id"=>$cust->customer_id]);
         }
         $deal->update($data);
-        Mail::send('mail.welcome',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($data){
-            $message->to($data["email"])->subject("ГАРАН24");
-        });
+
         return view(
             $this->viewFolder.'.deliverymethod',
             [
@@ -192,6 +190,9 @@ class CheckoutController extends Controller{
             "id"=>$data["deal_id"],
             "data"=>$data
         ]);
+        Mail::send('mail.welcome',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($data){
+            $message->to($data["email"])->subject("ГАРАН24");
+        });
         return view(
             $this->viewFolder.'.payment',
             [
@@ -336,6 +337,8 @@ class CheckoutController extends Controller{
         catch(\Exception $e){
             Log::error($e);
         }
+        if($deal->payment["id"]==2) Mail::send('mail.orderpayonline',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($data){$message->to($data["email"])->subject("ГАРАН24");});
+        else Mail::send('mail.orderpayondelivery',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($data){$message->to($data["email"])->subject("ГАРАН24");});
         return view($this->viewFolder.'.thanks',[
             "route"=>$this->getBPRoute("thanks"),
             "section" => 'thanks',
@@ -449,9 +452,9 @@ class CheckoutController extends Controller{
         //"personal" => ["condition"=>false,"next"=>"delivery","back"=>"email"],
         "personal" => ["condition"=>false,"next"=>"deliverypaymethod","back"=>"email"],
         "delivery" => ["condition"=>false,"next"=>"paymethod","back"=>"personal"],
-        "deliverypaymethod" => ["condition"=>false,"next"=>"address","back"=>"email"],
+        "deliverypaymethod" => ["condition"=>false,"next"=>"address","back"=>"index"],
         "address" => ["condition"=>false,"next"=>"passport","back"=>"deliverypaymethod"],
-        "deliverymethod" => ["condition"=>false,"next"=>"address","back"=>"email"],
+        "deliverymethod" => ["condition"=>false,"next"=>"address","back"=>"index"],
         "paymethod" => ["condition"=>["credit"=>"passport"],"next"=>"card","back"=>"delivery"],
         "checkcard" => ["condition"=>false,"next"=>"thanks","back"=>"deliverypaymethod"],
         "thanks" => ["condition"=>false,"next"=>"card","back"=>"passport"],

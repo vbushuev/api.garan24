@@ -27,8 +27,7 @@
     <div class="input-group hide">
     <input type="hidden" name="billing[country]" value="RU" />
     <input type="hidden" id="boxberry_city" name="billing[city]" value="Москва" />
-    <input type="hidden" id="boxberry_address_1" name="billing[address_1]" value="" />
-    <input type="hidden" id="boxberry_postcode" name="billing[postcode]" value="" />
+    <input type="hidden" id="boxberry_address_2" name="billing[address_2]" value="" />
     <input type="hidden" id="shipping_price" name="shipping_price" value="" />
 
     </div>
@@ -75,7 +74,10 @@
                                     $m.html("Стоимость доставки <strong>"+price.format(2)+" руб.</strong>");
                                     calculateTotal();
                                     var delivery_address = 'Доставка <b>Boxberry Курьер</b>';
+                                    var delivery_address_2 = '<br /><small>Ориентировочный срок: 20 дн.</small>';
                                     delivery_address+= "<br /><small class='shipping-city'>"+$("#shipping_city").val()+"</small>, "+$("#shipping_postcode").val()+", <small class='shipping-address-1'>"+$("#shipping_address_1").val()+"</small>";
+                                    delivery_address+= delivery_address_2;
+                                    $("#boxberry_address_2").val(delivery_address_2);
                                     price = parseInt(price);
                                     $("#cart-shipping .total").html(delivery_address);
                                     $("#cart-shipping .amount").html(price.format(0,3,' ','.')+" руб.");

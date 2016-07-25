@@ -26,7 +26,7 @@
     <input type="hidden" id="delivery_type_id" name="delivery_id" />
     <input type="hidden" id="delivery_type_name" name="delivery_type_name" />
     <input type="hidden" id="delivery_type_desc" name="delivery_type_desc" />
-    @include("$viewFolder._buttons")
+    @include("$viewFolder._buttons",["gobackurl"=>"/checkout/?id=".$deal->order->id,"gobacktype"=>"get"])
     <script>
         $(document).ready(function(){
             $(".row.payment").hide();

@@ -29,6 +29,7 @@
             @if(isset($deal->shipping_cost)&&strlen($deal->shipping_cost)>0)
                 Доставка <b>{{$deal->delivery["name"]}}</b>
                 <br /><small>{{$deal->getCustomer()->toAddressString()}}</small>
+                {!!$deal->getCustomer()->billing_address["address_2"] or ''!!}
             @endif
         </div>
         <div class="amount total-amount col-xs-4 col-sm-4 col-md-4 col-lg-4" id="shipping-price">

@@ -11,7 +11,8 @@
 <script>
     window.garan_submit_args= {
         form:$("#form"),
-        url:"{{$route["dir"].$route["next"]["href"]}}"
+        url:"{{$route["dir"].$route["next"]["href"]}}",
+        type:"post"
     };
     $(document).ready(function(){
 
@@ -19,9 +20,10 @@
             garan.form.submit(garan_submit_args);
         });
         $("#back").click(function(){
-            //history.go(-1);
-            garan_submit_args.url="{{$route["dir"].$route["back"]["href"]}}";
-            garan.form.submit(garan_submit_args);
+            history.go(-1);
+            //garan_submit_args.url="{{$gobackurl or $route["dir"].$route["back"]["href"]}}";
+            //garan_submit_args.type="{{$gobacktype or 'post'}}";
+            //garan.form.goback(garan_submit_args);
         })
     });
 </script>

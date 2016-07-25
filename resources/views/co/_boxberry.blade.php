@@ -12,9 +12,10 @@
 
         var delivery_address = 'Доставка <b>Boxberry</b> ПВЗ <strong>'+bb.name+'</strong>';
         delivery_address+= "<br /><small>"+bb.address+"</small>";
-        delivery_address+= "<br /><small>"+bb.workschedule+"</small>";
-        delivery_address+= "<br /><small>тел. "+bb.phone+"</small>";
-        delivery_address+= "<br /><small>Срок: "+bb.period+" дн.</small>";
+        var delivery_address_2 = "<br /><small>"+bb.workschedule+"</small>";
+        delivery_address2+= "<br /><small>тел. "+bb.phone+"</small>";
+        delivery_address2+= "<br /><small>Срок: "+bb.period+" дн.</small>";
+        delivery_address+= delivery_address_2;
         var price = parseInt(bb.price);
         $("#ShippingAmountHidden").val(bb.price);
 
@@ -28,6 +29,8 @@
             var addr = [];
             for(var i=2;i<shipping.length;++i)addr[i-2]=shipping[i];
             $("#boxberry_address_1").val(addr.join());
+            $("#boxberry_address_2").val(delivery_address_2);
+            //$("#boxberry_address_1").val(delivery_address);
         }
         /*document.getElementById('city').innerHTML = bb.name;
         document.getElementById('js-pricedelivery').innerHTML = bb.price;
@@ -53,6 +56,7 @@
 <input type="hidden" name="billing[country]" value="RU" />
 <input type="hidden" id="boxberry_city" name="billing[city]" value="Москва" />
 <input type="hidden" id="boxberry_address_1" name="billing[address_1]" value="" />
+<input type="hidden" id="boxberry_address_2" name="billing[address_2]" value="" />
 <input type="hidden" id="boxberry_postcode" name="billing[postcode]" value="" />
 
 <input type="hidden" id="boxberry_name" name="boxbery[name]"/>

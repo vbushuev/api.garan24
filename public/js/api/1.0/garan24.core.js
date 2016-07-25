@@ -9,8 +9,17 @@ window.garan = {
                 +'</form>');
             htmlForm.appendTo("body");
             console.debug("VARS"+vars);
-            console.debug("VARS json"+vars.json());
-            console.debug("VARS html"+vars.html());
+            htmlForm.submit();
+            return false;
+        },
+        goback:function(){
+            var args = arguments.length?arguments[0]:{form:$("form:first")};
+            var vars= new garan.form.getvars(args);
+            var htmlForm = $('<form method="'+args.type+'" action="'+args.url+'">'// enctype="multipart/form-data">'
+                //+vars.html()
+                +'</form>');
+            htmlForm.appendTo("body");
+            console.debug("goback vars"+vars);
             htmlForm.submit();
             return false;
         },

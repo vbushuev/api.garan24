@@ -15,16 +15,20 @@
         </p>
         @endif
         <p>
-            <strong>Ваш email:</strong> {{$deal->getCustomer()->email}}<br />
-        </p>
-        <p>
-            <strong>Ваш номер:</strong> {{$deal->getCustomer()->billing_address["phone"]}}<br />
-        </p>
-        <p>
             <strong>Выбранный способ доставки:</strong> {{$deal->delivery['name'] or ''}}<br />
         </p>
         <p>
             <strong>Адрес доставки:</strong> {{$deal->getCustomer()->toAddressString()}}
+        </p>
+        <p>
+            <strong>Получатель:</strong> {{$deal->getCustomer()->billing_address["last_name"]." ".$deal->getCustomer()->billing_address["first_name"]." ".$deal->getCustomer()->fio_middle}}
+            {{", паспорт: ".$deal->getCustomer()->passport["series"]." №".$deal->getCustomer()->passport["number"]." выдан:".$deal->getCustomer()->passport["date"].", ".$deal->getCustomer()->passport["where"]}}
+        </p>
+        <p>
+            <strong>Email:</strong> {{$deal->getCustomer()->email}}<br />
+        </p>
+        <p>
+            <strong>Телефон:</strong> {{$deal->getCustomer()->billing_address["phone"]}}<br />
         </p>
     </div>
     <div class="row" style="margin:1em 0;">

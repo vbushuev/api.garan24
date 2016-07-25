@@ -19,6 +19,7 @@ var web = {
     }
 };
 function moveCaretToStart(el) {
+    console.debug(el+" caret to start");
     if (typeof el.selectionStart == "number") {
         el.selectionStart = el.selectionEnd = 0;
     } else if (typeof el.createTextRange != "undefined") {
@@ -82,7 +83,9 @@ function calculateTotal(){
         }
     });
     $("input,textarea").on("focus",function(){
-        moveCaretToStart($(this).get());
+        //console.debug("Moving caret to Start");
+        var $t=$(this);
+        moveCaretToStart($t.get());
     });
     $(".combo .dropdown-menu li a").css("cursor","pointer").click(function(){
         var $t=$(this),
@@ -132,7 +135,7 @@ function calculateTotal(){
                 url:"//service.garan24.ru/crd?_href="+_ahref,
                 success:function(d,s,x){
                     var cont = $(d).find("#post-110").html();
-                    if(cont.length==0)cont=$(d).find("body");
+                    if(typeof cont!="undefined" && cont.length==0)cont=$(d).find("body");
                     console.debug(cont);
 
                     $("body").append('<div id="'+mesid+'" class="helper-box">'

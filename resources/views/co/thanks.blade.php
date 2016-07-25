@@ -7,7 +7,7 @@
         <i class="first">Проверьте</i> почту, Вам придет письмо от <span class="brand">Гаран24</span> с подтверждением Вашего заказа и ссылкой на Ваш Личный Кабинет.
     </p>
     <p>
-        <i class="first">Отслеживайте</i> Ваш заказ в <a target="__blank" href="https://garan24.ru/my-account/">в личном кабинете <span class="brand">Гаран24</span></a>
+        <i class="first">Отслеживайте</i> Ваш заказ в <a href="https://garan24.ru/my-account/">в личном кабинете <span class="brand">Гаран24</span></a>
     </p>
     <p>
         <i class="first">Остались</i> вопросы? Звоните по тел. <a href="tel:+7 499 110 2263">+7 499 110 2263</a>

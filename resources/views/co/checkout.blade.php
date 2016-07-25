@@ -9,7 +9,7 @@
         <label for="phone" class="control-label">Телефон:</label>
         @include('elements.inputs.mobile',["text"=>"Номер мобильного телефона",'required'=>"required"])
     </div>
-    @include("$viewFolder._buttons")
+    @include("$viewFolder._buttons",["gobackurl"=>$shop_url])
     <br />
     <p class="text-muted small">
         Нажимая кнопку "Продолжить", Вы присоединяетесь к <a href="https://garan24.ru/terms" target="__blank">Договору</a> на обслуживание клиентов сервиса Гаран24.
