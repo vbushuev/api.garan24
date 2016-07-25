@@ -105,7 +105,9 @@ function calculateTotal(){
     calculateTotal();
     /*helper section*/
     $(".helper").on("mouseover",function(){
-        $(".helper-text").show();
+        var sec = $(".helped.active:last").attr("data-helper");
+        $(".helper-box-item."+sec).show();
+        $(".helper-text").html($(".helper-box-item."+sec).text()).show();
     }).on("mouseout",function(){
         $(".helper-text").hide();
     }).on("click",function(){
@@ -134,8 +136,9 @@ function calculateTotal(){
                     console.debug(cont);
 
                     $("body").append('<div id="'+mesid+'" class="helper-box">'
+                        +'<a href="#" class="helper-box-item-close"><i class="fa fa-close fa-2x"></i></a>'
                         +'<div class="helper-box-item-lg">'
-                        +'<a href="#" class="helper-box-item-close"><i class="fa fa-close"></i></a>'+cont
+                        +cont
                     +'</div></div>');
                 },
                 error:function(x,t,e){}
