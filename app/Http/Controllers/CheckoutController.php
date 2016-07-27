@@ -359,7 +359,15 @@ class CheckoutController extends Controller{
             ->header('Status', "302")
             ->header("Location",$deal->response_url);
     }
-
+    public function getSendmemails(Request $rq){
+        $deal = new Deal(["id"=>$rq->input("id","1107")]);
+        Mail::send('mail.welcome',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){
+            $message->to($deal->getCustomer()->email)->subject("ГАРАН24");
+        });
+        if($deal->payment["id"]==2) Mail::send('mail.orderpayonline',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){$message->to($deal->getCustomer()->email)->subject("ГАРАН24");});
+        else Mail::send('mail.orderpayondelivery',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){$message->to($deal->getCustomer()->email)->subject("ГАРАН24");});
+        return "Mails are sent.";
+    }
     protected function getParams(Request $rq){
         if($rq->cookie("deal_id","nodata")=="nodata" && !$rq->session()->has("deal_id")) return false;
         $data = $rq->get("data",$rq->getContent());

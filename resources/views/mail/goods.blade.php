@@ -1,84 +1,42 @@
 @if($deal->order->getProducts()!==null)
-    <style>
-        table{
-            width: 100%;
-            font-size: 14pt;
-            border: solid 1px rgba(85,125,161,1);
-            margin-bottom: 1em;
-        }
-        table thead tr th {
-            border: solid 1px rgba(85,125,161,1);
-            height: 3em;
-            line-height: 3em;
-            text-align: center;
-            font-weight: 700;
-            font-size: 16pt;
-        }
-        table thead tr th.image{width:20%;}
-        table thead tr th.name{width:40%;}
-        table thead tr th.quantity{width:15%;}
-        table thead tr th.amount{width:25%;}
-        table tbody tr td{
-            border: solid 1px rgba(85,125,161,1);
-            padding:.4em 1em;
-        }
-        table tbody tr td.image{
-            text-align: center;
-        }
-        table tbody tr td.image img{
-            height:100px;
+    <table style="border-collapse: collapse;width: 100%;font-size: 14pt;border-style:solid;border-width: 1px;border-color: rgba(85,125,161,1);margin-bottom: 1em;">
 
-        }
-        table tbody .name{}
-        table tbody .quantity{text-align: center;}
-        table tbody .amount,table tfoot .amount{
-            text-align: right;
-            font-weight: 700;
-        }
-        table tfoot tr th{
-            padding:.4em 1em;
-            font-size: 16pt;
-        }
-    </style>
-    <table>
-        <div class="hide">{{$total_amount=0}}</div>
         <thead>
             <tr>
-                <th class="image">&nbsp;</th>
-                <th class="name">Наименование</th>
-                <th class="quantity">Кол-во</th>
-                <th class="amount">Стоимость</th>
+                <th style="border-style:solid;border-width:1px;border-color:rgba(85,125,161,1);height: 3em;line-height: 3em;text-align: center;font-weight: 700;font-size: 16pt; width:20%;">&nbsp;</th>
+                <th style="border-style:solid;border-width:1px;border-color:rgba(85,125,161,1);height: 3em;line-height: 3em;text-align: center;font-weight: 700;font-size: 16pt; width:40%;">Наименование</th>
+                <th style="border-style:solid;border-width:1px;border-color:rgba(85,125,161,1);height: 3em;line-height: 3em;text-align: center;font-weight: 700;font-size: 16pt; width:15%;">Кол-во</th>
+                <th style="border-style:solid;border-width:1px;border-color:rgba(85,125,161,1);height: 3em;line-height: 3em;text-align: center;font-weight: 700;font-size: 16pt; width:25%;">Стоимость<div style="display:none;">{{$total_amount=0}}</div></th>
             </tr>
         </thead>
         <tbody>
             @foreach($deal->order->getProducts() as $good)
             <tr>
-                <td class="image"><img src="{{$good["product_img"] or $good["featured_src"]}}" alt="{{$good["title"] or $good['name']}}"></td>
-                <td class="name">{{$good["title"] or $good["name"]}}</td>
-                <td class="quantity">{{$good["quantity"]}} шт.</td>
-                <td class="amount">@amount($good["regular_price"])</td>
+                <td style="border-style:solid;border-width:1px;border-color:rgba(85,125,161,1);padding:.4em 1em;width:20%;text-align: center;"><img height="100px"; src="{{$good["product_img"] or $good["featured_src"]}}" alt="{{$good["title"] or $good['name']}}"></td>
+                <td style="border-style:solid;border-width:1px;border-color:rgba(85,125,161,1);padding:.4em 1em;width:40%;">{{$good["title"] or $good["name"]}}</td>
+                <td style="border-style:solid;border-width:1px;border-color:rgba(85,125,161,1);padding:.4em 1em;width:15%;text-align: center;">{{$good["quantity"]}} шт.</td>
+                <td style="border-style:solid;border-width:1px;border-color:rgba(85,125,161,1);padding:.4em 1em;width:25%;text-align: right;font-weight: 700;">@amount($good["regular_price"])<div style="display:none;">{{$total_amount+=$good["regular_price"]*$good["quantity"]}}</div></td>
             </tr>
-            <div class="hide">{{$total_amount+=$good["regular_price"]*$good["quantity"]}}</div>
+
             @endforeach
             @if(isset($deal->shipping_cost)&&strlen($deal->shipping_cost)>0)
             <tr>
                 <td>&nbsp;</td>
-                <td class="total-name">
+                <td style="text-align: right;">
                     Доставка <b>{{$deal->delivery["name"]}}</b><br />
                     <small>{{$deal->getCustomer()->toAddressString()}}</small>
                 </td>
                 <td>&nbsp;</td>
-                <td class="amount">@amount($deal->shipping_cost)</td>
+                <td style="text-align: right;font-weight: 700;">@amount($deal->shipping_cost)<div style="display:none;">{{$total_amount+=$deal->shipping_cost}}</div></td>
             </tr>
-            <div class="hide">{{$total_amount+=$deal->shipping_cost}}</div>
             @endif
         </tbody>
         <tfoot>
             <tr>
                 <th></th>
-                <th>Итоговая сумма</th>
+                <th style="padding:.4em 1em;font-size: 16pt;">Итоговая сумма</th>
                 <th></th>
-                <th class="amount">@amount($total_amount)</th>
+                <th style="padding:.4em 1em;font-size: 16pt; text-align: right;font-weight: 700;">@amount($total_amount)</th>
             </tr>
         </tfoot>
     </table>
