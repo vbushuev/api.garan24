@@ -13,8 +13,8 @@
         var delivery_address = 'Доставка <b>Boxberry</b> ПВЗ <strong>'+bb.name+'</strong>';
         delivery_address+= "<br /><small>"+bb.address+"</small>";
         var delivery_address_2 = "<br /><small>"+bb.workschedule+"</small>";
-        delivery_address2+= "<br /><small>тел. "+bb.phone+"</small>";
-        delivery_address2+= "<br /><small>Срок: "+bb.period+" дн.</small>";
+        delivery_address_2+= "<br /><small>тел. "+bb.phone+"</small>";
+        delivery_address_2+= "<br /><small>Срок: "+bb.period+" дн.</small>";
         delivery_address+= delivery_address_2;
         var price = parseInt(bb.price);
         $("#ShippingAmountHidden").val(bb.price);
@@ -53,15 +53,3 @@
         });
     });
 </script>
-<input type="hidden" name="billing[country]" value="RU" />
-<input type="hidden" id="boxberry_city" name="billing[city]" value="Москва" />
-<input type="hidden" id="boxberry_address_1" name="billing[address_1]" value="" />
-<input type="hidden" id="boxberry_address_2" name="billing[address_2]" value="" />
-<input type="hidden" id="boxberry_postcode" name="billing[postcode]" value="" />
-
-<input type="hidden" id="boxberry_name" name="boxbery[name]"/>
-<input type="hidden" id="boxberry_address" name="boxbery[address]"/>
-<input type="hidden" id="boxberry_workschedule" name="boxbery[workschedule]"/>
-<input type="hidden" id="boxberry_phone" name="boxbery[phone]"/>
-<input type="hidden" id="boxberry_period" name="boxbery[period]"/>
-<input type="hidden" id="boxberry_id" name="boxbery[id]"/>

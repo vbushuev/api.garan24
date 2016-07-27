@@ -201,34 +201,7 @@ body
             background-color: rgba(100,255,218 ,1);
             padding:.4em;
             text-align: center;
-        .scale
-            width: 100%;
-            padding:0;
-            margin: 0;
-            background-color: rgba(174,213,129 ,1);
-            pointer-events: none;
-            .scale-item
-                display: inline-block;
-                font-size: 16pt;
-                width:25%;
-                margin: 0;
-                height: 3em;
-                line-height: 3em;
-                text-align: center;
-                position: relative;
-                color: rgba(255,255,255,.5);
-                .fa
-                    color: rgba(255,255,255,.5);
-                .fa-2x
-                    position: absolute;
-                    right:0;
-                    top: .25em;
-            .scale-item.active
-                font-weight: 700;
-                color: rgba(255,255,255,1);
-                .fa
-                    font-weight: 300;
-                    color: rgba(255,255,255,1);
+
 
         .scale-2
             width: 100%;
@@ -244,6 +217,9 @@ body
             font-size: 16pt;
             color: rgba(0,0,0,.3);
             pointer-events: none;
+        .scale-2-item a
+            color: rgba(0,0,0,.3);
+            text-decoration: none;
         .scale-2-item:after, .scale-2-item:before
             top: 50%;
             border: solid transparent;
@@ -274,7 +250,11 @@ body
         .active.scale-2-item,.active-last.scale-2-item
             background-color: #5cb85c;//#449d44
             color: rgba(255,255,255,1);
-        .active.scale-2-item
+        .active.scale-2-item a,.active-last.scale-2-item a
+            color: rgba(255,255,255,1);
+        .active-last.scale-2-item
+            pointer-events: all;
+        .active.scale-2-item,.active-last.scale-2-item a:hover
             font-weight: 700;
             text-transform: uppercase;
         .active-last.scale-2-item:after,.active-last.scale-2-item:first-child:before,

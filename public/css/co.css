@@ -212,40 +212,6 @@ body .container .attention {
   padding: 0.4em;
   text-align: center;
 }
-body .container .scale {
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  background-color: #aed581;
-  pointer-events: none;
-}
-body .container .scale .scale-item {
-  display: inline-block;
-  font-size: 16pt;
-  width: 25%;
-  margin: 0;
-  height: 3em;
-  line-height: 3em;
-  text-align: center;
-  position: relative;
-  color: rgba(255,255,255,0.5);
-}
-body .container .scale .scale-item .fa {
-  color: rgba(255,255,255,0.5);
-}
-body .container .scale .scale-item .fa-2x {
-  position: absolute;
-  right: 0;
-  top: 0.25em;
-}
-body .container .scale .scale-item.active {
-  font-weight: 700;
-  color: #fff;
-}
-body .container .scale .scale-item.active .fa {
-  font-weight: 300;
-  color: #fff;
-}
 body .container .scale-2 {
   width: 100%;
 }
@@ -261,6 +227,10 @@ body .container .scale-2-item {
   font-size: 16pt;
   color: rgba(0,0,0,0.3);
   pointer-events: none;
+}
+body .container .scale-2-item a {
+  color: rgba(0,0,0,0.3);
+  text-decoration: none;
 }
 body .container .scale-2-item:after,
 body .container .scale-2-item:before {
@@ -299,7 +269,15 @@ body .container .active-last.scale-2-item {
   background-color: #5cb85c;
   color: #fff;
 }
-body .container .active.scale-2-item {
+body .container .active.scale-2-item a,
+body .container .active-last.scale-2-item a {
+  color: #fff;
+}
+body .container .active-last.scale-2-item {
+  pointer-events: all;
+}
+body .container .active.scale-2-item,
+body .container .active-last.scale-2-item a:hover {
   font-weight: 700;
   text-transform: uppercase;
 }

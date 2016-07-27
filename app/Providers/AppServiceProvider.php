@@ -25,6 +25,9 @@ class AppServiceProvider extends ServiceProvider
         Blade::directive('amount', function($a) {
             return "<?php echo number_format(with({$a}),2,'.',' ').' руб.';?>";
         });
+        Blade::directive('telephone', function($a) {
+            return "<?php echo number_format(with({$a}),2,'.',' ').' руб.';?>";
+        });
     }
 
     /**

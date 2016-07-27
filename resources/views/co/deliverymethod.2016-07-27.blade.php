@@ -21,41 +21,26 @@
             @endforeach
         </div>
         @include($viewFolder.'._boxberry')
-        @include($viewFolder.'.address')
     </div>
 
     <input type="hidden" id="delivery_type_id" name="delivery_id" />
     <input type="hidden" id="delivery_type_name" name="delivery_type_name" />
     <input type="hidden" id="delivery_type_desc" name="delivery_type_desc" />
-    <input type="hidden" name="billing[country]" value="RU" />
-    <input type="hidden" id="boxberry_city" name="billing[city]" value="Москва" />
-    <input type="hidden" id="boxberry_address_1" name="billing[address_1]" value="" />
-    <input type="hidden" id="boxberry_address_2" name="billing[address_2]" value="" />
-    <input type="hidden" id="boxberry_postcode" name="billing[postcode]" value="" />
-
-    <input type="hidden" id="boxberry_name" name="boxbery[name]"/>
-    <input type="hidden" id="boxberry_address" name="boxbery[address]"/>
-    <input type="hidden" id="boxberry_workschedule" name="boxbery[workschedule]"/>
-    <input type="hidden" id="boxberry_phone" name="boxbery[phone]"/>
-    <input type="hidden" id="boxberry_period" name="boxbery[period]"/>
-    <input type="hidden" id="boxberry_id" name="boxbery[id]"/>
-    <input type="hidden" id="shipping_price" name="shipping_price" value="" />
     @include("$viewFolder._buttons",["gobackurl"=>"/checkout/?id=".$deal->order->id,"gobacktype"=>"get"])
     <script>
         $(document).ready(function(){
-
+            $(".row.payment").hide();
             //$("#forward").prop('disabled', true);
             $("#delivery_types .list-group-item").on("click",function(){
-                $(".shipping-type").slideUp();
                 var val = $(this).attr("data-id");
-                if(val==6){
-                    $("#shipping-type-6").slideDown();
+                if(val==4){
+                    window.garan_submit_args.url = window.garan_submit_args.url.replace(/address/i,"passport");
+                }else {
+                    window.garan_submit_args.url = window.garan_submit_args.url.replace(/passport/i,"address");
                     $("#ShippingAmountHidden").val('');
+
                     $("#cart-shipping .total").html('');
                     $("#cart-shipping .amount").html('');
-                    if($("#shipping_postcode").val().length){
-                        getShippingCost();
-                    }
                 }
                 $("#delivery_type_id").val(val);
                 console.debug($(".row.payment"));

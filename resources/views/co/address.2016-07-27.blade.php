@@ -1,3 +1,5 @@
+@extends($viewFolder.'.layout',["shop_url"=>$shop_url])
+@section('content')
 <style>
     .garan-message{
         font-family: "Open Sans";
@@ -8,7 +10,7 @@
         color: rgba(197,17,98 ,1);
     }
 </style>
-<div id="shipping-type-6" class="shipping-type" style="display:none;">
+    <h3><i class="first">Адрес</i> доставки:</h3>
     <div class="form-group">
         <label for="billing[postcode]" class="control-label">Ваш почтовый индекс:</label>
         @include('elements.inputs.text',["id"=>"shipping_postcode","required"=>"required","icon"=>"map-marker","name"=>"billing[postcode]","text"=>"Почтовый индекс","value"=>$deal->getCustomer()->toArray()["billing_address"]["postcode"]])
@@ -22,7 +24,14 @@
         @include('elements.inputs.text',["id"=>"shipping_address_1","icon"=>"building-o","name"=>"billing[address_1]","text"=>"Адрес","value"=>$deal->getCustomer()->toArray()["billing_address"]["address_1"]])
     </div>
     <div class="garan-message" style="margin-bottom:2em;"></div>
+    <div class="input-group hide">
+    <input type="hidden" name="billing[country]" value="RU" />
+    <input type="hidden" id="boxberry_city" name="billing[city]" value="Москва" />
+    <input type="hidden" id="boxberry_address_2" name="billing[address_2]" value="" />
+    <input type="hidden" id="shipping_price" name="shipping_price" value="" />
 
+    </div>
+    @include("$viewFolder._buttons")
     <script>
         function getShippingCost(){
             var t = $("#shipping_postcode").get(), $t = $("#shipping_postcode"), v = $t.val(),$m=$("#cart-shipping .total");
@@ -104,7 +113,9 @@
                     getShippingCost(garan.form.submit(garan_submit_args));
                 }
             });
-            
+            if($("#shipping_postcode").val().length){
+                getShippingCost();
+            }
         });
     </script>
-</div>
+@endsection

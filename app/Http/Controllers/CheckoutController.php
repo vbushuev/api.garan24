@@ -113,12 +113,12 @@ class CheckoutController extends Controller{
         return view(
             $this->viewFolder.'.deliverymethod',
             [
-                "route"=>$this->getBPRoute("deliverypaymethod"),
+                "route"=>$this->getBPRoute("deliverymethod"),
                 "section" => 'delivery',
                 "viewFolder"=>$this->viewFolder,"debug"=>"",
                 "goods"=>$deal->order->getProducts(),
                 "deal"=>$deal,
-                "customer"=>$cust->toArray(),
+                "customer"=>$deal->getCustomer()->toArray(),
                 "shop_url"=>$deal->getShopUrl(),
                 "payments" => $deal->getPaymentTypes(),
                 "delivery" => $deal->getDeliveryTypes()
@@ -190,8 +190,8 @@ class CheckoutController extends Controller{
             "id"=>$data["deal_id"],
             "data"=>$data
         ]);
-        Mail::send('mail.welcome',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($data){
-            $message->to($data["email"])->subject("ГАРАН24");
+        Mail::send('mail.welcome',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){
+            $message->to($deal->getCustomer()->email)->subject("ГАРАН24");
         });
         return view(
             $this->viewFolder.'.payment',
@@ -337,8 +337,8 @@ class CheckoutController extends Controller{
         catch(\Exception $e){
             Log::error($e);
         }
-        if($deal->payment["id"]==2) Mail::send('mail.orderpayonline',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($data){$message->to($data["email"])->subject("ГАРАН24");});
-        else Mail::send('mail.orderpayondelivery',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($data){$message->to($data["email"])->subject("ГАРАН24");});
+        if($deal->payment["id"]==2) Mail::send('mail.orderpayonline',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){$message->to($deal->getCustomer()->email)->subject("ГАРАН24");});
+        else Mail::send('mail.orderpayondelivery',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){$message->to($deal->getCustomer()->email)->subject("ГАРАН24");});
         return view($this->viewFolder.'.thanks',[
             "route"=>$this->getBPRoute("thanks"),
             "section" => 'thanks',
@@ -446,15 +446,15 @@ class CheckoutController extends Controller{
         "payout" => ["text"=>"Подтвердить","href"=>"/payout"],
     ];
     protected $bpmatrix=[
-        "index" => ["condition"=>false,"next"=>"email","back"=>"index"],
+        "index" => ["condition"=>false,"next"=>"email","back"=>false],
         "email" => ["condition"=>false,"next"=>"personal","back"=>"index"],
-        "checkout" => ["condition"=>false,"next"=>"deliverypaymethod","back"=>"index"],
+        "checkout" => ["condition"=>false,"next"=>"deliverypaymethod","back"=>false],
         //"personal" => ["condition"=>false,"next"=>"delivery","back"=>"email"],
         "personal" => ["condition"=>false,"next"=>"deliverypaymethod","back"=>"email"],
         "delivery" => ["condition"=>false,"next"=>"paymethod","back"=>"personal"],
         "deliverypaymethod" => ["condition"=>false,"next"=>"address","back"=>"index"],
         "address" => ["condition"=>false,"next"=>"passport","back"=>"deliverypaymethod"],
-        "deliverymethod" => ["condition"=>false,"next"=>"address","back"=>"index"],
+        "deliverymethod" => ["condition"=>false,"next"=>"passport","back"=>"index"],
         "paymethod" => ["condition"=>["credit"=>"passport"],"next"=>"card","back"=>"delivery"],
         "checkcard" => ["condition"=>false,"next"=>"thanks","back"=>"deliverypaymethod"],
         "thanks" => ["condition"=>false,"next"=>"card","back"=>"passport"],

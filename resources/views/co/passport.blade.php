@@ -39,9 +39,7 @@
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
             <div class="form-group" id="PassportLocale">
                 <label for="passport[where]" class="control-label-left">Кем выдан:</label>
-                <textarea id="passport[where]" name="passport[where]" class="form-control" placeholder="Кем выдан" rows="3">
-                    {{isset($customer["passport"]["where"])?urldecode($customer["passport"]["where"]):""}}
-                </textarea>
+                <textarea id="passport[where]" name="passport[where]" class="form-control" placeholder="Кем выдан" rows="3">{{isset($customer["passport"]["where"])?urldecode($customer["passport"]["where"]):""}}</textarea>
             </div>
         </div>
     </div>

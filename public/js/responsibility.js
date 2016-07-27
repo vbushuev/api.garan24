@@ -147,5 +147,12 @@ function calculateTotal(){
                 error:function(x,t,e){}
             });
         }
+        if($t.hasClass("post-link")){
+            $t.click(function(){
+                var where = $t.attr("href");
+                $("body").append('<form method="post" action="'+where+'"></form>').submit();
+                //return false;
+            });
+        }
     });
 })();
