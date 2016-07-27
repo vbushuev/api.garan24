@@ -28,7 +28,7 @@
             <strong>Email:</strong> {{$deal->getCustomer()->email}}<br />
         </p>
         <p>
-            <strong>Телефон:</strong> {{$deal->getCustomer()->billing_address["phone"]}}<br />
+            <strong>Телефон:</strong> @telephone($deal->getCustomer()->billing_address["phone"])<br />
         </p>
     </div>
     <div class="row" style="margin:1em 0;">
