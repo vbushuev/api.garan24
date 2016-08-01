@@ -2,17 +2,17 @@
   "uploadOnSave": false,
   "useAtomicWrites": false,
   "deleteLocal": false,
-  "hostname": "nkofrs.ru",
-  "port": "21",
-  "target": "/var/www/u0173919/data/www/garan24.ru/service",
+  "hostname": "151.248.117.239",
+  "port": "22",
+  "target": "/var/www/u0173919/data/www/service.garan24.ru",
   "ignore": [
     ".git/*",
     "vendor/*",
     ".env",
     "storage/*"
   ],
-  "username": "u0173919",
-  "password": "Mx7D6_pq",
+  "username": "bushuev",
+  "password": "Vampire04",
   "watch": [],
-  "transport": "ftp"
+  "transport": "scp"
 }

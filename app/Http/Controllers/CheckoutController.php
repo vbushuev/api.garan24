@@ -15,7 +15,7 @@ use WC_API_Client_Resource_Orders;
 use WC_API_Client_Resource_Customers;
 use WC_API_Client_Resource_Products;
 
-use \Garan24\Garan24 as Garan24;
+//use \Garan24\Garan24 as Garan24;
 use \Garan24\Deal\Deal as Deal;
 use \Garan24\Deal\Customer as Customer;
 /*
@@ -28,8 +28,8 @@ class CheckoutController extends Controller{
     protected $raworder;
     protected $viewFolder = 'co';
     protected $thishost = "https://service.garan24.ru";
-    public function __construct(){
-        Garan24::$DB["host"] = "151.248.117.239";
+    public function __construct(){      
+        \Garan24\Garan24::$DB["host"] = "151.248.117.239";
         //$this->raworder = file_get_contents('../tests/example.order.json');
         //$this->raworder = json_decode($this->raworder,true);
         //print_r($this->rawgoods);

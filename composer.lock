@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "d6b5d00a178b8553aa7164dcbb2b1d1b",
-    "content-hash": "ec6b8e57dd6a0184aa571e1c15ca3f04",
+    "hash": "4f5e1e54fca59285b79b6e098affb310",
+    "content-hash": "8f53e6b4e499f7244777f4bdf2b968b8",
     "packages": [
         {
             "name": "classpreloader/classpreloader",
@@ -163,16 +163,16 @@
         },
         {
             "name": "garan",
-            "version": "1.7",
+            "version": "1.8",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vbushuev/garan",
-                "reference": "release-1-7"
+                "reference": "release-1-8"
             },
             "type": "library",
             "autoload": {
                 "psr-4": {
-                    "Garan24\\": "src"
+                    "Garan24\\": "src/Garan24"
                 }
             }
         },

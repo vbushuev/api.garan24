@@ -2,6 +2,7 @@
 /node_modules
 /public/storage
 /storage
+/public/.htaccess
 Homestead.yaml
 Homestead.json
 .env
@@ -12,3 +13,4 @@ composer.lock
 app/Http/Controllers/bad.DemoCheckoutController.php
 composer.lock
 deployment-config.json
+.htaccess

@@ -55,14 +55,14 @@
             "type":"package",
             "package":{
                 "name":"garan",
-                "version":"1.7",
+                "version":"1.8",
                 "source":{
                     "type":"git",
                     "url":"https://github.com/vbushuev/garan",
-                    "reference":"release-1-7"
+                    "reference":"release-1-8"
                 },
                 "autoload":{
-                    "psr-4": {"Garan24\\": "src"}
+                    "psr-4": {"Garan24\\": "src/Garan24"}
                 }
             }
         }
