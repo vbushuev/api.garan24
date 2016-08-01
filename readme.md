@@ -25,3 +25,9 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](http://opensource.org/licenses/MIT).
+
+
+## Администратор сервера
+Логин: root
+Пароль: ПАРОЛЬ: VsAB2Eno9_U0ax
+Адрес панели управления сервером: https://151.248.117.239/manager
