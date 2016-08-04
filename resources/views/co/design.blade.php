@@ -1,9 +1,5 @@
 @extends($viewFolder.'.layout')
 @section('content')
-
-
-
-
 <div id="form" class="form col-xs-12 col-sm-12 col-md-8 col-lg-8">
     <h3><i class="first">Ваши</i> контактные данные: </h3>
     <div class="form-group">
@@ -18,4 +14,18 @@
         Нажимая кнопку "Продолжить", Вы присоединяетесь к <a href="https://garan24.ru/terms" target="__blank">Договору</a> на обслуживание клиентов сервиса Гаран24.
     </p>
 </div>
+<div id="test" class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
+</div>
+<script>
+$(document).ready(function(){
+    $.ajax({
+        url:"/checkout/goods",
+        data:{deal_id:1014},
+        method:"get",
+        success:function(d){
+            $("#test").html(d);
+        }
+    });
+});
+</script>
 @endsection

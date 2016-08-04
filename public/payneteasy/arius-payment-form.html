@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>Форма оплаты</title>
+    <link rel="stylesheet" type="text/css" href="https://service.garan24.ru/css/payneteasyform.css"/>
+</head>
+
+<body>
+<div class="container">
+    <div class="main">
+        <!-- Order Summary -->
+    <!--    <div class="summary">
+            <h2 class="summary-title as-title">Информация о платеже</h2>
+            <div class="summary-description">$!ORDERDESCRIPTION</div>
+
+            <div class="summary-total">
+                <span class="summary-total-label">Сумма:</span>
+                <span class="summary-total-value">$!AMOUNT $!CURRENCY</span>
+            </div>
+        </div>
+    -->
+        <!-- Pay form -->
+        <form class="form" action="${ACTION}" method="post">
+
+
+
+            <ul class="form-ul">
+                <!-- Card printed name -->
+                <!--<li class="form-li">
+                    <label class="form-label" for="${CARDHOLDER}">Имя держателя:</label>
+                    <input class="form-number-field" id="${CARDHOLDER}" name="${CARDHOLDER}" type="text" maxlength="50" autocomplete="off" value="${CARDHOLDER_VALUE}" />
+                </li>
+            -->
+                <!-- Card Number -->
+                <li class="form-li">
+                    <label class="form-label">Сумма:</label>
+                    <span class="form-amount">$!AMOUNT $!CURRENCY</span>
+                </li>
+                <li class="form-li">
+                    <label class="form-label" for="${CARDNO}">Номер карты:</label>
+                    <input class="form-number-field" id="${CARDNO}" name="${CARDNO}" type="text" maxlength="18" autocomplete="off"  />
+                </li>
+
+                <!-- CVV -->
+                <li class="form-li">
+                    <label class="form-label" for="${CVV2}">CVV2/CVC2-код:</label>
+                    <input class="form-cvv-field" name="${CVV2}" id="${CVV2}" type="password" maxlength="4" autocomplete="off" />
+                </li>
+
+                <li class="form-li">
+                    <label class="form-label" for="${EXPMONTH}">Срок действия:</label>
+
+                    <select class="form-expire-month" id="${EXPMONTH}" name="${EXPMONTH}" size="1" >
+                        <option value="01">01 / January</option>
+                        <option value="02">02 / February</option>
+                        <option value="03">03 / March</option>
+                        <option value="04">04 / April</option>
+                        <option value="05">05 / May</option>
+                        <option value="06">06 / June</option>
+                        <option value="07">07 / July</option>
+                        <option value="08">08 / August</option>
+                        <option value="09">09 / September</option>
+                        <option value="10">10 / October</option>
+                        <option value="11">11 / November</option>
+                        <option value="12">12 / December</option>
+                    </select>
+
+                    <!--suppress HtmlFormInputWithoutLabel -->
+                    <select class="form-expire-year" name="${EXPYEAR}" id="${EXPYEAR}" size="1">
+                        ${EXPIRE_YEARS}
+                    </select>
+                </li>
+
+                $!{INTERNAL_SECTION}
+
+                #if($!card_error)
+                <div class="form-error">
+                    $!card_error
+                </div>
+                #end
+
+
+                <li class="form-li-buttons">
+
+                    <span class="form-secure-connection">БЕЗОПАСНОЕ СОЕДИНЕНИЕ</span>
+                    <!--suppress HtmlFormInputWithoutLabel -->
+                    <input name="cancel" type="submit" class="form-button form-button-cancel" value="Отмена" />
+                    <!--suppress HtmlFormInputWithoutLabel -->
+                    <input name="submit" type="submit" class="form-button form-button-ok"     value="Оплатить" />
+
+                </li>
+
+            </ul>
+
+            <div class="form-card-info"></div>
+
+        </form>
+    </div>
+</div>
+</body>
+
+</html>

@@ -28,18 +28,17 @@ class CheckoutController extends Controller{
     protected $raworder;
     protected $viewFolder = 'co';
     protected $thishost = "https://service.garan24.ru";
-    public function __construct(){      
+    public function __construct(){
         \Garan24\Garan24::$DB["host"] = "151.248.117.239";
         //$this->raworder = file_get_contents('../tests/example.order.json');
         //$this->raworder = json_decode($this->raworder,true);
         //print_r($this->rawgoods);
     }
     public function getDesign(Request $rq){
-        $deal = new Deal();
-        $deal->byId("500");
+        $deal = new Deal(["id"=>"1014"]);
         return view(
             $this->viewFolder.'.design',
-            ["viewFolder"=>$this->viewFolder,"debug"=>"","section"=>"thanks"]
+            ["viewFolder"=>$this->viewFolder,"debug"=>"","section"=>"thanks","deal"=>$deal]
         );
     }
     public function getIndex(Request $rq){
@@ -71,6 +70,20 @@ class CheckoutController extends Controller{
         //if($resp->code==0){return redirect()->away($resp->redirect_url);}
         return $resp->__toString();
     }
+    /* Ajax functions */
+    public function getGoods(Request $rq){
+        Log::debug(__CLASS__.".".__METHOD__);
+        //$data = $this->getParams($rq);
+        //if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
+        $deal = new Deal(["id"=>$rq->input("deal_id")]);
+        return response()->view(
+            $this->viewFolder.'.goods',
+            [
+                "deal"=>$deal,
+            ]
+        )->header('Access-Control-Allow-Origin', '*');
+    }
+    /* Ajax functions */
     public function postPersonal(Request $rq){
         $data = $this->getParams($rq);
         if($data===false||!$rq->session()->has("deal_id"))return redirect()-back();
@@ -378,7 +391,7 @@ class CheckoutController extends Controller{
         foreach($data as $k=>$v){
             if(empty($v))unset($data["{$k}"]);
             else{
-                $log .= "{$k} = ".Garan24::obj2str($v).", ";
+                $log .= "{$k} = ".\Garan24\Garan24::obj2str($v).", ";
             }
         }
         $data = array_merge($data,["deal_id" => $rq->session()->get("deal_id"),"deal_id_source" => "session"]);
