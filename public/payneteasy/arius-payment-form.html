@@ -3,14 +3,29 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
     <title>Форма оплаты</title>
-    <link rel="stylesheet" type="text/css" href="https://service.garan24.ru/css/payneteasyform.css"/>
+    <link rel="stylesheet" type="text/css" href="/paynet-ui-skin/${SKIN_VERSION}/d/css/processing-form.css"/>
 </head>
 
 <body>
 <div class="container">
+    <!-- HEADER -->
+    <div class="header">
+        <table cellspacing="0" cellpadding="10" style="width:100%; text-align:center; margin:24px 0 0">
+            <tr>
+                <td><img alt="Verified by Visa logo" src="/images/visa/visa1_53x34_a.gif"></td>
+                <td class="centered">
+                    <a title="Платежный шлюз компании Ариус" href="http://www.ariuspay.ru/"><img height="40" alt="Arius payment company" src="https://gate.ariuspay.ru/images/ariuslogo.png"></a>
+                </td>
+                <td class="right">
+                    <img alt="MasterCard Secure Code logo" src="/images/mc/mc_accpt_034_gif.gif">
+                </td>
+            </tr>
+        </table>
+    </div>
+
     <div class="main">
         <!-- Order Summary -->
-    <!--    <div class="summary">
+        <div class="summary">
             <h2 class="summary-title as-title">Информация о платеже</h2>
             <div class="summary-description">$!ORDERDESCRIPTION</div>
 
@@ -19,24 +34,20 @@
                 <span class="summary-total-value">$!AMOUNT $!CURRENCY</span>
             </div>
         </div>
-    -->
+
         <!-- Pay form -->
         <form class="form" action="${ACTION}" method="post">
 
-
+            <h2 class="form-title as-title">Данные вашей карты</h2>
 
             <ul class="form-ul">
                 <!-- Card printed name -->
-                <!--<li class="form-li">
+                <li class="form-li">
                     <label class="form-label" for="${CARDHOLDER}">Имя держателя:</label>
                     <input class="form-number-field" id="${CARDHOLDER}" name="${CARDHOLDER}" type="text" maxlength="50" autocomplete="off" value="${CARDHOLDER_VALUE}" />
                 </li>
-            -->
+
                 <!-- Card Number -->
-                <li class="form-li">
-                    <label class="form-label">Сумма:</label>
-                    <span class="form-amount">$!AMOUNT $!CURRENCY</span>
-                </li>
                 <li class="form-li">
                     <label class="form-label" for="${CARDNO}">Номер карты:</label>
                     <input class="form-number-field" id="${CARDNO}" name="${CARDNO}" type="text" maxlength="18" autocomplete="off"  />
@@ -84,11 +95,11 @@
                 <li class="form-li-buttons">
 
                     <span class="form-secure-connection">БЕЗОПАСНОЕ СОЕДИНЕНИЕ</span>
-                    <!--suppress HtmlFormInputWithoutLabel -->
-                    <input name="cancel" type="submit" class="form-button form-button-cancel" value="Отмена" />
+
                     <!--suppress HtmlFormInputWithoutLabel -->
                     <input name="submit" type="submit" class="form-button form-button-ok"     value="Оплатить" />
-
+                    <!--suppress HtmlFormInputWithoutLabel -->
+                    <input name="cancel" type="submit" class="form-button form-button-cancel" value="Отмена" />
                 </li>
 
             </ul>

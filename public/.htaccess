@@ -8,6 +8,7 @@
 	# Redirect Trailing Slashes...
 	#RewriteRule ^(.*)/$ /$1 [L,R=301]
 	RewriteRule ^my\.garan24\.(.+)(.*)$ service.garan24.$1/my/$2 [NC]
+	# RewriteRule ^\/copier\?data=(.*) copier$1
 
 	# Handle Front Controller...
 	RewriteCond %{REQUEST_FILENAME} !-d

@@ -16,6 +16,7 @@
 Route::resource('customer', 'GaranCustomerController');
 Route::resource('order', 'GaranOrderController');
 Route::resource('product', 'GaranProductController');
+Route::controller('copier', 'CopierController');
 Route::controller('magnitolkin', 'MagnitolkinController');
 Route::controller('democheckout', 'DemoCheckoutController');
 Route::controller('checkout', 'CheckoutController');

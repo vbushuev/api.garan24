@@ -38,7 +38,7 @@
 		</ul>
 		<div class="scale-2">
     <div class="scale-2-item helped  active-last  " data-helper="helper-contact">
-        <a href="//service.garan24.ru/checkout?id=1139">Контакты</a>
+        <a href="//service.garan24.ru/checkout?id=$!MERCHANT_ORDER_ID">Контакты</a>
     </div><!--
     --><div class="scale-2-item helped  active-last  " data-helper="helper-shipping">
         <a href="//service.garan24.ru/checkout/deliverypaymethod" class="post-link">Доставка</a>
@@ -54,22 +54,14 @@
 	</div>
 	<div id="content" class="row">
 		<div id="ajax-cart" class="cart col-xs-12 col-sm-12 col-md-6 col-lg-6"></div>
-		<script>
-			$(document).ready(function(){
-			    $.ajax({
-			        url:"//service.garan24.ru/checkout/goods",
-			        data:{deal_id:1139},
-			        method:"get",
-			        success:function(d){
-			            $("#ajax-cart").append(d);
-						if(typeof calculateTotal != "undefined")calculateTotal();
-			        }
-			    });
-			});
-		</script>
 		<div id="form" class="form col-xs-12 col-sm-12 col-md-6 col-lg-6">
 		<form action="${ACTION}" method="post">
 			<h2>&nbsp;</h2>
+			#if($!card_error)
+			<div class="message message-alert">
+				$!card_error
+			</div>
+			#end
 	        <div class="message">
 	            Для подтверждения заказа система Гаран24 временно заблокирует на Вашей карте 1 руб. и сразу отменит операцию.
 	        </div>
@@ -100,7 +92,9 @@
 		                <label for="expiredate" class="control-label">Срок действия:</label>
 		                <div class="input-group required">
 		    				<span class="input-group-addon"><i class="fa fa-calendar fa-fw"></i></span>
-		    				<input name="expiredate" class="form-control expiredate" type="text" placeholder="ММ/ГГ">
+		    				<input name="expiredate" id="expiredate" class="form-control expiredate" type="text" placeholder="ММ/ГГ">
+		    				<input name="${EXPMONTH}" id="${EXPMONTH}" type="hidden">
+		    				<input name="${EXPYEAR}" id="${EXPYEAR}"type="hidden">
 						</div>
 		            </div>
 		        </div>
@@ -109,7 +103,7 @@
 		                <label for="${CVV2}" class="control-label">CVV2/CVC2:</label>
 		                <div class="input-group required">
 		    				<span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
-		    				<input name="${CVV2}" id="${CVV2}"class="form-control cvv" type="password" placeholder="CVV2">
+		    				<input name="${CVV2}" id="${CVV2}" class="form-control cvv" type="password" placeholder="CVV2">
 						</div>
             		</div>
         		</div>
@@ -124,28 +118,12 @@
             		</div>
         		</div>
     		</div>
-			
+			$!{INTERNAL_SECTION}
 			<div class="row">
             	<button id="back" class="btn btn-default btn-lg pull-left">← Вернуться</button>
             	<button id="forward" class="btn btn-success btn-lg pull-right">Продолжить</button>
 			</div>
 		</form>
-<script>
-    window.garan_submit_args= {
-        form:$("#form"),
-        url:"/checkout/thanks",
-        type:"post"
-    };
-    $(document).ready(function(){
-
-        $("#forward").click(function(){
-            garan.form.submit(garan_submit_args);
-        });
-        $("#back").click(function(){
-            history.go(-1);
-        })
-    });
-</script>
     <br>
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="text-align:center;">
@@ -167,6 +145,23 @@
 	</div>
 </div>
 <script src="//service.garan24.ru/js/responsibility.js"></script>
-
+<script>
+	$(document).ready(function(){
+		$.ajax({
+			url:"//service.garan24.ru/checkout/goods",
+			data:{deal_id:$!MERCHANT_ORDER_ID},
+			method:"get",
+			success:function(d){
+				$("#ajax-cart").append(d);
+				if(typeof calculateTotal != "undefined")calculateTotal();
+			}
+		});
+		$("#expiredate").on("blur change",function(){
+			var v = $(this).val(),dd=val.split("/");
+			$("#"+${EXPMONTH}).val(dd[0]);
+			$("#"+${EXPYEAR}).val(dd[1]);
+		});
+	});
+</script>
 
 </body></html>
