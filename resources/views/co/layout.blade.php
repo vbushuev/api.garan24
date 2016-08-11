@@ -45,7 +45,9 @@
 	<!-- boxberry API -->
 </head>
 <body>
+@yield('toper')	
 <div id="wrapper" class="container">
+
 	<div id="header" class="row">
 		<ul class="nav">
 			<li class="nav-item logo">ГАРАН <code>24</code></li>

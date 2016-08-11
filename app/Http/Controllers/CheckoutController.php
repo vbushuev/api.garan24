@@ -15,7 +15,7 @@ use WC_API_Client_Resource_Orders;
 use WC_API_Client_Resource_Customers;
 use WC_API_Client_Resource_Products;
 
-//use \Garan24\Garan24 as Garan24;
+use \Garan24\Garan24 as Garan24;
 use \Garan24\Deal\Deal as Deal;
 use \Garan24\Deal\Customer as Customer;
 /*
@@ -66,7 +66,7 @@ class CheckoutController extends Controller{
         Log::debug("In request:".$data);
         $deal->byJson($data);
         $resp = $deal->sync();
-        Log::debug("Deal response: ".Garan24::obj2str($resp));
+        Log::debug("Deal response: ".\Garan24\Garan24::obj2str($resp));
         //if($resp->code==0){return redirect()->away($resp->redirect_url);}
         return $resp->__toString();
     }
@@ -254,7 +254,7 @@ class CheckoutController extends Controller{
             ]);
         }
         catch(\Garan24\Gateway\Aruispay\Exception $e){
-            Garan24::debug("Exception in AruisPay gateway:".$e->getMessage());
+            \Garan24\Garan24::debug("Exception in AruisPay gateway:".$e->getMessage());
             return redirect()->back()->with("message","На данный момент сервис оплаты картой не доступен, попробуйте повторить попытку или выберете другой метод оплаты");
         }
 
@@ -310,7 +310,7 @@ class CheckoutController extends Controller{
                 $deal = new Deal();
                 $deal->byId($id);
                 $deal->update(["card-ref-id"=>$cardref]);
-                Garan24::debug("Redirecting to ".$this->viewFolder.'/thanks');
+                \Garan24\Garan24::debug("Redirecting to ".$this->viewFolder.'/thanks');
                 return redirect($this->viewFolder."/thanks");
                 return $this->postThanks($rq);
             }
@@ -334,7 +334,7 @@ class CheckoutController extends Controller{
         $deal = new Deal(["id"=>$data["deal_id"],"data"=>$data]);
         $resp = $deal->finish();
         $resp_str = $resp->__toString();
-        Garan24::debug("Response :".$resp_str);
+        \Garan24\Garan24::debug("Response :".$resp_str);
         try{
             $result = file_get_contents($deal->response_url, null, stream_context_create(array(
                 'http' => array(
@@ -396,7 +396,7 @@ class CheckoutController extends Controller{
         }
         $data = array_merge($data,["deal_id" => $rq->session()->get("deal_id"),"deal_id_source" => "session"]);
         if(strlen($data["deal_id"])<=0)$data = array_merge($data,["deal_id" => $rq->cookie("deal_id"),"deal_id_source" => "cookie"]);
-        Log::debug("CheckoutController:getParams request: ".Garan24::obj2str($data));
+        Log::debug("CheckoutController:getParams request: ".\Garan24\Garan24::obj2str($data));
         return $data;
     }
     protected function payout($deal){

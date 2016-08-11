@@ -1,4 +1,7 @@
 @extends($viewFolder.'.layout')
+@section('toper')
+    @include('toper')
+@endsection
 @section('content')
 <div id="form" class="form col-xs-12 col-sm-12 col-md-8 col-lg-8">
     <h3><i class="first">Ваши</i> контактные данные: </h3>
