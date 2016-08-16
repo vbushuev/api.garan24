@@ -14,3 +14,11 @@ app/Http/Controllers/bad.DemoCheckoutController.php
 composer.lock
 deployment-config.json
 .htaccess
+
+.ftpconfig
+
+composer.lock
+
+composer.json
+
+composer.json

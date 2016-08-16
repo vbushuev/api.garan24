@@ -66,9 +66,12 @@ class CheckoutController extends Controller{
         Log::debug("In request:".$data);
         $deal->byJson($data);
         $resp = $deal->sync();
-        Log::debug("Deal response: ".\Garan24\Garan24::obj2str($resp));
+        Log::debug("Deal response: ".$resp);
         //if($resp->code==0){return redirect()->away($resp->redirect_url);}
-        return $resp->__toString();
+        return response()->json($resp->toArray())->header('Access-Control-Allow-Origin', '*');
+    }
+    public function getCrossbrowser(Request $rq){
+        return response()->json(["a"=>"b"])->header('Access-Control-Allow-Origin', '*');
     }
     /* Ajax functions */
     public function getGoods(Request $rq){
