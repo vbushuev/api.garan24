@@ -19,15 +19,18 @@ use \Garan24\Deal\Deal as Deal;
 use \Garan24\Deal\Customer as Customer;
 
 class CartController extends Controller{
+    public function __construct(){
+        $this->middleware('cors');
+    }
     public function getCreate(Request $rq){
         $cart =["id" => DB::table('garan24_cart')->insertGetId(["value"=>"{}"])];
         Log::debug($cart);
-        return response()->json($cart)->header('Access-Control-Allow-Origin', '*');
+        return response()->json($cart);
     }
     public function getIndex(Request $rq){
         //$cart = ["id"=>];
         $cart = DB::table('garan24_cart')->where("id",$rq->input("id","0"))->first();
-        return response()->json(json_decode($cart->value))->header('Access-Control-Allow-Origin', '*');
+        return response()->json($cart->value);
     }
     public function getUpdate(Request $rq){
         DB::table('garan24_cart')
@@ -35,7 +38,13 @@ class CartController extends Controller{
             ->update(["value" => $rq->input("value","{}")]);
         $cart = DB::table('garan24_cart')
             ->where("id",$rq->input("id","0"))->first();
-        return response()->json($cart->value)->header('Access-Control-Allow-Origin', '*');
+        return response()->json($cart->value);
+    }
+    public function getClean(Request $rq){
+        DB::table('garan24_cart')
+            ->where("id",$rq->input("id","0"))
+            ->update(["value" => "{}"]);
+        return response()->json(["status"=>"success","id"=>$rq->input("id","0")]);
     }
 }
 ?>

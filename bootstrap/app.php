@@ -1,5 +1,10 @@
 <?php
 
+// allow origin
+//header('Access-Control-Allow-Origin: *');
+// add any additional headers you need to support here
+//header('Access-Control-Allow-Headers: Origin, Content-Type');
+//header('Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE');
 /*
 |--------------------------------------------------------------------------
 | Create The Application
