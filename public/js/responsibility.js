@@ -41,9 +41,9 @@ function calculateTotal(){
     $("#cart-total-price").html(total.format(2,3,' ','.')+" руб.");
     var shipping = $("#ShippingAmountHidden").val();
     console.debug("var shipping = "+shipping);
-    if(typeof shipping!="undefined")shipping=$("shipping-price").text().replace(/\s+/ig,'').replace(/[а-я]+\./ig,'');
+    if(typeof shipping=="undefined")shipping=$("shipping-price").text().replace(/\s+/ig,'').replace(/[а-я]+\./ig,'');
     if(typeof shipping!="undefined"){
-        shipping=shipping.replace(/\s+/ig,'').replace(/[а-я]+\./ig,'');
+        shipping=shipping.replace(/\s+/ig,'').replace(/[а-я]+/ig,'');
         console.debug("total["+total+"] => item cost:["+shipping+"] isNaN:"+isNaN(shipping));
         total+=(shipping.length&&!isNaN(shipping))?parseFloat(shipping):0;
     }

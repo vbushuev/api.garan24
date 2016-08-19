@@ -24,12 +24,11 @@ use \Garan24\Deal\Customer as Customer;
 */
 
 class CheckoutController extends Controller{
-    protected $rawgoods;
-    protected $raworder;
     protected $viewFolder = 'co';
     protected $thishost = "https://service.garan24.ru";
     public function __construct(){
         \Garan24\Garan24::$DB["host"] = "151.248.117.239";
+        $this->middleware('cors');
         //$this->raworder = file_get_contents('../tests/example.order.json');
         //$this->raworder = json_decode($this->raworder,true);
         //print_r($this->rawgoods);
@@ -57,7 +56,7 @@ class CheckoutController extends Controller{
             "deal"=>$deal,
             "shop_url"=>$deal->getShopUrl()
         ]
-        )->header('Access-Control-Allow-Origin', '*')->cookie("deal_id",$id);
+        );
     }
     public function postIndex(Request $rq){
         Log::debug(__CLASS__.".".__METHOD__);
@@ -68,10 +67,10 @@ class CheckoutController extends Controller{
         $resp = $deal->sync();
         Log::debug("Deal response: ".$resp);
         //if($resp->code==0){return redirect()->away($resp->redirect_url);}
-        return response()->json($resp->toArray())->header('Access-Control-Allow-Origin', '*');
+        return response()->json($resp->toArray());
     }
     public function getCrossbrowser(Request $rq){
-        return response()->json(["a"=>"b"])->header('Access-Control-Allow-Origin', '*');
+        return response()->json(["a"=>"b"]);
     }
     /* Ajax functions */
     public function getGoods(Request $rq){
@@ -84,7 +83,7 @@ class CheckoutController extends Controller{
             [
                 "deal"=>$deal,
             ]
-        )->header('Access-Control-Allow-Origin', '*');
+        );
     }
     /* Ajax functions */
     public function postPersonal(Request $rq){
@@ -235,10 +234,11 @@ class CheckoutController extends Controller{
             "data"=>$data
         ]);
         $deal->client_ip = $rq->ip();
-        $deal->update($data);
         try{
-            //$response = $this->payout($deal);
-            //return view($this->viewFolder.'.cardpayneteasy',[
+            $response = $this->payout($deal);
+            Log::debug(json_encode($response));
+            if($response->isRedirect()) return redirect()->away($response->getRedirectUrl());
+
             return view($this->viewFolder.'.card',[
                 "route"=>$this->getBPRoute("card2"),
                 "section" => 'payment',
@@ -268,8 +268,11 @@ class CheckoutController extends Controller{
     public function postPayout(Request $rq){
         Log::debug(__CLASS__.".".__METHOD__);
         $data = $this->getParams($rq);
-        if(!$data) return view('checkout.ups');
-        $deal = new Deal(["id"=>$data["deal_id"]]);
+        if(!$data) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
+        $deal = new Deal([
+            "id"=>$data["deal_id"],
+            "data"=>$data
+        ]);
         $deal->client_ip = $rq->ip();
         try{
             $response = $this->payout($deal);
@@ -310,11 +313,9 @@ class CheckoutController extends Controller{
                 /* Check user have this card*/
                 // DB::table('garan24_usermeta')->exist
                 $id = $rq->session()->get("deal_id");
-                $deal = new Deal();
-                $deal->byId($id);
-                $deal->update(["card-ref-id"=>$cardref]);
+                $deal = new Deal(["id"=>$id,"data"=>["card-ref-id"=>$cardref]]);
                 \Garan24\Garan24::debug("Redirecting to ".$this->viewFolder.'/thanks');
-                return redirect($this->viewFolder."/thanks");
+                //return redirect("/thanks");
                 return $this->postThanks($rq);
             }
             else return redirect($this->viewFolder."/card")->with('status','Вашу карту не удалось проверить. Повторите попытку или воспользуйтесь другой картой.');//$this->postCard($rq);
@@ -330,7 +331,8 @@ class CheckoutController extends Controller{
     public function postThanks(Request $rq){
         Log::debug(__CLASS__.".".__METHOD__);
         $data = $this->getParams($rq);
-        if($data["cvv"]!="123"){
+        $data["status"] = "checkout";
+        if(isset($data["cvv"])&&$data["cvv"]!="123"){
             return redirect()->back()->with('status','Вашу карту не удалось проверить. Повторите попытку или воспользуйтесь другой картой.');
         }
         if($data===false||!$rq->session()->has("deal_id"))redirect('/checkout');
@@ -403,37 +405,41 @@ class CheckoutController extends Controller{
         return $data;
     }
     protected function payout($deal){
+        $amount = 1;
         $saleData = [
-            "client_orderid" => $deal->order->id,
-            "order_desc" => "Garan24 pay order",
-            "first_name" => $deal->getCustomer()->billing_address["first_name"],
-            "last_name" => $deal->getCustomer()->billing_address["last_name"],
-            "ssn" => "",
-            "birthday" => "",
-            "address1" => $deal->getCustomer()->toAddressString(),
-            "address2" => "",
-            "city" => $deal->getCustomer()->billing_address["city"],
-            "state" => "",//isset($data["state"])?$data["state"]:"",
-            "zip_code" => $deal->getCustomer()->billing_address["postcode"],
-            "country" => "RU",
-            "phone" => $deal->getCustomer()->billing_address["phone"],
-            "cell_phone" => $deal->getCustomer()->billing_address["phone"],
-            "amount" => 1,
-            "currency" => "RUB",
-            "email" => $deal->getCustomer()->billing_address["email"],
+            "data"=>[
+                "client_orderid" => $deal->order->id,
+                "order_desc" => "Garan24 pay order",
+                "first_name" => $deal->getCustomer()->billing_address["first_name"],
+                "last_name" => $deal->getCustomer()->billing_address["last_name"],
+                "ssn" => "",
+                "birthday" => "",
+                "address1" => $deal->getCustomer()->toAddressString(),
+                "address2" => "",
+                "city" => $deal->getCustomer()->billing_address["city"],
+                "state" => "",//isset($data["state"])?$data["state"]:"",
+                "zip_code" => $deal->getCustomer()->billing_address["postcode"],
+                "country" => "RU",
+                "phone" => $deal->getCustomer()->billing_address["phone"],
+                "cell_phone" => $deal->getCustomer()->billing_address["phone"],
+                "amount" => $amount,
+                "currency" => "RUB",
+                "email" => $deal->getCustomer()->billing_address["email"],
 
-            "ipaddress" => "151.248.117.239",//$deal->client_ip(),
-            "site_url" => isset($data["site_url"])?$data["site_url"]:"",
-            /*"credit_card_number" => "4444555566661111",
-            "card_printed_name" => "CARD HOLDER",
-            "expire_month" => "12",
-            "expire_year" => "2099",
-            "cvv2" => "123",*/
-            "purpose" => "www.garan24.eu",
-            "redirect_url" => $this->thishost."/checkout/payoutresponse",
-            "server_callback_url" => $this->thishost."/checkout/payoutcallback",
-            //"merchant_data" => "VIP customer"
+                "ipaddress" => "151.248.117.239",//$deal->client_ip(),
+                "site_url" => isset($data["site_url"])?$data["site_url"]:"",
+                /*"credit_card_number" => "4444555566661111",
+                "card_printed_name" => "CARD HOLDER",
+                "expire_month" => "12",
+                "expire_year" => "2099",
+                "cvv2" => "123",*/
+                "purpose" => "www.garan24.eu",
+                "redirect_url" => $this->thishost."/checkout/payoutresponse",
+                "server_callback_url" => $this->thishost."/checkout/payoutcallback",
+                //"merchant_data" => "VIP customer"
+            ]
         ];
+        $saleData = array_merge($this->ariuspay["akbars"],$saleData);
         $request = new \Garan24\Gateway\Ariuspay\SaleRequest($saleData);
         $connector = new \Garan24\Gateway\Ariuspay\Connector();
         $connector->setRequest($request);
@@ -488,6 +494,25 @@ class CheckoutController extends Controller{
         //"card2" => ["condition"=>false,"next"=>"payout","back"=>"deliverypaymethod"]
         "card2" => ["condition"=>false,"next"=>"thanks","back"=>"passport"]
     ];
-
+    protected $ariuspay = [
+        "test" => [// testdata
+            "url" => "https://sandbox.ariuspay.ru/paynet/api/v2/",
+            "endpoint" => "1144",
+            "merchant_key" => "99347351-273F-4D88-84B4-89793AE62D94",
+            "merchant_login" => "GARAN24"
+        ],
+        "akbars" =>[
+            "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+            "endpoint" => "2879",
+            "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+            "merchant_login" => "garan24"
+        ],
+        "lemonway" =>[
+            "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+            "endpoint" => "2879",
+            "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+            "merchant_login" => "garan24"
+        ],
+    ];
 }
 ?>

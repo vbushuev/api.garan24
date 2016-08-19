@@ -7,7 +7,7 @@
     "require": {
         "php": ">=5.5.9",
         "laravel/framework": "5.2.*",
-        "garan":">=1.9",
+        "garan":">=1.10",
         "woothemes/woocommerce-api": "^2.0",
         "guzzlehttp/guzzle": "~5.3|~6.0"
     },
@@ -55,11 +55,11 @@
             "type":"package",
             "package":{
                 "name":"garan",
-                "version":"1.9",
+                "version":"1.10",
                 "source":{
                     "type":"git",
                     "url":"https://github.com/vbushuev/garan",
-                    "reference":"release-1-9"
+                    "reference":"release-1-10"
                 },
                 "autoload":{
                     "psr-4": {"Garan24\\": "src/Garan24"}

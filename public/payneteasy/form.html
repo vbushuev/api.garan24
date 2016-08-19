@@ -82,7 +82,6 @@
 		                <div class="input-group required">
 		    				<span class="input-group-addon"><i class="fa fa-credit-card fa-fw"></i></span>
 		    				<input id="${CARDNO}" name="${CARDNO}" class="form-control pan" type="text" placeholder="Номер карты">
-							<input id="${CARDHOLDER}" name="${CARDHOLDER}" type="hidden" value="Garan24 Shopper" />
 						</div>
 		            </div>
 		        </div>
@@ -148,10 +147,17 @@
 </div>
 <script src="//service.garan24.ru/js/responsibility.js"></script>
 <script>
+	var $_MERCHANT_ORDER_ID_ = 5606,
+		$_EXPYEAR_ = "dollar_scobe_EXPYEAR_scobe",
+		$_EXPMONTH_= "dollar_scobe_EXPMONTH_scobe",
+		$_ACTION_= "/";
+
 	$(document).ready(function(){
+		console.debug($("#expiredate").val());
 		$.ajax({
 			url:"//service.garan24.ru/checkout/goods",
-			data:{deal_id:$!MERCHANT_ORDER_ID},
+			data:{deal_id:$_MERCHANT_ORDER_ID_},
+			data:{deal_id:5606},
 			method:"get",
 			success:function(d){
 				$("#ajax-cart").append(d);
@@ -160,19 +166,21 @@
 		});
 		$("#expiredate").on("blur change",function(){
 			var v = $(this).val(),dd=v.split("/");
-			$("#$!EXPMONTH").val(dd[0]);
-			$("#$!EXPYEAR").val("20"+dd[1]);
+			$("#"+$_EXPMONTH_).val(dd[0]);
+			$("#"+$_EXPYEAR_).val(dd[1]);
+			console.debug("expire changed");
 		});
 		$("#forward").click(function(e){
 			e.preventDefault();
 			var v = $("#expiredate").val(),dd=v.split("/");
-			$("#$!EXPMONTH").val(dd[0]);
-			$("#$!EXPYEAR").val("20"+dd[1]);
-			garan.form.submit({
+			$("#"+$_EXPMONTH_).val(dd[0]);
+			$("#"+$_EXPYEAR_).val(dd[1]);
+			window.garan_submit_args= {
 		        form:$("#form"),
-		        url:"${ACTION}",
+		        url:$_ACTION_,
 		        type:"post"
-		    });
+		    };
+			garan.form.submit(garan_submit_args);
 		});
 	});
 </script>
