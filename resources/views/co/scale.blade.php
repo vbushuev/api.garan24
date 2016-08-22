@@ -6,7 +6,7 @@
         <a href="/checkout/deliverypaymethod" class="post-link">Доставка</a>
     </div><!--
     --><div class="scale-2-item helped @if(isset($section)) @if(in_array($section,["payment","thanks"]))active-last @elseif(isset($section)&&$section=="passport")active @endif @endif" data-helper="helper-passport">
-        <a href="/checkout/passport" class="post-link">Паспорт</a>
+        <a href="/checkout/passport" class="post-link">Получатель</a>
     </div><!--
     --><div class="scale-2-item helped @if(isset($section)) @if(in_array($section,["thanks"]))active-last @elseif(isset($section)&&$section=="payment")active @endif @endif" data-helper="helper-payment">
 

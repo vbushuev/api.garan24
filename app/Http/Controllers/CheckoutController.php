@@ -440,7 +440,7 @@ class CheckoutController extends Controller{
             ]
         ];
         $saleData = array_merge($this->ariuspay["akbars"],$saleData);
-        $request = new \Garan24\Gateway\Ariuspay\SaleRequest($saleData);
+        $request = new \Garan24\Gateway\Ariuspay\PreauthRequest($saleData);
         $connector = new \Garan24\Gateway\Ariuspay\Connector();
         $connector->setRequest($request);
         $connector->call();
