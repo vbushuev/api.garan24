@@ -8,7 +8,12 @@
         @if($value==='divider')
             <li class="divider"></li>
         @else
-            <li><a data-value="{{$value['key'] or $value['value']}}"><i class="fa fa-{{$value['icon'] or 'square-o'}} fa-fw"></i> <span class="combo-item-value">{{$value['value'] or 'Value'}}</span></a></li>
+            <li>
+                <a data-value="{{$value['key'] or $value['value']}}">
+
+                    <span class="combo-item-value"><i class="fa fa-{{$value['icon'] or 'square-o'}} fa-fw"></i></span>
+                </a>
+            </li>
         @endif
       @endforeach
   </ul>

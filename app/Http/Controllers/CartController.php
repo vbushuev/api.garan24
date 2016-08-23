@@ -28,8 +28,11 @@ class CartController extends Controller{
         return response()->json($cart);
     }
     public function getIndex(Request $rq){
-        //$cart = ["id"=>];
-        $cart = DB::table('garan24_cart')->where("id",$rq->input("id","0"))->first();
+        $id = $rq->input("id","0");
+        if($id == 0){
+            return view("cart.index");
+        }
+        $cart = DB::table('garan24_cart')->where("id",$id)->first();
         return response()->json($cart->value);
     }
     public function getUpdate(Request $rq){
