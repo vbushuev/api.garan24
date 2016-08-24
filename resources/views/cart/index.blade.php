@@ -39,12 +39,15 @@
         </div>
         <div class="after-url" style="padding:0;margin:0;display:none;">
         <div class="form-group">
+            <label for="sku" class="control-label">Код товара:</label>
             @include('elements.inputs.text',['name'=>'sku','text'=>'Код товара','required'=>"required", "icon"=>"barcode"])
         </div>
         <div class="form-group">
+            <label for="title" class="control-label">Наименование товара:</label>
             @include('elements.inputs.text',['name'=>'title','text'=>'Наименование товара','required'=>"required", "icon"=>"file-text"])
         </div>
         <div class="form-group">
+            <label for="amount" class="control-label">Стоимость товара:</label>
             @include('elements.inputs.amount',['text'=>'Стоимость товара','required'=>"required", "values"=>[
                 ["key"=>"EUR","icon"=>"euro","value"=>"Евро","selected"=>"true"],
                 ["key"=>"GBP","icon"=>"gbp","value"=>"Фунт"],
@@ -53,15 +56,19 @@
         </div>
 
         <div class="form-group">
+            <label for="quantity" class="control-label">Количество:</label>
             @include('elements.inputs.text',['name'=>'quantity','text'=>'Кол-во','required'=>"required", "icon"=>"circle-o", "value" => "1"])
         </div>
         <div class="form-group">
+            <label for="color" class="control-label">Цвет или иная вариация:</label>
             @include('elements.inputs.text',['name'=>'color','text'=>'Цвет или иная вариация', "icon"=>"circle-o"])
         </div>
         <div class="form-group">
+            <label for="weight" class="control-label">Вес товара:</label>
             @include('elements.inputs.text',['name'=>'weight','text'=>'Вес товара', "icon"=>"circle-o"])
         </div>
         <div class="form-group">
+            <label for="dimensions" class="control-label">Размеры товара:</label>
             @include('elements.inputs.text',['name'=>'dimensions','text'=>'Размеры товара', "icon"=>"circle-o"])
         </div>
         </div>
@@ -134,8 +141,10 @@
                             $("[name='sku']").val(d.sku);
                             $("[name='amount']").val(d.price);
                             $("[name='img']").val(d.img);
+                            $("[name='currency']").val(data.currency);
                             $(".after-url").slideDown();
                             $("#add2cart").removeAttr("disabled");
+                            $("[data-value='"+data.currency+"']").click();
                         }
                         else{
                             $('<div class="helper-box-auto">'
@@ -162,7 +171,8 @@
             $("#add2cart").on("click",function(){
                 var i = $("#add2cartform");
                 if(!garan.form.required({form:i}))return false;
-                var p = collectData();
+                var p = collectData(),
+                    c = $("[name='currency']").val();
                 i.clone()
                     .css({'position' : 'fixed', 'z-index' : '999'})
                     .appendTo(i)
@@ -176,7 +186,7 @@
                     },
                     800,function() {
                         $(this).remove();
-                        garan.cart.add2cart(p);
+                        garan.cart.add2cart(p,c);
                         $("#add2cartform input").val("");
                     });
             });

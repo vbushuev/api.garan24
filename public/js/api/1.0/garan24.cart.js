@@ -30,6 +30,17 @@ $.extend(window.garan,{
             return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
         }
     },
+    currency:{
+        multiplier:1.1,
+        EUR:73,
+        USD:65,
+        GBP:110,
+        rates:function(){
+            var cur = arguments.length?arguments[0]:false;
+            if(!cur)return 0;
+            return garan.currency.multiplier*garan.currency[cur];
+        }
+    },
     cart:{
         //carthost:"//service.garan24.ru/cart";
         carthost:(document.location.hostname.match(/\.bs2/i))?"http://service.garan24.bs2/cart":"https://service.garan24.ru/cart",
@@ -52,10 +63,11 @@ $.extend(window.garan,{
             console.debug("Garan24::add2cart(..)");
             if(!arguments.length){console.debug("nodata to add");return false;}
             var good = arguments[0];
+            var cur = (arguments.length>1)?arguments[1]:"EUR";
             console.debug(good);
             //if(typeof good.sku!="undefined")good.sku="xrayshopping.babywalz."+good.sku;
             if(!this.alreadyitem(good)){
-                good.regular_price*=garan.cart.currencyRate;
+                good.regular_price*=garan.currency.rates(cur);
                 garan.cart.cartQuantity=parseInt(garan.cart.cartQuantity)+parseInt(good.quantity);
                 garan.cart.cartAmount+=good.regular_price*good.quantity;
                 garan.cart.order.order_total=this.cartAmount;

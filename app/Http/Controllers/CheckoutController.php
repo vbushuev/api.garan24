@@ -318,7 +318,7 @@ class CheckoutController extends Controller{
                 //return redirect("/thanks");
                 return $this->postThanks($rq);
             }
-            else return redirect($this->viewFolder."/card")->with('status','Вашу карту не удалось проверить. Повторите попытку или воспользуйтесь другой картой.');//$this->postCard($rq);
+            else return redirect("checkout/card")->with('status','Вашу карту не удалось проверить. Повторите попытку или воспользуйтесь другой картой.');//$this->postCard($rq);
         }
         catch(\Garan24\Gateway\Ariuspay\Exception $e){
             Log::error("Exception in AruisPay Response gateway:".$e->getMessage());

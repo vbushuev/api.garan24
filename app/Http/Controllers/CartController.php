@@ -53,7 +53,8 @@ class CartController extends Controller{
         $r = [
             "success"=>true,
             "error"=>[],
-            "product"=>[]
+            "product"=>[],
+            "currency"=>""
         ];
         $url = $rq->getContent();
         $ui = parse_url($url);
@@ -74,6 +75,7 @@ class CartController extends Controller{
             foreach($s["patterns"] as $k=>$p){
                 if(preg_match($p,$result,$m))$r["product"][$k]=$m["value"];
             }
+            $r["currency"] = $this->shops[$ui["host"]]["currency"];
 
         }
         return response()->json($r);
@@ -86,8 +88,19 @@ class CartController extends Controller{
                 "price" => "/owaParams\.product_price\s*=\s*[\"']?(?<value>.+?)[\"'];/",
                 "img" => "/var\s+lsp_img\s*=\s*[\"']?(?<value>.+?)[\"'];/i",
                 "pk" =>  "/var\s+lsp_pk\s*=\s*[\"']?(?<value>.+?)[\"'];/i"
-            ]
+            ],
+            "currency" =>"EUR"
         ],
+        "www.ctshirts.com" => [
+            "patterns" => [
+                "title" => "/\<img.*?class=\"pdp\-main__image\".*?alt=\"(?<value>.+?)\"/i",
+                "sku" => "/\/(?<value>[^\/]+?)\.html/i",
+                "price" => "/\<div.*?class=\"tile__pricing tile__pricing--centered regular\"\>[\s\r\n]*£(?<value>[\d\.]+?)\"/im",
+                "img" => "/\<img.*?class=\"pdp\-main__image\".*?src=\"(?<value>.+?)\"/i",
+                "pk" =>  "/\"product_id\"\s*\:\s*\[\n\s*\"(?<value>.+?)\"/i"
+            ],
+            "currency" =>"GBP"
+        ]///uk/slim-fit-cutaway-collar-popover-white-shirt/CSR0083WHT.html#cgid=shirts-casual-shirts&start=1"
     ];
     protected $errors = [
         "0" => ["code"=>"200","message"=>"Успешно"],
