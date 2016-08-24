@@ -1,4 +1,4 @@
-    <h2><i class="first">Ваш</i> заказ</h2>
+    <h2><i class="first">Корзина</i></h2>
     {{--
     @foreach($deal->order->getProducts() as $good)
     <div class="row cart-item" id="cartItem-{{$good["product_id"]}}" data-ref="{{$good["product_url"]}}">
@@ -23,15 +23,16 @@
         <div class="total col-xs-8 col-sm-8 col-md-8 col-lg-8">Сумма заказа:</div>
         <div class="amount cart-total-amount total-amount col-xs-4 col-sm-4 col-md-4 col-lg-4" id="cart-total-price"></div>
     </div>
+    {{--
     <div class="row cart-item" id="cart-shipping">
         <div class="total col-xs-8 col-sm-8 col-md-8 col-lg-8">
-        {{--
+
             @if(isset($deal->shipping_cost)&&strlen($deal->shipping_cost)>0)
                 Доставка <b>{{$deal->delivery["name"]}}</b>
                 <br /><small>{{$deal->getCustomer()->toAddressString()}}</small>
                 {!!$deal->getCustomer()->billing_address["address_2"] or ''!!}
             @endif
-        --}}
+
         </div>
         <div class="amount total-amount col-xs-4 col-sm-4 col-md-4 col-lg-4" id="shipping-price"></div>
     </div>
@@ -39,3 +40,4 @@
         <div class="total col-xs-8 col-sm-8 col-md-8 col-lg-8">Итог:</div>
         <div class="amount total-amount col-xs-4 col-sm-4 col-md-4 col-lg-4" id="total-price"></div>
     </div>
+    --}}

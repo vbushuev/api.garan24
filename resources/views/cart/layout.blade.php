@@ -23,6 +23,7 @@
 	<script src="/js/api/1.0/garan24.core.js"></script>
 	<script src="/js/api/1.0/garan24.delivery.js"></script>
 	<script src="/js/api/1.0/garan24.customer.js"></script>
+	<script src="/js/api/1.0/garan24.cart.js"></script>
 	<!-- Google Analytics -->
 	<script>
   		(function(i,s,o,g,r,a,m){

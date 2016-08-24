@@ -22,18 +22,25 @@ $.extend(window.garan,{
             return true;
         }
     },
+    number:{
+        format:function(t,n, x, s, c) {
+            var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
+                num = parseFloat(t).toFixed(Math.max(0, ~~n));
+
+            return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
+        }
+    },
     cart:{
-        var t = this;
         //carthost:"//service.garan24.ru/cart";
         carthost:(document.location.hostname.match(/\.bs2/i))?"http://service.garan24.bs2/cart":"https://service.garan24.ru/cart",
-        id:$g.cookie.get("cart_id"),
+        id:0,
         currencyRate:72*1.1, //10%
         cartQuantity:0,
         cartAmount:0,
         x_secret:"cs_ddde7647b888f21548ca27c6b80a973b20cc6091",
         x_key:"ck_d80d9961dfe1d5d9dcee803a6d8d674e265c9220",
         version:"1.0",
-        response_url:garan.cart.carthost+"/clean?id="+this.id,
+        response_url:"",//garan.cart.carthost+"/clean?id="+this.id,
         order:{
             order_id:this.id,
             order_url:document.location.href,
@@ -46,12 +53,26 @@ $.extend(window.garan,{
             if(!arguments.length){console.debug("nodata to add");return false;}
             var good = arguments[0];
             console.debug(good);
-            garan.cart.cartQuantity+=good.quantity;
-            garan.cart.cartAmount+=good.regular_price*good.quantity;
-            garan.cart.order.order_total=this.cartAmount;
-            this.order.items.push(good);
-            this.setCartDigits();
+            //if(typeof good.sku!="undefined")good.sku="xrayshopping.babywalz."+good.sku;
+            if(!this.alreadyitem(good)){
+                good.regular_price*=garan.cart.currencyRate;
+                garan.cart.cartQuantity=parseInt(garan.cart.cartQuantity)+parseInt(good.quantity);
+                garan.cart.cartAmount+=good.regular_price*good.quantity;
+                garan.cart.order.order_total=this.cartAmount;
+                this.order.items.push(good);
+            }
+            this.showcart();
             this.set();
+        },
+        alreadyitem:function(good){
+            for(var i in this.order.items){
+                var it = this.order.items[i];
+                if(it.sku==good.sku&&it.title==good.title) {
+                    it.quantity=parseInt(it.quantity)+parseInt(good.quantity);
+                    return true;
+                }
+            }
+            return false;
         },
         remove:function(){
             console.debug("Garan24::remove from cart(..)");
@@ -62,7 +83,7 @@ $.extend(window.garan,{
             garan.cart.cartAmount-=good.regular_price*good.quantity;
             garan.cart.order.order_total=this.cartAmount;
             this.order.items.splice(i,1);
-            this.setCartDigits();
+            this.showcart();
             this.set();
         },
         setCartDigits:function(){
@@ -83,9 +104,12 @@ $.extend(window.garan,{
                     var d=data;
                     console.debug("Created cart.");
                     console.debug(d);
-                    G.id=d.id;
-                    $g.cookie.set("cart_id",d.id,{expires:1,domain:'.gauzy.bs2'});
-                    $g.cookie.set("cart_id",d.id,{expires:1,domain:'.xray.garan24.ru'});
+                    garan.cart.id=d.id;
+                    garan.cookie.set("cart_id",d.id,{expires:1,domain:'.bs2'});
+                    garan.cookie.set("cart_id",d.id,{expires:1,domain:'.gauzy.bs2'});
+                    garan.cookie.set("cart_id",d.id,{expires:1,domain:'.garan24.ru'});
+                    garan.cookie.set("cart_id",d.id,{expires:1,domain:'.garan24.com'});
+                    garan.cookie.set("cart_id",d.id,{expires:1,domain:'.garan24.bs2'});
                 }
             });
         },
@@ -126,15 +150,15 @@ $.extend(window.garan,{
                     //var d=data;
                     console.debug(d.order);
                     if(typeof d.order != "undefined"){
-                        t.order=$.extend(G.order,d.order);
-                        for(var i in t.order.items){
+                        t.order=$.extend(t.order,d.order);
+                        for(var i in garan.cart.order.items){
                             var item = t.order.items[i];
                             //console.debug(item);
-                            t.cartQuantity+=((typeof item.quantity != "undefined")&&!isNaN(item.quantity))?item.quantity:0;
+                            garan.cart.cartQuantity+=((typeof item.quantity != "undefined")&&!isNaN(item.quantity))?item.quantity:0;
                         }
                     }
                     t.cartAmount = t.order.order_total;
-                    t.setCartDigits();
+                    t.showcart();
                 }
             });
         },
@@ -178,32 +202,67 @@ $.extend(window.garan,{
             });
         },
         showcart:function(){
-            var $c = $("#garan-cart-full"),g="";
-            if($c.hasClass("garan24-visible")){
-                $c.removeClass("garan24-visible").slideUp();
-                return;
-            }
-            g+="<table>";
+            /*
+            <h2><i class="first">Корзина</i></h2>
+            {{--
+            @foreach($deal->order->getProducts() as $good)
+            <div class="row cart-item" id="cartItem-'+itm.product_id+'" data-ref="'+itm.product_url+'">
+                <div class="image col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                    <img src="'+itm.product_img+'" alt="'+itm.title+'">
+                </div>
+                <div class="name col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                    <div class="row">'+itm.title+'</div>
+                    <div class="row">
+                        <div class="quantity col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            '+itm.quantity+' шт.
+                        </div>
+                        <div class="amount col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                            @amount($good["regular_price"])
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+            --}}
+            <div class="row cart-item" id="cart-total">
+                <div class="total col-xs-8 col-sm-8 col-md-8 col-lg-8">Сумма заказа:</div>
+                <div class="amount cart-total-amount total-amount col-xs-4 col-sm-4 col-md-4 col-lg-4" id="cart-total-price"></div>
+            </div>
+            */
+            var $c = $(".cart"),g="",tot=0;
+            g+='<h2><i class="first">Корзина</i></h2>';
             for(var i in this.order.items){
-                g+="<tr>";
                 var itm = this.order.items[i];
+                g+="<div class=\"row cart-item\" id=\"cartItem-"+itm.product_id+"\" data-ref=\""+itm.product_url+"\">";
                 var vars = "";
                 for(var v in itm.variations){
                     vars+=v+" "+itm.variations[v];
                 }
-                g+="<td width='20%'><img alt='"+itm.title+"' src='"+itm.product_img+"'/></td>";
-                g+="<td width='5%' style='text-align:left;'><span class='small'>х"+itm.quantity+"</span></td>";
-                g+="<td width='5%'><a href='javascript:G.remove("+i+")'><i class='fa fa-trash-o'></i></a></td>";
-                g+="<td width='50%' style='text-align:left;'>"+itm.title+" <span class='small'>"+vars+"</span></td>";
-                g+="<td width='20%' style='text-align:right;'><span class='currency-amount'>"+itm.regular_price.format(0,3,' ','.')+" руб.</span></td>";
-                g+="</tr>";
+                g+='<div class="image col-xs-4 col-sm-4 col-md-4 col-lg-4">';
+                g+='<img height="100px" src="'+itm.product_img+'" alt="'+itm.title+'">';
+                g+='</div><div class="name col-xs-2 col-sm-2 col-md-2 col-lg-2">';
+                g+='<a href="javascript:garan.cart.remove('+i+')"><i class="fa fa-trash-o"></i></a>';
+                g+='</div><div class="name col-xs-6 col-sm-6 col-md-6 col-lg-6">';
+                g+='<div class="row">'+itm.title+'</div><div class="row"><div class="quantity col-xs-6 col-sm-6 col-md-6 col-lg-6">';
+                g+=itm.quantity+' шт.</div><div class="amount col-xs-6 col-sm-6 col-md-6 col-lg-6">';
+                g+=garan.number.format(itm.regular_price*itm.quantity,2,3,' ','.')+' руб.';
+                g+='</div></div></div></div>';
+                tot+=itm.regular_price*itm.quantity;
             }
-            g+="<tr class='total'><td>Итого:</td><td colspan='4'>"+this.order.order_total.format(0,3,' ','.')+" руб.</td></tr>";
-            g+="</table>";
-
-            $c.addClass("garan24-visible").html(g).slideDown();
+            g+="</div>";
+            g+='<div class="row cart-item" id="cart-total">';
+            g+='<div class="total col-xs-8 col-sm-8 col-md-8 col-lg-8">Сумма заказа:</div>';
+            g+='<div class="amount cart-total-amount total-amount col-xs-4 col-sm-4 col-md-4 col-lg-4" id="cart-total-price">'+garan.number.format(tot,2,3,' ','.')+' руб.</div>';
+            g+='</div>';
+            this.order.order_total = tot;
+            $c.html(g);
+            if(this.order.items.length){
+                $("#forward").show();
+                $("#forward").removeAttr("disabled");
+            }
         },
         init:function(){
+            this.id = garan.cookie.get("cart_id");
             console.debug("Init cart - "+this.id);
             if(typeof garan.cart.id!="undefined" && this.id.length ){
                 this.get();
@@ -213,16 +272,6 @@ $.extend(window.garan,{
                 this.create();
                 console.debug("Creating snooper cart");
             }
-            $("body").animate({
-                    paddingTop:"56px"
-                },
-                800,
-                function() {
-                    $("#garan24-toper").slideDown();
-                }
-            );
-            $("#garan-checkout").click(function(){G.checkout();});
-            $("#garan-cart").click(function(){G.showcart();});
             this.setCartDigits();
             console.debug("cart loaded!");
         }

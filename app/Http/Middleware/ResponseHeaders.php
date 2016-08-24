@@ -17,7 +17,7 @@ class ResponseHeaders
      */
     public function handle($request, Closure $next){
         $domain = $request->header("Origin");
-        if(preg_match("/(garan24\.ru|gauzy\.bs2|payneteasy|magnitolkin|laalmare)/i",$domain)){
+        if(preg_match("/(garan24\.ru|payneteasy|magnitolkin|laalmare|\.bs2)/i",$domain)){
             return $next($request)
                ->header('Access-Control-Allow-Origin', $domain)
                ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');

@@ -49,5 +49,49 @@ class CartController extends Controller{
             ->update(["value" => "{}"]);
         return response()->json(["status"=>"success","id"=>$rq->input("id","0")]);
     }
+    public function postParseproduct(Request $rq){
+        $r = [
+            "success"=>true,
+            "error"=>[],
+            "product"=>[]
+        ];
+        $url = $rq->getContent();
+        $ui = parse_url($url);
+        /*
+        scheme - e.g. http
+        host
+        port
+        user
+        pass
+        path
+        query - after the question mark ?
+        fragment - after the hashmark #
+        */
+        if(!isset($this->shops[$ui["host"]])){$r["error"]=$this->errors["1"];$r["success"]=false;}
+        if($r["success"]){
+            $s = $this->shops[$ui["host"]];
+            $result = file_get_contents($url);
+            foreach($s["patterns"] as $k=>$p){
+                if(preg_match($p,$result,$m))$r["product"][$k]=$m["value"];
+            }
+
+        }
+        return response()->json($r);
+    }
+    protected $shops = [
+        "www.baby-walz.fr"=>[
+            "patterns" => [
+                "title" => "/var\s+lsp_alt\s*=\s*[\"']?(?<value>.+?)[\"']?;/i",
+                "sku" => "/owaParams\.product_id\s*=\s*[\"']?(?<value>.+?)[\"']?;/",
+                "price" => "/owaParams\.product_price\s*=\s*[\"']?(?<value>.+?)[\"'];/",
+                "img" => "/var\s+lsp_img\s*=\s*[\"']?(?<value>.+?)[\"'];/i",
+                "pk" =>  "/var\s+lsp_pk\s*=\s*[\"']?(?<value>.+?)[\"'];/i"
+            ]
+        ],
+    ];
+    protected $errors = [
+        "0" => ["code"=>"200","message"=>"Успешно"],
+        "1" => ["code"=>"404","message"=>"Данный магазин не поддерживается"]
+    ];
 }
 ?>

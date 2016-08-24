@@ -64,6 +64,25 @@ function calculateTotal(){
     );
     */
     //$.mask.definitions['~']='\+7';
+    jQuery.fn.controlInput = function(){
+        var re = arguments.length?arguments[0]:/\d+\.?\d{0,2}/i;
+        return this.each(function(){
+            $(this).keydown(function(e){
+                // Allow: backspace, delete, tab, escape, enter, ctrl+A and .
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                    // Allow: Ctrl+A
+                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    // Allow: home, end, left, right
+                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                        // let it happen, don't do anything
+                        return;
+                }
+                var charValue = String.fromCharCode(e.keyCode),
+                    valid =re.test(charValue);
+                if (!valid)e.preventDefault();
+            });
+        });
+    }
 
     $(".phone").mask("+7(999) 999 99 99");//.insertBefor
     $(".postcode").mask("999999");//.insertBefor
@@ -73,6 +92,7 @@ function calculateTotal(){
     $(".pan").mask("9999 9999 9999 9999");
     $(".expiredate").mask("99/99");
     $(".date").mask("99.99.9999");
+    $(".amount").controlInput();
     $(".input-group input").blur(function(){
         var $t = $(this),icon = $t.parent().find('i.fa');
         if(icon.hasClass('fa-square-o')&&$t.val().length){
@@ -130,7 +150,10 @@ function calculateTotal(){
         $i.removeClass("fa-square-o").addClass("fa-check-square-o");
     });
     $("a").each(function(){
-        var $t=$(this), mesid=$t.attr("href").replace(/[\/\:\.\-]+/ig,"_"),_ahref =encodeURIComponent($t.attr("href"));
+        var $t=$(this),
+            mesid=$t.attr("href"),//.replace(/[\/\:\.\-]+/ig,"_"),
+            _ahref =encodeURIComponent($t.attr("href"));
+        if(typeof mesid == "undefined") return;
         if($t.attr("target")=="__blank"){ // only external links
             $t.attr("href","#"+mesid).removeAttr("target");
             $.ajax({
