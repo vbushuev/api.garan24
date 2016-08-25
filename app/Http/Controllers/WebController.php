@@ -29,7 +29,7 @@ class WebController extends Controller{
     protected $_host = "https://garan24.ru/service/public/";
 
     public function getIndex(Request $rq){
-        return redirect("/checkout/card");
+        return redirect("/cart");
         return view('public.index');
     }
     public function getPayneteasy(Request $rq){

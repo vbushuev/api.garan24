@@ -100,7 +100,51 @@ class CartController extends Controller{
                 "pk" =>  "/\"product_id\"\s*\:\s*\[\n\s*\"(?<value>.+?)\"/i"
             ],
             "currency" =>"GBP"
-        ]///uk/slim-fit-cutaway-collar-popover-white-shirt/CSR0083WHT.html#cgid=shirts-casual-shirts&start=1"
+        ],
+        "www.zara.com" =>[
+            "patterns" => [
+                "title" => "/\<img.*?class=\"image\-big _img\-zoom\".*?alt=\"Image 1 of (?<value>.+?)\"/i",
+                "price" => "/\<div.*?class=\"tile__pricing tile__pricing--centered regular\"\>[\s\r\n]*£(?<value>[\d\.]+?)\"/im",
+                "img" => "/\<a.*?class=\"_seoImg\".*?href=\"(?<value>.+?)\"/i",
+                "sku" =>  "/\"product_id\"\s*\:\s*\[\n\s*\"(?<value>.+?)\"/i"
+            ],
+            "currency" => "EUR"
+        ],
+        "www.yoox.com" =>[
+            "patterns" => [
+                /*
+                tc_vars["product_cod8"] = "46468832";
+                tc_vars["product_cod10"] = "46468832QJ";
+                tc_vars["product_brand"] = "RAY-BAN JUNIOR";
+                tc_vars["product_brand_id"] = "28552";
+                tc_vars["product_category"] = "Lunettes de soleil";
+                tc_vars["product_category_code"] = "cchldsl";
+                tc_vars["product_author"] = "RAY BAN JUNIOR";
+                tc_vars["product_title"] = "RJ9063S";
+                tc_vars["product_price"] = "89";
+                tc_vars["product_discountprice"] = "89";
+                tc_vars["product_url"] = "/fr/46468832QJ/item#sts=collgirl_kid";
+                tc_vars["product_url_picture"] = "http://images.yoox.com/46/46468832qj_14_f.jpg";
+                tc_vars["product_instock_num"] = "1";
+                tc_vars["product_discountprice_EUR"] = "89";
+                */
+                "title" => "/tc_vars\[\"product_author\"\]\s*\=\s*\"(?<value>.+?)\"/i",
+                "sku" => "/tc_vars\[\"product_title\"\]\s*\=\s*\"(?<value>.+?)\"/i",
+                "img" => "/tc_vars\[\"product_url_picture\"\]\s*\=\s*\"(?<value>.+?)\"/i",
+                "price" => "/tc_vars\[\"product_price\"\]\s*\=\s*\"(?<value>.+?)\"/i",
+                "pk" => "/tc_vars\[\"product_cod10\"\]\s*\=\s*\"(?<value>.+?)\"/i",
+            ],
+            "currency" => "EUR"
+        ],
+        "www.kenzo.com" =>[
+            "patterns" => [
+                //"app.page.setContext({"namespace":"product","title":"Eye Sweat","type":"product","host":"www.kenzo.com","path":"/on/demandware.store/Sites-Kenzo-Site/en/Product-ShowInCategory","querystring":"pid=L56G15084G08.98.4A&cgid=Boys"})",
+                "title" => "/\title\"\:\"(?<value>.+?)\"/i",
+                "img" => "/\<img.*?src\=\"(?<value>.+?)\".*?class\=\"img-responsive\"/i",
+                "sku" => "/pid\=(?<value>.+?)[\&\"]/i"
+            ],
+            "currency" => "EUR"
+        ],
     ];
     protected $errors = [
         "0" => ["code"=>"200","message"=>"Успешно"],
