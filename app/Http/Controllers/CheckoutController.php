@@ -18,6 +18,7 @@ use WC_API_Client_Resource_Products;
 use \Garan24\Garan24 as Garan24;
 use \Garan24\Deal\Deal as Deal;
 use \Garan24\Deal\Customer as Customer;
+use \Garan24\Gateway\Ariuspay\PreauthRequest as PreauthRequest;
 /*
 - проггрес бар ()
 - знак вопроса подвинуть, и тексты сразу
@@ -405,7 +406,10 @@ class CheckoutController extends Controller{
         return $data;
     }
     protected function payout($deal){
-        $amount = 1;
+        if($deal->payment["id"] == "1") $amount = 1;
+        else $amount = ($deal->order->order_total+$deal->shipping_cost);
+
+        $operation = "PreauthRequest";
         $saleData = [
             "data"=>[
                 "client_orderid" => $deal->order->id,
@@ -439,8 +443,11 @@ class CheckoutController extends Controller{
                 //"merchant_data" => "VIP customer"
             ]
         ];
-        $saleData = array_merge($this->ariuspay["akbars"],$saleData);
+        $saleData = array_merge($this->ariuspay["akbars"][$operation],$saleData);
         $request = new \Garan24\Gateway\Ariuspay\PreauthRequest($saleData);
+        switch($operation){
+            case "CaptureRequest":$request = new \Garan24\Gateway\Ariuspay\CaptureRequest($saleData);break;
+        }
         $connector = new \Garan24\Gateway\Ariuspay\Connector();
         $connector->setRequest($request);
         $connector->call();
@@ -496,22 +503,46 @@ class CheckoutController extends Controller{
     ];
     protected $ariuspay = [
         "test" => [// testdata
-            "url" => "https://sandbox.ariuspay.ru/paynet/api/v2/",
-            "endpoint" => "1144",
-            "merchant_key" => "99347351-273F-4D88-84B4-89793AE62D94",
-            "merchant_login" => "GARAN24"
+            "CaptureRequest" => [
+                "url" => "https://sandbox.ariuspay.ru/paynet/api/v2/",
+                "endpoint" => "1144",
+                "merchant_key" => "99347351-273F-4D88-84B4-89793AE62D94",
+                "merchant_login" => "GARAN24"
+            ],
+            "PreauthRequest" => [
+                "url" => "https://sandbox.ariuspay.ru/paynet/api/v2/",
+                "endpoint" => "1144",
+                "merchant_key" => "99347351-273F-4D88-84B4-89793AE62D94",
+                "merchant_login" => "GARAN24"
+            ]
         ],
         "akbars" =>[
-            "url" => "https://gate.payneteasy.com/paynet/api/v2/",
-            "endpoint" => "2879",
-            "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
-            "merchant_login" => "garan24"
+            "CaptureRequest" => [
+                "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+                "endpoint" => "2879",
+                "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+                "merchant_login" => "garan24"
+            ],
+            "PreauthRequest" => [
+                "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+                "endpoint" => "3028",
+                "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+                "merchant_login" => "garan24"
+            ]
         ],
         "lemonway" =>[
-            "url" => "https://gate.payneteasy.com/paynet/api/v2/",
-            "endpoint" => "2879",
-            "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
-            "merchant_login" => "garan24"
+            "CaptureRequest" => [
+                "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+                "endpoint" => "2879",
+                "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+                "merchant_login" => "garan24"
+            ],
+            "PreauthRequest" => [
+                "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+                "endpoint" => "3028",
+                "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+                "merchant_login" => "garan24"
+            ]
         ],
     ];
 }

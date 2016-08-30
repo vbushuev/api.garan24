@@ -55,12 +55,11 @@ class ServicesController extends Controller{
     public function CrossDomain(Request $rq){
         Log::debug("CrossDomain: ".$rq->getContent());
         $url = $rq->input("_href",false);
-        $url = ($url===false)?$rq->getContent():$url;
         $result ="";
         if($url!==false){
             $result = file_get_contents($url);
         }
-        return response($result);
+        return response($result)->header('Access-Control-Allow-Origin', '*');
     }
 }
 ?>

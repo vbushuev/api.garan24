@@ -34,12 +34,6 @@ class MailController extends Controller{
         $deal = new Deal(["id"=>$rq->input("id")]);
         return view($this->viewFolder.'.welcome',["viewFolder"=>$this->viewFolder,"deal"=>$deal]);
     }
-    public function getOrderprocess(Request $rq){
-        Log::debug(__CLASS__.".".__METHOD__);
-        $deal = new Deal(["id"=>$rq->input("id")]);
-        if($deal->payment["id"]==2) return view($this->viewFolder.'.orderpayondelivery',["viewFolder"=>$this->viewFolder,"deal"=>$deal]);
-        return view($this->viewFolder.'.orderpayondelivery',["viewFolder"=>$this->viewFolder,"deal"=>$deal]);
-    }
     public function getOrderpayondelivery(Request $rq){
         Log::debug(__CLASS__.".".__METHOD__);
         $deal = new Deal(["id"=>$rq->input("id")]);

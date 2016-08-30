@@ -2,8 +2,14 @@
 @section('content')
     <h3><i class="first">Формирование</i> корзины</h3>
     <style>
+        #add2cartform *{
+            font-size: 10pt;
+        }
         #add2cartform .control-label {
             display: block;
+        }
+        #add2cartform .form-group {
+            margin-bottom: 10px;
         }
         #garan24-overlay{
             height: 100%;
@@ -47,6 +53,14 @@
             @include('elements.inputs.text',['name'=>'title','text'=>'Наименование товара','required'=>"required", "icon"=>"file-text"])
         </div>
         <div class="form-group">
+            <label for="color" class="control-label">Цвет (если есть выбор):</label>
+            @include('elements.inputs.text',['name'=>'color','text'=>'например: серый', "icon"=>"circle-o"])
+        </div>
+        <div class="form-group">
+            <label for="dimensions" class="control-label">Размер (если есть выбор):</label>
+            @include('elements.inputs.text',['name'=>'dimensions','text'=>'например: М или 36', "icon"=>"circle-o"])
+        </div>
+        <div class="form-group">
             <label for="amount" class="control-label">Стоимость товара:</label>
             @include('elements.inputs.amount',['text'=>'Стоимость товара','required'=>"required", "values"=>[
                 ["key"=>"EUR","icon"=>"euro","value"=>"Евро","selected"=>"true"],
@@ -59,25 +73,22 @@
             <label for="quantity" class="control-label">Количество:</label>
             @include('elements.inputs.text',['name'=>'quantity','text'=>'Кол-во','required'=>"required", "icon"=>"circle-o", "value" => "1"])
         </div>
-        <div class="form-group">
-            <label for="color" class="control-label">Цвет или иная вариация:</label>
-            @include('elements.inputs.text',['name'=>'color','text'=>'Цвет или иная вариация', "icon"=>"circle-o"])
-        </div>
+        <!--
         <div class="form-group">
             <label for="weight" class="control-label">Вес товара:</label>
             @include('elements.inputs.text',['name'=>'weight','text'=>'Вес товара', "icon"=>"circle-o"])
         </div>
-        <div class="form-group">
-            <label for="dimensions" class="control-label">Размеры товара:</label>
-            @include('elements.inputs.text',['name'=>'dimensions','text'=>'Размеры товара', "icon"=>"circle-o"])
-        </div>
+        -->
         </div>
         <div class="row cart-buttons">
             <input type="hidden" name="img" />
             <button id="add2cart" class="btn btn-default btn-lg pull-left" disabled="disabled">Добавить <i class="fa fa-cart-plus"></i></button>
             <button id="forward" class="btn btn-success btn-lg pull-right" disabled="disabled">Оформить заказ</button>
         </div>
-
+        <h3><i class="first">Внимательно</i> проверьте все параметры</h3>
+        <div class="message">
+            <p>Наша система старается автоматически определить все необходимые поля и выбрать минимальную цену за товар.</p>
+        </div>
     </div>
     <div id="garan24-overlay">
         <!--<div id="garan24-overlay-cover"></div>-->
@@ -137,10 +148,10 @@
                         console.debug(data);
                         if(data.success){
                             var d=data.product;
-                            $("[name='title']").val(decodeURIComponent(d.title));
-                            $("[name='sku']").val(d.sku);
-                            $("[name='amount']").val(d.price);
-                            $("[name='img']").val(d.img);
+                            $("[name='title']").val(decodeURIComponent((typeof d.title!="undefined")?d.title:""));
+                            $("[name='sku']").val((typeof d.sku!="undefined")?d.sku:"");
+                            $("[name='amount']").val((typeof d.price!="undefined")?d.price:"");
+                            $("[name='img']").val((typeof d.img!="undefined")?d.img:"");
                             $("[name='currency']").val(data.currency);
                             $(".after-url").slideDown();
                             $("#add2cart").removeAttr("disabled");

@@ -3,7 +3,7 @@
 <html>
 <head>
 
-	<title>Garan24 Cart</title>
+	<title>X-Ray Shopping Cart</title>
 	<meta name="robots" content="index, all">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link href="/css/img/logo_garan24.png" rel="icon" type="image/x-icon">
@@ -44,7 +44,7 @@
 
 	<div id="header" class="row">
 		<ul class="nav">
-			<li class="nav-item logo">ГАРАН <code>24</code></li>
+			<li class="nav-item logo">X-ray <code>shopping</code></li>
 		</ul>
 	</div>
 	<div id="content" class="row">
