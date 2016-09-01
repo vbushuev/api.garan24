@@ -37,7 +37,7 @@ $.extend(window.garan,{
         GBP:110,
         rates:function(){
             var cur = arguments.length?arguments[0]:false;
-            if(!cur)return 0;
+            if(!cur) cur = 'EUR';
             return garan.currency.multiplier*garan.currency[cur];
         }
     },

@@ -68,6 +68,7 @@ class CartController extends Controller{
         query - after the question mark ?
         fragment - after the hashmark #
         */
+        Log::debug("parse url:[".$url."]");
         if(!isset($this->shops[$ui["host"]])){$r["error"]=$this->errors["1"];$r["success"]=false;}
         if($r["success"]&&$ui["host"]!="www.kenzo.com"){
             $s = $this->shops[$ui["host"]];

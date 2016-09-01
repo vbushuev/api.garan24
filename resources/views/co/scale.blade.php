@@ -1,6 +1,6 @@
 <div class="scale-2">
     <div class="scale-2-item helped @if(isset($section)) @if(in_array($section,["delivery","passport","payment","thanks"]))active-last @elseif(isset($section)&&$section=="contact")active @endif @endif" data-helper="helper-contact">
-        <a href="/checkout?id={{$deal->order->id or #}}">Контакты</a>
+        <a href="/checkout?id={{$deal->order->id or '#'}}">Контакты</a>
     </div><!--
     --><div class="scale-2-item helped @if(isset($section)) @if(in_array($section,["passport","payment","thanks"]))active-last @elseif(isset($section)&&$section=="delivery")active @endif @endif" data-helper="helper-shipping">
         <a href="/checkout/deliverypaymethod" class="post-link">Доставка</a>

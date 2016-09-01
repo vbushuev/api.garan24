@@ -443,7 +443,8 @@ class CheckoutController extends Controller{
                 //"merchant_data" => "VIP customer"
             ]
         ];
-        $saleData = array_merge($this->ariuspay["akbars"][$operation],$saleData);
+        //$saleData = array_merge($this->ariuspay["akbars"][$operation],$saleData);
+        $saleData = array_merge($this->ariuspay["lemonway"][$operation],$saleData);
         $request = new \Garan24\Gateway\Ariuspay\PreauthRequest($saleData);
         switch($operation){
             case "CaptureRequest":$request = new \Garan24\Gateway\Ariuspay\CaptureRequest($saleData);break;
@@ -538,10 +539,10 @@ class CheckoutController extends Controller{
                 "merchant_login" => "garan24"
             ],
             "PreauthRequest" => [
-                "url" => "https://gate.payneteasy.com/paynet/api/v2/",
-                "endpoint" => "3028",
-                "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
-                "merchant_login" => "garan24"
+                "url" => "https://sandbox.libill.com/paynet/api/v2/",
+                "endpoint" => "204",
+                "merchant_key" => "DB3C4FE7-1D1B-4106-8E36-1F5EAC807E34",
+                "merchant_login" => "eurolego"
             ]
         ],
     ];

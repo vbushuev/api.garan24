@@ -198,7 +198,7 @@
                     800,function() {
                         $(this).remove();
                         garan.cart.add2cart(p,c);
-                        $("#add2cartform input").val("");
+                        //$("#add2cartform input").val("");
                     });
             });
             $("#forward").on("click",function(){

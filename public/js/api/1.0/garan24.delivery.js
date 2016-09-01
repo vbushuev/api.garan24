@@ -22,6 +22,7 @@ $.extend(window.garan,{
         },
         list:[],
         boxberry:{
+            //api.token = 18455.rvpqeafa
             token:'gTVJ0bB4bEy68vCaEqNO3Q==',
             callback:function(boxres){
                 console.debug(boxres);
@@ -41,7 +42,7 @@ $.extend(window.garan,{
                 }*/
             },
             calculateCost:function(){
-                
+
             }
         }
     }
