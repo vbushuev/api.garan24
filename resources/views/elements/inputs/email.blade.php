@@ -1,2 +1,11 @@
 
-@include('elements.inputs.text',["required" => isset($required)?$required:"","name"=>isset($name)?$name:'email',"class"=>"email","icon"=>"envelope-o"])
+<div class="input-field email {{$required or ''}}">
+
+    <input name="{{$name or 'txtField'}}"
+        id="{{$name or 'txtField'}}"
+        class="email"
+        type="text"
+        placeholder="{{$text or 'Текст'}}"
+        value="{{$value or ''}}"
+        {{$readonly or ''}}>
+</div>

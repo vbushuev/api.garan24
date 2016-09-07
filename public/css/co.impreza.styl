@@ -1,0 +1,251 @@
+// out: co.css
+@import "fonts.styl"
+
+
+$garanDefault = rgba(0, 191, 128,1)
+$garanSuccess = rgba(0, 191, 128,1)
+$garanBlue = #33bbff//rgba(255,0,0,1)
+$garanRed = #D50000//rgba(255,0,0,1)
+
+$colorGreen = rgb(0, 191, 128)
+$colorBlue = #33bbff
+$colorGrey = rgb(103, 111, 124)
+$colorLightGrey = rgb(242, 243, 245)
+$fontColor = rgb(103, 111, 124)
+//functions
+border-radius()
+   -webkit-border-radius arguments
+   -moz-border-radius arguments
+   border-radius arguments
+background-transition()
+   -webkit-transition opacity arguments ease-in//opacity 400ms ease-in;
+   -moz-transition opacity arguments ease-in//opacity 400ms ease-in;
+   transition  opacity arguments ease-in//opacity 400ms ease-in;
+background-blur()
+    -webkit-filter blur(arguments)
+    -moz-filter blur(arguments)
+    -o-filter blur(arguments)
+    -ms-filter blur(arguments)
+    filter blur(arguments)
+//main styles
+html,body
+    height 100%
+body
+    font-weight 300
+    font-family 'Open Sans'
+    font-size 10pt
+    color $fontColor
+    margin 0
+    padding 0
+    width 100%
+    .ui-dialog-titlebar
+        display: none;
+
+    .container
+        .first
+            font-weight: 700;
+            font-style: normal;
+            font-size: inherit;
+        h1,h2,h3
+            font-weight: 500;
+            text-transform: uppercase;
+            margin-bottom: 1em;
+
+        h1
+            font-size: 20pt
+            text-align: center;
+            line-height: 2em;
+            border-bottom: dotted 1px $colorGrey;
+        h2
+            font-size: 16pt
+        h3
+            font-size: 14pt
+            padding-right: 2em;
+        h4
+            font-weight: 700;
+            font-size: 12pt;
+        ul
+            list-style: none;
+            li
+                display: inline-block;
+                list-style-position: inside;
+        .mail
+            background-color: $colorGrey;
+            color: rgba(255,255,255,1);
+            text-align: center;
+            height: 3em;
+            line-height: 3em;
+        .row
+            margin-left: 0;
+            margin-right: 0;
+        .brand
+            color: $colorGrey;
+            font-weight: 700;
+            text-transform: uppercase;
+        .text
+            text-indent: 2em;
+        .data
+            padding:1em;
+            line-height: 2em;
+            font-size: 110%;
+        .bye
+            margin: 1em auto;
+            text-align: center;
+            font-size: 110%;
+        /*
+        No labels
+        */
+        .control-label
+            display: none;
+
+        .hide
+            display: none;
+        .small
+            font-size: 10pt;
+            a
+                font-size: 10pt;
+        .attention
+            font-size: 110%;
+            font-weight: 700;
+            display: block;
+            background-color: rgba(100,255,218 ,1);
+            padding:.4em;
+            text-align: center;
+
+
+
+        .form
+            position: relative;
+            .fa
+                color: $garanDefault
+            .helper .fa
+                color: rgba(255,255,255,.6);
+            .helper:hover .fa
+                color: rgba(255,255,255,1);
+        input,select,textarea
+            font-size 12pt;
+
+
+        .input-field
+            padding 0
+            position relative
+            color $colorGrey
+            input
+                height 40px
+                line-height 40px
+                background-color $colorLightGrey
+                padding-left 3em
+                border-radius(5px)
+                width 100%
+                border solid 2px rgba(242, 243, 245,.73)
+        .input-field:before
+            display block
+            position absolute
+            left 0
+            top 0
+            width 3em
+            font-family 'FontAwesome'
+            height 40px
+            text-align center
+            line-height 40px
+            color $colorGrey
+            font-size 14pt
+            opacity .33
+        .input-field input:active
+            border-color $colorGreen
+        .input-field.email:before
+            content '\f0e0'
+        /* Cart*/
+        .cart
+            border:dotted 1px rgba(100,255,218 ,1);
+            padding: 0 1em;
+        .cart-item
+            margin-bottom: 1.4em;
+            cursor: pointer;
+            *
+                margin: 0;
+                padding:0;
+
+            .image
+                display: inline-block;
+                text-align: center;
+                img
+                    height: 3em;
+                    width: 3em;
+            .name
+                padding-left: 0em;
+            .quantity
+                font-weight: 700;
+            .amount
+                text-align: right;
+                font-weight: 700;
+                font-family: 'Lato', 'Open Sans';
+            .total
+                text-align: right;
+        #cart-total
+            border-top:dotted 1px $colorGrey;
+            margin-top: 2.4em;
+        #cart-shipping
+            border: none;
+        #cart-shipping-total
+            border-top:dotted 1px $colorGrey;
+            margin-top: 1em;
+            color: $colorGrey;
+            *
+                font-size: 16pt;
+                font-weight: 700;
+
+        .list-group-item-text
+            text-indent: 1.4em;
+        .list-group-item.active .fa
+            color: rgba(255,255,255,1);
+
+        #header
+            font-size: 12pt
+            padding: 0;
+            .nav
+                background-color $colorGrey
+                list-style: none;
+                color: rgba(255,255,255,.8);
+                text-align: right;
+                padding-bottom: .5em;
+                .nav-item
+                    height: 2em;
+                    line-height: 2em;
+                    display: inline-block;
+                    font-size: 12pt;
+                    a
+                        color rgba(174,213,129 ,1)
+                        font-size: 12pt;
+                    a:hover
+                        background: none;
+                        text-decoration: underline;
+                .nav-item.logo
+                    float:left;
+                    font-size: 16pt;
+                    margin-left: 1em;
+        #content
+            background-color rgba(0,0,0,0)
+            .cart
+                padding-right: 2em;
+                margin-bottom: 2em;
+
+            .message
+                background-color: rgba(185,246,202 ,1);
+                border-radius(.5em);
+                padding:1em;
+                font-size: 12pt;
+            .message-alert
+                background-color: rgba(233,30,99 ,1);
+                color: rgba(255,255,255,1);
+                text-indent: 1em;
+        #footer
+            position absolute
+            bottom 0
+            margin-top 2em
+            padding-top 25px
+            padding-bottom 15px
+            color #fff
+            background-color #aab2bd
+            text-align center
+@import "elements.styl"

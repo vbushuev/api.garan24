@@ -70,14 +70,21 @@ class CartController extends Controller{
         */
         Log::debug("parse url:[".$url."]");
         if(!isset($this->shops[$ui["host"]])){$r["error"]=$this->errors["1"];$r["success"]=false;}
-        if($r["success"]&&$ui["host"]!="www.kenzo.com"){
+        //if($r["success"]&&$ui["host"]!="www.kenzo.com"){
+        if($r["success"]){
             $s = $this->shops[$ui["host"]];
-            $result = file_get_contents($url);
+            //$result = file_get_contents($url);
+            $result = $this->getPage($url);
+            Log::debug($result);
             foreach($s["patterns"] as $k=>$p){
                 if(is_array($p)){
                     foreach($p as $_){
                         if(preg_match($_,$result,$m)){
                             $r["product"][$k]=$m["value"];
+                            if($k=='price'){
+                                $r["product"][$k]=preg_replace("/\,/",".",$r["product"][$k]);
+                                $r["product"][$k]=preg_replace("/[€]/","",$r["product"][$k]);
+                            }
                             break;
                         }
                     }
@@ -85,12 +92,47 @@ class CartController extends Controller{
                 else {
                     if(preg_match($p,$result,$m))$r["product"][$k]=$m["value"];
                 }
-
+                if($k == "img" && !isset($r["product"][$k])){
+                    if($ui["host"]=="www.kenzo.com") $r["product"][$k] = "https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Kenzo_logo.png/250px-Kenzo_logo.png";
+                    else if($ui["host"]=="www.polar.com") $r["product"][$k]="https://www.polar.com/kg-polar-logo.jpg";
+                }
             }
             $r["currency"] = $this->shops[$ui["host"]]["currency"];
-
+            Log::debug(json_encode($r,JSON_PRETTY_PRINT));
         }
         return response()->json($r);
+    }
+    protected function getPage ($url) {
+        $useragent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36';
+        $timeout= 120;
+        $dir            = dirname(__FILE__);
+        $cookie_file    = 'storage/logs/cookies_' . md5($_SERVER['REMOTE_ADDR']) . '.txt';
+
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_FAILONERROR, true);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        curl_setopt($ch, CURLOPT_COOKIEFILE, $cookie_file);
+        curl_setopt($ch, CURLOPT_COOKIEJAR, $cookie_file);
+        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true );
+        curl_setopt($ch, CURLOPT_ENCODING, "" );
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true );
+        curl_setopt($ch, CURLOPT_AUTOREFERER, true );
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, $timeout );
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout );
+        curl_setopt($ch, CURLOPT_MAXREDIRS, 10 );
+        curl_setopt($ch, CURLOPT_USERAGENT, $useragent);
+        curl_setopt($ch, CURLOPT_REFERER, 'http://www.google.com/');
+        $content = curl_exec($ch);
+        if(curl_errno($ch))
+        {
+            //echo 'error:' . curl_error($ch);
+        }
+        else
+        {
+            return $content;
+        }
+        curl_close($ch);
+
     }
     protected $shops = [
         "www.baby-walz.fr"=>[
@@ -124,22 +166,6 @@ class CartController extends Controller{
         ],
         "www.yoox.com" =>[
             "patterns" => [
-                /*
-                tc_vars["product_cod8"] = "46468832";
-                tc_vars["product_cod10"] = "46468832QJ";
-                tc_vars["product_brand"] = "RAY-BAN JUNIOR";
-                tc_vars["product_brand_id"] = "28552";
-                tc_vars["product_category"] = "Lunettes de soleil";
-                tc_vars["product_category_code"] = "cchldsl";
-                tc_vars["product_author"] = "RAY BAN JUNIOR";
-                tc_vars["product_title"] = "RJ9063S";
-                tc_vars["product_price"] = "89";
-                tc_vars["product_discountprice"] = "89";
-                tc_vars["product_url"] = "/fr/46468832QJ/item#sts=collgirl_kid";
-                tc_vars["product_url_picture"] = "http://images.yoox.com/46/46468832qj_14_f.jpg";
-                tc_vars["product_instock_num"] = "1";
-                tc_vars["product_discountprice_EUR"] = "89";
-                */
                 "title" => "/tc_vars\[\"product_title\"\]\s*\=\s*\"(?<value>.+?)\"/i",
                 "sku" => "/tc_vars\[\"product_cod10\"\]\s*\=\s*\"(?<value>.+?)\"/i",
                 "img" => "/tc_vars\[\"product_url_picture\"\]\s*\=\s*\"(?<value>.+?)\"/i",
@@ -152,15 +178,6 @@ class CartController extends Controller{
             "currency" => "EUR"
         ],
         "www.disneystore.fr" =>[
-            /*
-            window.universal_variable.product={"id":"411018744389",
-                "sku_code":"411018744389",
-                "url":"http\u003a\u002f\u002fwww\u002edisneystore\u002efr\u002fproduits\u002fjouets\u002ffigurines\u002dd\u002daction\u002ffigurine\u002dwoody\u002dparlante\u002f411018744389\u002ehtml","name":"Figurine Woody parlante",
-                "description":"Tirez sur la ficelle dans le dos de cette figurine Woody parlante et \u00e9coutez la prononcer des c\u00e9l\u00e8bres phrases de la vedette de Toy Story\u002e Ce fid\u00e8le compagnon est parfait pour les petits cowboys avec ses fantastiques d\u00e9tails du personnage\u002e",
-                "stock":0,
-                "unit_price":35.99,
-                "unit_sale_price":35.99,"currency":"EUR","manufacturer":null,"category":"Jouets","subcategory":"Figurines d\u0027action","promo_code":"","isProductSet":false,"omniturepage":"products\u003atoys\u003aactionfigs","linked_products":[]};
-            */
             "patterns" =>[
                 "title" => "/\"\,\"name\"\:\"(?<value>.+?)\"/i",
                 "description" => "/\"description\"\:\"(?<value>.+?)\"/i",
@@ -168,6 +185,37 @@ class CartController extends Controller{
                 "img" => "/\<div.*class=\"mainImage\s+zoom\"\>[\r\n\s]*\<img.*?src\=\"(?<value>.+?)\".*?alt/i",
                 "price" => "/\"unit_price\"\:(?<value>.+?)\,/i",
                 "pk" => "/\"id\"\:\"(?<value>.+?)\"/i"
+            ],
+            "currency" => "EUR"
+        ],
+        "www.chevignon.com" =>[
+            /*
+            <img id="img1" src="http://www.chevignon.com/content/product_9316305b.jpg"  itemprop="image"
+
+            alt="CL FOUL" />
+            */
+            "patterns" =>[
+                "title" => "/\<title.*\>(?<value>.+?)\<\/title\>/i",
+                "sku" => "/product_id_magento\s*\:\s*\'(?<value>.+?)\'/i",
+                "img" => "/product_url_picture\s*\:\s*\'(?<value>.+?)\'/i",
+                "price" => "/product_unitprice_ati\s*\:\s*\'(?<value>.+?)\'\,/i",
+            ],
+            "currency" => "EUR"
+        ],
+        "www.3suisses.fr" =>[
+            /*
+            <img id="img1" src="http://www.chevignon.com/content/product_9316305b.jpg"  itemprop="image"
+
+            alt="CL FOUL" />
+            */
+            "patterns" =>[
+                "title" => "/\<title.*\>(?<value>.+?)\<\/title\>/i",
+                "sku" => "/\<input.+?class=\"referenceMc\".+?value=\"(?<value>.+?)\"/i",
+                "img" => "/\<img data-index=\"1\"\s*class=\"js-picture productpage_picture\".+?src=\"(?<value>.+?)\"/i",
+                "price" => [
+                    "/\<input.+?class=\"prixSansD3e\".+?value=\"(?<value>.+?)\"/i",
+                    "/\<input.+?class=\"produitPrixBarre\".+?value=\"(?<value>.+?)\"/i",
+                ]
             ],
             "currency" => "EUR"
         ],
@@ -194,6 +242,38 @@ class CartController extends Controller{
                 "img" => "/\<img.*?src\=\"(?<value>.+?)\".*?class\=\"img-responsive\"/i",
                 "sku" => "/\<div.*?data-product-id\=\"(?<value>.+?)\"/i",
                 "price" => "/\div.*?data\-product\-price\=\"(?<value>.+?)\"/i"
+            ],
+            "currency" => "EUR"
+        ],
+        "www.royalcheese.com" =>[
+            "patterns" => [
+                "title" => "/\<title.*\>(?<value>.+?)\<\/title\>/i",
+                "img" => "/\<img\s*class=img-responsive\s+id=thumb_\d+\s*src\=\"(?<value>.+?)\"/i",
+                "sku" => "/var\s*productReference\s*=\s*\'(?<value>.+?)\'\;/i",
+                "price" => "/var\s*productPrice\s*=\s*(?<value>.+?)\;/i",
+            ],
+            "currency" => "EUR"
+        ],
+        "www.novoidplus.com" =>[
+            "patterns" => [
+                "title" => "/\<title.*\>(?<value>.+?)\<\/title\>/i",
+                "img" => "/\<meta property=\"og\:image\"\s+content\=\"(?<value>.+?)\"/i",
+                "sku" => "/\<title.*\>(?<value>.+?)\<\/title\>/i",
+                "price" => [
+                    "/\<span itemprop=\"price\" content=\s*\"(?<value>.+?)\"/i",
+                ]
+            ],
+            "currency" => "EUR"
+        ],
+        "www.frenchblossom.com" =>[
+            "patterns" => [
+                "title" => "/\<title.*\>(?<value>.+?)\<\/title\>/i",
+                "img" => "/\<meta property=\"og\:image\"\s+content\=\"(?<value>.+?)\"/i",
+                "sku" => "/\<title.*\>(?<value>.+?)\<\/title\>/i",
+                "price" => [
+                    //<span id="our_price_display" class="price" itemprop="price">17,60 €</span>
+                    "/\<span id=\"our_price_display\".+?\>(?<value>.+?)\<\//i",
+                ]
             ],
             "currency" => "EUR"
         ],

@@ -1,0 +1,155 @@
+.scale-2
+    width: 100%;
+.scale-2-item
+    position: relative;
+    background-color: rgba(167,255,235 ,1);
+    display: inline-block;
+    width: 25%;
+    text-align: center;
+    height: 64px;
+    line-height: 64px;
+    border:none;
+    font-size: 16pt;
+    color: rgba(0,0,0,.3);
+    pointer-events: none;
+.scale-2-item a
+    color: rgba(0,0,0,.3);
+    text-decoration: none;
+.scale-2-item:after, .scale-2-item:before
+    top: 50%;
+    border: solid transparent;
+    content: " ";
+    height: 0;
+    width: 0;
+    position: absolute;
+    pointer-events: none;
+.scale-2-item:after
+    border-color: transparent;
+    border-left-color: rgba(167,255,235 ,1);
+    border-width: 32px;
+    margin-top: -32px;
+    right: -60px;
+    z-index: 200;
+.scale-2-item:before
+    border-color: transparent;
+    border-left-color: rgba(255,255,255,1);
+    border-width: 32px;
+    z-index: 100;
+    left:0;
+    margin-top: -32px;
+.scale-2-item:first-child:before
+    border-left-color: rgba(167,255,235 ,1);
+.scale-2-item:last-child:after
+    //border-left-color: rgba(255,255,255,1);
+    border-left-color: transparent;
+.active.scale-2-item,.active-last.scale-2-item
+    background-color: #5cb85c;//#449d44
+    color: rgba(255,255,255,1);
+.active.scale-2-item a,.active-last.scale-2-item a
+    color: rgba(255,255,255,1);
+.active-last.scale-2-item
+    pointer-events: all;
+.active.scale-2-item,.active-last.scale-2-item a:hover
+    font-weight: 700;
+    text-transform: uppercase;
+.active-last.scale-2-item:after,.active-last.scale-2-item:first-child:before,
+.active.scale-2-item:after,.active.scale-2-item:first-child:before
+    border-left-color: #5cb85c;
+.active.scale-2-item:last-child:after,
+.active-last.scale-2-item:last-child:after
+    border-left-color: transparent;
+    /* Modal helper boxes*/
+.helper
+    display: inline-block;
+    background-color: $colorGrey;
+    color: rgba(255,255,255,.6);
+    border-radius: (1em);
+    min-width:2em;
+    text-align: center;
+    height: 2em;
+    line-height: 2em;
+    position: absolute;
+    right: .5em;
+    top: .5em;
+    cursor:pointer;
+    z-index: 100;
+.helper:hover
+    color: rgba(255,255,255,1);
+    text-decoration: none;
+.helper-text
+    background-color: $colorGrey;
+    color: rgba(255,255,255,1);
+    position: absolute;
+    top: 3em;
+    right: 1em;
+    padding: 1em;
+    z-index: 100;
+    border-radius: (.5em);
+.helper-box
+    display: none;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.3);
+    //background-blur(5px);
+    z-index: 300;
+    background-transition(400ms);
+    pointer-events: none;
+.helper-box:target
+    display: block;
+    pointer-events: auto;
+.helper-box-auto
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.3);
+    //background-blur(5px);
+    z-index: 300;
+    background-transition(400ms);
+    pointer-events: auto;
+.helper-box-item-lg
+    background-color: rgba(255,255,255,1);
+    position: relative;
+    z-index: 300;
+    color: rgba(0,0,0,1);
+    margin:4em 6em 1em 6em;
+    height:92%
+    padding: 4em;
+    font-size: 12pt;
+    text-indent: 2em;
+    border-radius: (1em);
+    overflow: auto;
+.helper-box-item
+    background-color: rgba(255,255,255,1);
+    display: none;
+    position: relative;
+    z-index: 300;
+    color: rgba(0,0,0,1);
+    width: 40em;
+    margin:10% auto;
+    padding: 4em;
+    font-size: 12pt;
+    text-indent: 2em;
+    border-radius: (1em);
+.helper-box-item-close
+    border: solid 4px transparent;
+    position: fixed;
+    top:1em;
+    right:1em;
+    color: rgba(255,255,255,1);
+    border-radius: (1.5em);
+    height: 3em;
+    line-height: 3em;
+    width:3em;
+    text-align: center;
+    display: inline-block;
+    padding-bottom: .2em;
+    text-indent: 0;
+.helper-box-item-close .fa
+    color: rgba(255,255,255,1);
+.helper-box-item-close:hover
+    border: solid 4px rgba(255,255,255,1);

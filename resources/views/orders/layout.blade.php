@@ -3,7 +3,7 @@
 <html>
 <head>
 
-	<title>X-Ray Shopping Cart</title>
+	<title>X-Ray Shopping Orders</title>
 	<meta name="robots" content="index, all">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 	<link href="/css/img/logo_garan24.png" rel="icon" type="image/x-icon">
@@ -13,6 +13,7 @@
 
 	<link rel="Stylesheet" href="/css/jquery-ui.min.css" type="text/css">
 	<link rel="Stylesheet" href="/css/co.css" type="text/css">
+	<link rel="Stylesheet" href="/css/orders.css" type="text/css">
 
 	<script src="/js/jquery-2.1.4.min.js"></script>
 	<script src="/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
@@ -24,19 +25,7 @@
 	<script src="/js/api/1.0/garan24.delivery.js"></script>
 	<script src="/js/api/1.0/garan24.customer.js"></script>
 	<script src="/js/api/1.0/garan24.cart.js"></script>
-	<!-- Google Analytics -->
-	<script>
-  		(function(i,s,o,g,r,a,m){
-			i['GoogleAnalyticsObject']=r;
-			i[r]=i[r]||function(){
-  				(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  				m=s.getElementsByTagName(o)[0];
-				a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-		ga('create', 'UA-80175137-2', 'auto');
-  		ga('send', 'pageview');
-	</script>
-	<!-- boxberry API -->
+
 </head>
 <body>
 @yield('toper')
@@ -48,15 +37,12 @@
 		</ul>
 	</div>
 	<div id="content" class="row">
-		<div class="cart col-xs-12 col-sm-12 col-md-6 col-lg-6">
-			@include('cart.goods')
-		</div>
-		<div id="form" class="form col-xs-12 col-sm-12 col-md-6 col-lg-6">
+		<div id="form" class="form col-xs-12 col-sm-12 col-md-12 col-lg-12">
 			@yield('content')
 		</div>
 
 	</div>
-	<div id="footer">
+	<!--<div id="footer">
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 				<div class="w-menu "><div class="w-menu-list"><a class="w-menu-item menu-item menu-item-type-post_type menu-item-object-page current-menu-item page_item page-item-5122 current_page_item" href="http://xrayshopping.ru/g24-about/" id="menu-item-5256"><span>О нас</span></a><a class="w-menu-item menu-item menu-item-type-post_type menu-item-object-page" href="http://xrayshopping.ru/rules-adv/" id="menu-item-5257"><span>Правила</span></a><a class="w-menu-item menu-item menu-item-type-post_type menu-item-object-page" href="http://xrayshopping.ru/g24-contact/" id="menu-item-5260"><span>Контакты</span></a></div></div>
@@ -65,7 +51,7 @@
 			</div>
 
 		</div>
-	</div>
+	</div>-->
 </div>
 <script src="/js/responsibility.js"></script>
 </body>
