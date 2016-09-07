@@ -277,6 +277,32 @@ class CartController extends Controller{
             ],
             "currency" => "EUR"
         ],
+        "www.avenuedesjeux.com" =>[
+            "patterns" => [
+                "title" => "/\<title.*\>(?<value>.+?)\<\/title\>/i",
+                //<img itemprop="image" class="first_picture" src="http://static.alipson.fr/fun-frag-ed-debroise.137/fun-frag--ed-debroise-aquarellum--peinture-sur-soie-perroquets-.28432-1.jpg" alt="Aquarellum Peinture sur soie&nbsp;: Perroquets  - 646" style="border:none;" width="400" height="400">
+                "img" => "/\<meta (property|name)=\"og\:image\"\s+content\=\"(?<value>.+?)\"/i",
+                "sku" => "/ecomm_prodid\:\s*\"(?<value>.+?)\"\,/i",
+                "price" => [
+                    //ecomm_value: "16.99"
+                     "/ecomm_value\:\s*\"(?<value>.+?)\"/i",
+                ]
+            ],
+            "currency" => "EUR"
+        ],
+        "www.auboisjoli.com" =>[
+            "patterns" => [
+                "title" => "/\<title.*\>(?<value>.+?)\<\/title\>/i",
+                //<img itemprop="image" class="first_picture" src="http://static.alipson.fr/fun-frag-ed-debroise.137/fun-frag--ed-debroise-aquarellum--peinture-sur-soie-perroquets-.28432-1.jpg" alt="Aquarellum Peinture sur soie&nbsp;: Perroquets  - 646" style="border:none;" width="400" height="400">
+                "img" => "/\<meta (property|name)=\"og\:image\"\s+content\=\"(?<value>.+?)\"/i",
+                "sku" => "/ecomm_prodid\:\s*\"(?<value>.+?)\"\,/i",
+                "price" => [
+                    //ecomm_value: "16.99"
+                     "/ecomm_value\:\s*\"(?<value>.+?)\"/i",
+                ]
+            ],
+            "currency" => "EUR"
+        ],
     ];
     protected $errors = [
         "0" => ["code"=>"200","message"=>"Успешно"],
