@@ -81,16 +81,24 @@ class CartController extends Controller{
                     foreach($p as $_){
                         if(preg_match($_,$result,$m)){
                             $r["product"][$k]=$m["value"];
-                            if($k=='price'){
-                                $r["product"][$k]=preg_replace("/\,/",".",$r["product"][$k]);
-                                $r["product"][$k]=preg_replace("/[€]/","",$r["product"][$k]);
-                            }
                             break;
                         }
                     }
                 }
                 else {
                     if(preg_match($p,$result,$m))$r["product"][$k]=$m["value"];
+                }
+                if($k=="img" && isset($r["product"][$k])){
+                    if($ui["host"]=="www.franceadultshop.com"){
+                        $r["product"][$k]="http://www.franceadultshop.com/pc/".$r["product"][$k];
+                    }else if(!preg_match("/^http/",$r["product"][$k])){
+                        $r["product"][$k]=$ui["scheme"]."://".$ui["host"].$r["product"][$k];
+                    }
+
+                }
+                if($k=='price' && isset($r["product"][$k])){
+                    $r["product"][$k]=preg_replace("/\,/",".",$r["product"][$k]);
+                    $r["product"][$k]=preg_replace("/[€]/","",$r["product"][$k]);
                 }
                 if($k == "img" && !isset($r["product"][$k])){
                     if($ui["host"]=="www.kenzo.com") $r["product"][$k] = "https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Kenzo_logo.png/250px-Kenzo_logo.png";
@@ -100,7 +108,7 @@ class CartController extends Controller{
             $r["currency"] = $this->shops[$ui["host"]]["currency"];
             Log::debug(json_encode($r,JSON_PRETTY_PRINT));
         }
-        return response()->json($r);
+        return response()->json($r, 200, [], JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
     protected function getPage ($url) {
         $useragent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_8_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/44.0.2403.89 Safari/537.36';
@@ -294,15 +302,96 @@ class CartController extends Controller{
             "patterns" => [
                 "title" => "/\<title.*\>(?<value>.+?)\<\/title\>/i",
                 //<img itemprop="image" class="first_picture" src="http://static.alipson.fr/fun-frag-ed-debroise.137/fun-frag--ed-debroise-aquarellum--peinture-sur-soie-perroquets-.28432-1.jpg" alt="Aquarellum Peinture sur soie&nbsp;: Perroquets  - 646" style="border:none;" width="400" height="400">
-                "img" => "/\<meta (property|name)=\"og\:image\"\s+content\=\"(?<value>.+?)\"/i",
-                "sku" => "/ecomm_prodid\:\s*\"(?<value>.+?)\"\,/i",
+                "img" => "/\<img.+?src=\"(?<value>.+?)\".+?itemprop=\"image\"\/\>/i",
+                "sku" => "/\<td\s+style=\"padding\:1px\;\"\>(?<value>\d+)\<\/td\>/i",
                 "price" => [
                     //ecomm_value: "16.99"
-                     "/ecomm_value\:\s*\"(?<value>.+?)\"/i",
+                     "/(?<value>\d+\,\d+)\s*\&euro;/i",
                 ]
             ],
             "currency" => "EUR"
         ],
+        "www.franceadultshop.com" =>[
+            "patterns" => [
+                "title" => "/\<title.*\>(?<value>.+?)\<\/title\>/i",
+                //<img itemprop="image" class="first_picture" src="http://static.alipson.fr/fun-frag-ed-debroise.137/fun-frag--ed-debroise-aquarellum--peinture-sur-soie-perroquets-.28432-1.jpg" alt="Aquarellum Peinture sur soie&nbsp;: Perroquets  - 646" style="border:none;" width="400" height="400">
+                "img" => "/\<img.+?name=[\"']mainimg[\"'].+?src=[\"'](?<value>.+?)[\"']/i",
+                "sku" => "/\<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i",
+                "price" => [
+                    //ecomm_value: "16.99"
+                     "/Price\:\s*\&euro;(?<value>.+?)\</i",
+                ]
+            ],
+            "currency" => "EUR"
+        ],
+        "www.rueducommerce.fr" =>[
+            "patterns" => [
+                "title" => "/\<title.*\>(?<value>.+?)\<\/title\>/im",
+                "img" => [
+                    "/\<img.+?name=[\"']mainimg[\"'].+?src=[\"'](?<value>.+?)[\"']/i",
+                    "/\<link.*?rel\=\"icon\".*?href=\"(?<value>.+?)\".*?\>/i",
+                    "/\<link.*?href=\"(?<value>.+?)\".*?rel\=\"icon\".*?\>/i",
+                ],
+                "sku" => "/\<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i",
+                "price" => ["/Price\:\s*\&euro;(?<value>.+?)\</i"]
+            ],
+            "currency" => "EUR"
+        ],
+        "www-v6.brandalley.fr" => [
+            "patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title\>/im","img" => ["/\<img.+?name=[\"']mainimg[\"'].+?src=[\"'](?<value>.+?)[\"']/i","/\<link.*?rel\=\"icon\".*?href=\"(?<value>.+?)\".*?\>/i","/\<link.*?href=\"(?<value>.+?)\".*?rel\=\"icon\".*?\>/i",],"sku" => "/\<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price\:\s*\&euro;(?<value>.+?)\</i"]],"currency" => "EUR"
+        ],
+        "www.graduatestore.fr" => [
+            "patterns" => [
+                "title" => "/\<title.*\>?<value>.+?\<\/title>/im",
+                "img" => ["/<link.*?rel=\"icon\".*?href=\"?<value>.+?\".*?>/i","/<link.*?href=\"?<value>.+?\".*?rel=\"icon\".*?>/i",],
+                "sku" => "/<input.+?name=\"idproduct\"s+value=\"?<value>.+?\"/i",
+                "price" => ["/Price:s*&euro;?<value>.+?</i"]
+            ],
+            "currency" => "EUR"
+        ],
+        "www.anticboutik.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.antikbatik.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.pimkie.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.ikks.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.etam.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.promod.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.blue-tomato.com" => [
+            "patterns" => [
+                "title" => "/\<title.*\>(?<value>.+?)\<\/title>/im",
+                "img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],
+                "sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i",
+                "price" => ["/Price:s*&euro;(?<value>.+?)</i"]
+            ],
+            "currency" => "EUR"
+        ],
+        "www.sucredorge.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.zalando.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.fr.shop-orchestra.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.placedestendances.com/fr/fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.galerieslafayette.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.laredoute.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.damart.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.chic-et-choc.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.sergent-major.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.okaidi.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.balsamik.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.petit-bateau.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.modz.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.mandmdirect.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.lahalle.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.kiabi.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.gemo.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.frenchconnection.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.excedence.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.destock-sport-et-mode.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.esprit.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.caliroots.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.vertbaudet.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.t-a-o.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.vente-privee.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"vente-aglae.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.showroomprive.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+
     ];
     protected $errors = [
         "0" => ["code"=>"200","message"=>"Успешно"],

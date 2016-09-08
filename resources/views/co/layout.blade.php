@@ -45,14 +45,13 @@
 	<!-- boxberry API -->
 </head>
 <body>
-@yield('toper')	
+@yield('toper')
 <div id="wrapper" class="container">
-
 	<div id="header" class="row">
-		<ul class="nav">
+		<!--<ul class="nav">
 			<li class="nav-item logo">ГАРАН <code>24</code></li>
 			<li class="nav-item"><a href="{{$shop_url or '#'}}">Вернуться к витрине</a></li>
-		</ul>
+		</ul>-->
 		@include($viewFolder.'.scale')
 
 	</div>
@@ -77,16 +76,16 @@
 		</div>
 
 	</div>
+	<!--
 	<div id="footer">
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-				<!--<a href="//garan24.ru/" title="Вернуться на главную страницу">-->
 					Гаран24© 2016
 
 			</div>
 
 		</div>
-	</div>
+	</div>-->
 </div>
 <script src="/js/responsibility.js"></script>
 </body>

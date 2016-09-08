@@ -7,8 +7,26 @@
     padding: 14px;
     font-size: 14pt;
 }
-.orders .order-details{
+.orders .order-details-row{
     display:none;
+}
+.orders .order-details{
+    padding:1em;
+}
+.orders .order-details .order-info-section{
+
+}
+.orders .order-details .order-info-section p{
+    margin-bottom: 0;
+}
+.orders .order-details .order-info-section p.small{
+    font-size: 8pt;
+}
+.orders .order-details .order-action-section{
+    border-top: dotted 1px rgb(237, 238, 240);
+    width:100%;
+    padding: 1em;
+    text-align: right;
 }
 .orders .order .order-field{
     height:40px;

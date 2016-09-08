@@ -85,9 +85,9 @@
             <button id="add2cart" class="btn btn-default btn-lg pull-left" disabled="disabled">Добавить <i class="fa fa-cart-plus"></i></button>
             <button id="forward" class="btn btn-success btn-lg pull-right" disabled="disabled">Оформить заказ</button>
         </div>
-        <h3><i class="first">Внимательно</i> проверьте все параметры</h3>
+        <h3><i class="first">Внимательно</i> проверьте все поля покупки: размер, цвет, кол-во и цену.</h3>
         <div class="message">
-            <p>Наша система старается автоматически определить все необходимые поля и выбрать минимальную цену за товар.</p>
+            <p>Наша система старается автоматически заполнить все необходимые поля и выбрать минимальную цену за товары. Но дополнительная проверка не помешает.</p>
         </div>
     </div>
     <div id="garan24-overlay">

@@ -41,21 +41,24 @@
 <body>
 @yield('toper')
 <div id="wrapper" class="container">
-
+<!--
 	<div id="header" class="row">
 		<ul class="nav">
 			<li class="nav-item logo"><img height="30px" src="http://xrayshopping.ru/wp-content/uploads/2016/08/LogoXray-601.png" alt="XrayShopping" /></li>
 		</ul>
 	</div>
+-->
 	<div id="content" class="row">
-		<div class="cart col-xs-12 col-sm-12 col-md-6 col-lg-6">
-			@include('cart.goods')
-		</div>
 		<div id="form" class="form col-xs-12 col-sm-12 col-md-6 col-lg-6">
 			@yield('content')
 		</div>
+		<div class="cart col-xs-12 col-sm-12 col-md-6 col-lg-6">
+			@include('cart.goods')
+		</div>
+
 
 	</div>
+<!--
 	<div id="footer">
 		<div class="row">
 			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -66,6 +69,7 @@
 
 		</div>
 	</div>
+-->
 </div>
 <script src="/js/responsibility.js"></script>
 </body>
