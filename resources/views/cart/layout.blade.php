@@ -48,12 +48,8 @@
 		</ul>
 	</div>
 	<div id="content" class="row">
-		<div class="cart col-xs-12 col-sm-12 col-md-6 col-lg-6">
-			@include('cart.goods')
-		</div>
-		<div id="form" class="form col-xs-12 col-sm-12 col-md-6 col-lg-6">
-			@yield('content')
-		</div>
+		@yield('content')
+		
 
 	</div>
 	<div id="footer">
