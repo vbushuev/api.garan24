@@ -161,6 +161,10 @@ function calculateTotal(){
                 success:function(d,s,x){
                     var cont = $(d).find("#post-110").html();
                     if(typeof cont!="undefined" && cont.length==0)cont=$(d).find("body");
+                    else {
+                        cont = d;
+                        $(cont).find("header").css("display","none");
+                    }
                     console.debug(cont);
 
                     $("body").append('<div id="'+mesid+'" class="helper-box">'

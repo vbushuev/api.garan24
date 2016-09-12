@@ -60,8 +60,9 @@ class ManagerController extends Controller{
     }
     public function getOrderitems(Request $rq){
         $id = $rq->input("id","0");
-        $res = $this->resource->get($id)->http->response->body;
-        return response()->json($res,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+        $res = $this->resource->get($id);
+        //var_dump($res);
+        return response()->json($res->order,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
     public function getUpdate(Request $rq){
         DB::table('garan24_cart')

@@ -94,15 +94,37 @@ class CartController extends Controller{
                     }else if(!preg_match("/^http/",$r["product"][$k])){
                         $r["product"][$k]=$ui["scheme"]."://".$ui["host"].$r["product"][$k];
                     }
-
                 }
                 if($k=='price' && isset($r["product"][$k])){
                     $r["product"][$k]=preg_replace("/\,/",".",$r["product"][$k]);
                     $r["product"][$k]=preg_replace("/[€]/","",$r["product"][$k]);
                 }
                 if($k == "img" && !isset($r["product"][$k])){
-                    if($ui["host"]=="www.kenzo.com") $r["product"][$k] = "https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Kenzo_logo.png/250px-Kenzo_logo.png";
-                    else if($ui["host"]=="www.polar.com") $r["product"][$k]="https://www.polar.com/kg-polar-logo.jpg";
+                    $r["product"]["img"] = "http://service.garan24.ru/default.png";
+                    //if($ui["host"]=="www.kenzo.com") $r["product"][$k] = "https://upload.wikimedia.org/wikipedia/en/thumb/5/5a/Kenzo_logo.png/250px-Kenzo_logo.png";
+                    //else if($ui["host"]=="www.polar.com") $r["product"][$k]="https://www.polar.com/kg-polar-logo.jpg";
+                }
+            }
+            foreach($this->product_patterns as $k=>$p){
+                if(!isset($r["product"][$k])){
+                    foreach($p as $_){
+                        if(preg_match($_,$result,$m)){
+                            $r["product"][$k]=$m["value"];
+                            break;
+                        }
+                    }
+                    if($k=="img" && isset($r["product"][$k])){
+                        if($ui["host"]=="www.franceadultshop.com"){
+                            $r["product"][$k]="http://www.franceadultshop.com/pc/".$r["product"][$k];
+                        }else if(!preg_match("/^http/",$r["product"][$k])){
+                            $r["product"][$k]=$ui["scheme"]."://".$ui["host"].$r["product"][$k];
+                        }
+
+                    }
+                    if($k=='price' && isset($r["product"][$k])){
+                        $r["product"][$k]=preg_replace("/\,/",".",$r["product"][$k]);
+                        $r["product"][$k]=preg_replace("/[€]/","",$r["product"][$k]);
+                    }
                 }
             }
             $r["currency"] = $this->shops[$ui["host"]]["currency"];
@@ -392,6 +414,20 @@ class CartController extends Controller{
 "vente-aglae.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
 "www.showroomprive.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
 
+    ];
+    protected $product_patterns = [
+        "title"=>[
+            "/\<title.*\>(?<value>.+?)\<\/title>/im",
+        ],
+        "img"=>[
+            "/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",
+            "/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"shortcut\sicon\".*?>/i",
+        ],
+        "sku" => ["/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i"],
+        "price" => ["/Price:s*&euro;(?<value>.+?)</i"],
+        "sizes"=>[],
+        "dimensions"=>[],
+        "description"=>[],
     ];
     protected $errors = [
         "0" => ["code"=>"200","message"=>"Успешно"],

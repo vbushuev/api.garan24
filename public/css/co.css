@@ -479,3 +479,11 @@ body .container #footer {
 .helper-box-item-close:hover {
   border: solid 4px #fff;
 }
+ .tariff-plans-option-column,.tariff-plans-option-column-cell{
+     width:80px;
+     height:40px;
+ }
+ .tariff-plans-option-column.first,.tariff-plans-option-column-cell.first{
+     min-width:240px;
+     height:40px;
+ }

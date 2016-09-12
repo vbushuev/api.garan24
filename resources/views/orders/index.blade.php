@@ -100,11 +100,17 @@
                     if(typeof itemsContainer!= "undefined" && itemsContainer.hasClass("empty")){
                         $.ajax({
                             url:'/manager/orderitems',
+                            type:"get",
                             dataType:"json",
                             data:{id:order_id},
-                            success:function(d,x,s){
+                            beforeSend:function(){
+                                itemsContainer.html('<i class="fa fa-spin fa-spinner fa-2x fa-fw"></i>')
+                            },
+                            success:function(d){
                                 console.debug(d);
-                                itemsContainer.html(d)
+                                for(var i in d.line_items){
+                                    
+                                }
                             }
                         });
                     }
