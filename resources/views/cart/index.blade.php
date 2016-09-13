@@ -1,56 +1,79 @@
 @extends('cart.layout')
 @section('content')
-    <div id="garan24-overlay">
-        <!--<div id="garan24-overlay-cover"></div>-->
-        <div id="garan24-overlay-message">
-            <span class="garan24-overlay-message-text">here is message</span><br />
-            <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
-        </div>
-    </div>
-<div class="row">
+<style>
+    #add2cartform *{
+        font-size: 10pt;
+    }
+    #add2cartform .control-label {
+        display: block;
+    }
+    #add2cartform .form-group {
+        margin-bottom: 10px;
+    }
+    #garan24-overlay{
+        height: 100%;
+        width: 100%;
+        position:fixed;
+        top:56px;left: 0;
+        background-color: rgba(0,0,0,.3);
+        z-index:999;
+        display: none;
+    }
+    #garan24-overlay-cover{
+        position: absolute;
+        top:0;left: 0;bottom: 0;right: 0;
+    }
+    #garan24-overlay-message{
+        z-index:1000;
+        background-color: rgba(255,255,255,1);
+        overflow: auto;
+        position: relative;
+        margin: 6em 20%;
+        padding: 2em;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        border-radius: 5px;
+        font-size: 14pt;
+        text-align: center;
+    }
+    .fill-data{
+        cursor: pointer;
+        font-size: 12pt;
+        display: inline-block;
+        height: 36px;
+        line-height: 36px;
+    }
+    #sugestion {
+        font-size: 14pt;
+    }
+    #sugestion .image{
+        text-align: center;
+        padding:10px;
+    }
+    #sugestion .name{
+        padding:10px;
+        padding-left:20px;
+    }
+    #sugestion .fa{
+        margin-left: -18px;
+    }
+    #sugestion .image img{
+        display: inline-block;
+    }
+</style>
 
-    <div id="iframe" class="iframe col-xs-0 col-sm-0 col-md-0 col-lg-0"></div>
+<div id="garan24-overlay">
+    <!--<div id="garan24-overlay-cover"></div>-->
+    <div id="garan24-overlay-message">
+        <span class="garan24-overlay-message-text">here is message</span><br />
+        <i class="fa fa-spinner fa-spin fa-3x fa-fw"></i>
+    </div>
+</div>
+<div class="row">
     <div id="form" class="form col-xs-12 col-sm-12 col-md-6 col-lg-6">
         <!--<h3><i class="first">Формирование</i> корзины</h3>-->
-        <style>
-            #add2cartform *{
-                font-size: 10pt;
-            }
-            #add2cartform .control-label {
-                display: block;
-            }
-            #add2cartform .form-group {
-                margin-bottom: 10px;
-            }
-            #garan24-overlay{
-                height: 100%;
-                width: 100%;
-                position:fixed;
-                top:56px;left: 0;
-                background-color: rgba(0,0,0,.3);
-                z-index:999;
-                display: none;
-            }
-            #garan24-overlay-cover{
-                position: absolute;
-                top:0;left: 0;bottom: 0;right: 0;
-            }
-            #garan24-overlay-message{
-                z-index:1000;
-                background-color: rgba(255,255,255,1);
-                overflow: auto;
-                position: relative;
-                margin: 6em 20%;
-                padding: 2em;
-                -webkit-border-radius: 5px;
-                -moz-border-radius: 5px;
-                border-radius: 5px;
-                font-size: 14pt;
-                text-align: center;
-            }
-        </style>
         <div id="add2cartform" style="padding:0;margin:0;">
-            <div class="form-group">
+            <div class="form-group url-field">
                 <label for="email" class="control-label">Скопируйте в это поле ссылку на товар:</label>
                 @include('elements.inputs.text',['id'=>'productUrl','name'=>'url','text'=>'URL ссылка на товар','required'=>"required", "icon"=>"external-link"])
             </div>
@@ -102,13 +125,12 @@
                 <button id="add2cart" class="btn btn-default btn-lg pull-right" disabled="disabled"><i class="fa fa-cart-plus"></i> Добавить</button>
             </div>
             <h3><i class="first">Внимательно</i> проверьте все поля покупки: размер, цвет, кол-во и цену.</h3>
-            <div class="message">
-                <p>Наша система старается автоматически заполнить все необходимые поля и выбрать минимальную цену за товары. Но дополнительная проверка не помешает.</p>
-            </div>
+
         </div>
     </div>
     <div class="cart col-xs-12 col-sm-12 col-md-6 col-lg-6">@include('cart.goods')</div>
-
+    <div id="iframe" class="iframe col-xs-0 col-sm-0 col-md-6 col-lg-6"></div>
+    <div id="sugestion" class=" col-xs-12 col-sm-12 col-md-6 col-lg-6"></div>
 </div>
 <div class="row cart-buttons">
     <br />
@@ -150,7 +172,7 @@
             //$("#iframe").removeClass("col-xs-0").removeClass("col-sm-0").removeClass("col-md-0").removeClass("col-lg-0")
                 //.addClass("col-xs-12").addClass("col-sm-12").addClass("col-md-8").addClass("col-lg-8")
                 //.html('<iframe src="'+$v+'" width="100%" height="800px" style="border:none;overflow:auto;"></iframe>');
-            $(".after-url").slideDown();
+
             $("#add2cart").removeAttr("disabled");
             $.ajax({
                 url:"/cart/parseproduct",
@@ -178,10 +200,32 @@
                         $("[name='sku']").val((typeof d.sku!="undefined")?d.sku:"");
                         $("[name='amount']").val((typeof d.price!="undefined")?d.price:"");
                         */
+                        $(".url-field .external-link").remove();
+                        $(".url-field").append('<a class="external-link" href="'+$v+'" target="__blank">Перейти по ссылке</a>');
                         $("[name='img']").val((typeof d.img!="undefined")?d.img:"");
                         $("[name='currency']").val(data.currency);
-
+                        $(".after-url").slideDown();
                         $("[data-value='"+data.currency+"']").click();
+
+                        var itm = d,g="<div class=\"row\" id=\"cartItem-"+itm.product_id+"\" data-ref=\""+$v+"\">";
+                        var vars = "";
+                        for(var v in itm.variations){
+                            vars+=v+" "+itm.variations[v];
+                        }
+                        g+='<div class="image col-xs-6 col-sm-6 col-md-4 col-lg-4" >';
+                        g+='<img height="160px" src="'+itm.img+'" alt="'+itm.title+'">';
+                        g+='</div>';
+                        g+='<div class="name col-xs-6 col-sm-6 col-md-8 col-lg-8">';
+                        g+='<div class="row"><strong>Наименование:</strong><br /><a class="fill-data" title="Копировать значение" href="javascript:fillData(\'title\',\''+d.title+'\');" data-rel="title"><i class="fa fa-copy"></i></a> '+itm.title+'</div>';
+                        if(d.price!=null&&d.price!="undefined")g+='<div class="row"><strong>Цена:</strong><br /><a class="fill-data" title="Копировать значение" href="javascript:fillData(\'amount\','+d.price+');" data-rel="amount"><i class="fa fa-copy"></i></a> '+garan.number.format(itm.price,2,3,' ','.')+' '+data.currency+'</div>';
+                        if(d.sku!=null&&d.sku!="undefined")g+='<div class="row"><strong>Артикул:</strong><br /><a class="fill-data" title="Копировать значение" href="javascript:fillData(\'sku\',\''+d.sku+'\');" data-rel="sku"><i class="fa fa-copy"></i></a> '+d.sku+"</div>";
+                        g+='</div></div>';
+                        $("#sugestion").html(
+                            '<h2>Мы нашли по Вашей ссылке этот товар:</h2>'
+                            +g
+                            +'<div class="message"><p>Наша система старается автоматически заполнить все необходимые поля и выбрать минимальную цену за товары. Но дополнительная проверка не помешает.</p></div>'
+                        );
+
                     }
                     else{
                         $('<div class="helper-box-auto">'
@@ -230,6 +274,14 @@
         $("#forward").on("click",function(){
             garan.cart.checkout();
         });
-    });
+        $(".fill-data").on("click",function(){
+
+        });
+    });s
+    function fillData(){
+        var n =arguments[0],t=arguments[1];
+        console.debug("[name='"+n+"'] = "+t);
+        $("[name='"+n+"']").val(t);
+    }
 </script>
 @endsection

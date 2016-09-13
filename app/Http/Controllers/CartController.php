@@ -413,6 +413,7 @@ class CartController extends Controller{
 "www.vente-privee.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
 "vente-aglae.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
 "www.showroomprive.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+"www.geox.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
 
     ];
     protected $product_patterns = [
