@@ -221,6 +221,12 @@ body .container #content .message-alert {
   color: #fff;
   text-indent: 1em;
 }
+body .container #content .text-right {
+  text-align: right;
+}
+body .container #content .text-center {
+  text-align: center;
+}
 body .container #footer {
   position: absolute;
   bottom: 0;
@@ -439,19 +445,7 @@ body .container #footer {
   -webkit-transition: opacity 400ms ease-in;
   -moz-transition: opacity 400ms ease-in;
   transition: opacity 400ms ease-in;
-}
-.modal-box-auto {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  background: rgba(0,0,0,0.3);
-  z-index: 300;
-  -webkit-transition: opacity 400ms ease-in;
-  -moz-transition: opacity 400ms ease-in;
-  transition: opacity 400ms ease-in;
-  pointer-events: auto;
+  ointer-events: auto;
 }
 .modal-box-item-lg {
   background-color: #fff;
@@ -467,21 +461,6 @@ body .container #footer {
   -moz-border-radius: 1em;
   border-radius: 1em;
   overflow: auto;
-}
-.modal-box-item {
-  background-color: #fff;
-  display: none;
-  position: relative;
-  z-index: 300;
-  color: #000;
-  width: 40em;
-  margin: 10% auto;
-  padding: 4em;
-  font-size: 12pt;
-  text-indent: 2em;
-  -webkit-border-radius: 1em;
-  -moz-border-radius: 1em;
-  border-radius: 1em;
 }
 .modal-box-item-close {
   border: solid 4px transparent;
@@ -549,4 +528,7 @@ textarea {
 }
 .input-field.phone:before {
   content: '\f095';
+}
+.input-field.external-link:before {
+  content: '\f08e';
 }

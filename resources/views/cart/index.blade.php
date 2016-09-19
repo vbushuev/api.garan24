@@ -95,7 +95,7 @@
             </div>
             <div class="form-group">
                 <label for="dimensions" class="control-label">Размер (если есть выбор):</label>
-                @include('elements.inputs.text',['name'=>'dimensions','text'=>'например: М или 36', "icon"=>"circle-o"])
+                @include('elements.inputs.text',['name'=>'size','text'=>'например: М или 36', "icon"=>"circle-o"])
                 <a href="http://gauzymall.com/g24-sizes" target="__blank">Таблица размеров</a>
             </div>
             <div class="form-group">
@@ -125,6 +125,7 @@
             </div>
             <div class="row cart-buttons">
                 <input type="hidden" name="img" />
+                <a id="edit" class="btn btn-default btn-lg" style="display:none;"><i class="fa fa-pencil"></i> Сохранить</a>
                 <button id="add2cart" class="btn btn-default btn-lg pull-right" disabled="disabled"><i class="fa fa-cart-plus"></i> Добавить</button>
             </div>
             <h3><i class="first">Внимательно</i> проверьте все поля покупки: размер, цвет, кол-во и цену.</h3>
@@ -147,11 +148,15 @@
 <script>
     var collectData = function(){
         var varis = [];
-        varis["color"] = $("[name='color']").val();
+        var domain = document.createElement("a");
+        domain.href=$("[name='url']").val();
         return {
+            shop:domain.hostname,
+            comments:$("[name='comments']").val(),
             product_id:-1,
             quantity:$("[name='quantity']").val(),
             regular_price:$("[name='amount']").val(),
+            original_price:$("[name='amount']").val(),
             title: $("[name='title']").val(),
             description: $("[name='title']").val(),
             product_url:$("[name='url']").val(),
@@ -163,8 +168,30 @@
                 "depth":"40"
             },
             //sku:$("[name='sku']").val(),
-            variations:varis
+            variations:{
+                color: $("[name='color']").val(),
+                size: $("[name='size']").val()
+            }
         }
+    }
+    var decollectData = function(){
+        var p = arguments[0], i = arguments[1];
+        $("[name='quantity']").val(p.quantity);
+        $("[name='amount']").val(p.original_price);
+        $("[name='title']").val(p.title);
+        if(p.comments.length)$("[name='comments']").val(p.comments);
+
+        $("[name='url']").val(p.product_url);
+        $("[name='img']").val(p.product_img);
+        $("[name='weight']").val(p.weight);
+        $("[name='color']").val(p.variations.color);
+        $("[name='size']").val(p.variations.size);
+        $("#edit").show();
+        $("#edit").on("click",function(){
+            garan.cart.remove(i);
+            $("#add2cart").click();
+            $("#edit").hide();
+        });
     }
     window.collectData = collectData;
     $(document).ready(function(){

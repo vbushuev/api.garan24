@@ -89,6 +89,15 @@ $.extend(window.garan,{
             if(!arguments.length){console.debug("nodata to add");return false;}
             var i = arguments[0],good = this.order.items[i];
             console.debug(good);
+            if(typeof decollectData !="undefined"){
+                decollectData(good,i);
+            }
+        },
+        saveItem:function(){
+            var i = arguments[0];
+            var good = arguments[1];
+            garan.cart.remove(i);
+            garan.cart.add2cart(good);
         },
         remove:function(){
             console.debug("Garan24::remove from cart(..)");
@@ -226,25 +235,51 @@ $.extend(window.garan,{
             g+='<h3><i class="first">Мультикорзина</i></h3>';
             if(this.order.items.length==0){
                 g+="<div class=\"row cart-item\">";
-                g+='Ваша корзина еще пуста.';
+                g+='<div class="message">Ваша корзина еще пуста.</div>';
                 g+='</div>';
             }
             for(var i in this.order.items){
                 var itm = this.order.items[i];
                 g+="<div class=\"row cart-item\" id=\"cartItem-"+itm.product_id+"\" data-ref=\""+itm.product_url+"\">";
-                var vars = "";
-                for(var v in itm.variations){
-                    vars+=v+" "+itm.variations[v];
-                }
+
+                /*
                 g+='<div class="image col-xs-4 col-sm-4 col-md-4 col-lg-4">';
-                g+='<img height="100px" src="'+itm.product_img+'" alt="'+itm.title+'">';
-                g+='</div><div class="name col-xs-2 col-sm-2 col-md-2 col-lg-2">';
-                g+='<a href="javascript:garan.cart.remove('+i+')"><i class="fa fa-trash-o"></i></a>';
-                g+='</div><div class="name col-xs-6 col-sm-6 col-md-6 col-lg-6">';
-                g+='<div class="row">'+itm.title+'</div><div class="row"><div class="quantity col-xs-6 col-sm-6 col-md-6 col-lg-6">';
-                g+=itm.quantity+' шт.</div><div class="amount col-xs-6 col-sm-6 col-md-6 col-lg-6">';
-                g+=garan.number.format(itm.regular_price*itm.quantity,2,3,' ','.')+' руб.';
-                g+='</div></div></div></div>';
+                g+='    <img height="100px" src="'+itm.product_img+'" alt="'+itm.title+'">';
+                g+='</div>';
+                */
+                g+='<div class="name col-xs-1 col-sm-1 col-md-1 col-lg-1">';
+                g+='    <a href="javascript:garan.cart.remove('+i+')"><i class="fa fa-trash-o"></i></a>';
+                g+='</div>';
+                g+='<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">';
+                if(typeof itm.shop!="undefined"){
+                    g+='<div class="row"><div class="shop col-xs-6 col-sm-6 col-md-6 col-lg-6" style="font-weight:700;">'
+                    g+=         itm.shop;
+                    g+='</div></div>';
+                }
+                g+='  <div class="row">';
+                g+=         itm.title;
+                g+='  </div>';
+                g+='  <div class="row" style="margin-top:4px;">';
+                if(typeof itm.variations.color!="undefined"){
+                    g+='    <div class="color col-xs-4 col-sm-4 col-md-4 col-lg-4">'
+                    g+=         '<b>Цвет</b>: '+itm.variations["color"];
+                    g+='    </div>';
+                }
+                if(typeof itm.variations.size!="undefined"){
+                    g+='    <div class="size col-xs-4 col-sm-4 col-md-4 col-lg-4">'
+                    g+=         '<b>Размер</b>: '+itm.variations["size"];
+                    g+='    </div>';
+                }
+                g+='    <div class="size col-xs-4 col-sm-4 col-md-4 col-lg-4">'
+                g+='<a href="javascript:garan.cart.editItem('+i+')"><i class="fa fa-pencil"></i> Изменить</a>'
+                g+='  </div>';
+                g+='  </div>';
+                g+='</div>';
+                g+='<div class="quantity col-xs-1 col-sm-1 col-md-1 col-lg-1 text-right">'+itm.quantity+'<sup>x</sup></div>';
+                g+='<div class="amount col-xs-3 col-sm-3 col-md-3 col-lg-3">'+garan.number.format(itm.regular_price*itm.quantity,2,3,' ','.')+' руб.</div>';
+
+
+                g+='</div>';
                 tot+=itm.regular_price*itm.quantity;
             }
             g+="</div>";
