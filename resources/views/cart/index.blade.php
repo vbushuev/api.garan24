@@ -81,7 +81,7 @@
             </div>
             <div class="after-url" style="padding:0;margin:0;">
             <div class="form-group">
-                <label for="title" class="control-label">Наименование товара:</label>
+                <label for="title" class="control-label">Скопируйте сюда наименование товара:</label>
                 @include('elements.inputs.text',['name'=>'title','text'=>'Наименование товара','required'=>"required", "icon"=>"file-text"])
             </div>
             <div class="form-group" style="display:none;">
@@ -90,16 +90,16 @@
             </div>
 
             <div class="form-group">
-                <label for="color" class="control-label">Цвет (если есть выбор):</label>
+                <label for="color" class="control-label">Скопируйте или впишите Цвет товара (если есть выбор):</label>
                 @include('elements.inputs.text',['name'=>'color','text'=>'например: серый', "icon"=>"circle-o"])
             </div>
             <div class="form-group">
-                <label for="dimensions" class="control-label">Размер (если есть выбор):</label>
+                <label for="dimensions" class="control-label">Укажите размер (если есть выбор):</label>
                 @include('elements.inputs.text',['name'=>'size','text'=>'например: М или 36', "icon"=>"circle-o"])
                 <a href="http://gauzymall.com/g24-sizes" target="__blank">Таблица размеров</a>
             </div>
             <div class="form-group">
-                <label for="amount" class="control-label">Стоимость товара:</label>
+                <label for="amount" class="control-label">Впишите стоимость товара:</label>
                 @include('elements.inputs.amount',['text'=>'Стоимость товара','required'=>"required", "values"=>[
                     ["key"=>"EUR","icon"=>"euro","value"=>"Евро","selected"=>"true"],
                     ["key"=>"GBP","icon"=>"gbp","value"=>"Фунт"],
