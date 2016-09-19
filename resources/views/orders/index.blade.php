@@ -63,7 +63,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row order-action-section">
+                            <div class="row order-action-section"  data-ref="{{$order->order_id}}">
                                 @if($order->status == 'new')
                                     <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="canceled">Отменить</a>
                                 @elseif($order->status == 'checkout')
@@ -104,31 +104,58 @@
                             dataType:"json",
                             data:{id:order_id},
                             beforeSend:function(){
-                                itemsContainer.html('<i class="fa fa-spin fa-spinner fa-2x fa-fw"></i>')
+                                itemsContainer.html('<i class="fa fa-spin fa-spinner fa-2x fa-fw"></i>');
                             },
                             success:function(d){
                                 console.debug(d);
                                 var ii = '';
+                                itemsContainer.html('');
                                 for(var i in d.line_items){
-                                    var itm=d.line_items[i];
-                                    ii+='<div class="row">';
-                                    ii+='<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 content-name" >';
-                                    ii+=itm.name;
-                                    ii+='</div>';
-                                    ii+='<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 content-quntity">';
-                                    ii+='x'+itm.quantity;
-                                    ii+='</div>';
-                                    ii+='<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" content-amount>';
-                                    ii+=parseFloat(itm.price).format(2,3,' ','.')+' руб.';
-                                    ii+='</div>';
-                                    ii+='</div><br/>';
+                                    var it=d.line_items[i];
+                                    $.ajax({
+                                        url:'/manager/product?id='+it.product_id,
+                                        type:"get",
+                                        dataType:"json",
+                                        success:function(itm){
+                                            console.debug(itm);
+                                            ii='<div class="row">';
+                                            ii+='<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 content-name" >';
+                                            ii+='<a href="'+itm.product_url+'" target="__blank">'+itm.title+'</a>';
+                                            ii+=itm.description;
+                                            ii+='</div>';
+                                            ii+='<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 content-quntity">';
+                                            ii+='x'+it.quantity;
+                                            ii+='</div>';
+                                            ii+='<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" content-amount>';
+                                            ii+=parseFloat(itm.price).format(2,3,' ','.')+' руб.';
+                                            ii+='</div>';
+                                            ii+='</div><br/>';
+                                            itemsContainer.append(ii);
+                                        }
+                                    });
+
                                 }
                                 itemsContainer.html(ii);
                             }
                         });
+                        itemsContainer.removeClass("empty");
                     }
                     //$(".order-details-row:not(#order-details-"+$t.attr("data-ref")+")").slideUp();
                     $("#order-details-"+$t.attr("data-ref")).slideToggle();
+                });
+                $(".order-action").on("click",function(){
+                    var $t = $(this),ac = $t.attr("data-rel"),id = $t.parent().attr("data-ref");
+                    $.ajax({
+                        url:"/manager/updatestatus?id="+id+"&status="+ac,
+                        type:"get",
+                        dataType:"json",
+                        beforeSend:function(){
+                            $t.html('<i class="fa fa-spin fa-spinner fa-2x fa-fw"></i>');
+                        },
+                        success:function(d){
+                            document.location.reload();
+                        }
+                    });
                 });
             });
         </script>

@@ -352,7 +352,6 @@ class CheckoutController extends Controller{
                 'http' => array(
                     'method' => 'POST',
                     'header' => array('Content-Type: application/json'."\r\n"
-                    . 'Authorization: username:key'."\r\n"
                     . 'Content-Length: ' . strlen($resp_str) . "\r\n"),
                     'content' => $resp_str)
                     )

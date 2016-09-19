@@ -150,6 +150,8 @@
         var varis = [];
         var domain = document.createElement("a");
         domain.href=$("[name='url']").val();
+        var img = $("[name='img']").val();
+        if(img.length==0) img = "http://service.garan24.ru/default.png";
         return {
             shop:domain.hostname,
             comments:$("[name='comments']").val(),
@@ -160,7 +162,7 @@
             title: $("[name='title']").val(),
             description: $("[name='title']").val(),
             product_url:$("[name='url']").val(),
-            product_img:$("[name='img']").val(),
+            product_img:img,
             weight:$("[name='weight']").val(),
             dimensions:{
                 "height":"100",

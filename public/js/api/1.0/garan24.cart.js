@@ -1,35 +1,4 @@
 $.extend(window.garan,{
-    cookie:{
-        get:function(){
-            if(arguments.length<=0)return "";
-            var n = arguments[0],
-                d = (arguments.length>1)?arguments[1]:"",
-                v = decodeURIComponent(document.cookie.replace(new RegExp("(?:(?:^|.*;)\\s*" + encodeURIComponent(n).replace(/[\-\.\+\*]/g, "\\$&") + "\\s*\\=\\s*([^;]*).*$)|^.*$"), "$1")) || d;
-            return v;
-        },
-        set:function(){
-            if(arguments.length<=0)return "";
-            var n = arguments[0],
-                v = (arguments.length>1)?arguments[1]:"",
-                o = (arguments.length>2)?arguments[2]:"",
-                e = new Date();
-            e.setDate(e.getDate()+(typeof o.expires!="undefined")?e.expires:9999);
-            document.cookie = encodeURIComponent(n) + "=" + encodeURIComponent(v)
-                + "; expires=" + e.toUTCString()
-                + (typeof o.domain !="undefined" ? "; domain=" + o.domain : "")
-                + (typeof o.path !="undefined" ? "; path=" + o.path : "")
-                + (typeof o.secure !="undefined" ? "; secure" : "");
-            return true;
-        }
-    },
-    number:{
-        format:function(t,n, x, s, c) {
-            var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\D' : '$') + ')',
-                num = parseFloat(t).toFixed(Math.max(0, ~~n));
-
-            return (c ? num.replace('.', c) : num).replace(new RegExp(re, 'g'), '$&' + (s || ','));
-        }
-    },
     currency:{
         multiplier:1.05,
         EUR:73.21,
@@ -45,7 +14,6 @@ $.extend(window.garan,{
         //carthost:"//service.garan24.ru/cart";
         carthost:(document.location.hostname.match(/\.bs2/i))?"http://service.garan24.bs2/cart":"https://service.garan24.ru/cart",
         id:0,
-        currencyRate:72*1.1, //10%
         cartQuantity:0,
         cartAmount:0,
         version:"1.0",
@@ -63,7 +31,9 @@ $.extend(window.garan,{
             var good = arguments[0];
             var cur = (arguments.length>1)?arguments[1]:"EUR";
             console.debug(good);
-            //if(typeof good.sku!="undefined")good.sku="xrayshopping.babywalz."+good.sku;
+            //if(typeof good.sku!="undefined")good.sku=good.shop+'#'+good.sku;
+            good.description=good.shop+' | Размер: '+good.variations.size+' | Цвет: '+good.variations.color+' | '
+                +good.comments;
             if(!this.alreadyitem(good)){
                 good.regular_price*=garan.currency.rates(cur);
                 garan.cart.cartQuantity=parseInt(garan.cart.cartQuantity)+parseInt(good.quantity);
@@ -133,7 +103,7 @@ $.extend(window.garan,{
                     garan.cookie.set("cart_id",d.id,{expires:1,domain:'.bs2'});
                     garan.cookie.set("cart_id",d.id,{expires:1,domain:'.gauzy.bs2'});
                     garan.cookie.set("cart_id",d.id,{expires:1,domain:'.garan24.ru'});
-                    garan.cookie.set("cart_id",d.id,{expires:1,domain:'.garan24.com'});
+                    garan.cookie.set("cart_id",d.id,{expires:1,domain:'.gauzymall.com'});
                     garan.cookie.set("cart_id",d.id,{expires:1,domain:'.garan24.bs2'});
                 }
             });
@@ -184,6 +154,10 @@ $.extend(window.garan,{
                     }
                     t.cartAmount = t.order.order_total;
                     t.showcart();
+                },
+                error:function(){
+
+                    garan.cart.create();
                 }
             });
         },

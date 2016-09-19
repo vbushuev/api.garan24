@@ -24,9 +24,9 @@ class ManagerController extends Controller{
     protected $products;
     public function __construct(){
         $this->middleware('cors');
-        $domain = "https://garan24.ru";
-        $consumer_key = "ck_35457354c06e162d14702ef932a3f1207869f705";
-        $consumer_secret = "cs_125b46e5e9ee2d02abb662f99ffcbaef6937e4e1";
+        $domain = "http://gauzymall.com";
+        $consumer_key = "ck_653d001502fc0b8e1b5e562582f678ce7b966b85";
+        $consumer_secret = "cs_a9b8f4b535f845f82509c1cfa6bea5d094219dce";
         $options = [
             'debug'           => true,
         	'return_as_array' => false,
@@ -66,13 +66,13 @@ class ManagerController extends Controller{
         //var_dump($res);
         return response()->json($res->order,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
-    public function getUpdate(Request $rq){
-        DB::table('garan24_cart')
-            ->where("id",$rq->input("id","0"))
-            ->update(["value" => $rq->input("value","{}")]);
-        $cart = DB::table('garan24_cart')
-            ->where("id",$rq->input("id","0"))->first();
-        return response()->json($cart->value);
+    public function getUpdatestatus(Request $rq){
+        $status = DB::table('garan24_deal_statuses')
+            ->where("status",$rq->input("status"))->first();
+        DB::table('deals')
+            ->where("internal_order_id",$rq->input("id","0"))
+            ->update(["status" => $status->id]);
+        return response()->json($status);
     }
     public function getProduct(Request $rq){
         $id = $rq->input("id","0");
