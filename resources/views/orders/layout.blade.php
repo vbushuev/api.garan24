@@ -33,7 +33,8 @@
 
 	<div id="header" class="row">
 		<ul class="nav">
-			<li class="nav-item logo"><img height="30px" src="http://xrayshopping.ru/wp-content/uploads/2016/08/LogoXray-601.png" alt="XrayShopping" /></li>
+			<!--<li class="nav-item logo"><img height="30px" src="http://xrayshopping.ru/wp-content/uploads/2016/08/LogoXray-601.png" alt="XrayShopping" /></li>-->
+			<li class="nav-item logo"><img height="30px" src="http://xrayshopping.ru/wp-content/uploads/2016/09/Gauzy_logo_01.png" alt="XrayShopping" /></li>
 		</ul>
 	</div>
 	<div id="content" class="row">

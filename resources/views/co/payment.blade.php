@@ -33,7 +33,8 @@
     </div>
     <div class="row" style="margin:1em 0;">
         <button id="back" class="btn btn-info btn-lg pull-left">Оплатить сейчас</button>
-        <button id="forward" class="btn btn-success btn-lg pull-right">Оплатить после доставки</button>
+        <!--<button id="forward" class="btn btn-success btn-lg pull-right">Оплатить после доставки</button>-->
+        <button id="forward" class="btn btn-success btn-lg pull-right">Оплатить потом</button>
         <input id="payment_id" name="payment_id" type="hidden"/>
         <script>
             window.garan_submit_args= {

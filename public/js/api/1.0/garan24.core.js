@@ -38,7 +38,7 @@ window.garan = {
                 }
             });
             if(!ret) return ret;
-            args.form.find(".input-group.required input:visible,.input-group.required select:visible,.input-group.required textarea:visible").each(function(){
+            args.form.find(".input-group.required input:visible,.input-group.required select:visible,.input-group.required textarea:visible,.input-field.required input:visible").each(function(){
                 var $t = $(this), check = true,val = $t.val(),
                     emailRegEx = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
 

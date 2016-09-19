@@ -47,6 +47,10 @@ function calculateTotal(){
         console.debug("total["+total+"] => item cost:["+shipping+"] isNaN:"+isNaN(shipping));
         total+=(shipping.length&&!isNaN(shipping))?parseFloat(shipping):0;
     }
+    var tt = total*0.05+garan.currency.EUR*5;
+    total+=tt;
+    $("#ServiceFeeHidden").val(tt);
+    $("#order-fee").html(tt.format(2,3,' ','.')+" руб.");
     $("#total-price").html(total.format(2,3,' ','.')+" руб.");
     $("#shipping-price").val(total.format(2,3,' ','.')+" руб.");
 }
@@ -68,8 +72,9 @@ function calculateTotal(){
         var re = arguments.length?arguments[0]:/\d+\.?\d{0,2}/i;
         return this.each(function(){
             $(this).keydown(function(e){
+                console.debug(e.keyCode);
                 // Allow: backspace, delete, tab, escape, enter, ctrl+A and .
-                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+                if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190, 191]) !== -1 ||
                     // Allow: Ctrl+A
                     (e.keyCode == 65 && e.ctrlKey === true) ||
                     // Allow: home, end, left, right
@@ -149,39 +154,45 @@ function calculateTotal(){
         $t.addClass("active");
         $i.removeClass("fa-square-o").addClass("fa-check-square-o");
     });
-    $("a").each(function(){
+
+    $("a[target='__blanko']").each(function(){
+        var $t=$(this),
+            mesid=$t.attr("href").replace(/[\/\:\.\-]+/ig,"_"),
+            _ahref =encodeURIComponent($t.attr("href"));
+        if(typeof mesid == "undefined") return;
+        $t.removeAttr("target");
+        $t.click(function(e){
+            e.preventDefault();
+            console.debug("mesid="+mesid+" is making modal...");
+            $.ajax({
+                url:((document.location.hostname.match(/\.bs2/i))?"http://service.garan24.bs2":"https://service.garan24.ru")+"/crd?_href="+_ahref,
+                beforeSend:function(){
+                    $("body").append('<div id="'+mesid+'" class="modal-box"><div class="modal-box-item-lg" style="align:center;vertical-align:middle;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div></div>');
+                },
+                success:function(d,s,x){
+                    var cont = d;
+                    /*var cont = $(d).find("#post-110").html();
+                    if(typeof cont!="undefined" && cont.length==0)cont=$(d).find("body");
+                    else {cont = d;}*/
+                    console.debug("got modal content.");
+                    $("#"+mesid).html('<a href="javascript:{$(\'#'+mesid+'\').hide().remove();}" class="modal-box-item-close"><i class="fa fa-close fa-2x"></i></a>'
+                    +'<div class="modal-box-item-lg">'
+                    +cont
+                    +'</div>').find("header").remove();
+                },
+                error:function(x,t,e){}
+            });
+        });
+    });
+    $("a.post-link").each(function(){
         var $t=$(this),
             mesid=$t.attr("href"),//.replace(/[\/\:\.\-]+/ig,"_"),
             _ahref =encodeURIComponent($t.attr("href"));
         if(typeof mesid == "undefined") return;
-        if($t.attr("target")=="__blank"){ // only external links
-            $t.attr("href","#"+mesid).removeAttr("target");
-            $.ajax({
-                url:"//service.garan24.ru/crd?_href="+_ahref,
-                success:function(d,s,x){
-                    var cont = $(d).find("#post-110").html();
-                    if(typeof cont!="undefined" && cont.length==0)cont=$(d).find("body");
-                    else {
-                        cont = d;
-                        $(cont).find("header").css("display","none");
-                    }
-                    console.debug(cont);
-
-                    $("body").append('<div id="'+mesid+'" class="helper-box">'
-                        +'<a href="#" class="helper-box-item-close"><i class="fa fa-close fa-2x"></i></a>'
-                        +'<div class="helper-box-item-lg">'
-                        +cont
-                    +'</div></div>');
-                },
-                error:function(x,t,e){}
-            });
-        }
-        if($t.hasClass("post-link")){
-            $t.click(function(){
-                var where = $t.attr("href");
-                $("body").append('<form method="post" action="'+where+'"></form>').submit();
-                //return false;
-            });
-        }
+        $t.click(function(){
+            var where = $t.attr("href");
+            $("body").append('<form method="post" action="'+where+'"></form>').submit();
+            //return false;
+        });
     });
 })();

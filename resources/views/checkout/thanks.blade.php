@@ -8,7 +8,7 @@
             <h2>Заказ № <span class="red" id="OrderId">{{$order_id}}</span> оформлен!</h2>
             @endif
             <p>В ближайшее время с Вами свяжется наш менеджер для подтверждения заказа.</p>
-            <p>Отследить состояние заказа, а также выполнить другие действия можно <a id="OrderPath" target="__blank" href="https://garan24.ru/my-account/">в личном кабинете Гаран24</a></a>.</p>
+            <p>Отследить состояние заказа, а также выполнить другие действия можно <a id="OrderPath" target="__blank" href="https://gauzymall.com/my-account/">в личном кабинете</a></a>.</p>
         </div>
     </div>
 </div>

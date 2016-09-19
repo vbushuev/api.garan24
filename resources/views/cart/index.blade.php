@@ -71,21 +71,24 @@
 </div>
 <div class="row">
     <div id="form" class="form col-xs-12 col-sm-12 col-md-6 col-lg-6">
-        <!--<h3><i class="first">Формирование</i> корзины</h3>-->
+        <h3><i class="first">Мой</i> товар</h3>
+        <!--<a href="/euro-sizes.html" rel="modal:open">Таблица размеров</a>-->
+
         <div id="add2cartform" style="padding:0;margin:0;">
             <div class="form-group url-field">
                 <label for="email" class="control-label">Скопируйте в это поле ссылку на товар:</label>
                 @include('elements.inputs.text',['id'=>'productUrl','name'=>'url','text'=>'URL ссылка на товар','required'=>"required", "icon"=>"external-link"])
             </div>
-            <div class="after-url" style="padding:0;margin:0;display:none;">
+            <div class="after-url" style="padding:0;margin:0;">
             <div class="form-group">
                 <label for="title" class="control-label">Наименование товара:</label>
                 @include('elements.inputs.text',['name'=>'title','text'=>'Наименование товара','required'=>"required", "icon"=>"file-text"])
             </div>
-            <div class="form-group">
-                <label for="sku" class="control-label">Код товара:</label>
+            <div class="form-group" style="display:none;">
+                <label for="sku" class="control-label">Артикул товара:</label>
                 @include('elements.inputs.text',['name'=>'sku','text'=>'Код товара', "icon"=>"barcode"])
             </div>
+
             <div class="form-group">
                 <label for="color" class="control-label">Цвет (если есть выбор):</label>
                 @include('elements.inputs.text',['name'=>'color','text'=>'например: серый', "icon"=>"circle-o"])
@@ -93,7 +96,7 @@
             <div class="form-group">
                 <label for="dimensions" class="control-label">Размер (если есть выбор):</label>
                 @include('elements.inputs.text',['name'=>'dimensions','text'=>'например: М или 36', "icon"=>"circle-o"])
-                <a href="http://xrayshopping.ru/g24-sizes/" target="__blank">Таблица размеров</a>
+                <a href="http://gauzymall.com/g24-sizes" target="__blank">Таблица размеров</a>
             </div>
             <div class="form-group">
                 <label for="amount" class="control-label">Стоимость товара:</label>
@@ -128,13 +131,17 @@
 
         </div>
     </div>
-    <div class="cart col-xs-12 col-sm-12 col-md-6 col-lg-6">@include('cart.goods')</div>
-    <div id="iframe" class="iframe col-xs-0 col-sm-0 col-md-6 col-lg-6"></div>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+        <div class="cart">
+            @include('cart.goods')
+        </div>
+
+        <button id="forward" class="btn btn-success btn-lg pull-right" disabled="disabled">Оформить заказ</button>
+    </div>
     <div id="sugestion" class=" col-xs-12 col-sm-12 col-md-6 col-lg-6"></div>
-</div>
-<div class="row cart-buttons">
-    <br />
-    <button id="forward" class="btn btn-success btn-lg pull-right" disabled="disabled">Оформить заказ</button>
+    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+
+    </div>
 </div>
 <script src="/js/responsibility.js"></script>
 <script>
@@ -213,18 +220,21 @@
                             vars+=v+" "+itm.variations[v];
                         }
                         g+='<div class="image col-xs-6 col-sm-6 col-md-4 col-lg-4" >';
-                        g+='<img height="160px" src="'+itm.img+'" alt="'+itm.title+'">';
+                        g+='<img height="100px" src="'+itm.img+'" alt="'+itm.title+'">';
                         g+='</div>';
                         g+='<div class="name col-xs-6 col-sm-6 col-md-8 col-lg-8">';
-                        g+='<div class="row"><strong>Наименование:</strong><br /><a class="fill-data" title="Копировать значение" href="javascript:fillData(\'title\',\''+d.title+'\');" data-rel="title"><i class="fa fa-copy"></i></a> '+itm.title+'</div>';
+                        if(d.title!=null&&d.title!="undefined")g+='<div class="row"><strong>Наименование:</strong><br /><a class="fill-data" title="Копировать значение" href="javascript:fillData(\'title\',\''+d.title+'\');" data-rel="title"><i class="fa fa-copy"></i></a> '+itm.title+'</div>';
                         if(d.price!=null&&d.price!="undefined")g+='<div class="row"><strong>Цена:</strong><br /><a class="fill-data" title="Копировать значение" href="javascript:fillData(\'amount\','+d.price+');" data-rel="amount"><i class="fa fa-copy"></i></a> '+garan.number.format(itm.price,2,3,' ','.')+' '+data.currency+'</div>';
-                        if(d.sku!=null&&d.sku!="undefined")g+='<div class="row"><strong>Артикул:</strong><br /><a class="fill-data" title="Копировать значение" href="javascript:fillData(\'sku\',\''+d.sku+'\');" data-rel="sku"><i class="fa fa-copy"></i></a> '+d.sku+"</div>";
+                        //if(d.sku!=null&&d.sku!="undefined")g+='<div class="row"><strong>Артикул:</strong><br /><a class="fill-data" title="Копировать значение" href="javascript:fillData(\'sku\',\''+d.sku+'\');" data-rel="sku"><i class="fa fa-copy"></i></a> '+d.sku+"</div>";
                         g+='</div></div>';
-                        $("#sugestion").html(
-                            '<h2>Мы нашли по Вашей ссылке этот товар:</h2>'
-                            +g
-                            +'<div class="message"><p>Наша система старается автоматически заполнить все необходимые поля и выбрать минимальную цену за товары. Но дополнительная проверка не помешает.</p></div>'
-                        );
+                        if(d.title!=null&&d.title!="undefined"){
+                            /*$("#sugestion").html(
+                                '<h2>Мы нашли по Вашей ссылке этот товар:</h2>'
+                                +g
+                                +'<div class="row"><a class="btn btn-default pull-right" href="javascript:fillAllData();">Копировать все данные в форму</a></div>'
+                                +'<div class="message"><p>Наша система старается автоматически заполнить все необходимые поля и выбрать минимальную цену за товары. Но дополнительная проверка не помешает.</p></div>'
+                            );*/
+                        }
 
                     }
                     else{
@@ -268,20 +278,20 @@
                 800,function() {
                     $(this).remove();
                     garan.cart.add2cart(p,c);
-                    //$("#add2cartform input").val("");
+                    $("#add2cartform input").val("");
                 });
         });
         $("#forward").on("click",function(){
             garan.cart.checkout();
         });
-        $(".fill-data").on("click",function(){
-
-        });
-    });s
+    });
     function fillData(){
         var n =arguments[0],t=arguments[1];
         console.debug("[name='"+n+"'] = "+t);
         $("[name='"+n+"']").val(t);
+    }
+    function fillAllData(){
+        $(".fill-data").click();
     }
 </script>
 @endsection

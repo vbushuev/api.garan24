@@ -55,7 +55,7 @@ return [
     |
     */
 
-    'from' => ['address' => 'contact@garan24.ru', 'name' => 'ГАРАН24'],
+    'from' => ['address' => 'robot@gauzymall.com', 'name' => 'GauzyMALL'],
 
     /*
     |--------------------------------------------------------------------------

@@ -1,66 +1,46 @@
-//main: style.styl
-$fontColor = rgba(99, 158, 20,1)
-.button
-    border-radius(.4em)
-    font-size 11pt
-    font-weight 100
-    display inline-block
-    text-align center
-    cursor pointer
-    width    14em
-    height 2.2em
-    line-height 2.2em
-    margin 0 .4em .4em 0
-    text-transform uppercase
-    color $fontColor
-    border  solid $fontColor 1px
-    background-color rgba(255,255,255,1)
-    text-decoration none !important
-.button:hover
-    background-color $fontColor
-    border solid rgba(255, 255, 255,1) 1px
-    color rgba(255,255,255,1)
-.button.alert
-    background-color red
-    border  solid red 1px
-    color rgba(255,255,255,1)
-.button.alert:hover
-    background-color rgba(255,255,255,1)
-    color red
-input,select
-    border-radius(.2em)
-    font-family Roboto-Mono
-    font-weight 100
-    display inline-block
-    font-size 12pt
-    border solid rgba(0,0,0,.2) 1px
-    width    14em
-    height 1.8em
-    line-height 1.8em
-    padding-left .2em
-    color rgba(0,0,0,.7)
-    position relative
-label
-    display block
-    font-family Roboto-Mono
-    font-size 10pt
-    text-transform uppercase
-    color rgba(0,0,0,.7)
-    margin-bottom .2em
-.required label
-    font-weight 800
-.required label:after
-    content "*"
+// out: forms.css
+$garanDefault = rgba(0, 191, 128,1)
+$garanSuccess = rgba(0, 191, 128,1)
+$garanBlue = #33bbff//rgba(255,0,0,1)
+$garanRed = #D50000//rgba(255,0,0,1)
 
-.input-group
-    margin 0 .6em .6em 0
-.input-form
-    border-radius(.4em)
-    background-color rgba(0,0,0,.05)
-    border solid 1px rgba(0,0,0,.1)
-    margin 0
-    padding .5em
-    h3
-        margin 0 0 .4em 0
-        color rgba(0,0,0,.7)
-        font-family 'Roboto Mono'
+$colorGreen = rgb(0, 191, 128)
+$colorBlue = #33bbff
+$colorGrey = rgb(103, 111, 124)
+$colorLightGrey = rgb(242, 243, 245)
+$fontColor = rgb(103, 111, 124)
+input,select,textarea
+    font-size 12pt;
+.input-field
+    padding 0
+    position relative
+    color $colorGrey
+    input
+        height 40px
+        line-height 40px
+        background-color $colorLightGrey
+        padding-left 3em
+        border-radius(5px)
+        width 100%
+        border solid 2px rgba(242, 243, 245,.73)
+.input-field:before
+    display block
+    position absolute
+    left 0
+    top 0
+    width 3em
+    font-family 'FontAwesome'
+    height 40px
+    text-align center
+    line-height 40px
+    color $colorGrey
+    font-size 14pt
+    opacity .33
+.input-field input:active
+    border-color $colorGreen
+.input-field.email:before
+    content '\f0e0'
+.input-field.phone:before
+    content '\f095'
+.input-field.external-link:before
+    content '\f08e'

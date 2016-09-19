@@ -6,7 +6,7 @@
         <div class="container">
             <h2>Заказ № <span class="red" id="OrderId">33252</span> оформлен!</h2>
             <p>В ближайшее время с Вами свяжется наш менеджер.</p>
-            <p>Отследить состояние заказа, а также выполнить другие действия можно <a id="OrderPath" href="https://garan24.ru/my-account/">в личном кабинете Гаран24</a></a>.</p>
+            <p>Отследить состояние заказа, а также выполнить другие действия можно <a id="OrderPath" href="https://gauzymall.com/my-account/">в личном кабинете</a></a>.</p>
         </div>
     </div>
 </div>

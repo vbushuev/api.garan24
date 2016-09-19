@@ -12,6 +12,7 @@
 	<!--<link rel="stylesheet" href="/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">-->
 
 	<link rel="Stylesheet" href="/css/jquery-ui.min.css" type="text/css">
+	<link rel="Stylesheet" href="/css/jquery.modal.css" type="text/css">
 	<link rel="Stylesheet" href="/css/co.css" type="text/css">
 
 	<script src="/js/jquery-2.1.4.min.js"></script>
@@ -20,6 +21,7 @@
 	<script src="/js/jquery.color.js"></script>
 	<script src="/js/jquery.redirect.js"></script>
 	<script src="/js/jquery.maskedinput.min.js"></script>
+	<script src="/js/jquery.modal.js"></script>
 	<script src="/js/api/1.0/garan24.core.js"></script>
 	<script src="/js/api/1.0/garan24.delivery.js"></script>
 	<script src="/js/api/1.0/garan24.customer.js"></script>

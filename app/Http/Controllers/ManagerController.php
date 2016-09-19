@@ -21,6 +21,7 @@ use \Garan24\Deal\Customer as Customer;
 class ManagerController extends Controller{
     protected $resource_avaliable = false;
     protected $resource;
+    protected $products;
     public function __construct(){
         $this->middleware('cors');
         $domain = "https://garan24.ru";
@@ -36,6 +37,7 @@ class ManagerController extends Controller{
         try {
             $client = new WC_API_Client( $domain, $consumer_key,$consumer_secret, $options );
             $this->resource = new WC_API_Client_Resource_Orders($client);
+            $this->products = new WC_API_Client_Resource_Products($client);
             $this->resource_avaliable = true;
         } catch ( WC_API_Client_Exception $e ) {
 
@@ -71,6 +73,12 @@ class ManagerController extends Controller{
         $cart = DB::table('garan24_cart')
             ->where("id",$rq->input("id","0"))->first();
         return response()->json($cart->value);
+    }
+    public function getProduct(Request $rq){
+        $id = $rq->input("id","0");
+        $res = $this->products->get($id);
+        //var_dump($res);
+        return response()->json($res->product,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
 }
 ?>

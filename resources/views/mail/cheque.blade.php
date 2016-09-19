@@ -3,12 +3,12 @@ CREATIVE SPACES (EAST SUSSEX) LTD
 14 Hackwood, Robertsbridge, East Sussex,
 TN32 5ER, England and Wales
 -----------------------------------------
-Дата операции: ДД/ММ/ГГГГ
-Номер заказа: 0258678
-Терминал: 108215369
-Магазин: www.eurolego.ru
+Дата операции: {{$date or ''}}
+Номер заказа: {{$order_id or ''}}
+Терминал: {{$term_id or ''}}
+Магазин: www.gauzymall.com
 Карта: ************4678
-Клиент: IVAN PETROV
-Сумма (руб.): 4500-00
-Код авторизации: 215863458
+Клиент: {{$name or ''}}
+Сумма (руб.): {{$amount or ''}}
+Код авторизации: {{$auth_id or ''}}
 </pre>

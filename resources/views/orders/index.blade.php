@@ -108,9 +108,22 @@
                             },
                             success:function(d){
                                 console.debug(d);
+                                var ii = '';
                                 for(var i in d.line_items){
-                                    
+                                    var itm=d.line_items[i];
+                                    ii+='<div class="row">';
+                                    ii+='<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 content-name" >';
+                                    ii+=itm.name;
+                                    ii+='</div>';
+                                    ii+='<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3 content-quntity">';
+                                    ii+='x'+itm.quantity;
+                                    ii+='</div>';
+                                    ii+='<div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" content-amount>';
+                                    ii+=parseFloat(itm.price).format(2,3,' ','.')+' руб.';
+                                    ii+='</div>';
+                                    ii+='</div><br/>';
                                 }
+                                itemsContainer.html(ii);
                             }
                         });
                     }

@@ -16,7 +16,7 @@
             <div class="col-lg-6">
                 <div class="form-group">
                     <label for="email" class="control-label">Электронная почта:</label>
-                    @include('elements.inputs.email',['text'=>'Электронная почта','required'=>"required"])
+                    @include('elements.inputs.email',['text'=>'Электронная почта','required'=>"required",'name'=>'email'])
                     <p class="text-muted small">Сообщив электронную почту, Вы сможете отслеживать состояние заказа.</p>
                 </div>
             </div>

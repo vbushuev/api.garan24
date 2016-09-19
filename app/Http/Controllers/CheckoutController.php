@@ -29,6 +29,12 @@ class CheckoutController extends Controller{
     protected $thishost = "https://service.garan24.ru";
     public function __construct(){
         \Garan24\Garan24::$DB["host"] = "151.248.117.239";
+        \Garan24\Garan24::$DB["prefix"] = "xr_";
+        \Garan24\Garan24::$DB["schema"] = "gauzymall";
+        //\Garan24\Garan24::$DB["user"] = "vsb";
+        //\Garan24\Garan24::$DB["pass"] = "Vampire04";
+        \Garan24\Garan24::$DB["user"] = "gauzymall";
+        \Garan24\Garan24::$DB["pass"] = "gauzymall";
         $this->middleware('cors');
         //$this->raworder = file_get_contents('../tests/example.order.json');
         //$this->raworder = json_decode($this->raworder,true);
@@ -47,7 +53,7 @@ class CheckoutController extends Controller{
         if($id=="noindex") return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
         $rq->session()->put("deal_id",$id);
         $deal = new Deal(["id"=>$id]);
-        if(!isset($deal->x_secret))  return view('public.index');
+        if(!isset($deal->x_secret)) return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
         return response()->view($this->viewFolder.'.checkout',[
             "route"=>$this->getBPRoute("checkout"),
             "section" => 'contact',
@@ -218,7 +224,7 @@ class CheckoutController extends Controller{
                 "customer"=>($deal->getCustomer()!==null)?$deal->getCustomer()->toArray():[],
                 "shop_url"=>$deal->getShopUrl(),
                 "goods"=>$deal->order->getProducts(),
-                "amount"=>($deal->order->order_total+$deal->shipping_cost),
+                "amount"=>($deal->order->order_total+$deal->shipping_cost+$deal->service_fee),
                 "deal"=>$deal
             ]
         );
@@ -246,7 +252,7 @@ class CheckoutController extends Controller{
                 "title"=>'<i class="first">Заказ</i> №'.$deal->order->id.' оформлен',
                 "deal" => $deal,
                 "viewFolder"=>$this->viewFolder,"debug"=>"",
-                "amount"=>($deal->order->order_total+$deal->shipping_cost),//"amount"=>(isset($data["TotalAmountHidden"])?$data["TotalAmountHidden"]:"0"),
+                "amount"=>($deal->order->order_total+$deal->shipping_cost+$deal->service_fee),//"amount"=>(isset($data["TotalAmountHidden"])?$data["TotalAmountHidden"]:"0"),
                 "goods"=>$deal->order->getProducts(),
                 "shipping_cost"=>$deal->shipping_cost,
                 "shop_url"=>$deal->getShopUrl(),
@@ -365,7 +371,7 @@ class CheckoutController extends Controller{
             "title"=>'<i class="first">Заказ</i> №'.$deal->order->id.' подтвержден',
             "viewFolder"=>$this->viewFolder,"debug"=>"",
             "goods"=>$deal->order->getProducts(),
-            "amount"=>($deal->order->order_total+$deal->shipping_cost),
+            "amount"=>($deal->order->order_total+$deal->shipping_cost+$deal->service_fee),
             "shop_url"=>$deal->getShopUrl(),
             "order_id"=>$deal->order->id,
             "address"=>$deal->getCustomer()->toAddressString(),
@@ -381,10 +387,10 @@ class CheckoutController extends Controller{
     public function getSendmemails(Request $rq){
         $deal = new Deal(["id"=>$rq->input("id","1107")]);
         Mail::send('mail.welcome',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){
-            $message->to($deal->getCustomer()->email)->subject("ГАРАН24");
+            $message->to($deal->getCustomer()->email)->subject("GauzyMALL");
         });
-        if($deal->payment["id"]==2) Mail::send('mail.orderpayonline',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){$message->to($deal->getCustomer()->email)->subject("ГАРАН24");});
-        else Mail::send('mail.orderpayondelivery',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){$message->to($deal->getCustomer()->email)->subject("ГАРАН24");});
+        if($deal->payment["id"]==2) Mail::send('mail.orderpayonline',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){$message->to($deal->getCustomer()->email)->subject("GauzyMALL");});
+        else Mail::send('mail.orderpayondelivery',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){$message->to($deal->getCustomer()->email)->subject("GauzyMALL");});
         return "Mails are sent.";
     }
     protected function getParams(Request $rq){
@@ -406,10 +412,18 @@ class CheckoutController extends Controller{
         return $data;
     }
     protected function payout($deal){
-        if($deal->payment["id"] == "1") $amount = 1;
-        else $amount = ($deal->order->order_total+$deal->shipping_cost);
-
         $operation = "PreauthRequest";
+        $aquere ="akbars";
+        if($deal->payment["id"] == "1") {
+            $amount = 1;
+            $operation = "PreauthRequest";
+        }
+        else {
+            $amount = ($deal->order->order_total+$deal->shipping_cost+$deal->service_fee)*1.028;
+            $operation = "SaleRequest";
+        }
+
+
         $saleData = [
             "data"=>[
                 "client_orderid" => $deal->order->id,
@@ -438,16 +452,20 @@ class CheckoutController extends Controller{
                 "expire_year" => "2099",
                 "cvv2" => "123",*/
                 "purpose" => "www.garan24.eu",
+                //
+                //"redirect_url" => $_SERVER['HTTP_HOST']."/checkout/payoutresponse",
+                //"server_callback_url" =>  $_SERVER['HTTP_HOST']."/checkout/payoutcallback",
                 "redirect_url" => $this->thishost."/checkout/payoutresponse",
-                "server_callback_url" => $this->thishost."/checkout/payoutcallback",
+                "server_callback_url" =>  $this->thishost."/checkout/payoutcallback",
                 //"merchant_data" => "VIP customer"
             ]
         ];
         //$saleData = array_merge($this->ariuspay["akbars"][$operation],$saleData);
-        $saleData = array_merge($this->ariuspay["lemonway"][$operation],$saleData);
+        $saleData = array_merge($this->ariuspay[$aquere][$operation],$saleData);
         $request = new \Garan24\Gateway\Ariuspay\PreauthRequest($saleData);
         switch($operation){
             case "CaptureRequest":$request = new \Garan24\Gateway\Ariuspay\CaptureRequest($saleData);break;
+            case "SaleRequest":$request = new \Garan24\Gateway\Ariuspay\SaleRequest($saleData);break;
         }
         $connector = new \Garan24\Gateway\Ariuspay\Connector();
         $connector->setRequest($request);
@@ -518,6 +536,12 @@ class CheckoutController extends Controller{
             ]
         ],
         "akbars" =>[
+            "SaleRequest" => [
+                "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+                "endpoint" => "2879",
+                "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+                "merchant_login" => "garan24"
+            ],
             "CaptureRequest" => [
                 "url" => "https://gate.payneteasy.com/paynet/api/v2/",
                 "endpoint" => "2879",

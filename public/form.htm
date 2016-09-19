@@ -33,7 +33,7 @@
 <body>
 <div id="wrapper" class="container">
 	<div id="header" class="row">
-
+		
 	<div class="scale-2">
     <div class="scale-2-item helped  active-last  " data-helper="helper-contact">
         <a href="//service.garan24.ru/checkout?id=$!MERCHANT_ORDER_ID">Контакты</a>
@@ -60,11 +60,10 @@
 				$!card_error
 			</div>
 			#end
-			#if($!AMOUNT==1)
 	        <div class="message">
 	            Для подтверждения заказа и оплаты после доставки необходимо внести предоплату 1 руб.
 	        </div>
-			#end
+
 		    <div class="row">
 		        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 		            <label for="card_amount" class="control-label-">Сумма операции:</label>

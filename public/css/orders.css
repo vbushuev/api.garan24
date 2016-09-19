@@ -43,7 +43,19 @@
 /* by status*/
 .orders .order.status-new .order-field{background-color: rgb(242, 243, 245);}
 .orders .order.status-checkout .order-field{background-color: rgb(0, 191, 128); color:#fff;}
+.orders .order.status-confirmed .order-field{background-color: rgb(0, 191, 128); color:#fff;}
 .orders .order.status-credit .order-field{background-color: #33bbff; color:#fff;}
+.orders .order.status-delivered .order-field{background-color: rgb(0, 191, 128); color:#fff;}
+.orders .order.status-boxbery .order-field{background-color: rgb(0, 191, 128); color:#fff;}
+.orders .order.status-boxberyhub .order-field{background-color: rgb(0, 191, 128); color:#fff;}
+.orders .order.status-shipped .order-field{background-color: rgb(0, 191, 128); color:#fff;}
+.orders .order.status-payed .order-field{background-color: rgb(0, 191, 128); color:#fff;}
+.orders .order.status-closed .order-field{background-color: rgb(255, 255, 255); color:#fff;}
+.orders .order.status-canceled .order-field{background-color: rgb(220, 222, 224); color:#fff;}
+
+.content-name {font-weight: 700;}
+.content-quntity {text-align: right;}
+.content-amount{text-align: right;}
 /* animations */
 .orders .order{
     opacity: .8;

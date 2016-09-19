@@ -153,3 +153,46 @@
     color: rgba(255,255,255,1);
 .helper-box-item-close:hover
     border: solid 4px rgba(255,255,255,1);
+
+
+.modal-box
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    background: rgba(0,0,0,0.3);
+    //background-blur(5px);
+    z-index: 300;
+    background-transition(400ms);
+    ointer-events: auto;
+.modal-box-item-lg
+    background-color: rgba(255,255,255,1);
+    position: relative;
+    z-index: 300;
+    color: rgba(0,0,0,1);
+    margin:4em 6em 1em 6em;
+    height:92%
+    padding: 4em;
+    font-size: 12pt;
+    text-indent: 2em;
+    border-radius: (1em);
+    overflow: auto;
+.modal-box-item-close
+    border: solid 4px transparent;
+    position: fixed;
+    top:1em;
+    right:1em;
+    color: rgba(255,255,255,1);
+    border-radius: (1.5em);
+    height: 3em;
+    line-height: 3em;
+    width:3em;
+    text-align: center;
+    display: inline-block;
+    padding-bottom: .2em;
+    text-indent: 0;
+.modal-box-item-close .fa
+    color: rgba(255,255,255,1);
+.modal-box-item-close:hover
+    border: solid 4px rgba(255,255,255,1);

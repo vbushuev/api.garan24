@@ -1,0 +1,44 @@
+input,
+select,
+textarea {
+  font-size: 12pt;
+}
+.input-field {
+  padding: 0;
+  position: relative;
+  color: #676f7c;
+}
+.input-field input {
+  height: 40px;
+  line-height: 40px;
+  background-color: #f2f3f5;
+  padding-left: 3em;
+  width: 100%;
+  border: solid 2px rgba(242,243,245,0.73);
+}
+.input-field:before {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 3em;
+  font-family: 'FontAwesome';
+  height: 40px;
+  text-align: center;
+  line-height: 40px;
+  color: #676f7c;
+  font-size: 14pt;
+  opacity: 0.33;
+}
+.input-field input:active {
+  border-color: #00bf80;
+}
+.input-field.email:before {
+  content: '\f0e0';
+}
+.input-field.phone:before {
+  content: '\f095';
+}
+.input-field.external-link:before {
+  content: '\f08e';
+}

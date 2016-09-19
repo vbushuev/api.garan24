@@ -1,5 +1,6 @@
 
 <input type="hidden" id="TotalAmountHidden" name="TotalAmountHidden"/>
+<input type="hidden" id="ServiceFeeHidden" name="service-fee"/>
 <input type="hidden" id="ShippingAmountHidden" name="shipping_cost" value="{{$deal->shipping_cost or ''}}"/>
 <div class="row">
     @if($route["back"]!=false)

@@ -1,4 +1,4 @@
-    <h2><i class="first">Корзина</i></h2>
+    <h3><i class="first">Мультикорзина</i></h3>
     {{--
     @foreach($deal->order->getProducts() as $good)
     <div class="row cart-item" id="cartItem-{{$good["product_id"]}}" data-ref="{{$good["product_url"]}}">
