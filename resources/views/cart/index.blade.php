@@ -77,25 +77,25 @@
         <div id="add2cartform" style="padding:0;margin:0;">
             <div class="form-group url-field">
                 <label for="email" class="control-label">Скопируйте в это поле ссылку на товар:</label>
-                @include('elements.inputs.text',['id'=>'productUrl','name'=>'url','text'=>'URL ссылка на товар','required'=>"required", "icon"=>"external-link"])
+                @include('elements.inputs.input',['id'=>'productUrl','name'=>'url','text'=>'URL ссылка на товар','required'=>"required", "icon"=>"external-link"])
             </div>
             <div class="after-url" style="padding:0;margin:0;">
             <div class="form-group">
                 <label for="title" class="control-label">Скопируйте сюда наименование товара:</label>
-                @include('elements.inputs.text',['name'=>'title','text'=>'Наименование товара','required'=>"required", "icon"=>"file-text"])
+                @include('elements.inputs.input',['name'=>'title','text'=>'Наименование товара','required'=>"required", "icon"=>"file-text"])
             </div>
             <div class="form-group" style="display:none;">
                 <label for="sku" class="control-label">Артикул товара:</label>
-                @include('elements.inputs.text',['name'=>'sku','text'=>'Код товара', "icon"=>"barcode"])
+                @include('elements.inputs.input',['name'=>'sku','text'=>'Код товара', "icon"=>"barcode"])
             </div>
 
             <div class="form-group">
                 <label for="color" class="control-label">Скопируйте или впишите Цвет товара (если есть выбор):</label>
-                @include('elements.inputs.text',['name'=>'color','text'=>'например: серый', "icon"=>"circle-o"])
+                @include('elements.inputs.input',['name'=>'color','text'=>'например: серый', "icon"=>"circle-o"])
             </div>
             <div class="form-group">
                 <label for="dimensions" class="control-label">Укажите размер (если есть выбор):</label>
-                @include('elements.inputs.text',['name'=>'size','text'=>'например: М или 36', "icon"=>"circle-o"])
+                @include('elements.inputs.input',['name'=>'size','text'=>'например: М или 36', "icon"=>"circle-o"])
                 <a href="http://gauzymall.com/g24-sizes" target="__blank">Таблица размеров</a>
             </div>
             <div class="form-group">
@@ -109,13 +109,13 @@
 
             <div class="form-group">
                 <label for="quantity" class="control-label">Количество:</label>
-                @include('elements.inputs.text',['name'=>'quantity','text'=>'Кол-во','required'=>"required", "icon"=>"circle-o", "value" => "1"])
+                @include('elements.inputs.input',['name'=>'quantity','type'=>'number','text'=>'Кол-во','required'=>"required", "icon"=>"circle-o", "value" => "1"])
             </div>
 
             <!--
             <div class="form-group">
                 <label for="weight" class="control-label">Вес товара:</label>
-                @include('elements.inputs.text',['name'=>'weight','text'=>'Вес товара', "icon"=>"circle-o"])
+                @include('elements.inputs.input',['name'=>'weight','text'=>'Вес товара', "icon"=>"circle-o"])
             </div>
             -->
             <div class="form-group">
@@ -157,8 +157,8 @@
             comments:$("[name='comments']").val(),
             product_id:-1,
             quantity:$("[name='quantity']").val(),
-            regular_price:$("[name='amount']").val(),
-            original_price:$("[name='amount']").val(),
+            regular_price:$("[name='amount']").val().replace(/\,/,'.'),
+            original_price:$("[name='amount']").val().replace(/\,/,'.'),
             title: $("[name='title']").val(),
             description: $("[name='title']").val(),
             product_url:$("[name='url']").val(),
@@ -181,7 +181,7 @@
         $("[name='quantity']").val(p.quantity);
         $("[name='amount']").val(p.original_price);
         $("[name='title']").val(p.title);
-        if(typeof p.comments!="undefined" && p.comments.length)$("[name='comments']").val(p.comments);
+        $("[name='comments']").val((typeof p.comments!="undefined" && p.comments.length)?p.comments:"");
 
         $("[name='url']").val(p.product_url);
         $("[name='img']").val(p.product_img);
@@ -189,7 +189,8 @@
         $("[name='color']").val(p.variations.color);
         $("[name='size']").val(p.variations.size);
         $("#edit").show();
-        $("#edit").on("click",function(){
+        $("#add2cart").attr("disabled","disabled");
+        $("#edit").unbind("click").on("click",function(){
             garan.cart.remove(i,false);
             $("#add2cart").click();
             $("#edit").hide();

@@ -521,7 +521,7 @@ textarea {
   position: absolute;
   left: 0;
   top: 0;
-  width: 3em;
+  width: 2em;
   font-family: 'FontAwesome';
   height: 40px;
   text-align: center;
@@ -532,6 +532,7 @@ textarea {
 }
 .input-field input:active {
   border-color: #00bf80;
+  color: #00bf80;
 }
 .input-field.email:before {
   content: '\f0e0';
@@ -541,4 +542,13 @@ textarea {
 }
 .input-field.external-link:before {
   content: '\f08e';
+}
+.input-field.file-text:before {
+  content: '\f0f6';
+}
+.input-field.barcode:before {
+  content: '\f02a';
+}
+.input-field.default:before {
+  content: '\f1db';
 }

@@ -54,20 +54,8 @@ function calculateTotal(){
     $("#total-price").html(total.format(2,3,' ','.')+" руб.");
     $("#shipping-price").val(total.format(2,3,' ','.')+" руб.");
 }
+
 (function(){
-    /*
-    $.animate(
-        {
-            color:bcolor,
-            borderColor:bcolor,
-            backgroundColor:fcolor
-        },
-        400,
-        "swing",
-        function(){$t.removeClass("-animating");}
-    );
-    */
-    //$.mask.definitions['~']='\+7';
     jQuery.fn.controlInput = function(){
         var re = arguments.length?arguments[0]:/\d+\.?\d{0,2}/i;
         return this.each(function(){
@@ -89,6 +77,20 @@ function calculateTotal(){
             });
         });
     }
+    /*
+    $.animate(
+        {
+            color:bcolor,
+            borderColor:bcolor,
+            backgroundColor:fcolor
+        },
+        400,
+        "swing",
+        function(){$t.removeClass("-animating");}
+    );
+    */
+    //$.mask.definitions['~']='\+7';
+
 
     $(".phone").mask("+7(999) 999 99 99");//.insertBefor
     $(".postcode").mask("999999");//.insertBefor
@@ -98,7 +100,7 @@ function calculateTotal(){
     $(".pan").mask("9999 9999 9999 9999");
     $(".expiredate").mask("99/99");
     $(".date").mask("99.99.9999");
-    $(".amount").controlInput();
+    //$(".amount").controlInput();
     $(".input-group input").blur(function(){
         var $t = $(this),icon = $t.parent().find('i.fa');
         if(icon.hasClass('fa-square-o')&&$t.val().length){

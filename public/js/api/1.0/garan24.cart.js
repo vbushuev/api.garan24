@@ -30,6 +30,7 @@ $.extend(window.garan,{
             if(!arguments.length){console.debug("nodata to add");return false;}
             var good = arguments[0];
             var cur = (arguments.length>1)?arguments[1]:"EUR";
+            good.regular_price = good.regular_price.replace(/[\,]/,'.');
             console.debug(good);
             //if(typeof good.sku!="undefined")good.sku=good.shop+'#'+good.sku;
             good.description=good.shop+' | Размер: '+good.variations.size+' | Цвет: '+good.variations.color+' | '

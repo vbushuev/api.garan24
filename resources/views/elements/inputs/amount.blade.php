@@ -1,4 +1,4 @@
-<div class="input-group amount-currency" {{$required or ''}}>
+<div class="input-group amount-currency input-field" {{$required or ''}}>
     <div class="input-group-btn">
         <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fa fa-euro fa-fw"></i>
@@ -9,7 +9,7 @@
             <li><a data-value="USD"><i class="fa fa-usd fa-fw"></i><span class="combo-item-value"> Доллар</span></a></li>
         </ul>
     </div>
-    <input name="amount" id="amount" class="form-control amount" type="text" placeholder="{{$text or 'Текст'}}" value="" {{$readonly or ''}}>
+    <input name="amount" id="amount" class="form-control amount" type="number" placeholder="{{$text or 'Текст'}}" value="" {{$readonly or ''}}>
     <input type="hidden" name="currency" value="EUR" />
     <script>
         $(document).ready(function(){
