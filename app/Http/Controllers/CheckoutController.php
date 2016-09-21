@@ -309,18 +309,26 @@ class CheckoutController extends Controller{
         try{
             $obj = new \Garan24\Gateway\Ariuspay\CallbackResponse($r,function($d){});
             if($obj->accept()){
-                $crd = new \Garan24\Gateway\Ariuspay\CreateCardRef([
+                $id = $rq->session()->get("deal_id");
+                if(strlen($id)<=0)$id = $rq->cookie("deal_id");
+                $deal = new Deal(["id"=>$id]);
+                $operation = ($deal->payment["id"] == "1")?"CreateCardRef_RIB":"CreateCardRef";
+                $crdData = array_merge($this->ariuspay["akbars"][$operation],["data"=>[
                     'client_orderid' => $obj->client_orderid,
                     'orderid' => $obj->orderid
-                ]);
-                $crd->call();
+                ]]);
+                $request = new \Garan24\Gateway\Ariuspay\CreateCardRefRequest($crdData);
+                $connector = new \Garan24\Gateway\Ariuspay\Connector();
+                $connector->setRequest($request);
+                $connector->call();
                 $key = "card-ref-id";
-                $cardref =  $crd->getResponse()->$key;
+                $cardref =  $connector->getResponse()->$key;
+                Log::debug("Order ".$id." set customer cardref ".$cardref);
+                $deal->update(["card-ref-id"=>$cardref]);
                 //$crd->getResponse()->
                 /* Check user have this card*/
                 // DB::table('garan24_usermeta')->exist
-                $id = $rq->session()->get("deal_id");
-                $deal = new Deal(["id"=>$id,"data"=>["card-ref-id"=>$cardref]]);
+
                 \Garan24\Garan24::debug("Redirecting to ".$this->viewFolder.'/thanks');
                 //return redirect("/thanks");
                 return $this->postThanks($rq);
@@ -550,6 +558,18 @@ class CheckoutController extends Controller{
             "PreauthRequest" => [
                 "url" => "https://gate.payneteasy.com/paynet/api/v2/",
                 "endpoint" => "3028",
+                "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+                "merchant_login" => "garan24"
+            ],
+            "CreateCardRef_RIB" => [
+                "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+                "endpoint" => "3028",
+                "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+                "merchant_login" => "garan24"
+            ],
+            "CreateCardRef" => [
+                "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+                "endpoint" => "2879",
                 "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
                 "merchant_login" => "garan24"
             ]

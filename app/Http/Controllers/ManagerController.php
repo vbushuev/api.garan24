@@ -51,13 +51,11 @@ class ManagerController extends Controller{
         }
     }
     public function getIndex(Request $rq){
-        $id = $rq->input("status","0");
-        $orders = DB::table('orders')
-            ->join('userinfo','orders.user_id','=','userinfo.user_id')
-            //->join("(select '' as items from dual)")
-            ->take(20)
-            ->get();
-        //$orders->passport=json_decode($orders->passport);
+        //$id = $rq->input("status","0");
+        $filters = $rq->all();
+        $sel = DB::table('orders')->join('userinfo','orders.user_id','=','userinfo.user_id');
+        foreach($filters as $f=>$v){}
+        $orders=$sel->take(20)->get();
         return view("orders.index",["orders"=>$orders]);
     }
     public function getOrderitems(Request $rq){
@@ -69,8 +67,26 @@ class ManagerController extends Controller{
     public function getUpdatestatus(Request $rq){
         $status = DB::table('garan24_deal_statuses')
             ->where("status",$rq->input("status"))->first();
+        //WooCommerce statuses
+        // pending, processing, on-hold, completed, cancelled, refunded and failed.
+        $order_id = $rq->input("id","0");
+        if($status->status=="canceled"){
+            $this->resource->update($order_id,["status"=>"cancelled"]);
+        }
+        else if($status->status=="closed"){
+            $this->resource->update($order_id,["status"=>"completed"]);
+        }
+        else if($status->status=="confirmed"){
+            $this->resource->update($order_id,["status"=>"processing"]);
+        }
+        else if($status->status=="new"){
+            $this->resource->update($order_id,["status"=>"pending"]);
+        }
+        else if($status->status=="shipped"){
+            $this->resource->update($order_id,["status"=>"on-hold"]);
+        }
         DB::table('deals')
-            ->where("internal_order_id",$rq->input("id","0"))
+            ->where("internal_order_id",$order_id)
             ->update(["status" => $status->id]);
         return response()->json($status);
     }

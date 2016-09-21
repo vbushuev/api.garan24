@@ -28,7 +28,7 @@ h3 {
 .mail {
   background-color: #557da1;color: #fff;text-align: center;height: 3em;line-height: 3em;
 }
-.brand {color: #557da1;font-weight: 700;text-transform: uppercase;
+.brand {color: #557da1;font-weight: 700;
 }
 .text {
   text-indent: 2em;

@@ -72,14 +72,15 @@ function calculateTotal(){
         var re = arguments.length?arguments[0]:/\d+\.?\d{0,2}/i;
         return this.each(function(){
             $(this).keydown(function(e){
-                console.debug(e.keyCode);
+
                 // Allow: backspace, delete, tab, escape, enter, ctrl+A and .
                 if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190, 191]) !== -1 ||
                     // Allow: Ctrl+A
-                    (e.keyCode == 65 && e.ctrlKey === true) ||
+                    ((e.keyCode == 65 ||e.keyCode == 86) && e.ctrlKey) ||
                     // Allow: home, end, left, right
-                    (e.keyCode >= 35 && e.keyCode <= 39)) {
+                    (e.keyCode >= 35 && e.keyCode <= 39) ){
                         // let it happen, don't do anything
+                        console.debug("allow");
                         return;
                 }
                 var charValue = String.fromCharCode(e.keyCode),

@@ -45,6 +45,7 @@ $.extend(window.garan,{
             this.set();
         },
         alreadyitem:function(good){
+            return false;
             for(var i in this.order.items){
                 var it = this.order.items[i];
                 if(it.sku==good.sku&&it.title==good.title) {
@@ -73,13 +74,16 @@ $.extend(window.garan,{
             console.debug("Garan24::remove from cart(..)");
             if(!arguments.length){console.debug("nodata to add");return false;}
             var i = arguments[0],good = this.order.items[i];
+            var needconfirm = (arguments.length>1)?false:true;
             console.debug(good);
-            garan.cart.cartQuantity-=good.quantity;
-            garan.cart.cartAmount-=good.regular_price*good.quantity;
-            garan.cart.order.order_total=this.cartAmount;
-            this.order.items.splice(i,1);
-            this.showcart();
-            this.set();
+            if(!needconfirm||confirm('Вы уверены, что хотите удалить Ваш товар из мультикорзины?')){
+                garan.cart.cartQuantity-=good.quantity;
+                garan.cart.cartAmount-=good.regular_price*good.quantity;
+                garan.cart.order.order_total=this.cartAmount;
+                this.order.items.splice(i,1);
+                this.showcart();
+                this.set();
+            }
         },
         setCartDigits:function(){
             if(!$("#garan24-cart-quantity").length){
@@ -221,16 +225,8 @@ $.extend(window.garan,{
                 g+='    <img height="100px" src="'+itm.product_img+'" alt="'+itm.title+'">';
                 g+='</div>';
                 */
-                g+='<div class="name col-xs-1 col-sm-1 col-md-1 col-lg-1">';
-                g+='    <a href="javascript:garan.cart.remove('+i+')"><i class="fa fa-trash-o"></i></a>';
-                g+='</div>';
                 g+='<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">';
-                if(typeof itm.shop!="undefined"){
-                    g+='<div class="row"><div class="shop col-xs-6 col-sm-6 col-md-6 col-lg-6" style="font-weight:700;">'
-                    g+=         itm.shop;
-                    g+='</div></div>';
-                }
-                g+='  <div class="row">';
+                g+='  <div class="row" style="font-weight:700;">';
                 g+=         itm.title;
                 g+='  </div>';
                 g+='  <div class="row" style="margin-top:4px;">';
@@ -244,14 +240,24 @@ $.extend(window.garan,{
                     g+=         '<b>Размер</b>: '+itm.variations["size"];
                     g+='    </div>';
                 }
-                g+='    <div class="size col-xs-4 col-sm-4 col-md-4 col-lg-4">'
-                g+='<a href="javascript:garan.cart.editItem('+i+')"><i class="fa fa-pencil"></i> Изменить</a>'
                 g+='  </div>';
-                g+='  </div>';
+                if(typeof itm.shop!="undefined"){
+                    g+='<div class="row shop" style="font-style: italic;">';
+                    //g+='<div class="shop col-xs-6 col-sm-6 col-md-6 col-lg-6">'
+                    g+= 'Магазин:' +itm.shop;
+                    //g+='</div>';
+                    g+='</div>';
+                }
                 g+='</div>';
-                g+='<div class="quantity col-xs-1 col-sm-1 col-md-1 col-lg-1 text-right">'+itm.quantity+'<sup>x</sup></div>';
-                g+='<div class="amount col-xs-3 col-sm-3 col-md-3 col-lg-3">'+garan.number.format(itm.regular_price*itm.quantity,2,3,' ','.')+' руб.</div>';
+                g+='<div class="edit col-xs-2 col-sm-2 col-md-2 col-lg-2">'
+                g+='    <a href="javascript:garan.cart.editItem('+i+')"><i class="fa fa-pencil"></i> Изменить</a>'
+                g+='</div>';
 
+                g+='<div class="quantity col-xs-1 col-sm-1 col-md-1 col-lg-1 text-center">'+itm.quantity+'<sup>x</sup></div>';
+                g+='<div class="amount col-xs-2 col-sm-2 col-md-2 col-lg-2">';
+                g+=garan.number.format(itm.regular_price*itm.quantity,2,3,' ','.')+' руб.';
+                g+='<a href="javascript:garan.cart.remove('+i+')" style="color:red;">&nbsp;<i class="fa fa-remove"></i></a>';
+                g+='</div>';
 
                 g+='</div>';
                 tot+=itm.regular_price*itm.quantity;

@@ -97,6 +97,7 @@
                     var $t = $(this),
                         itemsContainer = $t.next().find(".order-items"),
                         order_id=$t.attr("data-ref");
+                    $(".order-details-row").slideUp();
                     if(typeof itemsContainer!= "undefined" && itemsContainer.hasClass("empty")){
                         $.ajax({
                             url:'/manager/orderitems',
@@ -140,7 +141,6 @@
                         });
                         itemsContainer.removeClass("empty");
                     }
-                    //$(".order-details-row:not(#order-details-"+$t.attr("data-ref")+")").slideUp();
                     $("#order-details-"+$t.attr("data-ref")).slideToggle();
                 });
                 $(".order-action").on("click",function(){

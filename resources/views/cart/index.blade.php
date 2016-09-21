@@ -70,7 +70,7 @@
     </div>
 </div>
 <div class="row">
-    <div id="form" class="form col-xs-12 col-sm-12 col-md-6 col-lg-6">
+    <div id="form" class="form col-xs-12 col-sm-12 col-md-5 col-lg-5">
         <h3><i class="first">Мой</i> товар</h3>
         <!--<a href="/euro-sizes.html" rel="modal:open">Таблица размеров</a>-->
 
@@ -132,7 +132,7 @@
 
         </div>
     </div>
-    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+    <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
         <div class="cart">
             @include('cart.goods')
         </div>
@@ -181,7 +181,7 @@
         $("[name='quantity']").val(p.quantity);
         $("[name='amount']").val(p.original_price);
         $("[name='title']").val(p.title);
-        if(p.comments.length)$("[name='comments']").val(p.comments);
+        if(typeof p.comments!="undefined" && p.comments.length)$("[name='comments']").val(p.comments);
 
         $("[name='url']").val(p.product_url);
         $("[name='img']").val(p.product_img);
@@ -190,7 +190,7 @@
         $("[name='size']").val(p.variations.size);
         $("#edit").show();
         $("#edit").on("click",function(){
-            garan.cart.remove(i);
+            garan.cart.remove(i,false);
             $("#add2cart").click();
             $("#edit").hide();
         });
@@ -307,7 +307,8 @@
                 800,function() {
                     $(this).remove();
                     garan.cart.add2cart(p,c);
-                    $("#add2cartform input").val("");
+                    $("#add2cartform input,#add2cartform textarea").val("");
+                    $("[name='quantity']").val("1");
                 });
         });
         $("#forward").on("click",function(){

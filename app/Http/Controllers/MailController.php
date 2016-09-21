@@ -25,6 +25,12 @@ class MailController extends Controller{
     protected $thishost = "https://service.garan24.ru";
     public function __construct(){
         Garan24::$DB["host"] = "151.248.117.239";
+        \Garan24\Garan24::$DB["prefix"] = "xr_";
+        \Garan24\Garan24::$DB["schema"] = "gauzymall";
+        //\Garan24\Garan24::$DB["user"] = "vsb";
+        //\Garan24\Garan24::$DB["pass"] = "Vampire04";
+        \Garan24\Garan24::$DB["user"] = "gauzymall";
+        \Garan24\Garan24::$DB["pass"] = "gauzymall";
         //$this->raworder = file_get_contents('../tests/example.order.json');
         //$this->raworder = json_decode($this->raworder,true);
         //print_r($this->rawgoods);
