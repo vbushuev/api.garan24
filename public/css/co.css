@@ -530,8 +530,10 @@ textarea {
   font-size: 14pt;
   opacity: 0.33;
 }
-.input-field input:active {
+.input-field:focus {
   border-color: #00bf80;
+}
+.input-field:focus .input-field:before {
   color: #00bf80;
 }
 .input-field.email:before {
@@ -550,5 +552,5 @@ textarea {
   content: '\f02a';
 }
 .input-field.default:before {
-  content: '\f1db';
+  content: '\f105';
 }

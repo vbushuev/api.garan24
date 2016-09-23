@@ -54,7 +54,9 @@ class ManagerController extends Controller{
         //$id = $rq->input("status","0");
         $filters = $rq->all();
         $sel = DB::table('orders')->join('userinfo','orders.user_id','=','userinfo.user_id');
-        foreach($filters as $f=>$v){}
+        foreach($filters as $f=>$v){
+            if($f=="status")$sel = $sel->where("status","=",$v);
+        }
         $orders=$sel->take(20)->get();
         return view("orders.index",["orders"=>$orders]);
     }

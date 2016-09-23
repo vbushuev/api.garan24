@@ -36,9 +36,10 @@ input,select,textarea
     color $colorGrey
     font-size 14pt
     opacity .33
-.input-field input:active
+.input-field:focus
     border-color $colorGreen
-    color $colorGreen
+    .input-field:before
+        color $colorGreen
 .input-field.email:before
     content '\f0e0'
 .input-field.phone:before
@@ -50,4 +51,4 @@ input,select,textarea
 .input-field.barcode:before
     content '\f02a'
 .input-field.default:before
-    content '\f1db'
+    content '\f105'

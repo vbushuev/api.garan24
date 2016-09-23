@@ -76,7 +76,7 @@
 
         <div id="add2cartform" style="padding:0;margin:0;">
             <div class="form-group url-field">
-                <label for="email" class="control-label">Скопируйте в это поле ссылку на товар:</label>
+                <label for="url" class="control-label">Скопируйте в это поле ссылку на товар:</label>
                 @include('elements.inputs.input',['id'=>'productUrl','name'=>'url','text'=>'URL ссылка на товар','required'=>"required", "icon"=>"external-link"])
             </div>
             <div class="after-url" style="padding:0;margin:0;">
@@ -91,11 +91,11 @@
 
             <div class="form-group">
                 <label for="color" class="control-label">Скопируйте или впишите Цвет товара (если есть выбор):</label>
-                @include('elements.inputs.input',['name'=>'color','text'=>'например: серый', "icon"=>"circle-o"])
+                @include('elements.inputs.input',['name'=>'color','text'=>'например: серый'])
             </div>
             <div class="form-group">
                 <label for="dimensions" class="control-label">Укажите размер (если есть выбор):</label>
-                @include('elements.inputs.input',['name'=>'size','text'=>'например: М или 36', "icon"=>"circle-o"])
+                @include('elements.inputs.input',['name'=>'size','text'=>'например: М или 36'])
                 <a href="http://gauzymall.com/g24-sizes" target="__blank">Таблица размеров</a>
             </div>
             <div class="form-group">
@@ -109,7 +109,7 @@
 
             <div class="form-group">
                 <label for="quantity" class="control-label">Количество:</label>
-                @include('elements.inputs.input',['name'=>'quantity','type'=>'number','text'=>'Кол-во','required'=>"required", "icon"=>"circle-o", "value" => "1"])
+                @include('elements.inputs.input',['name'=>'quantity','type'=>'number','text'=>'Кол-во','required'=>"required", "value" => "1"])
             </div>
 
             <!--
@@ -237,7 +237,7 @@
                         $("[name='sku']").val((typeof d.sku!="undefined")?d.sku:"");
                         $("[name='amount']").val((typeof d.price!="undefined")?d.price:"");
                         */
-                        $(".url-field .external-link").remove();
+                        //$(".url-field .external-link").remove();
                         $(".url-field").append('<a class="external-link" href="'+$v+'" target="__blank">Перейти по ссылке</a>');
                         $("[name='img']").val((typeof d.img!="undefined")?d.img:"");
                         $("[name='currency']").val(data.currency);
