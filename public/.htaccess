@@ -6,9 +6,11 @@
 	RewriteEngine On
 
 	# Redirect Trailing Slashes...
-	#RewriteRule ^(.*)/$ /$1 [L,R=301]
+
 	RewriteRule ^my\.garan24\.(.+)(.*)$ service.garan24.$1/my/$2 [NC]
-	# RewriteRule ^\/copier\?data=(.*) copier$1
+
+	RewriteCond %{HTTP_HOST} ^checkout\.garan24\.
+	RewriteRule ^checkout\.garan24\.(bs2|ru)(.+) service.garan24.$1/checkout$2
 
 	# Handle Front Controller...
 	RewriteCond %{REQUEST_FILENAME} !-d

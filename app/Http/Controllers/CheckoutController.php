@@ -70,11 +70,17 @@ class CheckoutController extends Controller{
         $data = $rq->getContent();
         $deal = new Deal();
         Log::debug("In request:".$data);
-        $deal->byJson($data);
-        $resp = $deal->sync();
-        Log::debug("Deal response: ".$resp);
-        //if($resp->code==0){return redirect()->away($resp->redirect_url);}
-        return response()->json($resp->toArray());
+        try{
+            $deal->byJson($data);
+            $resp = $deal->sync();
+            Log::debug("Deal response: ".$resp);
+            return response()->json($resp->toArray());
+        }
+        catch(\Exception $e){
+            Log::error($e);
+            return response()->json(["error"=>$e->getMessage()]);
+        }
+
     }
     public function getCrossbrowser(Request $rq){
         return response()->json(["a"=>"b"]);

@@ -28,4 +28,5 @@ Route::match(['get','post'],'/shipping/bb', 'ServicesController@ShippingBoxberry
 Route::match(['get','post'],'/statuses', 'ServicesController@Statuses');
 Route::match(['get','post'],'/statuses/{wc_status}', 'ServicesController@StatusByWC');
 Route::match(['get','post'],'/crd', 'ServicesController@CrossDomain');
+Route::match(['get','post'],'/calculator', 'ServicesController@CalculatorDomain');
 Route::controller('/', 'WebController');

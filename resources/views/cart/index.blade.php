@@ -79,61 +79,74 @@
                 <label for="url" class="control-label">Скопируйте в это поле ссылку на товар:</label>
                 @include('elements.inputs.input',['id'=>'productUrl','name'=>'url','text'=>'URL ссылка на товар','required'=>"required", "icon"=>"external-link"])
             </div>
-            <div class="after-url" style="padding:0;margin:0;">
-            <div class="form-group">
-                <label for="title" class="control-label">Скопируйте сюда наименование товара:</label>
-                @include('elements.inputs.input',['name'=>'title','text'=>'Наименование товара','required'=>"required", "icon"=>"file-text"])
-            </div>
-            <div class="form-group" style="display:none;">
-                <label for="sku" class="control-label">Артикул товара:</label>
-                @include('elements.inputs.input',['name'=>'sku','text'=>'Код товара', "icon"=>"barcode"])
-            </div>
+            <div class="after-url" style="padding:0;margin:0;display:none">
+                <div class="row message">
+                    <p>
+                        <i class="first">Отлично!</i> Добавляйте Ваш товар в корзину. Нам достаточно одной ссылки! Наши менеджеры обязательно свяжутся с Вами и уточнят все детали.
+                    </p>
+                    <p>
+                        <i class="first">Вы</i> Можете самостоятельно ввести параметры товара ниже или оставить эту работу нашему менеджеру.
+                    </p>
+                </div>
 
-            <div class="form-group">
-                <label for="color" class="control-label">Скопируйте или впишите Цвет товара (если есть выбор):</label>
-                @include('elements.inputs.input',['name'=>'color','text'=>'например: серый'])
-            </div>
-            <div class="form-group">
-                <label for="dimensions" class="control-label">Укажите размер (если есть выбор):</label>
-                @include('elements.inputs.input',['name'=>'size','text'=>'например: М или 36'])
-                <a href="http://gauzymall.com/g24-sizes" target="__blank">Таблица размеров</a>
-            </div>
-            <div class="form-group">
-                <label for="amount" class="control-label">Впишите стоимость товара:</label>
-                @include('elements.inputs.amount',['text'=>'Стоимость товара','required'=>"required", "values"=>[
-                    ["key"=>"EUR","icon"=>"euro","value"=>"Евро","selected"=>"true"],
-                    ["key"=>"GBP","icon"=>"gbp","value"=>"Фунт"],
-                    ["key"=>"USD","icon"=>"usd","value"=>"Доллар"]
-                ] ])
-            </div>
+                <div class="clearfix"><p>&nbsp;</p></div>
+                <div class="row cart-buttons">
+                    <input type="hidden" name="img" />
+                    <a id="edit" class="btn btn-default btn-lg" style="display:none;"><i class="fa fa-pencil"></i> Сохранить</a>
+                    <button id="add2cart" class="btn btn-default btn-lg pull-right" disabled="disabled"><i class="fa fa-cart-plus"></i> Добавить</button>
+                </div>
 
-            <div class="form-group">
-                <label for="quantity" class="control-label">Количество:</label>
-                @include('elements.inputs.input',['name'=>'quantity','type'=>'number','text'=>'Кол-во','required'=>"required", "value" => "1"])
-            </div>
+                <div class="form-group">
+                    <label for="title" class="control-label">Скопируйте сюда наименование товара:</label>
+                    @include('elements.inputs.input',['name'=>'title','text'=>'Наименование товара', "icon"=>"file-text"])
+                </div>
+                <div class="form-group" style="display:none;">
+                    <label for="sku" class="control-label">Артикул товара:</label>
+                    @include('elements.inputs.input',['name'=>'sku','text'=>'Код товара', "icon"=>"barcode"])
+                </div>
 
+                <div class="form-group">
+                    <label for="color" class="control-label">Скопируйте или впишите Цвет товара (если есть выбор):</label>
+                    @include('elements.inputs.input',['name'=>'color','text'=>'например: серый'])
+                </div>
+                <div class="form-group">
+                    <label for="dimensions" class="control-label">Укажите размер (если есть выбор):</label>
+                    @include('elements.inputs.input',['name'=>'size','text'=>'например: М или 36'])
+                    <a href="http://gauzymall.com/g24-sizes" target="__blank">Таблица размеров</a>
+                </div>
+                <div class="form-group">
+                    <label for="amount" class="control-label">Впишите стоимость товара:</label>
+                    @include('elements.inputs.amount',['text'=>'Стоимость товара', "values"=>[
+                        ["key"=>"EUR","icon"=>"euro","value"=>"Евро","selected"=>"true"],
+                        ["key"=>"GBP","icon"=>"gbp","value"=>"Фунт"],
+                        ["key"=>"USD","icon"=>"usd","value"=>"Доллар"]
+                    ] ])
+                </div>
+
+                <div class="form-group">
+                    <label for="quantity" class="control-label">Количество:</label>
+                    @include('elements.inputs.input',['name'=>'quantity','type'=>'number','text'=>'Кол-во', "value" => "1"])
+                </div>
+
+                <!--
+                <div class="form-group">
+                    <label for="weight" class="control-label">Вес товара:</label>
+                    @include('elements.inputs.input',['name'=>'weight','text'=>'Вес товара', "icon"=>"circle-o"])
+                </div>
+                -->
+                <div class="form-group">
+                    <label for="comments" class="control-label">Комментарии к товару:</label>
+                    <textarea id="comments" name="comments" class="form-control" placeholder="Комментарии к товару, промокод или информация о скидке. Пишите любую информацию." rows="3"></textarea>
+                </div>
+
+            </div>
             <!--
-            <div class="form-group">
-                <label for="weight" class="control-label">Вес товара:</label>
-                @include('elements.inputs.input',['name'=>'weight','text'=>'Вес товара', "icon"=>"circle-o"])
-            </div>
+                <h3><i class="first">Внимательно</i> проверьте все поля покупки: размер, цвет, кол-во и цену.</h3>
             -->
-            <div class="form-group">
-                <label for="comments" class="control-label">Комментарии к товару:</label>
-                <textarea id="comments" name="comments" class="form-control" placeholder="Комментарии к товару, промокод или информация о скидке. Пишите любую информацию." rows="3"></textarea>
-            </div>
-            </div>
-            <div class="row cart-buttons">
-                <input type="hidden" name="img" />
-                <a id="edit" class="btn btn-default btn-lg" style="display:none;"><i class="fa fa-pencil"></i> Сохранить</a>
-                <button id="add2cart" class="btn btn-default btn-lg pull-right" disabled="disabled"><i class="fa fa-cart-plus"></i> Добавить</button>
-            </div>
-            <h3><i class="first">Внимательно</i> проверьте все поля покупки: размер, цвет, кол-во и цену.</h3>
-
         </div>
     </div>
     <div class="col-xs-12 col-sm-12 col-md-7 col-lg-7">
-        <div class="cart">
+        <div class="garan cart">
             @include('cart.goods')
         </div>
 
@@ -146,6 +159,7 @@
 </div>
 <script src="/js/responsibility.js"></script>
 <script>
+    var parsedUrl = false;
     var collectData = function(){
         var varis = [];
         var domain = document.createElement("a");
@@ -189,6 +203,7 @@
         $("[name='color']").val(p.variations.color);
         $("[name='size']").val(p.variations.size);
         $("#edit").show();
+        $(".after-url").slideDown();
         $("#add2cart").attr("disabled","disabled");
         $("#edit").unbind("click").on("click",function(){
             garan.cart.remove(i,false);
@@ -205,6 +220,8 @@
                 $v=$(this).val(),
                 re=/^(http|https)\:\/\/[0-9a-z\.\#\?\&\-\;\%\/\=]+$/i;
             console.debug("url changed v="+$v+ " test re="+re.test($v));
+            if(parsedUrl == $v)return;
+            parsedUrl = $v.trim();
             //$(".cart").removeClass("col-md-8").removeClass("col-lg-8").addClass("col-md-12").addClass("col-lg-12");
             //$("#iframe").removeClass("col-xs-0").removeClass("col-sm-0").removeClass("col-md-0").removeClass("col-lg-0")
                 //.addClass("col-xs-12").addClass("col-sm-12").addClass("col-md-8").addClass("col-lg-8")

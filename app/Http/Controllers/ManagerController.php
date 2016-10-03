@@ -53,11 +53,11 @@ class ManagerController extends Controller{
     public function getIndex(Request $rq){
         //$id = $rq->input("status","0");
         $filters = $rq->all();
-        $sel = DB::table('orders')->join('userinfo','orders.user_id','=','userinfo.user_id');
+        $sel = DB::table('orders')->join('userinfo','orders.user_id','=','userinfo.user_id')->where("status","<>","canceled");
         foreach($filters as $f=>$v){
             if($f=="status")$sel = $sel->where("status","=",$v);
         }
-        $orders=$sel->take(20)->get();
+        $orders=$sel->take(40)->get();
         return view("orders.index",["orders"=>$orders]);
     }
     public function getOrderitems(Request $rq){

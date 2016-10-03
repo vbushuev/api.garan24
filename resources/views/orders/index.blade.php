@@ -45,7 +45,7 @@
                                         <?php $passport = json_decode($order->passport); ?>
                                         <h3>Покупатель</h3>
                                         <p>{{$order->first_name}} {{$order->fio_middle}} {{$order->last_name}}</p>
-                                        <p class="small">Паспорт: {{$passport->series}}№{{$passport->number}} Выдан: {{$passport->date}}, {{$passport->where}}</p>
+                                        <p class="small">Паспорт: {{$passport->series or ''}}№{{$passport->number or ''}} Выдан: {{$passport->date or ''}}, {{$passport->where or ''}}</p>
                                         <p><a href="tel:{{$order->shipping_phone}}">{{$order->shipping_phone}}</a></p>
                                         <p><a href="mailto:{{$order->email}}">{{$order->email}}</a></p>
                                         <p>

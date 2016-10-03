@@ -56,7 +56,9 @@ class CartController extends Controller{
             "product"=>[],
             "currency"=>""
         ];
+
         $url = $rq->getContent();
+        DB::table('cart_url')->insertGetId(["url"=>$url]);
         $ui = parse_url($url);
         /*
         scheme - e.g. http
