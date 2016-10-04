@@ -536,6 +536,9 @@ textarea {
 .input-field:focus .input-field:before {
   color: #00bf80;
 }
+.input-field.default:before {
+  content: '\f105';
+}
 .input-field.email:before {
   content: '\f0e0';
 }
@@ -550,7 +553,4 @@ textarea {
 }
 .input-field.barcode:before {
   content: '\f02a';
-}
-.input-field.default:before {
-  content: '\f105';
 }

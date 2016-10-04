@@ -196,7 +196,7 @@ $.extend(window.garan,{
                 /* test */
                 //x_key:"ck_388a0b6c5cc1f391d6fab43b87b1a344ec2c7384",
                 //x_secret:"cs_be6251768285569537f9f26dceb455d30802d51f",
-                domain_id:10,
+                domain_id:8,
                 version: "1.0",
                 response_url: garan.cart.carthost+"/clean?id="+this.id,
                 order:garan.cart.order
