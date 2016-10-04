@@ -3,7 +3,7 @@ $.extend(window.garan,{
         multiplier:1.05,
         EUR:70.88,
         USD:63.39,
-        GBP:82.20,
+        GBP:79.01,
         rates:function(){
             var cur = arguments.length?arguments[0]:false;
             if(!cur) cur = 'EUR';
@@ -98,6 +98,7 @@ $.extend(window.garan,{
                 garan.cart.order.order_total=this.cartAmount;
                 this.order.items.splice(i,1);
                 this.showcart();
+                this.setCartDigits();
                 this.set();
             }
         },
@@ -161,6 +162,7 @@ $.extend(window.garan,{
                         garan.cart.order=$.extend(garan.cart.order,d.order);
                         for(var i in garan.cart.order.items){
                             var item = garan.cart.order.items[i];
+                            item.quantity=((typeof item.quantity!="undefined") )?item.quantity:1;
                             item.quantity=(isNaN(item.quantity))?item.quantity.replace(/.*(\d+).*/,"$1"):item.quantity;
                             //console.debug(item);
                             garan.cart.cartQuantity+=((typeof item.quantity != "undefined")&&!isNaN(item.quantity))?parseInt(item.quantity):0;
@@ -169,8 +171,8 @@ $.extend(window.garan,{
                     }
                     t.order.order_total = tot;
                     t.cartAmount = t.order.order_total;
-                    t.setCartDigits();
-                    t.showcart();
+                    garan.cart.setCartDigits();
+                    garan.cart.showcart();
                 },
                 error:function(){
 
@@ -204,6 +206,7 @@ $.extend(window.garan,{
                 delete itm.variations;
                 delete itm.currency;
                 delete itm.shop;
+                delete itm.sku;
                 rq.order.items[i] = itm;
                 if(typeof itm.product_id == "undefined"){
                     if((typeof itm.shop != "undefined")&&(typeof itm.sku != "undefined")){
@@ -223,6 +226,7 @@ $.extend(window.garan,{
                 dataType: "json",
                 data:JSON.stringify(rq),
                 beforeSend:function(){
+                    $m.find("#garan24-overlay-message").show();
                     $m.find(".garan24-overlay-message-text").html("Обрабатываются товары из Вашей корзины...");
                     $m.fadeIn();
                 },
@@ -245,74 +249,102 @@ $.extend(window.garan,{
             });
         },
         showcart:function(){
-            console.debug("show cart");
             var $c = $(".garan.cart"),g="",tot=0;
-            g+='<h3><i class="first">Мультикорзина</i></h3>';
-            if(garan.cart.order.items.length==0){
-                g+="<div class=\"row cart-item\">";
-                g+='<div class="message">Ваша корзина еще пуста.</div>';
-                g+='</div>';
-            }
-            for(var i in garan.cart.order.items){
-                var itm = garan.cart.order.items[i];
-                if(!itm.title.length) itm.title = itm.product_url;
-                g+="<div class=\"row cart-item\" id=\"cartItem-"+itm.product_id+"\" data-ref=\""+itm.product_url+"\">";
-
-                /*
-                g+='<div class="image col-xs-4 col-sm-4 col-md-4 col-lg-4">';
-                g+='    <img height="100px" src="'+itm.product_img+'" alt="'+itm.title+'">';
-                g+='</div>';
-                */
-                g+='<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">';
-                g+='  <div class="row" style="font-weight:700;">'+itm.title+'</div>';
-                g+='  <div class="row" style="margin-top:4px;">';
-                if(typeof itm.variations != "undefined"){
-                    if(typeof itm.variations["color"]!="undefined"&&itm.variations["color"].length){
-                        g+='    <div class="color col-xs-4 col-sm-4 col-md-4 col-lg-4">'
-                        g+=         '<b>Цвет</b>: '+itm.variations["color"];
-                        g+='    </div>';
-                    }
-                    if(typeof itm.variations["size"]!="undefined"&&itm.variations["size"].length){
-                        g+='    <div class="size col-xs-4 col-sm-4 col-md-4 col-lg-4">'
-                        g+=         '<b>Размер</b>: '+itm.variations["size"];
-                        g+='    </div>';
-                    }
-                }
-                g+='  </div>';
-                if(typeof itm.shop!="undefined"){
-                    g+='<div class="row shop" style="font-style: italic;">';
-                    //g+='<div class="shop col-xs-6 col-sm-6 col-md-6 col-lg-6">'
-                    g+= 'Магазин:' +itm.shop;
-                    //g+='</div>';
+            console.debug("show cart ("+$c.length+")");
+            if($c.length){
+                g+='<h3><i class="first">Мультикорзина</i></h3>';
+                if(garan.cart.order.items.length==0){
+                    g+="<div class=\"row cart-item\">";
+                    g+='<div class="message">Ваша корзина еще пуста.</div>';
                     g+='</div>';
                 }
-                g+='</div>';
-                g+='<div class="edit col-xs-2 col-sm-2 col-md-2 col-lg-2">'
-                g+='    <a href="javascript:garan.cart.editItem('+i+')"><i class="fa fa-pencil"></i> Изменить</a>'
-                g+='</div>';
+                for(var i in garan.cart.order.items){
+                    var itm = garan.cart.order.items[i];
+                    if((typeof itm.title=="undefined")||!itm.title.length) itm.title = itm.product_url;
+                    g+="<div class=\"row cart-item\" id=\"cartItem-"+itm.product_id+"\" data-ref=\""+itm.product_url+"\">";
 
-                if(itm.regular_price>0)g+='<div class="quantity col-xs-1 col-sm-1 col-md-1 col-lg-1 text-center">'+itm.quantity+'<sup>x</sup></div>';
-                g+='<div class="amount col-xs-2 col-sm-2 col-md-2 col-lg-2">';
-                if(itm.regular_price>0)g+=garan.number.format(itm.regular_price*itm.quantity,2,3,' ','.')+' руб.';
-                g+='<a href="javascript:garan.cart.remove('+i+')" style="color:red;">&nbsp;<i class="fa fa-remove"></i></a>';
-                g+='</div>';
+                    /*
+                    g+='<div class="image col-xs-4 col-sm-4 col-md-4 col-lg-4">';
+                    g+='    <img height="100px" src="'+itm.product_img+'" alt="'+itm.title+'">';
+                    g+='</div>';
+                    */
+                    g+='<div class="col-xs-7 col-sm-7 col-md-7 col-lg-7">';
+                    g+='  <div class="row" style="font-weight:700;">'+itm.title+'</div>';
+                    g+='  <div class="row" style="margin-top:4px;">';
+                    if(typeof itm.variations != "undefined"){
+                        if(typeof itm.variations["color"]!="undefined"&&itm.variations["color"].length){
+                            g+='    <div class="color col-xs-4 col-sm-4 col-md-4 col-lg-4">'
+                            g+=         '<b>Цвет</b>: '+itm.variations["color"];
+                            g+='    </div>';
+                        }
+                        if(typeof itm.variations["size"]!="undefined"&&itm.variations["size"].length){
+                            g+='    <div class="size col-xs-4 col-sm-4 col-md-4 col-lg-4">'
+                            g+=         '<b>Размер</b>: '+itm.variations["size"];
+                            g+='    </div>';
+                        }
+                    }
+                    g+='  </div>';
+                    if(typeof itm.shop!="undefined"){
+                        g+='<div class="row shop" style="font-style: italic;">';
+                        //g+='<div class="shop col-xs-6 col-sm-6 col-md-6 col-lg-6">'
+                        g+= 'Магазин:' +itm.shop;
+                        //g+='</div>';
+                        g+='</div>';
+                    }
+                    g+='</div>';
+                    g+='<div class="edit col-xs-2 col-sm-2 col-md-2 col-lg-2">'
+                    g+='    <a href="javascript:garan.cart.editItem('+i+')"><i class="fa fa-pencil"></i> Изменить</a>'
+                    g+='</div>';
 
-                g+='</div>';
-                tot+=itm.regular_price*itm.quantity;
+                    if(itm.regular_price>0)g+='<div class="quantity col-xs-1 col-sm-1 col-md-1 col-lg-1 text-center">'+itm.quantity+'<sup>x</sup></div>';
+                    g+='<div class="amount col-xs-2 col-sm-2 col-md-2 col-lg-2">';
+                    if(itm.regular_price>0)g+=garan.number.format(itm.regular_price*itm.quantity,2,3,' ','.')+' руб.';
+                    g+='<a href="javascript:garan.cart.remove('+i+')" style="color:red;">&nbsp;<i class="fa fa-remove"></i></a>';
+                    g+='</div>';
+
+                    g+='</div>';
+                    tot+=itm.regular_price*itm.quantity;
+                }
+                g+="</div>";
+                if(garan.cart.order.items.length>0){
+                    g+='<div class="row cart-item" id="cart-total">';
+                    g+='<div class="total col-xs-8 col-sm-8 col-md-8 col-lg-8">Сумма заказа:</div>';
+                    g+='<div class="amount cart-total-amount total-amount col-xs-4 col-sm-4 col-md-4 col-lg-4" id="cart-total-price">'+garan.number.format(tot,2,3,' ','.')+' руб.</div>';
+                    g+='</div>';
+                }
+
+                if(garan.cart.order.items.length){
+                    $("#forward").show();
+                    $("#forward").removeAttr("disabled");
+                }
             }
-            g+="</div>";
-            if(garan.cart.order.items.length>0){
-                g+='<div class="row cart-item" id="cart-total">';
-                g+='<div class="total col-xs-8 col-sm-8 col-md-8 col-lg-8">Сумма заказа:</div>';
-                g+='<div class="amount cart-total-amount total-amount col-xs-4 col-sm-4 col-md-4 col-lg-4" id="cart-total-price">'+garan.number.format(tot,2,3,' ','.')+' руб.</div>';
-                g+='</div>';
+            else{
+                $c = $(".garan.x-cart");
+                g+='<h2><i class="first">Ваши</i> товары</h2>';
+                for(var i in garan.cart.order.items){
+                    var itm = garan.cart.order.items[i];
+                    g+='<div class="row-item">';
+                    g+='    <div class ="garan-col garan-img col-xs-2 cols-sm-2 col-md-2 col-lg-2"><img src="'+itm.product_img+'" height="100px"/></div>';
+                    g+='    <div class ="garan-col garan-name col-xs-7 cols-sm-7 col-md-7 col-lg-7">';
+                    g+='        <div class="row-item title">'+itm.title+'</div>';
+                    g+='        <div class="row-item variations">';
+                    g+='            <div class ="col-xs-4 cols-sm-4 col-md-4 col-lg-4"><i>Магазин</i>: '+itm.shop+'</div>';
+                    g+='            <div class ="col-xs-4 cols-sm-4 col-md-4 col-lg-4"><i>Размер</i>: '+((typeof itm.variations['size']!="undefined")?itm.variations['size']:' - ')+'</div>';
+                    g+='            <div class ="col-xs-4 cols-sm-4 col-md-4 col-lg-4"><i>Цвет</i>: '+((typeof itm.variations['color']!="undefined")?itm.variations['color']:' - ')+'</div>';
+                    g+='        </div>';
+                    g+='    </div>';
+                    g+='    <div class ="garan-col garan-quantity col-xs-1 cols-sm-1 col-md-1 col-lg-1 quantity">'+itm.quantity+'<sup>x</sup>';
+                    g+='        <a href="javascript:garan.cart.remove('+i+')" style="color:red;">&nbsp;<i class="fa fa-remove"></i></a>';
+                    g+='    </div>';
+                    g+='    <div class ="garan-col garan-amount col-xs-2 cols-sm-2 col-md-2 col-lg-2 amount">';
+                    g+=garan.number.format(itm.regular_price*itm.quantity,2,3,' ','.')+' руб.';
+                    g+='    </div>';
+                    g+='</div>';
+                    tot+=itm.regular_price*itm.quantity;
+                }
             }
             garan.cart.order.order_total = tot;
             $c.html(g);
-            if(garan.cart.order.items.length){
-                $("#forward").show();
-                $("#forward").removeAttr("disabled");
-            }
         },
         setCartDigits:function(){
             if(!$("#garan24-cart-quantity").length){

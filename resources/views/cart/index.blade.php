@@ -77,15 +77,20 @@
         <div id="add2cartform" style="padding:0;margin:0;">
             <div class="form-group url-field">
                 <label for="url" class="control-label">Скопируйте в это поле ссылку на товар:</label>
-                @include('elements.inputs.input',['id'=>'productUrl','name'=>'url','text'=>'URL ссылка на товар','required'=>"required", "icon"=>"external-link"])
+                @include('elements.inputs.input',['id'=>'productUrl','name'=>'url','text'=>'URL ссылка на товар','required'=>"required", "icon"=>"external-link","value"=>$url])
+            </div>
+            <div class="form-group">
+                <label for="amount" class="control-label">Впишите стоимость товара:</label>
+                @include('elements.inputs.amount',['text'=>'Стоимость товара','required'=>"required", "values"=>[
+                    ["key"=>"EUR","icon"=>"euro","value"=>"Евро","selected"=>"true"],
+                    ["key"=>"GBP","icon"=>"gbp","value"=>"Фунт"],
+                    ["key"=>"USD","icon"=>"usd","value"=>"Доллар"]
+                ] ])
             </div>
             <div class="after-url" style="padding:0;margin:0;display:none">
                 <div class="row message">
                     <p>
-                        <i class="first">Отлично!</i> Добавляйте Ваш товар в корзину. Нам достаточно одной ссылки! Наши менеджеры обязательно свяжутся с Вами и уточнят все детали.
-                    </p>
-                    <p>
-                        <i class="first">Вы</i> Можете самостоятельно ввести параметры товара ниже или оставить эту работу нашему менеджеру.
+                        <i class="first">Остальные</i> поля необязательны для заполнения и их можно уточнить во время разговора с нашим сотрудником. Но если выбранный Вами товар может иметь разные цвета или размер, то во избежание ошибок мы рекомендуем вписать в эти поля выбранные Вами параметры товара.
                     </p>
                 </div>
 
@@ -97,12 +102,12 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="title" class="control-label">Скопируйте сюда наименование товара:</label>
-                    @include('elements.inputs.input',['name'=>'title','text'=>'Наименование товара', "icon"=>"file-text"])
+                    <label for="title" class="control-label">Впишите или скопируйте название товара:</label>
+                    @include('elements.inputs.input',['name'=>'title','text'=>'Впишите или скопируйте название товара', "icon"=>"file-text"])
                 </div>
                 <div class="form-group" style="display:none;">
                     <label for="sku" class="control-label">Артикул товара:</label>
-                    @include('elements.inputs.input',['name'=>'sku','text'=>'Код товара', "icon"=>"barcode"])
+                    @include('elements.inputs.input',['name'=>'sku','text'=>'Впишите или скопируйте код товара', "icon"=>"barcode"])
                 </div>
 
                 <div class="form-group">
@@ -113,14 +118,6 @@
                     <label for="dimensions" class="control-label">Укажите размер (если есть выбор):</label>
                     @include('elements.inputs.input',['name'=>'size','text'=>'например: М или 36'])
                     <a href="http://gauzymall.com/g24-sizes" target="__blank">Таблица размеров</a>
-                </div>
-                <div class="form-group">
-                    <label for="amount" class="control-label">Впишите стоимость товара:</label>
-                    @include('elements.inputs.amount',['text'=>'Стоимость товара', "values"=>[
-                        ["key"=>"EUR","icon"=>"euro","value"=>"Евро","selected"=>"true"],
-                        ["key"=>"GBP","icon"=>"gbp","value"=>"Фунт"],
-                        ["key"=>"USD","icon"=>"usd","value"=>"Доллар"]
-                    ] ])
                 </div>
 
                 <div class="form-group">
@@ -215,6 +212,7 @@
     $(document).ready(function(){
         garan.cart.init();
         //$("#productUrl").on("blur change",function(){
+
         $("#productUrl").on("keyup",function(){
             var $t=$(this),
                 $v=$(this).val(),
@@ -306,6 +304,7 @@
                 }
             });
         });
+        if($("#productUrl").val().length)$("#productUrl").keyup();
         $("#add2cart").on("click",function(){
             var i = $("#add2cartform");
             if(!garan.form.required({form:i}))return false;

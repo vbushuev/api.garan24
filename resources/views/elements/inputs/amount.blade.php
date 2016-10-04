@@ -1,4 +1,4 @@
-<div class="input-group amount-currency input-field" {{$required or ''}}>
+<div class="input-group amount-currency input-field {{$required or ''}}" >
     <style>
         .input-field .input-group-btn{
             background-color: #f2f3f5;

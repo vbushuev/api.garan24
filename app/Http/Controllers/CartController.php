@@ -29,8 +29,9 @@ class CartController extends Controller{
     }
     public function getIndex(Request $rq){
         $id = $rq->input("id","0");
+        $url = $rq->input("url","");
         if($id == 0){
-            return view("cart.index");
+            return view("cart.index",["url"=>$url]);
         }
         $cart = DB::table('garan24_cart')->where("id",$id)->first();
         return response()->json($cart->value);
