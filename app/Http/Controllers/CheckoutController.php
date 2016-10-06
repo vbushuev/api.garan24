@@ -34,7 +34,7 @@ class CheckoutController extends Controller{
         //\Garan24\Garan24::$DB["user"] = "vsb";
         //\Garan24\Garan24::$DB["pass"] = "Vampire04";
         \Garan24\Garan24::$DB["user"] = "gauzymall";
-        \Garan24\Garan24::$DB["pass"] = "gauzymall";
+        \Garan24\Garan24::$DB["pass"] = "D6a8O2e1";
         $this->middleware('cors');
         //$this->raworder = file_get_contents('../tests/example.order.json');
         //$this->raworder = json_decode($this->raworder,true);
