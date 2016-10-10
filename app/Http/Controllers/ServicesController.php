@@ -39,6 +39,9 @@ class ServicesController extends Controller{
 		"refunded" => 0,
 		"failed" => 0,
     ];
+    protected $sales = [
+        "boxberry" => true
+    ];
     public function __construct(){
         $this->middleware('cors');
     }
@@ -50,6 +53,13 @@ class ServicesController extends Controller{
     }
     public function ShippingBoxberry(Request $rq){
         Log::debug("ShippingBoxberry: ".$rq->getContent());
+        /*if($this->sales["boxberry"]){
+            return response()->json([
+                "price"=>"0",
+                "price_base"=>"0",
+                "price_service"=>"0"
+            ]);
+        }*/
         $jr = json_decode($rq->getContent(),true);
         $m = $jr["method"];
         $bb = new \Garan24\Delivery\BoxBerry\BoxBerry();

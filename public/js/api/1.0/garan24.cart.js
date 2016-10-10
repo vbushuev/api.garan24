@@ -2,9 +2,10 @@ $.extend(window.garan,{
     currency:{
         //multiplier:1.05,
         multiplier:1.00,
-        EUR:70.88,
-        USD:63.39,
-        GBP:79.00,
+        EUR:69.23,
+        USD:62.30,
+        GBP:77.00,
+        RUB:1.00,
         rates:function(){
             var cur = arguments.length?arguments[0]:false;
             if(!cur) cur = 'EUR';
@@ -13,7 +14,7 @@ $.extend(window.garan,{
     },
     cart:{
         //carthost:"//service.garan24.ru/cart";
-        carthost:(document.location.hostname.match(/\.bs2/i))?"http://service.garan24.bs2/cart":"https://service.garan24.ru/cart",
+        carthost:(document.location.hostname.match(/\.bs2/i))?"http://service.garan24.bs2/cart":"http://l.gauzymall.com/cart",
         id:0,
         cartQuantity:0,
         cartAmount:0,
@@ -29,38 +30,44 @@ $.extend(window.garan,{
         },
         add2cart:function(){
             if(!arguments.length){console.debug("nodata to add");return false;}
-            while(!garan.cart.inited){
+            /*while(!garan.cart.inited){
                 setTimeout(function(){
                     console.debug("wait for cart inittiated ...");
                 }, 600);
+            }*/
+            var goods = arguments[0];
+            if(!Array.isArray(goods)){
+                var arr = [];
+                arr.push(goods);
+                goods = arr;
             }
-            var good = arguments[0];
-            var cur = (arguments.length>1)?arguments[1]:"EUR";
-            console.debug("Garan24::add2cart(");
-            console.debug(good);
-            console.debug(")");
-            good.original_price = good.original_price.replace(/[\,]/,'.').replace(/^\D+/,"").replace(/\D+$/,"");
-            good.regular_price = good.original_price*garan.currency.rates(cur);
-            good.quantity=parseInt(good.quantity);
-            console.debug(good);
-            //if(typeof good.sku!="undefined")good.sku=good.shop+'#'+good.sku;
-            good.description+=(typeof good.shop != "undefined")?good.shop+" | "+good.description:+"| "+good.description;
-            if(typeof good.product_id == "undefined"){
-                if((typeof good.shop != "undefined")&&(typeof good.sku != "undefined")){
-                    good.product_id = good.shop+"_"+good.sku;
+            for(var i  in goods){
+                var good = goods[i];
+                var cur = (typeof good.currency!="undefiend")?good.currency:((arguments.length>1)?arguments[1]:"EUR");
+                //console.debug("Garan24::add2cart");
+                good.original_price = (isNaN(good.original_price))?good.original_price.replace(/[\,]/,'.').replace(/^\D+/,"").replace(/\D+$/,""):good.original_price;
+                good.regular_price = good.original_price*garan.currency.rates(cur);
+                good.quantity=parseInt(good.quantity);
+                //if(typeof good.sku!="undefined")good.sku=good.shop+'#'+good.sku;
+                good.description+=(typeof good.shop != "undefined")?good.shop+" | "+good.description:+"| "+good.description;
+                //console.debug(good);
+                if(typeof good.product_id == "undefined"){
+                    if((typeof good.shop != "undefined")&&(typeof good.sku != "undefined")){
+                        good.product_id = good.shop+"_"+good.sku;
+                    }
+                    else good.product_id = -1;
                 }
-                else good.product_id = -1;
-            }
-            if(typeof good.variations != "undefined"){
-                good.description+=' | Размер: '+(typeof good.variations.size != "undefined")?good.variations.size:"не указан";
-                good.description+=' | Цвет: '+(typeof good.variations.color != "undefined")?good.variations.color:"не указан";
-            }
-            good.description+=(typeof good.comments!="undefined")?' | comments:'+good.comments:"";
-            if(!this.alreadyitem(good)){
-                garan.cart.cartQuantity=parseInt(garan.cart.cartQuantity)+parseInt(good.quantity);
-                garan.cart.cartAmount+=good.regular_price*good.quantity;
-                garan.cart.order.order_total=this.cartAmount;
-                this.order.items.push(good);
+                if(typeof good.variations != "undefined"){
+                    good.description+=' | Размер: '+(typeof good.variations.size != "undefined")?good.variations.size:"не указан";
+                    good.description+=' | Цвет: '+(typeof good.variations.color != "undefined")?good.variations.color:"не указан";
+                }
+                good.description+=(typeof good.comments!="undefined")?' | comments:'+good.comments:"";
+                if(!this.alreadyitem(good)){
+                    garan.cart.cartQuantity=parseInt(garan.cart.cartQuantity)+parseInt(good.quantity);
+                    garan.cart.cartAmount+=good.regular_price*good.quantity;
+                    garan.cart.order.order_total=this.cartAmount;
+                    this.order.items.push(good);
+                }
             }
             this.setCartDigits();
             this.showcart();
@@ -71,17 +78,17 @@ $.extend(window.garan,{
             for(var i in this.order.items){
                 var it = this.order.items[i];
                 if(it.sku==good.sku&&it.title==good.title) {
-                    it.quantity=parseInt(it.quantity)+parseInt(good.quantity);
+                    //it.quantity=parseInt(it.quantity)+parseInt(good.quantity);
                     return true;
                 }
             }
             return false;
         },
         editItem:function(){
-            console.debug("Garan24::edit cart item(..)");
+            //console.debug("Garan24::edit cart item(..)");
             if(!arguments.length){console.debug("nodata to add");return false;}
             var i = arguments[0],good = this.order.items[i];
-            console.debug(good);
+            //console.debug(good);
             if(typeof decollectData !="undefined"){
                 decollectData(good,i);
             }
@@ -93,11 +100,11 @@ $.extend(window.garan,{
             garan.cart.add2cart(good);
         },
         remove:function(){
-            console.debug("Garan24::remove from cart(..)");
+            //console.debug("Garan24::remove from cart(..)");
             if(!arguments.length){console.debug("nodata to add");return false;}
             var i = arguments[0],good = this.order.items[i];
             var needconfirm = (arguments.length>1)?false:true;
-            console.debug(good);
+            //console.debug(good);
             if(!needconfirm||confirm('Вы уверены, что хотите удалить Ваш товар из мультикорзины?')){
                 garan.cart.cartQuantity-=good.quantity;
                 garan.cart.cartAmount-=good.regular_price*good.quantity;
@@ -108,6 +115,15 @@ $.extend(window.garan,{
                 this.set();
             }
         },
+        removeAll:function(){
+            //console.debug("Garan24::remove ALL from cart(..)");
+            for(var i in garan.cart.order.items){
+                garan.cart.remove(i,false);
+            }
+        },
+        update:function(){
+            console.debug("function cart.update is not defined.");
+        },
         create:function(){
             $.ajax({
                 url:this.carthost+"/create",
@@ -117,8 +133,8 @@ $.extend(window.garan,{
                 success:function(data){
                     //var d=JSON.parse(data);
                     var d=data;
-                    console.debug("Created cart.");
-                    console.debug(d);
+                    //console.debug("Created cart.");
+                    //console.debug(d);
                     garan.cart.id=d.id;
                     garan.cookie.set("cart_id",d.id,{expires:1,domain:'.bs2'});
                     garan.cookie.set("cart_id",d.id,{expires:1,domain:'.xray.bs2'});
@@ -137,7 +153,7 @@ $.extend(window.garan,{
                 response_url: "//"+document.location.hostname+"/response.php?id="+this.id,
                 order:this.order
             };
-            console.debug(this.order);
+            //console.debug(this.order);
             //return ;
             $.ajax({
                 url:this.carthost+"/update",
@@ -158,13 +174,13 @@ $.extend(window.garan,{
                 crossDomain: true,
                 //jsonp:false,
                 beforeSend:function(x){
-                    console.debug("Getting data");
+                    //console.debug("Getting data");
                     //console.debug(x);
                 },
                 success:function(data){
                     var d=JSON.parse(data),tot=0;
                     //var d=data;
-                    console.debug(d);
+                    //console.debug(d);
                     if(typeof d.order != "undefined"){
                         garan.cart.order=$.extend(garan.cart.order,d.order);
                         for(var i in garan.cart.order.items){
@@ -222,7 +238,7 @@ $.extend(window.garan,{
                     }
                     else itm.product_id = -1;
                 }
-                console.debug(itm);
+                //console.debug(itm);
             }
 
             //return ;
@@ -230,7 +246,7 @@ $.extend(window.garan,{
                 type:"POST",
                 //url:"//service.garan24.ru/checkout/",
                 //url:"http://service.garan24.bs2/checkout/",
-                url:(document.location.hostname.match(/\.bs2/i))?"//service.garan24.bs2/checkout":"https://service.garan24.ru/checkout",
+                url:(document.location.hostname.match(/\.bs2/i))?"//service.garan24.bs2/checkout":"http://l.gauzymall.com/checkout",
                 dataType: "json",
                 data:JSON.stringify(rq),
                 beforeSend:function(){
@@ -247,8 +263,8 @@ $.extend(window.garan,{
                 success:function(data){
                     //var d=JSON.parse(data);
                     var d=data;
-                    console.debug("checkout response ");
-                    console.debug(d);
+                    //console.debug("checkout response ");
+                    //console.debug(d);
                     if(!d.error){
                         $m.find(".garan24-overlay-message-text").html("Переход на страницу оформления заказа...");
                         document.location.href = d.redirect_url;
@@ -261,7 +277,7 @@ $.extend(window.garan,{
         },
         showcart:function(){
             var $c = $(".garan.cart"),g="",tot=0;
-            console.debug("show cart ("+$c.length+")");
+            //console.debug("show cart items.#"+garan.cart.order.items.length+" ("+$c.length+")");
             if($c.length){
                 g+='<h3><i class="first">Мультикорзина</i></h3>';
                 if(garan.cart.order.items.length==0){
@@ -332,6 +348,7 @@ $.extend(window.garan,{
             else{
                 $c = $(".garan.x-cart");
                 g+='<h2><i class="first">Ваши</i> товары</h2>';
+                g+='<div class="garan-editional-actions"><a href="javascript:{garan.cart.update();}" class="garan-disabled"><i class="fa fa-refresh"></i> Обновить корзину</a></div>';
                 if(garan.cart.order.items.length==0){
                     g+="<div class=\"row-item\">";
                     g+='<div class="message">Ваша корзина еще пуста.</div>';
@@ -354,7 +371,8 @@ $.extend(window.garan,{
                     g+='        <a href="javascript:garan.cart.remove('+i+')" style="color:red;">&nbsp;<i class="fa fa-remove"></i></a>';
                     g+='    </div>';
                     g+='    <div class ="garan-col garan-amount col-xs-2 cols-sm-2 col-md-2 col-lg-2 amount">';
-                    g+=garan.number.format(itm.regular_price*itm.quantity,2,3,' ','.')+' руб.';
+                    //g+=garan.number.format(itm.regular_price*itm.quantity,2,3,' ','.')+' руб.';
+                    g+=garan.number.format(itm.regular_price,2,3,' ','.')+' руб.';
                     g+='    </div>';
                     g+='</div>';
                     tot+=itm.regular_price*itm.quantity;

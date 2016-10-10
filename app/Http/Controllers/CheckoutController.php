@@ -26,7 +26,8 @@ use \Garan24\Gateway\Ariuspay\PreauthRequest as PreauthRequest;
 
 class CheckoutController extends Controller{
     protected $viewFolder = 'co';
-    protected $thishost = "https://service.garan24.ru";
+    //protected $thishost = "https://service.garan24.ru";
+    protected $thishost = "http://l.gauzymall.com";
     public function __construct(){
         \Garan24\Garan24::$DB["host"] = "151.248.117.239";
         \Garan24\Garan24::$DB["prefix"] = "xr_";
@@ -313,7 +314,9 @@ class CheckoutController extends Controller{
         ];
         $redirect_url = "";
         try{
+            Log::debug("payoutresponse[r]: ".json_encode($r));
             $obj = new \Garan24\Gateway\Ariuspay\CallbackResponse($r,function($d){});
+            Log::debug("payoutresponse[obj]: ".$obj);
             if($obj->accept()){
                 $id = $rq->session()->get("deal_id");
                 if(strlen($id)<=0)$id = $rq->cookie("deal_id");
@@ -324,6 +327,7 @@ class CheckoutController extends Controller{
                     'orderid' => $obj->orderid
                 ]]);
                 $request = new \Garan24\Gateway\Ariuspay\CreateCardRefRequest($crdData);
+                
                 $connector = new \Garan24\Gateway\Ariuspay\Connector();
                 $connector->setRequest($request);
                 $connector->call();
@@ -334,7 +338,6 @@ class CheckoutController extends Controller{
                 //$crd->getResponse()->
                 /* Check user have this card*/
                 // DB::table('garan24_usermeta')->exist
-
                 \Garan24\Garan24::debug("Redirecting to ".$this->viewFolder.'/thanks');
                 //return redirect("/thanks");
                 return $this->postThanks($rq);
@@ -414,10 +417,10 @@ class CheckoutController extends Controller{
         $log = "";
         if(empty($data))$data = $rq->all();
         foreach($data as $k=>$v){
-            if(empty($v))unset($data["{$k}"]);
-            else{
+            //if(empty($v))unset($data["{$k}"]);
+            //else{
                 $log .= "{$k} = ".\Garan24\Garan24::obj2str($v).", ";
-            }
+            //}
         }
         $data = array_merge($data,["deal_id" => $rq->session()->get("deal_id"),"deal_id_source" => "session"]);
         if(strlen($data["deal_id"])<=0)$data = array_merge($data,["deal_id" => $rq->cookie("deal_id"),"deal_id_source" => "cookie"]);

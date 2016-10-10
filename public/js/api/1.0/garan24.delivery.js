@@ -23,7 +23,9 @@ $.extend(window.garan,{
         list:[],
         boxberry:{
             //api.token = 18455.rvpqeafa
-            token:'gTVJ0bB4bEy68vCaEqNO3Q==',
+            //token:'gTVJ0bB4bEy68vCaEqNO3Q==',
+            //18455.rvpqeafa
+            token:'Aw+IJdwZMl1hMwsdq/uvQA==',
             callback:function(boxres){
                 console.debug(boxres);
                 /*document.getElementById('city').innerHTML = result.name;

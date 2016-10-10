@@ -29,7 +29,7 @@
             var callback = (arguments.length)?arguments[0]:(function(){});
             if(v.length==6){
                 $.ajax({
-                    url:"https://service.garan24.ru/shipping/bb",
+                    url:"//l.gauzymall.com/shipping/bb",
                     method:"post",
                     dataType:"json",
                     data:JSON.stringify({
@@ -45,7 +45,7 @@
                         if(d[0].ExpressDelivery){
                             $m.html("");
                             $.ajax({
-                                url:"https://service.garan24.ru/shipping/bb",
+                                url:"//l.gauzymall.com/shipping/bb",
                                 method:"post",
                                 dataType:"json",
                                 data:JSON.stringify({
@@ -63,7 +63,7 @@
                                     console.debug("d.price_base: "+price);
                                     $("#ShippingAmountHidden").val(price);
                                     $m.html("Стоимость доставки <strong>"+price.format(2)+" руб.</strong>");
-                                    calculateTotal();
+
                                     var delivery_address = 'Доставка <b>Boxberry Курьер</b>';
                                     var delivery_address_2 = '<br /><small>Ориентировочный срок: 20 дн.</small>';
                                     delivery_address+= "<br /><small class='shipping-city'>"+$("#shipping_city").val()+"</small>, "+$("#shipping_postcode").val()+", <small class='shipping-address-1'>"+$("#shipping_address_1").val()+"</small>";
@@ -72,6 +72,11 @@
                                     price = parseInt(price);
                                     $("#cart-shipping .total").html(delivery_address);
                                     $("#cart-shipping .amount").html(price.format(0,3,' ','.')+" руб.");
+                                    //SALE
+                                    $("#cart-shipping .amount").html("<strike>"+$("#cart-shipping .amount").html()+"</strike><br/>0 руб.");
+                                    $("#ShippingAmountHidden").val(0);
+                                    //$("#cart-shipping .amount").css("text-decoration","line-through");
+                                    calculateTotal();
                                     callback();
                                 },
                                 error:function(x,t,e){
@@ -104,7 +109,7 @@
                     getShippingCost(garan.form.submit(garan_submit_args));
                 }
             });
-            
+
         });
     </script>
 </div>

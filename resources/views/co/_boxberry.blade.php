@@ -49,7 +49,7 @@
     }
     $(document).ready(function(){
         $("#delivery-type-4").on("click",function(){
-            boxberry.open(boxberry_callback,garan.delivery.boxberry.token,'Москва',77961);
+            boxberry.open(boxberry_callback,garan.delivery.boxberry.token,'Москва',0);
         });
     });
 </script>

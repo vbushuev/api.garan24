@@ -51,6 +51,12 @@ function calculateTotal(){
     total+=tt;
     $("#ServiceFeeHidden").val(tt);
     $("#order-fee").html(tt.format(2,3,' ','.')+" руб.");
+    //!!!! SALE
+    $("#order-fee").html("<strike>"+$("#order-fee").html()+"</strike><br/>0 руб.");
+    total-=tt;
+    $("#ServiceFeeHidden").val(0);
+    //!!!! SALE END
+
     $("#total-price").html(total.format(2,3,' ','.')+" руб.");
     $("#shipping-price").val(total.format(2,3,' ','.')+" руб.");
 }
@@ -198,4 +204,18 @@ function calculateTotal(){
             //return false;
         });
     });
+    // GoogleAnalytics
+    if(typeof ga!="undefined"){
+        console.debug("GA events.");
+        $("[name='email']").on("blur",function(){
+            var $t = $(this),v = $(this).val();
+            ga('send','event','checkout','email',v,1);
+            console.debug("GA event: email["+v+"] entered.");
+        });
+        $("[name='phone']").on("blur",function(){
+            var $t = $(this),v = $(this).val();
+            ga('send','event','checkout','phone',v,1);
+            console.debug("GA event: phone["+v+"] entered.");
+        });
+    }
 })();
