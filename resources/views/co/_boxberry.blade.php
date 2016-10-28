@@ -17,7 +17,8 @@
         delivery_address_2+= "<br /><small>Срок: "+bb.period+" дн.</small>";
         delivery_address+= delivery_address_2;
         var price = parseInt(bb.price);
-        $("#ShippingAmountHidden").val(bb.price);
+        if(isNaN(price)) price = 0;
+        $("#ShippingAmountHidden").val(price);
 
         $("#cart-shipping .total").html(delivery_address);
         $("#cart-shipping .amount").html(price.format(0,3,' ','.')+" руб.");

@@ -29,4 +29,14 @@ Route::match(['get','post'],'/statuses', 'ServicesController@Statuses');
 Route::match(['get','post'],'/statuses/{wc_status}', 'ServicesController@StatusByWC');
 Route::match(['get','post'],'/crd', 'ServicesController@CrossDomain');
 Route::match(['get','post'],'/calculator', 'ServicesController@CalculatorDomain');
+Route::match(['get','post'],'/currency', 'ServicesController@Currency');
+Route::match(['get','post'],'/currency/update', 'ManagerController@CurrencyUpdate');
+
+
+Route::auth();
+
+Route::get('/home', 'HomeController@index');
+
+
+// Default controller
 Route::controller('/', 'WebController');

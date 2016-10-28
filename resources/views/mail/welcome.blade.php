@@ -5,7 +5,7 @@
         <i style="font-weight: 700;font-style: normal;font-size: inherit;">Вы</i> сделали заказ с помощью сервиса комфортных покупок <span style="color: #557da1;font-weight: 700;">GauzyMALL</span>.
     </div>
     <div style="text-indent: 2em;">
-        <i style="font-weight: 700;font-style: normal;font-size: inherit;">Используя</i> <a href="http://gauzymall.com/myaccount/">Личный кабинет <span style="color: #557da1;font-weight: 700;">GauzyMALL</span></a>, Вы можете отслеживать статус доставки заказа. При покупках у наших партнеров Вам не придется повторно вводить данные для доставки и оплаты заказа.
+        <i style="font-weight: 700;font-style: normal;font-size: inherit;">Используя</i> <a href="http://gauzymall.com/my-account/">Личный кабинет <span style="color: #557da1;font-weight: 700;">GauzyMALL</span></a>, Вы можете отслеживать статус доставки заказа. При покупках у наших партнеров Вам не придется повторно вводить данные для доставки и оплаты заказа.
     </div>
     <div style="text-indent: 2em;">
         <i style="font-weight: 700;font-style: normal;font-size: inherit;">Уже</i> сейчас, как участник сервиса <span style="color: #557da1;font-weight: 700;">GauzyMALL</span>, Вы можете оплачивать заказ банковской картой при его получении. В дальнейшем мы предложим Вам другие способы оплаты, в том числе, с отсрочкой или рассрочкой платежа.

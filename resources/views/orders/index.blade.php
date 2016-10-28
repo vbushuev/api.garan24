@@ -92,6 +92,23 @@
             @endforeach
         </table>
         <script>
+            $=jQuery.noConflict();
+            var rp = {
+                value:50000,
+                timer:0,
+                start:function(){
+                    rp.value = (arguments.length&&!isNaN(arguments[0])&&arguments[0]>1000)?arguments[0]:rp.value;
+                    rp.timer = setTimeout(function(){
+                        console.debug("timer occurs "+rp.value);
+                        document.location.reload();
+                    },rp.value);
+                },
+                restart:function(){
+                    console.debug("Restart timer "+ rp.timer);
+                    clearTimeout(rp.timer);
+                    rp.start();
+                }
+            };
             $(document).ready(function(){
                 $(".order").on("click",function(){
                     var $t = $(this),
@@ -142,6 +159,7 @@
                         itemsContainer.removeClass("empty");
                     }
                     $("#order-details-"+$t.attr("data-ref")).slideToggle();
+                    rp.restart();
                 });
                 $(".order-action").on("click",function(){
                     var $t = $(this),ac = $t.attr("data-rel"),id = $t.parent().attr("data-ref");
@@ -157,6 +175,7 @@
                         }
                     });
                 });
+                //rp.start(50000);
             });
         </script>
     @endif

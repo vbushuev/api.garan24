@@ -21,7 +21,7 @@
             garan.form.submit(garan_submit_args);
         });
         $("#back").click(function(){
-            history.go(-1);
+            history.back();
             //garan_submit_args.url="{{$gobackurl or $route["dir"].$route["back"]["href"]}}";
             //garan_submit_args.type="{{$gobacktype or 'post'}}";
             //garan.form.goback(garan_submit_args);

@@ -76,6 +76,12 @@
                                     $("#cart-shipping .amount").html("<strike>"+$("#cart-shipping .amount").html()+"</strike><br/>0 руб.");
                                     $("#ShippingAmountHidden").val(0);
                                     //$("#cart-shipping .amount").css("text-decoration","line-through");
+
+                                    $("#boxberry_postcode").val($("#shipping_postcode").val());
+                                    $("#boxberry_city").val($("#shipping_city").val());
+                                    $("#boxberry_address_1").val($("#shipping_address_1").val());
+                                    $("#boxberry_address_2").val("");
+
                                     calculateTotal();
                                     callback();
                                 },

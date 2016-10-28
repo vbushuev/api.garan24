@@ -1,3 +1,5 @@
+// main: co.impreza.styl
+$colorGreen = rgb(0, 191, 128)
 .scale-2
     width: 100%;
 .scale-2-item
@@ -6,10 +8,10 @@
     display: inline-block;
     width: 25%;
     text-align: center;
-    height: 64px;
-    line-height: 64px;
+    height: 2em;
+    line-height: 2em;
     border:none;
-    font-size: 16pt;
+    font-size: 1em;
     color: rgba(0,0,0,.3);
     pointer-events: none;
 .scale-2-item a
@@ -26,24 +28,24 @@
 .scale-2-item:after
     border-color: transparent;
     border-left-color: rgba(167,255,235 ,1);
-    border-width: 32px;
-    margin-top: -32px;
-    right: -60px;
+    border-width: 1em;
+    margin-top: -1em;
+    right: -2em;
     z-index: 200;
 .scale-2-item:before
     border-color: transparent;
     border-left-color: rgba(255,255,255,1);
-    border-width: 32px;
+    border-width: 1em;
     z-index: 100;
     left:0;
-    margin-top: -32px;
+    margin-top: -1em;
 .scale-2-item:first-child:before
     border-left-color: rgba(167,255,235 ,1);
 .scale-2-item:last-child:after
     //border-left-color: rgba(255,255,255,1);
     border-left-color: transparent;
 .active.scale-2-item,.active-last.scale-2-item
-    background-color: #5cb85c;//#449d44
+    background-color: $colorGreen//#449d44
     color: rgba(255,255,255,1);
 .active.scale-2-item a,.active-last.scale-2-item a
     color: rgba(255,255,255,1);
@@ -54,7 +56,7 @@
     text-transform: uppercase;
 .active-last.scale-2-item:after,.active-last.scale-2-item:first-child:before,
 .active.scale-2-item:after,.active.scale-2-item:first-child:before
-    border-left-color: #5cb85c;
+    border-left-color: $colorGreen
 .active.scale-2-item:last-child:after,
 .active-last.scale-2-item:last-child:after
     border-left-color: transparent;
@@ -135,6 +137,10 @@
     font-size: 12pt;
     text-indent: 2em;
     border-radius: (1em);
+.helper-box-auto
+    .helper-box-item
+        display: block;
+        text-align: center;
 .helper-box-item-close
     border: solid 4px transparent;
     position: fixed;
@@ -196,3 +202,7 @@
     color: rgba(255,255,255,1);
 .modal-box-item-close:hover
     border: solid 4px rgba(255,255,255,1);
+
+.btn-success
+    background-color: $colorGreen
+    border-color $colorGreen

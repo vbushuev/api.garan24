@@ -29,10 +29,9 @@
             &nbsp;
         </div>
         <div class="name col-xs-8 col-sm-8 col-md-8 col-lg-8">
-            <div class="row">Комиссия сервиса</div>
             <div class="row">
                 <div class="total col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    5% + <i class="fa fa-euro"></i>5
+                    Комиссия сервиса 5% + <i class="fa fa-euro"></i>5
                 </div>
                 <div class="amount col-xs-6 col-sm-6 col-md-6 col-lg-6" id="order-fee">
 
@@ -46,11 +45,15 @@
                 Доставка <b>{{$deal->delivery["name"]}}</b>
                 <br /><small>{{$deal->getCustomer()->toAddressString()}}</small>
                 {!!$deal->getCustomer()->billing_address["address_2"] or ''!!}
+            @else
+                Доставка <b>Стандарт</b>
             @endif
         </div>
         <div class="amount total-amount col-xs-4 col-sm-4 col-md-4 col-lg-4" id="shipping-price">
             @if(isset($deal->shipping_cost)&&strlen($deal->shipping_cost)>0)
                 @amount($deal->shipping_cost)
+            @else
+                <strike>@amount(500)</strike><br />@amount(0)
             @endif
         </div>
     </div>

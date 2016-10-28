@@ -74,5 +74,11 @@ class ServicesController extends Controller{
         }
         return response($result);
     }
+    public function Currency(Request $rq){
+        //DB::table('currency_rates')->insertGetId(["value"=>"{}"])];
+        $c = DB::table('currency_rates')->take(4)->get();
+        return response()->json($c,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    }
+
 }
 ?>

@@ -60,12 +60,13 @@
 				$!card_error
 			</div>
 			#end
-			#if($!AMOUNT==1)
+			<!--
 	        <div class="message">
 	            Для подтверждения заказа и оплаты после доставки необходимо внести предоплату 1 руб.
 	        </div>
-			#end
+		-->
 		    <div class="row">
+				<h2>Заказ: №<code>$!MERCHANT_ORDER_ID</code></h2>
 		        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
 		            <label for="card_amount" class="control-label-">Сумма операции:</label>
 		        </div>
@@ -80,7 +81,7 @@
 		                <div class="input-group required">
 		    				<span class="input-group-addon"><i class="fa fa-credit-card fa-fw"></i></span>
 		    				<input id="${CARDNO}" name="${CARDNO}" class="form-control pan" type="text" placeholder="Номер карты">
-							<input id="${CARDHOLDER}" name="${CARDHOLDER}" type="hidden" value="Garan24 Shopper" />
+							<input id="${CARDHOLDER}" name="${CARDHOLDER}" type="hidden" value="Gauzymall Shopper" />
 						</div>
 		            </div>
 		        </div>
@@ -108,7 +109,7 @@
             		</div>
         		</div>
     		</div>
-		    <div class="row">
+		    <!--<div class="row">
 		        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 		            <div class="form-group" id="card-save-agree">
 		                <div class="input-group">
@@ -117,7 +118,7 @@
 						</div>
             		</div>
         		</div>
-    		</div>
+    		</div>-->
 			$!{INTERNAL_SECTION}
 			<div class="row">
             	<button id="back" class="btn btn-default btn-lg pull-left">← Вернуться</button>
@@ -164,6 +165,7 @@
 		        type:"post"
 		    });
 		});
+		$("#back").on("click",function(){history.back();});
 	});
 </script>
 

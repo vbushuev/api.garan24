@@ -24,6 +24,7 @@ class ManagerController extends Controller{
     protected $products;
     public function __construct(){
         $this->middleware('cors');
+        $this->middleware('auth');
         $domain = "http://gauzymall.com";
         $consumer_key = "ck_653d001502fc0b8e1b5e562582f678ce7b966b85";
         $consumer_secret = "cs_a9b8f4b535f845f82509c1cfa6bea5d094219dce";
@@ -52,12 +53,18 @@ class ManagerController extends Controller{
     }
     public function getIndex(Request $rq){
         //$id = $rq->input("status","0");
+        $filtersSet = false;
         $filters = $rq->all();
         $sel = DB::table('orders')->join('userinfo','orders.user_id','=','userinfo.user_id')->where("status","<>","canceled");
+
         foreach($filters as $f=>$v){
-            if($f=="status")$sel = $sel->where("status","=",$v);
+            if($f=="status"){
+                $sel = $sel->where("status","=",$v);
+                $filtersSet = true;
+            }
         }
-        $orders=$sel->take(40)->get();
+        if(!$filtersSet)$sel = $sel->where('status','<>','new');
+        $orders=$sel->take(100)->get();
         return view("orders.index",["orders"=>$orders]);
     }
     public function getOrderitems(Request $rq){
@@ -98,5 +105,17 @@ class ManagerController extends Controller{
         //var_dump($res);
         return response()->json($res->product,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
+    public function getConsole(Request $rq){
+        return view("orders.manager");
+    }
+    public function CurrencyUpdate(Request $rq){
+        $d = $rq->all();
+        Log::debug(json_encode($d,JSON_PRETTY_PRINT));
+        foreach($d as $k=>$v){
+            if(in_array(strtoupper($k),["EUR","USD","GBP"]))DB::table('currency_rates')->where("iso_code",strtoupper($k))->update(["value"=>$v]);
+        }
+        return $this->Currency($rq);
+    }
+
 }
 ?>

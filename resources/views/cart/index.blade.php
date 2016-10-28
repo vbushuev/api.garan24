@@ -211,6 +211,7 @@
     window.collectData = collectData;
     $(document).ready(function(){
         garan.cart.init();
+        garan.cart.isframe = true;
         //$("#productUrl").on("blur change",function(){
 
         $("#productUrl").on("keyup",function(){
@@ -245,51 +246,47 @@
                 },
                 success:function(data){
                     console.debug(data);
-                    if(data.success){
-                        var d=data.product;
-                        /*
-                        $("[name='title']").val(decodeURIComponent((typeof d.title!="undefined")?d.title:""));
-                        $("[name='sku']").val((typeof d.sku!="undefined")?d.sku:"");
-                        $("[name='amount']").val((typeof d.price!="undefined")?d.price:"");
-                        */
-                        //$(".url-field .external-link").remove();
-                        $(".url-field").append('<a class="external-link" href="'+$v+'" target="__blank">Перейти по ссылке</a>');
-                        $("[name='img']").val((typeof d.img!="undefined")?d.img:"");
-                        $("[name='currency']").val(data.currency);
-                        $(".after-url").slideDown();
-                        $("[data-value='"+data.currency+"']").click();
+                    if(!data.success && !$(".helper-box-auto:visible").length){
 
-                        var itm = d,g="<div class=\"row\" id=\"cartItem-"+itm.product_id+"\" data-ref=\""+$v+"\">";
-                        var vars = "";
-                        for(var v in itm.variations){
-                            vars+=v+" "+itm.variations[v];
-                        }
-                        g+='<div class="image col-xs-6 col-sm-6 col-md-4 col-lg-4" >';
-                        g+='<img height="100px" src="'+itm.img+'" alt="'+itm.title+'">';
-                        g+='</div>';
-                        g+='<div class="name col-xs-6 col-sm-6 col-md-8 col-lg-8">';
-                        if(d.title!=null&&d.title!="undefined")g+='<div class="row"><strong>Наименование:</strong><br /><a class="fill-data" title="Копировать значение" href="javascript:fillData(\'title\',\''+d.title+'\');" data-rel="title"><i class="fa fa-copy"></i></a> '+itm.title+'</div>';
-                        if(d.price!=null&&d.price!="undefined")g+='<div class="row"><strong>Цена:</strong><br /><a class="fill-data" title="Копировать значение" href="javascript:fillData(\'amount\','+d.price+');" data-rel="amount"><i class="fa fa-copy"></i></a> '+garan.number.format(itm.price,2,3,' ','.')+' '+data.currency+'</div>';
+                        $('<div class="helper-box-auto">'
+                            +'<a href="#" class="helper-box-item-close"><i class="fa fa-close fa-2x"></i></a>'
+                            +'<div class="helper-box-item">'
+                            +data.error.message
+                        +'</div></div>').appendTo("body").click(function(){$(this).remove();});
+                        //return;
+                    }
+                    var d=data.product;
+
+                    $("[name='title']").val(decodeURIComponent((typeof d.title!="undefined")?d.title:""));
+                    $("[name='sku']").val((typeof d.sku!="undefined")?d.sku:"");
+                    $("[name='amount']").val((typeof d.price!="undefined")?d.price:"");
+
+                    //$(".url-field .external-link").remove();
+                    if($(".url-field a.external-link").length==0)$(".url-field").append('<a class="external-link" href="'+$v+'" target="__blank">Перейти по ссылке</a>');
+                    $("[name='img']").val((typeof d.img!="undefined")?d.img:"");
+                    $("[name='currency']").val(data.currency);
+                    $(".after-url").slideDown();
+                    $("[data-value='"+data.currency+"']").click();
+                    var itm = d,g="<div class=\"row\" id=\"cartItem-"+itm.product_id+"\" data-ref=\""+$v+"\">";
+                    var vars = "";
+                    for(var v in itm.variations){
+                        vars+=v+" "+itm.variations[v];
+                    }
+                    g+='<div class="image col-xs-6 col-sm-6 col-md-4 col-lg-4" >';
+                    g+='<img height="100px" src="'+itm.img+'" alt="'+itm.title+'">';
+                    g+='</div>';
+                    g+='<div class="name col-xs-6 col-sm-6 col-md-8 col-lg-8">';
+                    if(d.title!=null&&d.title!="undefined")g+='<div class="row"><strong>Наименование:</strong><br /><a class="fill-data" title="Копировать значение" href="javascript:fillData(\'title\',\''+d.title+'\');" data-rel="title"><i class="fa fa-copy"></i></a> '+itm.title+'</div>';
+                    if(d.price!=null&&d.price!="undefined")g+='<div class="row"><strong>Цена:</strong><br /><a class="fill-data" title="Копировать значение" href="javascript:fillData(\'amount\','+d.price+');" data-rel="amount"><i class="fa fa-copy"></i></a> '+garan.number.format(itm.price,2,3,' ','.')+' '+data.currency+'</div>';
                         //if(d.sku!=null&&d.sku!="undefined")g+='<div class="row"><strong>Артикул:</strong><br /><a class="fill-data" title="Копировать значение" href="javascript:fillData(\'sku\',\''+d.sku+'\');" data-rel="sku"><i class="fa fa-copy"></i></a> '+d.sku+"</div>";
-                        g+='</div></div>';
-                        if(d.title!=null&&d.title!="undefined"){
+                    g+='</div></div>';
+                    if(d.title!=null&&d.title!="undefined"){
                             /*$("#sugestion").html(
                                 '<h2>Мы нашли по Вашей ссылке этот товар:</h2>'
                                 +g
                                 +'<div class="row"><a class="btn btn-default pull-right" href="javascript:fillAllData();">Копировать все данные в форму</a></div>'
                                 +'<div class="message"><p>Наша система старается автоматически заполнить все необходимые поля и выбрать минимальную цену за товары. Но дополнительная проверка не помешает.</p></div>'
                             );*/
-                        }
-
-                    }
-                    else{
-                        $('<div class="helper-box-auto">'
-                            +'<a href="#" class="helper-box-item-close"><i class="fa fa-close fa-2x"></i></a>'
-                            +'<div class="helper-box-item">'
-                            +data.error.message
-                        +'</div></div>').appendTo("body").delay(1000).hide().click(function(){
-                            $(this).hide();
-                        });
                     }
                 },
                 complete:function(){

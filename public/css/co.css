@@ -256,10 +256,10 @@ body .container #footer {
   display: inline-block;
   width: 25%;
   text-align: center;
-  height: 64px;
-  line-height: 64px;
+  height: 2em;
+  line-height: 2em;
   border: none;
-  font-size: 16pt;
+  font-size: 1em;
   color: rgba(0,0,0,0.3);
   pointer-events: none;
 }
@@ -280,18 +280,18 @@ body .container #footer {
 .scale-2-item:after {
   border-color: transparent;
   border-left-color: #a7ffeb;
-  border-width: 32px;
-  margin-top: -32px;
-  right: -60px;
+  border-width: 1em;
+  margin-top: -1em;
+  right: -2em;
   z-index: 200;
 }
 .scale-2-item:before {
   border-color: transparent;
   border-left-color: #fff;
-  border-width: 32px;
+  border-width: 1em;
   z-index: 100;
   left: 0;
-  margin-top: -32px;
+  margin-top: -1em;
 }
 .scale-2-item:first-child:before {
   border-left-color: #a7ffeb;
@@ -301,7 +301,7 @@ body .container #footer {
 }
 .active.scale-2-item,
 .active-last.scale-2-item {
-  background-color: #5cb85c;
+  background-color: #00bf80;
   color: #fff;
 }
 .active.scale-2-item a,
@@ -320,7 +320,7 @@ body .container #footer {
 .active-last.scale-2-item:first-child:before,
 .active.scale-2-item:after,
 .active.scale-2-item:first-child:before {
-  border-left-color: #5cb85c;
+  border-left-color: #00bf80;
 }
 .active.scale-2-item:last-child:after,
 .active-last.scale-2-item:last-child:after {
@@ -421,6 +421,10 @@ body .container #footer {
   -moz-border-radius: 1em;
   border-radius: 1em;
 }
+.helper-box-auto .helper-box-item {
+  display: block;
+  text-align: center;
+}
 .helper-box-item-close {
   border: solid 4px transparent;
   position: fixed;
@@ -495,6 +499,10 @@ body .container #footer {
 .modal-box-item-close:hover {
   border: solid 4px #fff;
 }
+.btn-success {
+  background-color: #00bf80;
+  border-color: #00bf80;
+}
 input,
 select,
 textarea {
@@ -553,4 +561,16 @@ textarea {
 }
 .input-field.barcode:before {
   content: '\f02a';
+}
+.input-field.euro:before {
+  content: '\f153';
+}
+.input-field.gbp:before {
+  content: '\f154';
+}
+.input-field.usd:before {
+  content: '\f155';
+}
+.input-field.rub:before {
+  content: '\f158';
 }

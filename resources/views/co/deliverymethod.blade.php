@@ -53,6 +53,10 @@
                     $("#ShippingAmountHidden").val('');
                     $("#cart-shipping .total").html('');
                     $("#cart-shipping .amount").html('');
+
+                    //$("#shipping_postcode").val("");
+                    //$("#shipping_city").val("");
+                    //$("#shipping_address_1").val("");
                     if($("#shipping_postcode").val().length){
                         getShippingCost();
                     }

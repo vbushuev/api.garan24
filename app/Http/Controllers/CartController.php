@@ -45,9 +45,12 @@ class CartController extends Controller{
         return response()->json($cart->value);
     }
     public function getClean(Request $rq){
-        DB::table('garan24_cart')
-            ->where("id",$rq->input("id","0"))
-            ->update(["value" => "{}"]);
+        $id = $rq->input("id","0");
+        if($id!="0"){
+            DB::table('garan24_cart')
+                ->where("id",$rq->input("id","0"))
+                ->update(["value" => "{}"]);
+        }
         return response()->json(["status"=>"success","id"=>$rq->input("id","0")]);
     }
     public function postParseproduct(Request $rq){
@@ -78,7 +81,7 @@ class CartController extends Controller{
             $s = $this->shops[$ui["host"]];
             //$result = file_get_contents($url);
             $result = $this->getPage($url);
-            Log::debug($result);
+            //Log::debug($result);
             foreach($s["patterns"] as $k=>$p){
                 if(is_array($p)){
                     foreach($p as $_){
@@ -374,6 +377,30 @@ class CartController extends Controller{
             ],
             "currency" => "EUR"
         ],
+        "www.wolfordshop.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "geizhals.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.modekids.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.pompdelux.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.stiefelkoenig.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "at.triumph.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.veromoda.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "at-de.voegele-shoes.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.intersport.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.hervis.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.jako-o.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.deerberg.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.gudrunsjoeden.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.engelbert-strauss.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.hessnatur.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.waschbaer.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.vivanda.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.humanic.net" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.monshowroom.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.peek-cloppenburg.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.dantendorfer.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.universal.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "at.tommy.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+
         "www.anticboutik.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
         "www.antikbatik.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
         "www.pimkie.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
@@ -389,6 +416,11 @@ class CartController extends Controller{
             ],
             "currency" => "EUR"
         ],
+        "www.ernstings-family.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.eduscho.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.kik.at" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+        "www.c-and-a.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
+
         "www.sucredorge.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
         "www.zalando.fr" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
 "www.fr.shop-orchestra.com" => ["patterns" => ["title" => "/\<title.*\>(?<value>.+?)\<\/title>/im","img" => ["/<link.*?rel=\"icon\".*?href=\"(?<value>.+?)\".*?>/i","/<link.*?href=\"(?<value>.+?)\".*?rel=\"icon\".*?>/i",],"sku" => "/<input.+?name=\"idproduct\"\s+value=\"(?<value>.+?)\"/i","price" => ["/Price:s*&euro;(?<value>.+?)</i"]],"currency" => "EUR"],
@@ -435,7 +467,7 @@ class CartController extends Controller{
     ];
     protected $errors = [
         "0" => ["code"=>"200","message"=>"Успешно"],
-        "1" => ["code"=>"404","message"=>"Данный магазин не поддерживается"]
+        "1" => ["code"=>"404","message"=>"Внимание! Магазин, товар из которого Вы хотите приобрести, еще не добавлен в нашу базу. Мы приложим все усилия, чтобы выполнить ваш заказ, но возможность и стоимость доставки данного товара будет уточнена при дальнейшей обработке заказа."]
     ];
 }
 ?>

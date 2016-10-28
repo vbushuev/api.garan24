@@ -1,3 +1,4 @@
+$=jQuery.noConflict();
 var web = {
     required:function(){
         var ret = true;
@@ -218,4 +219,11 @@ function calculateTotal(){
             console.debug("GA event: phone["+v+"] entered.");
         });
     }
+    $(document).ready(function(){
+        /*$("#form #back").unbind("click").on("click",function(e){
+            e.preventDefault();
+            e.stopPropagation();
+            history.go(-1);
+        });*/
+    });
 })();

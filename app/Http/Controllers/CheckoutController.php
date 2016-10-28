@@ -220,7 +220,7 @@ class CheckoutController extends Controller{
             "data"=>$data
         ]);
         Mail::send('mail.welcome',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){
-            $message->to($deal->getCustomer()->email)->subject("ГАРАН24");
+            $message->to($deal->getCustomer()->email)->subject("GauzyMALL");
         });
         return view(
             $this->viewFolder.'.payment',
@@ -309,7 +309,7 @@ class CheckoutController extends Controller{
         $dataArr = [];
         parse_str($data,$dataArr);
         $r = [
-            "url" => $_SERVER["HTTP_ORIGIN"],
+            "url" => isset($_SERVER["HTTP_ORIGIN"])?$_SERVER["HTTP_ORIGIN"]:$_SERVER["HTTP_HOST"],
             "data" => $dataArr
         ];
         $redirect_url = "";
@@ -327,7 +327,7 @@ class CheckoutController extends Controller{
                     'orderid' => $obj->orderid
                 ]]);
                 $request = new \Garan24\Gateway\Ariuspay\CreateCardRefRequest($crdData);
-                
+
                 $connector = new \Garan24\Gateway\Ariuspay\Connector();
                 $connector->setRequest($request);
                 $connector->call();
@@ -378,8 +378,8 @@ class CheckoutController extends Controller{
         catch(\Exception $e){
             Log::error($e);
         }
-        if($deal->payment["id"]==2) Mail::send('mail.orderpayonline',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){$message->to($deal->getCustomer()->email)->subject("ГАРАН24");});
-        else Mail::send('mail.orderpayondelivery',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){$message->to($deal->getCustomer()->email)->subject("ГАРАН24");});
+        if($deal->payment["id"]==2) Mail::send('mail.orderpayonline',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){$message->to($deal->getCustomer()->email)->subject("GauzyMALL");});
+        else Mail::send('mail.orderpayondelivery',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){$message->to($deal->getCustomer()->email)->subject("GauzyMALL");});
         return view($this->viewFolder.'.thanks',[
             "route"=>$this->getBPRoute("thanks"),
             "section" => 'thanks',
@@ -401,7 +401,7 @@ class CheckoutController extends Controller{
             ->header("Location",$deal->response_url);
     }
     public function getSendmemails(Request $rq){
-        $deal = new Deal(["id"=>$rq->input("id","1107")]);
+        $deal = new Deal(["id"=>$rq->input("id","6203")]);
         Mail::send('mail.welcome',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){
             $message->to($deal->getCustomer()->email)->subject("GauzyMALL");
         });
@@ -435,7 +435,8 @@ class CheckoutController extends Controller{
             $operation = "PreauthRequest";
         }
         else {
-            $amount = ($deal->order->order_total+$deal->shipping_cost+$deal->service_fee)*1.028;
+            //$amount = ($deal->order->order_total+$deal->shipping_cost+$deal->service_fee)*1.028;
+            $amount = ($deal->order->order_total+$deal->shipping_cost+$deal->service_fee);
             $operation = "SaleRequest";
         }
 

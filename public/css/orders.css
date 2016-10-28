@@ -50,7 +50,7 @@
 .orders .order.status-boxberyhub .order-field{background-color: rgb(0, 191, 128); color:#fff;}
 .orders .order.status-shipped .order-field{background-color: rgb(0, 191, 128); color:#fff;}
 .orders .order.status-payed .order-field{background-color: rgb(0, 191, 128); color:#fff;}
-.orders .order.status-closed .order-field{background-color: rgb(255, 255, 255); color:#fff;}
+.orders .order.status-closed .order-field{background-color: rgb(255, 255, 255); color:#555;}
 .orders .order.status-canceled .order-field{background-color: rgb(220, 222, 224); color:#fff;}
 
 .content-name {font-weight: 700;}
