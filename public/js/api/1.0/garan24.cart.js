@@ -7,14 +7,14 @@ jQuery.noConflict();
             carthost:(document.location.hostname.match(/\.bs2/i))?"http://service.garan24.bs2/cart":"http://l.gauzymall.com/cart",
             id:0,
             cartQuantity:0,
-            cartAmount:0,
+            cartAmount:0.0,
             version:"1.0",
             response_url:"",//garan.cart.carthost+"/clean?id="+this.id,
             inited:false,
             order:{
                 order_id:this.id,
                 order_url:document.location.href,
-                order_total:0,
+                order_total:0.0,
                 order_currency:"RUB",
                 items:[]
             },
@@ -32,10 +32,10 @@ jQuery.noConflict();
                     arr.push(goods);
                     goods = arr;
                 }
-                for(var i  in goods){
+                for(var i=0;i<goods.length;++i){
                     var good = goods[i];
                     var cur = (typeof good.currency!="undefiend")?good.currency:((arguments.length>1)?arguments[1]:"EUR");
-                    //console.debug("Garan24::add2cart");
+                    console.debug("Garan24::add2cart "+ good);
                     good.original_price = (isNaN(good.original_price))?good.original_price.replace(/[\,]/,'.').replace(/^\D+/,"").replace(/\D+$/,""):good.original_price;
                     good.regular_price = good.original_price*garan.currency.rates(cur);
                     good.quantity=parseInt(good.quantity);
@@ -56,12 +56,12 @@ jQuery.noConflict();
                     }
                     good.description+=(typeof good.comments!="undefined")?' | comments:'+good.comments:"";
                     if(!this.alreadyitem(good)){
-                        garan.cart.cartQuantity=parseInt(garan.cart.cartQuantity)+parseInt(good.quantity);
-                        garan.cart.cartAmount+=good.regular_price*good.quantity;
-                        garan.cart.order.order_total=this.cartAmount;
+                        garan.cart.cartQuantity+=good.quantity;
+                        garan.cart.order.order_total=garan.cart.order.order_total+(good.regular_price*good.quantity);
                         this.order.items.push(good);
                     }
                 }
+                garan.cart.cartAmount = garan.cart.order.order_total;
                 this.setCartDigits();
                 this.showcart();
                 this.set();
@@ -208,29 +208,31 @@ jQuery.noConflict();
             },
             checkout:function(){
                 garan.cart.order.order_id = garan.cart.id;
-                $(document).trigger('gcart:beforeCheckout',garan.cart.order);
                 var rq = {
                     domain_id:8,
                     version: "1.0",
                     response_url: garan.cart.carthost+"/clean?id="+this.id,
                     order:garan.cart.order
                 },$m = $("#garan24-overlay");
-                for(var i in garan.cart.order.items) {
-                    var itm = garan.cart.order.items[i];
-                    delete itm.variations;
-                    delete itm.currency;
-                    delete itm.shop;
-                    delete itm.sku;
-                    rq.order.items[i] = itm;
+                var tot = 0;
+                for(var i=0;i<rq.order.items.length;++i ) {
+                    var itm = rq.order.items[i];
                     if(typeof itm.product_id == "undefined"){
                         if((typeof itm.shop != "undefined")&&(typeof itm.sku != "undefined")){
                             itm.product_id = itm.shop+"_"+itm.sku;
                         }
                         else itm.product_id = -1;
                     }
+                    delete itm.variations;
+                    delete itm.currency;
+                    delete itm.shop;
+                    delete itm.sku;
+                    rq.order.items[i] = itm;
+                    tot+=itm.regular_price*itm.quantity;
                     //console.debug(itm);
                 }
-
+                rq.order.order_total = tot;
+                $(document).trigger('gcart:beforeCheckout',rq);
                 //return ;
                 $.ajax({
                     type:"POST",
