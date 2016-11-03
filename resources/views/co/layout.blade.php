@@ -40,7 +40,7 @@
 
 	  ga('create', 'UA-84557375-3', 'auto');
 	  ga('send', 'pageview');
-
+	  $=jQuery.noConflict();
 	</script>
 	<!-- boxberry API -->
 </head>

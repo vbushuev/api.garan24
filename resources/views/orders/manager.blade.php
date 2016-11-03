@@ -15,6 +15,7 @@
 
     </div>
         <script>
+            $=jQuery.noConflict();
             $(document).ready(function(){
                 garan.currency.get(function(d){
                     console.debug(d);

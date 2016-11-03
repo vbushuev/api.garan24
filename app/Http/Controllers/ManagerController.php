@@ -116,6 +116,10 @@ class ManagerController extends Controller{
         }
         return $this->Currency($rq);
     }
+    public function getStatistics(Request $rq){
+        $r = DB::table('order_statistics')->get();
+        return response()->json($r,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    }
 
 }
 ?>

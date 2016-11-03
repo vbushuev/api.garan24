@@ -1,5 +1,40 @@
 @extends('orders.layout')
 @section('content')
+    <div class="row statistics">
+
+    </div>
+    <script>
+        $=jQuery.noConflict();
+        $(document).ready(function(){
+            $.ajax({
+                url:'/manager/statistics',
+                type:"get",
+                dataType:"json",
+                beforeSend:function(){
+                    $(".statistics").html('<i class="fa fa-spin fa-spinner fa-2x fa-fw"></i>');
+                },
+                success:function(d){
+                    var o={
+                        today:{count:0,amount:0},
+                        all:{count:0,amount:0}
+                    };
+                    for(var i in d){
+                        var q = d[i];
+                        if(q.status != 'new' && q.status != 'canceled'){
+                            o.all.count+=parseInt(q.count);
+                            o.all.amount+=parseFloat(q.amount);
+                        }
+                        if(q.day=="today"){
+                            o.today.count+=parseInt(q.count);
+                            o.today.amount+=parseFloat(q.amount);
+                        }
+
+                    }
+                    $(".statistics").html("Сегодня новых заказов <i class='number'>"+o.today.count+"</i> на сумму <i class='number'>&#8381;"+garan.number.format(o.today.amount,2,3,' ','.')+"</i>&nbsp;&nbsp;&nbsp;&nbsp; Всего заказов "+"<i class='number'>"+o.all.count+"</i> на сумму <i class='number'>&#8381;"+garan.number.format(o.all.amount,2,3,' ','.')+"</i>");
+                }
+            });
+        });
+    </script>
     @if(isset($orders))
         <table class="orders">
             <tr class="order-header">
