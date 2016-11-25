@@ -79,6 +79,21 @@ class ServicesController extends Controller{
         $c = DB::table('currency_rates')->take(4)->get();
         return response()->json($c,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
+    public function Social(Request $rq){
+        $data = $rq->all();
+        $data["referer"]= $rq->headers->get('referer');
+        $data = json_encode($data,JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+        Log::debug("Social: ".$data);
+        $id =["id" => DB::table('social_credit')->insertGetId(["data"=>$data])];
+        return response()->json($id,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    }
+    public function Analytics(Request $rq){
+        $type = $rq->input("type","add2cart");
+        $data= $rq->input("data",$rq->headers->get('referer'));
+        $ip = $rq->ip();
+        $id =["id" => DB::table('analytics')->insertGetId(["value"=>$data,"type"=>$type,"ip"=>$ip])];
+        return response()->json($id,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    }
 
 }
 ?>

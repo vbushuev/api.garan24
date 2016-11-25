@@ -1,3 +1,14 @@
+table{
+    width:100%;
+    border:transparent;
+}
+table tr th{
+    font-weight: 400;
+    text-align: center;
+}
+table tr td{
+    padding:2px;
+}
 .orders{
     width: 100%;
     font-size: 10pt;
@@ -40,22 +51,29 @@
     text-align: right;
 }
 
+
 /* by status*/
 .orders .order.status-new .order-field{background-color: rgb(242, 243, 245);}
-.orders .order.status-checkout .order-field{background-color: rgb(0, 191, 128); color:#fff;}
-.orders .order.status-confirmed .order-field{background-color: rgb(0, 191, 128); color:#fff;}
-.orders .order.status-credit .order-field{background-color: #33bbff; color:#fff;}
-.orders .order.status-delivered .order-field{background-color: rgb(0, 191, 128); color:#fff;}
-.orders .order.status-boxbery .order-field{background-color: rgb(0, 191, 128); color:#fff;}
-.orders .order.status-boxberyhub .order-field{background-color: rgb(0, 191, 128); color:#fff;}
-.orders .order.status-shipped .order-field{background-color: rgb(0, 191, 128); color:#fff;}
-.orders .order.status-payed .order-field{background-color: rgb(0, 191, 128); color:#fff;}
+.orders .order.status-checkout .order-field{background-color: #777; color:#fff;}
+.orders .order.status-confirmed .order-field{background-color: rgba(0, 191, 128,1); color:#fff;}
+.orders .order.status-credit .order-field{background-color: rgba(51,187,255,1); color:#fff;}
+.orders .order.status-delivered .order-field{background-color: #337ab7; color:#fff;}
+.orders .order.status-boxbery .order-field{background-color: #5bc0de; color:#fff;}
+.orders .order.status-boxberyhub .order-field{background-color: rgba(51,187,255,.8); color:#fff;}
+.orders .order.status-shipped .order-field{background-color: #f0ad4e; color:#fff;}
+.orders .order.status-payed .order-field{background-color: rgba(51,187,255,1); color:#fff;}
 .orders .order.status-closed .order-field{background-color: rgb(255, 255, 255); color:#555;}
-.orders .order.status-canceled .order-field{background-color: rgb(220, 222, 224); color:#fff;}
+.orders .order.status-canceled .order-field{background-color: #d9534f; color:#fff;}
 
 .content-name {font-weight: 700;}
 .content-quntity {text-align: right;}
 .content-amount{text-align: right;}
+.content-image a{
+    display:block;
+    width:6em;
+    height:6em;
+    overflow: hidden;
+}
 .message{
     padding: 1em;
     background-color: rgba(242, 240, 241, .9);
@@ -77,4 +95,58 @@
     font-weight: 700;
     font-size: 110%;
     font-style: normal;
+}
+.statistics{
+    height:2em;
+    line-height: 2em;
+}
+.links a{
+    display: inline-block;
+    color: rgb(0, 191, 128);
+    text-decoration: none;
+    height:2em;
+    line-height: 2em;
+    font-weight: 100;
+    border: transparent;
+    margin:0 1em;
+}
+.links a:hover{
+    display: inline-block;
+    color: rgb(0, 191, 128);
+    text-decoration: none;
+    height:2em;
+    line-height: 2em;
+    font-weight: 100;
+    border-bottom: solid 1px rgb(0, 191, 128);
+}
+.links a.active{
+    border:solid 1px rgb(0, 191, 128);
+    padding:0 .5em;
+}
+.editable{
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+}
+.editable:after{
+  display: block;
+  position: absolute;
+  right: -1.1em;
+  top: 0;
+  width: 2em;
+  font-family: 'FontAwesome';
+  text-align: right;
+  color: #676f7c;
+  opacity: 0.23;
+  content: '\f040';
+}
+.editable:after:hover{
+    opacity: 0.9;
+}
+.editable i.value{
+    font-style: normal;
+    cursor: pointer;
+}
+.editable .edit{
+    display:none;
 }

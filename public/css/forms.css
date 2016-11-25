@@ -63,3 +63,9 @@ textarea {
 .input-field.usd:before {
   content: '\f155';
 }
+.input-field.bag:before {
+  content: '\f290';
+}
+.input-field.search:before {
+  content: '\f002';
+}

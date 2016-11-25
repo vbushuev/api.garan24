@@ -21,10 +21,10 @@
 	<script src="/js/jquery.color.js"></script>
 	<script src="/js/jquery.redirect.js"></script>
 	<script src="/js/jquery.maskedinput.min.js"></script>
-	<script src="/js/api/1.0/garan24.core.js"></script>
-	<script src="/js/api/1.0/garan24.delivery.js"></script>
-	<script src="/js/api/1.0/garan24.customer.js"></script>
-	<script src="/js/api/1.0/garan24.cart.js"></script>
+	<script src="/js/api/2.0/garan24.core.js"></script>
+	<script src="/js/api/2.0/garan24.delivery.js"></script>
+	<script src="/js/api/2.0/garan24.customer.js"></script>
+	<script src="/js/api/2.0/garan24.cart.js"></script>
 
 </head>
 <body>
@@ -36,6 +36,15 @@
 			<!--<li class="nav-item logo"><img height="30px" src="http://xrayshopping.ru/wp-content/uploads/2016/08/LogoXray-601.png" alt="XrayShopping" /></li>-->
 			<!--<li class="nav-item logo"><img height="30px" src="http://xrayshopping.ru/wp-content/uploads/2016/09/Gauzy_logo_01.png" alt="XrayShopping" /></li>-->
 			<li class="nav-item logo">Gauzy&nbsp;<code>MALL</code></li>
+			<li class="nav-item">
+				<a href="/manager"><i class="fa fa-home"></i>&nbsp;Заказы</a>
+			</li>
+			<li class="nav-item">
+				<a href="/manager/console"><i class="fa fa-gear"></i>&nbsp;Консоль управления</a>
+			</li>
+			<li class="nav-item">
+				@include('elements.inputs.input',['name'=>'search','icon'=>'search','id'=>'search','text'=>'Поиск', 'value'=>app('request')->input('search')])
+			</li>
 		</ul>
 	</div>
 	<div id="content" class="row">

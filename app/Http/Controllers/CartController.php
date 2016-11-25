@@ -53,6 +53,22 @@ class CartController extends Controller{
         }
         return response()->json(["status"=>"success","id"=>$rq->input("id","0")]);
     }
+    public function getParseproduct(Request $rq){
+        $r = [
+            "success"=>true,
+            "error"=>[],
+            "product"=>[],
+            "currency"=>""
+        ];
+        $url = $rq->input("u",false);
+        if($url!==false){
+            $result = $this->getPage($url);
+            $p=[
+                
+            ];
+        }
+        return response()->json($r, 200, [], JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    }
     public function postParseproduct(Request $rq){
         $r = [
             "success"=>true,

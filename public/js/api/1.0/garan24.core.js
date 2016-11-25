@@ -3,8 +3,8 @@ window.garan = {
         host:(document.location.hostname.match(/\.bs2/i))?"http://service.garan24.bs2":"http://l.gauzymall.com"
     },
     currency:{
-        //multiplier:1.05,
-        multiplier:1.00,
+        multiplier:1.05,
+        //multiplier:1.00,
         EUR:69.00,
         USD:62.39,
         GBP:76.00,
@@ -12,7 +12,7 @@ window.garan = {
         rates:function(){
             var cur = arguments.length?arguments[0]:false;
             if(!cur) cur = 'EUR';
-            return garan.currency.multiplier*garan.currency[cur];
+            return ((cur == 'RUB')?1:garan.currency.multiplier)*garan.currency[cur];
         },
         get:function(){
             var cb = (arguments.length&&typeof arguments[0]=="function")?arguments[0]:function(){};

@@ -2,6 +2,7 @@
 <script>
     var bbRexEx = /(\d+)\,(.+?)\,(.+)/i;
     function boxberry_callback(bb){
+        console.debug(bb);
         //bb.name = encodeURIComponent(bb.name) // Что бы избежать проблемы с кириллическими символами, на страницах отличными от UTF8, вы можете использовать функцию encodeURIComponent()
         $("#boxberry_name").val(bb.name);
         $("#boxberry_address").val(bb.address);
@@ -16,7 +17,7 @@
         delivery_address_2+= "<br /><small>тел. "+bb.phone+"</small>";
         delivery_address_2+= "<br /><small>Срок: "+bb.period+" дн.</small>";
         delivery_address+= delivery_address_2;
-        var price = parseInt(bb.price);
+        var price = parseInt(bb.price)+750;
         if(isNaN(price)) price = 0;
         $("#ShippingAmountHidden").val(price);
 
@@ -50,7 +51,11 @@
     }
     $(document).ready(function(){
         $("#delivery-type-4").on("click",function(){
-            boxberry.open(boxberry_callback,garan.delivery.boxberry.token,'Москва',0);
+            /*
+             * B70 0BD - Англия
+             * 2983 GR Голландия
+             */
+            boxberry.open(boxberry_callback,garan.delivery.boxberry.token,'Москва','77461',$("#TotalAmountHidden").val());
         });
     });
 </script>

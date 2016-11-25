@@ -17,6 +17,8 @@ use WC_API_Client_Resource_Products;
 use \Garan24\Garan24 as Garan24;
 use \Garan24\Deal\Deal as Deal;
 use \Garan24\Deal\Customer as Customer;
+use \Garan24\Delivery\BoxBerry\Converter as Converter;
+use \Garan24\Delivery\BoxBerry\BoxBerry as BoxBerry;
 
 class ManagerController extends Controller{
     protected $resource_avaliable = false;
@@ -25,6 +27,13 @@ class ManagerController extends Controller{
     public function __construct(){
         $this->middleware('cors');
         $this->middleware('auth');
+        \Garan24\Garan24::$DB["host"] = "151.248.117.239";
+        \Garan24\Garan24::$DB["prefix"] = "xr_";
+        \Garan24\Garan24::$DB["schema"] = "gauzymall";
+        //\Garan24\Garan24::$DB["user"] = "vsb";
+        //\Garan24\Garan24::$DB["pass"] = "Vampire04";
+        \Garan24\Garan24::$DB["user"] = "gauzymall";
+        \Garan24\Garan24::$DB["pass"] = "D6a8O2e1";
         $domain = "http://gauzymall.com";
         $consumer_key = "ck_653d001502fc0b8e1b5e562582f678ce7b966b85";
         $consumer_secret = "cs_a9b8f4b535f845f82509c1cfa6bea5d094219dce";
@@ -62,8 +71,11 @@ class ManagerController extends Controller{
                 $sel = $sel->where("status","=",$v);
                 $filtersSet = true;
             }
+            elseif ($f=="search"){
+                $sel = $sel->where("external_order_id","like", "%".$v."%");//->orWhere("internal_order_id","=",$v);
+            }
         }
-        if(!$filtersSet)$sel = $sel->where('status','<>','new');
+        if($filtersSet === false )$sel = $sel->where('status','<>','new');
         $orders=$sel->take(100)->get();
         return view("orders.index",["orders"=>$orders]);
     }
@@ -74,6 +86,7 @@ class ManagerController extends Controller{
         return response()->json($res->order,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
     public function getUpdatestatus(Request $rq){
+        $exid = $rq->input("external_order_id",false);
         $status = DB::table('garan24_deal_statuses')
             ->where("status",$rq->input("status"))->first();
         //WooCommerce statuses
@@ -97,6 +110,11 @@ class ManagerController extends Controller{
         DB::table('deals')
             ->where("internal_order_id",$order_id)
             ->update(["status" => $status->id]);
+        if($exid!==false){
+            DB::table('deals')
+            ->where("internal_order_id",$order_id)
+            ->update(["external_order_id" => $exid]);
+        }
         return response()->json($status);
     }
     public function getProduct(Request $rq){
@@ -114,12 +132,46 @@ class ManagerController extends Controller{
         foreach($d as $k=>$v){
             if(in_array(strtoupper($k),["EUR","USD","GBP"]))DB::table('currency_rates')->where("iso_code",strtoupper($k))->update(["value"=>$v]);
         }
-        return $this->Currency($rq);
+        return $this->getConsole($rq);
     }
     public function getStatistics(Request $rq){
         $r = DB::table('order_statistics')->get();
         return response()->json($r,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
-
+    public function getBbparsel(Request $rq){
+        $r = ["error"=>["code"=>"1","message"=>"no deal id"]];
+        $deal_id = $rq->input("deal",false);
+        if($deal_id!==false){
+            $b = $rq->input("weight",1000);
+            $deal = new Deal(["id"=>$deal_id]);
+            $d2b = new Converter();
+            $bb = new BoxBerry();
+            $con = $d2b->convert($deal,$b);
+            //$r=$con;
+            $r = json_decode($bb->ParcelCreateForeign($con),true);
+            if(!isset($r["err"])){
+                DB::table('deals')
+                    ->where("internal_order_id",$deal_id)
+                    ->update(["shipping_track" => $r["result"]["track"]]);
+                //"label": "http:\/\/api.boxberry.de\/?act=build&track=PMG2128720&token=18455.rvpqeafa",
+                //"box": "10002161451"
+            }
+        }
+        return response()->json($r,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    }
+    public function getSocialresult(Request $rq){
+        $r = DB::table('social_credit')->get();
+        return response()->json($r,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    }
+    public function getAnalyticsresult(Request $rq){
+        $t = $rq->input("type","add2cart");
+        $r = DB::table('analytics')->where("type","=",$t)->orderBy("id","desc")->take(20)->get();
+        return response()->json($r,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    }
+    public function Currency(Request $rq){
+        //DB::table('currency_rates')->insertGetId(["value"=>"{}"])];
+        $c = DB::table('currency_rates')->take(4)->get();
+        return response()->json($c,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    }
 }
 ?>

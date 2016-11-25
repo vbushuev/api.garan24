@@ -12,14 +12,29 @@
 */
 
 //Route::get('/', function () {return view('welcome');});
+// Groups
+Route::group(['domain'=>'checkout.gauzymall.bs2'],function(){
+    Route::controller('/', 'CheckoutController');
+});
+Route::group(['domain'=>'checkout.gauzymall.com'],function(){
+    Route::controller('/', 'CheckoutController');
+});
+Route::group(['domain'=>'cart.gauzymall.bs2'],function(){
+    Route::controller('/', 'CartController');
+});
+Route::group(['domain'=>'cart.gauzymall.com'],function(){
+    Route::controller('/', 'CartController');
+});
 
+// Old style
 Route::resource('customer', 'GaranCustomerController');
 Route::resource('order', 'GaranOrderController');
 Route::resource('product', 'GaranProductController');
+Route::controller('prod', 'ProductsController');
 Route::controller('store', 'CopierController');
 Route::controller('magnitolkin', 'MagnitolkinController');
 Route::controller('democheckout', 'DemoCheckoutController');
-Route::controller('checkout', 'CheckoutController');
+Route::controller('checkout', 'CheckoutOldController');
 Route::controller('mail', 'MailController');
 Route::controller('my', 'MyController');
 Route::controller('cart', 'CartController');
@@ -31,6 +46,8 @@ Route::match(['get','post'],'/crd', 'ServicesController@CrossDomain');
 Route::match(['get','post'],'/calculator', 'ServicesController@CalculatorDomain');
 Route::match(['get','post'],'/currency', 'ServicesController@Currency');
 Route::match(['get','post'],'/currency/update', 'ManagerController@CurrencyUpdate');
+Route::match(['get','post'],'/social', 'ServicesController@Social');
+Route::match(['get','post'],'/analytics', 'ServicesController@Analytics');
 
 
 Route::auth();

@@ -48,16 +48,18 @@ function calculateTotal(){
         console.debug("total["+total+"] => item cost:["+shipping+"] isNaN:"+isNaN(shipping));
         total+=(shipping.length&&!isNaN(shipping))?parseFloat(shipping):0;
     }
-    var tt = total*0.05+garan.currency.EUR*5;
-    total+=tt;
-    $("#ServiceFeeHidden").val(tt);
-    $("#order-fee").html(tt.format(2,3,' ','.')+" руб.");
-    //!!!! SALE
-    $("#order-fee").html("<strike>"+$("#order-fee").html()+"</strike><br/>0 руб.");
-    total-=tt;
+    //var tt = total*0.05+garan.currency.rates('EUR')*5;
+    //total+=tt;
+    //$("#ServiceFeeHidden").val(tt);
+    //$("#order-fee").html(tt.format(2,3,' ','.')+" руб.");
     $("#ServiceFeeHidden").val(0);
-    //!!!! SALE END
 
+    //!!!! SALE
+    //$("#order-fee").html("<strike>"+$("#order-fee").html()+"</strike><br/>0 руб.");
+    //total-=tt;
+    //$("#ServiceFeeHidden").val(0);
+    //!!!! SALE END
+    $("#TotalAmountHidden").val(total);
     $("#total-price").html(total.format(2,3,' ','.')+" руб.");
     $("#shipping-price").val(total.format(2,3,' ','.')+" руб.");
 }
@@ -98,13 +100,13 @@ function calculateTotal(){
     */
     //$.mask.definitions['~']='\+7';
 
-
+    garan.currency.get();
     $(".phone").mask("+7(999) 999 99 99");//.insertBefor
     $(".postcode").mask("999999");//.insertBefor
     //$(".passport-seria").mask("9999");//.insertBefor
     //$(".passport-number").mask("999999");
     //$(".passport-code").mask("999-999");
-    $(".pan").mask("9999 9999 9999 9999");
+    //$(".pan").mask("9999 9999 9999 9999");
     $(".expiredate").mask("99/99");
     $(".date").mask("99.99.9999");
     //$(".amount").controlInput();
@@ -219,6 +221,14 @@ function calculateTotal(){
             console.debug("GA event: phone["+v+"] entered.");
         });
     }
+    $("div.editable").on("click",function(){
+        var $t = $(this), v = $t.find(".value").text();
+        console.debug("Lets edit editable ["+v+"]");
+        $t.find(".value").hide(function(){
+            $t.find(".edit").show();
+        });
+
+    });
     $(document).ready(function(){
         /*$("#form #back").unbind("click").on("click",function(e){
             e.preventDefault();

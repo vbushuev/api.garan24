@@ -5,21 +5,28 @@ jQuery.noConflict();
             host:(document.location.hostname.match(/\.bs2/i))?"http://service.garan24.bs2":"http://l.gauzymall.com"
         },
         currency:{
-            //multiplier:1.05,
-            multiplier:1.00,
+            _inited:false,
+            multiplier:1.05,
+            //multiplier:1.00,
             EUR:69.00,
             USD:62.39,
             GBP:76.00,
             RUB:1.00,
             rates:function(){
+                if(!garan.currency._inited){
+                    console.warn("No currency getted yet.");
+                    garan.currency.get(function(){},false);
+                }
                 var cur = arguments.length?arguments[0]:false;
                 if(!cur) cur = 'EUR';
-                return garan.currency.multiplier*garan.currency[cur];
+                return ((cur == 'RUB')?1:garan.currency.multiplier)*garan.currency[cur];
             },
             get:function(){
                 var cb = (arguments.length&&typeof arguments[0]=="function")?arguments[0]:function(){};
+                var sync = (arguments.length>1)?arguments[1]:true;
                 $.ajax({
                     url:garan.service.host+"/currency",
+                    async:sync,
                     type:"get",
                     dataType: "json",
                     crossDomain: true,
@@ -32,6 +39,7 @@ jQuery.noConflict();
                             }
                         }
                         cb(d);
+                        garan.currency._inited = true;
                     }
                 });
             },
@@ -48,6 +56,10 @@ jQuery.noConflict();
                  * currency - what the original currency (EUR,GBP,USD)
                  */
                 action:function(){
+                    if(!garan.currency._inited){
+                        console.warn("No currency getted yet.");
+                        garan.currency.get(function(){},false);
+                    }
                     var b = garan.cookie.get("g.currency.convert"), //i don't know why
                         o = $.extend(this.options,arguments.length?arguments[0]:{}),
                         rub = '&#8381;'

@@ -141,9 +141,22 @@ body .container .cart-item .image {
   display: inline-block;
   text-align: center;
 }
-body .container .cart-item .image img {
-  height: 3em;
-  width: 3em;
+body .container .cart-item .image .image-container {
+  display: inline-block;
+  position: relative;
+  text-align: center;
+  overflow: hidden;
+  height: 4em;
+  width: 4em;
+  z-index: 100;
+}
+body .container .cart-item .image .image-container img {
+  margin-left: -2em;
+  margin-top: -2em;
+}
+body .container .cart-item .image .image-container:hover {
+  overflow: visible;
+  z-index: 1000;
 }
 body .container .cart-item .name {
   padding-left: 0em;
@@ -573,4 +586,25 @@ textarea {
 }
 .input-field.rub:before {
   content: '\f158';
+}
+.input-field.bag:before {
+  content: '\f290';
+}
+.input-field.search:before {
+  content: '\f002';
+}
+.input-field.map-marker:before {
+  content: '\f041';
+}
+.input-field.bank:before {
+  content: '\f19c';
+}
+.input-field.building-o:before {
+  content: '\f0f7';
+}
+.input-field.user:before {
+  content: '\f007';
+}
+.input-field.calendar:before {
+  content: '\f073';
 }

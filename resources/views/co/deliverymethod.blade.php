@@ -32,13 +32,14 @@
     <input type="hidden" id="boxberry_address_1" name="billing[address_1]" value="" />
     <input type="hidden" id="boxberry_address_2" name="billing[address_2]" value="" />
     <input type="hidden" id="boxberry_postcode" name="billing[postcode]" value="" />
+    <input type="hidden" id="boxberry_id" name="billing[state]" value="0"/>
 
     <input type="hidden" id="boxberry_name" name="boxbery[name]"/>
     <input type="hidden" id="boxberry_address" name="boxbery[address]"/>
     <input type="hidden" id="boxberry_workschedule" name="boxbery[workschedule]"/>
     <input type="hidden" id="boxberry_phone" name="boxbery[phone]"/>
     <input type="hidden" id="boxberry_period" name="boxbery[period]"/>
-    <input type="hidden" id="boxberry_id" name="boxbery[id]"/>
+
     <input type="hidden" id="shipping_price" name="shipping_price" value="" />
     @include("$viewFolder._buttons",["gobackurl"=>"/checkout/?id=".$deal->order->id,"gobacktype"=>"get"])
     <script>

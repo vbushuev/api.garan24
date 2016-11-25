@@ -27,10 +27,10 @@
 	<script src="/js/jquery.color.js"></script>
 	<script src="/js/jquery.redirect.js"></script>
 	<script src="/js/jquery.maskedinput.min.js"></script>
-	<script src="/js/api/1.0/garan24.core.js"></script>
-	<script src="/js/api/1.0/garan24.delivery.js"></script>
-	<script src="/js/api/1.0/garan24.customer.js"></script>
-	<script src="/js/api/1.0/garan24.cart.js"></script>
+	<script src="/js/api/2.0/garan24.core.js"></script>
+	<script src="/js/api/2.0/garan24.delivery.js"></script>
+	<script src="/js/api/2.0/garan24.customer.js"></script>
+	<script src="/js/api/2.0/garan24.cart.js"></script>
 	<!-- Google Analytics -->
 	<script>
 	  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

@@ -11,15 +11,15 @@
 <div id="shipping-type-6" class="shipping-type" style="display:none;">
     <div class="form-group">
         <label for="billing[postcode]" class="control-label">Ваш почтовый индекс:</label>
-        @include('elements.inputs.text',["id"=>"shipping_postcode","required"=>"required","icon"=>"map-marker","name"=>"billing[postcode]","text"=>"Почтовый индекс","value"=>$deal->getCustomer()->toArray()["billing_address"]["postcode"]])
+        @include('elements.inputs.input',["id"=>"shipping_postcode","required"=>"required","icon"=>"map-marker","name"=>"billing[postcode]","text"=>"Почтовый индекс","value"=>$deal->getCustomer()->toArray()["billing_address"]["postcode"]])
     </div>
     <div class="form-group">
         <label for="billing[city]" class="control-label">Ваш город:</label>
-        @include('elements.inputs.text',["id"=>"shipping_city","icon"=>"bank","name"=>"billing[city]","text"=>"Город","value"=>$deal->getCustomer()->toArray()["billing_address"]["city"]])
+        @include('elements.inputs.input',["id"=>"shipping_city","icon"=>"bank","name"=>"billing[city]","text"=>"Город","value"=>$deal->getCustomer()->toArray()["billing_address"]["city"]])
     </div>
     <div class="form-group">
         <label for="billing[address_1]" class="control-label">Улица и дом:</label>
-        @include('elements.inputs.text',["id"=>"shipping_address_1","icon"=>"building-o","name"=>"billing[address_1]","text"=>"Адрес","value"=>$deal->getCustomer()->toArray()["billing_address"]["address_1"]])
+        @include('elements.inputs.input',["id"=>"shipping_address_1","icon"=>"building-o","name"=>"billing[address_1]","text"=>"Адрес","value"=>$deal->getCustomer()->toArray()["billing_address"]["address_1"]])
     </div>
     <div class="garan-message" style="margin-bottom:2em;"></div>
 
@@ -54,12 +54,12 @@
                                         weight:1000,
                                         type:2,
                                         target:v,
-                                        ordersum:0
+                                        ordersum:$("#TotalAmountHidden").val()
                                     }
                                 }),
                                 success:function(d,s,x){
                                     console.debug(d);
-                                    var price = Math.floor(d.price_base*80)+150;
+                                    var price = Math.floor(d.price_base*garan.currency.rates('EUR'))+150;
                                     console.debug("d.price_base: "+price);
                                     $("#ShippingAmountHidden").val(price);
                                     $m.html("Стоимость доставки <strong>"+price.format(2)+" руб.</strong>");
@@ -69,12 +69,13 @@
                                     delivery_address+= "<br /><small class='shipping-city'>"+$("#shipping_city").val()+"</small>, "+$("#shipping_postcode").val()+", <small class='shipping-address-1'>"+$("#shipping_address_1").val()+"</small>";
                                     delivery_address+= delivery_address_2;
                                     $("#boxberry_address_2").val(delivery_address_2);
-                                    price = parseInt(price);
+                                    price = parseInt(price)+750;
                                     $("#cart-shipping .total").html(delivery_address);
                                     $("#cart-shipping .amount").html(price.format(0,3,' ','.')+" руб.");
                                     //SALE
-                                    $("#cart-shipping .amount").html("<strike>"+$("#cart-shipping .amount").html()+"</strike><br/>0 руб.");
-                                    $("#ShippingAmountHidden").val(0);
+                                    //$("#cart-shipping .amount").html("<strike>"+$("#cart-shipping .amount").html()+"</strike><br/>0 руб.");
+                                    $("#cart-shipping .amount").html($("#cart-shipping .amount").html());
+                                    $("#ShippingAmountHidden").val(price);
                                     //$("#cart-shipping .amount").css("text-decoration","line-through");
 
                                     $("#boxberry_postcode").val($("#shipping_postcode").val());

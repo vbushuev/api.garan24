@@ -65,7 +65,7 @@ jQuery.noConflict();
                 this.setCartDigits();
                 this.showcart();
                 this.set();
-                ga('send', 'event', 'conversion', 'add2cart', 'add2cart');
+                /*ga('send', 'event', 'conversion', 'add2cart', 'add2cart');*/
             },
             alreadyitem:function(good){
                 for(var i in this.order.items){

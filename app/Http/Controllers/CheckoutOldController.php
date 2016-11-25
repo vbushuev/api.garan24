@@ -26,9 +26,8 @@ use \Garan24\Gateway\Ariuspay\PreauthRequest as PreauthRequest;
  - Рассрочка 3 месяца +20% от стоимости
 */
 
-class CheckoutController extends Controller{
+class CheckoutOldController extends Controller{
     protected $viewFolder = 'co';
-    protected $urlFolder = "/";
     //protected $thishost = "https://service.garan24.ru";
     protected $thishost = "http://l.gauzymall.com";
     public function __construct(){
@@ -54,7 +53,6 @@ class CheckoutController extends Controller{
     public function getIndex(Request $rq){
         Log::debug(__CLASS__.".".__METHOD__);
         $id = $rq->get('id','noindex');
-        if($id=="noindex") $id=$rq->session()->has("deal_id")?$rq->session()->get("deal_id"):"noindex";
         if($id=="noindex") return view($this->viewFolder.'.ups',["viewFolder"=>$this->viewFolder]);
         $rq->session()->put("deal_id",$id);
         $deal = new Deal(["id"=>$id]);
@@ -184,9 +182,11 @@ class CheckoutController extends Controller{
                 ]
             );
 
+        //return redirect()->action("CheckoutController@postPassport");
+        //return redirect('checkout/passport');
     }
     public function getPassport(Request $rq){
-        return $this->postPassport($rq);
+        $this->postPassport($rq);
     }
     public function postPassport(Request $rq){
         Log::debug(__CLASS__.".".__METHOD__);
@@ -227,7 +227,6 @@ class CheckoutController extends Controller{
         Mail::send('mail.welcome',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){
             $message->to($deal->getCustomer()->email)->subject("GauzyMALL");
         });
-        Log::debug("postPayment::".$this->viewFolder.'.payment');
         return view(
             $this->viewFolder.'.payment',
             [
@@ -352,7 +351,7 @@ class CheckoutController extends Controller{
                 //return redirect("/thanks");
                 return $this->postThanks($rq);
             }
-            else return redirect($this->urlFolder."/card")->with('status','Вашу карту не удалось проверить. Повторите попытку или воспользуйтесь другой картой.');//$this->postCard($rq);
+            else return redirect("checkout/card")->with('status','Вашу карту не удалось проверить. Повторите попытку или воспользуйтесь другой картой.');//$this->postCard($rq);
         }
         catch(\Garan24\Gateway\Ariuspay\Exception $e){
             Log::error("Exception in AruisPay Response gateway:".$e->getMessage());
@@ -369,7 +368,7 @@ class CheckoutController extends Controller{
         if(isset($data["cvv"])&&$data["cvv"]!="123"){
             return redirect()->back()->with('status','Вашу карту не удалось проверить. Повторите попытку или воспользуйтесь другой картой.');
         }
-        if($data===false||!$rq->session()->has("deal_id"))redirect($this->urlFolder);
+        if($data===false||!$rq->session()->has("deal_id"))redirect('/checkout');
         $deal = new Deal(["id"=>$data["deal_id"],"data"=>$data]);
         $resp = $deal->finish();
         $resp_str = $resp->__toString();
@@ -420,15 +419,21 @@ class CheckoutController extends Controller{
         return "Mails are sent.";
     }
     protected function getParams(Request $rq){
-        if($rq->input("deal_id","nodata")!="nodata"){
-            $rq->session()->put("deal_id",$rq->input("deal_id"));
-        }
-        else if($rq->cookie("deal_id","nodata")=="nodata" && !$rq->session()->has("deal_id")) return false;
+        if($rq->input("deal_id","nodata")=="nodata" && $rq->cookie("deal_id","nodata")=="nodata" && !$rq->session()->has("deal_id")) return false;
         $data = $rq->get("data",$rq->getContent());
         $data = json_decode($data,true);
         if(empty($data))$data = $rq->all();
+        $log = "";
+        if(empty($data))$data = $rq->all();
+        foreach($data as $k=>$v){
+            //if(empty($v))unset($data["{$k}"]);
+            //else{
+                $log .= "{$k} = ".\Garan24\Garan24::obj2str($v).", ";
+            //}
+        }
         $data = array_merge($data,["deal_id" => $rq->session()->get("deal_id"),"deal_id_source" => "session"]);
         if(strlen($data["deal_id"])<=0)$data = array_merge($data,["deal_id" => $rq->cookie("deal_id"),"deal_id_source" => "cookie"]);
+        if(strlen($data["deal_id"])<=0)$data = array_merge($data,["deal_id" => $rq->input("deal_id"),"deal_id_source" => "input"]);
         Log::debug("CheckoutController:getParams request: ".\Garan24\Garan24::obj2str($data));
         return $data;
     }
@@ -474,8 +479,11 @@ class CheckoutController extends Controller{
                 "expire_year" => "2099",
                 "cvv2" => "123",*/
                 "purpose" => "www.garan24.eu",
-                "redirect_url" => $this->thishost.$this->urlFolder."/payoutresponse",
-                "server_callback_url" =>  $this->thishost.$this->urlFolder."/payoutcallback",
+                //
+                //"redirect_url" => $_SERVER['HTTP_HOST']."/checkout/payoutresponse",
+                //"server_callback_url" =>  $_SERVER['HTTP_HOST']."/checkout/payoutcallback",
+                "redirect_url" => $this->thishost."/checkout/payoutresponse",
+                "server_callback_url" =>  $this->thishost."/checkout/payoutcallback",
                 //"merchant_data" => "VIP customer"
             ]
         ];
@@ -496,7 +504,7 @@ class CheckoutController extends Controller{
             ? $this->bpmatrix["index"]
             : $this->bpmatrix[$current];
         return [
-            "dir" => $this->urlFolder,
+            "dir" => "/checkout",
             //"dir" => $this->viewFolder,
             "next" => ($c["condition"]!==false)
                     ? (isset($c["condition"][$condition])?$this->bpmodels[$c["condition"][$condition]]:$this->bpmodels[$c["next"]])
@@ -506,19 +514,19 @@ class CheckoutController extends Controller{
     }
     protected $bpmodels=[
         "index" => ["text"=>"Продолжить","href"=>"/"],
-        "email" => ["text"=>"Продолжить","href"=>"/"],
-        "personal" => ["text"=>"Продолжить","href"=>"personal"],
-        "delivery" => ["text"=>"Продолжить","href"=>"delivery"],
-        "paymethod" => ["text"=>"Продолжить","href"=>"paymethod"],
-        "checkcard" => ["text"=>"Продолжить","href"=>"checkcard"],
-        "deliverypaymethod" => ["text"=>"Продолжить","href"=>"deliverypaymethod"],
-        "address" => ["text"=>"Продолжить","href"=>"address"],
-        "thanks" => ["text"=>"Продолжить","href"=>"thanks"],
-        "passport" => ["text"=>"Продолжить","href"=>"passport"],
-        "payment" => ["text"=>"Продолжить","href"=>"payment"],
-        "card2" => ["text"=>"Продолжить","href"=>"cardpayneteasy"],
-        "card" => ["text"=>"Оплатить","href"=>"card"],
-        "payout" => ["text"=>"Подтвердить","href"=>"payout"],
+        "email" => ["text"=>"Продолжить","href"=>"/checkout"],
+        "personal" => ["text"=>"Продолжить","href"=>"/personal"],
+        "delivery" => ["text"=>"Продолжить","href"=>"/delivery"],
+        "paymethod" => ["text"=>"Продолжить","href"=>"/paymethod"],
+        "checkcard" => ["text"=>"Продолжить","href"=>"/checkcard"],
+        "deliverypaymethod" => ["text"=>"Продолжить","href"=>"/deliverypaymethod"],
+        "address" => ["text"=>"Продолжить","href"=>"/address"],
+        "thanks" => ["text"=>"Продолжить","href"=>"/thanks"],
+        "passport" => ["text"=>"Продолжить","href"=>"/passport"],
+        "payment" => ["text"=>"Продолжить","href"=>"/payment"],
+        "card2" => ["text"=>"Продолжить","href"=>"/cardpayneteasy"],
+        "card" => ["text"=>"Оплатить","href"=>"/card"],
+        "payout" => ["text"=>"Подтвердить","href"=>"/payout"],
     ];
     protected $bpmatrix=[
         "index" => ["condition"=>false,"next"=>"email","back"=>false],
