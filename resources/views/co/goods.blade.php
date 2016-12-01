@@ -41,7 +41,7 @@
             @if(isset($deal->shipping_cost)&&strlen($deal->shipping_cost)>0)
                 @amount($deal->shipping_cost)
             @else
-                <i style="color:#bbb;">~@amount(1000)</i>
+                <i style="color:#bbb;">~@amount(1500)</i>
                 <br/><i class="small" style="color:#bbb;font-size:8pt;font-weight:300;">Точная стоимость будет расчитана далее, после выбора типа и адреса доставки.</i>
             @endif
         </div>

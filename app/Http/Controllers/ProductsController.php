@@ -17,9 +17,14 @@ class ProductsController extends Controller{
     protected $resource;
     public function __construct(){
         $this->middleware('cors');
+        /* test.gauzymall */
         $domain = "http://shop.gauzymall.com";
         $consumer_key = "ck_aae4b84777ac446eb62fc0e4276a0ee7b2bbd209";
         $consumer_secret = "cs_3e1c58bd4f00bdf2fc9c526318200d25dd3d4989";
+        /* prod.gauzymall */
+        $domain = "https://www.gauzymall.com";
+        $consumer_key = "ck_577effb8374d4f5a62dd8f9cdd9613c86d604672";
+        $consumer_secret = "cs_b265269e0008b72cfc5f56fe5408c5375504f9d5";
         $options = [
             'debug'           => true,
         	'return_as_array' => false,
@@ -53,6 +58,7 @@ class ProductsController extends Controller{
             $r=$this->get($d["sku"]);
             try{
                 $d["enable_html_description"] = true;
+                $d["enable_html_short_description"] = true;
                 //$d["description"] = htmlspecialchars($d["description"]);
                 if(isset($r["error"])){
                     $resp=$this->resource->create($d);
