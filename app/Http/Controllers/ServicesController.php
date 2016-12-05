@@ -46,7 +46,10 @@ class ServicesController extends Controller{
         $this->middleware('cors');
     }
     public function Statuses(Request $rq){
-        return response()->json($this->statuses);
+        $st = DB::table('garan24_deal_statuses')->get();
+        $out = [];
+        foreach($st as $s){$out[$s->status]=$s->description;}
+        return response()->json($out,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
     public function StatusByWC($wc_status){
         return response()->json($this->wcstatuses[$wc_status]);

@@ -11,14 +11,16 @@
                 <ul class="dropdown-menu">
                     <li><a href="/manager">Рабочие</a></li>
                     <li role="separator" class="divider"></li>
-                    <li><a href="/manager?status=new">Незавершенные</a></li>
-                    <li role="separator" class="divider"></li>
+                    @foreach($statuses as $status=>$desc)
+                    <li style="display:block;"><a href="/manager?status={{$status}}">{{$desc}}</a></li>
+                    @endforeach
+                    <!--<li role="separator" class="divider"></li>
                     <li><a href="/manager?status=credit">Выкупленные</a></li>
                     <li><a href="/manager?status=delivered">Доставлены агенту</a></li>
                     <li><a href="/manager?status=boxbery">Отправлены в boxberry</a></li>
                     <li><a href="/manager?status=boxberyhub">Доставлены в boxberry</a></li>
                     <li><a href="/manager?status=shipped">Доставлено клиенту</a></li>
-                    <li><a href="/manager?status=payed">Оплачено</a></li>
+                    <li><a href="/manager?status=payed">Оплачено</a></li>-->
                 </ul>
             </div>
 
@@ -45,7 +47,7 @@
                     <td class="order-field">{{$i--}}</td>
                     <td class="order-field">{{$order->order_id}}</td>
                     <td class="order-field">{{$order->date}}</td>
-                    <td class="order-field">{{$order->status}}</td>
+                    <td class="order-field">{{$statuses[$order->status]}}</td>
                     <td class="order-field">{{$order->first_name}} {{$order->fio_middle}} {{$order->last_name}}<br/><a href="tel:{{$order->shipping_phone}}">{{$order->shipping_phone}}</a></td>
                     <td class="order-field order-amount">{{$order->delivery}}<br />@amount($order->shipping_cost)</td>
                     <td class="order-field order-amount">{{$order->payment}}<br />@amount($order->amount)</td>
@@ -110,40 +112,45 @@
                             </div>
                             <div class="row order-action-section"  data-ref="{{$order->order_id}}">
                                 @if($order->status == 'new')
-                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="canceled">Отменить</a>
+                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="canceled">{{$statuses["canceled"]}}</a>
                                 @elseif($order->status == 'checkout')
-                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="canceled">Отменить</a>
-                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="confirmed">Подтвердить заказ</a>
+                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="canceled">{{$statuses["canceled"]}}</a>
+                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="confirmed">{{$statuses["confirmed"]}}</a>
                                 @elseif($order->status == 'confirmed')
                                     <div class="col-xs-6"></div>
                                     <div class="col-xs-3">
                                         @include('elements.inputs.input',['name'=>'external_order_id','icon'=>'bag','id'=>'external_order_id','text'=>'Номер заказа в магазине'])
                                     </div>
                                     <div class="col-xs-3">
-                                        <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="canceled">Отменить</a>
-                                        <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="credit">Заказ выкуплен</a>
+                                        <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="canceled">{{$statuses["canceled"]}}</a>
+                                        <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="credit">{{$statuses["credit"]}}</a>
                                     </div>
 
                                 @elseif($order->status == 'credit')
-                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="delivered">Доставлен Агенту</a>
+                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="dispatched">{{$statuses["dispatched"]}}</a>
+                                @elseif($order->status == 'dispatched')
+                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="delivered">{{$statuses["delivered"]}}</a>
                                 @elseif($order->status == 'delivered')
                                     <div class="col-xs-6 bb-sticker">
-
                                     </div>
                                     <div class="col-xs-3">
                                         @include('elements.inputs.input',['name'=>'weight','icon'=>'bag','id'=>'weight','text'=>'Общий вес посылки (г)'])
                                     </div>
                                     <div class="col-xs-3">
-                                        <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="boxbery">Отправлено в BoxBerry</a>
+                                        <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="boxbery">{{$statuses["boxbery"]}}</a>
                                     </div>
                                 @elseif($order->status == 'boxbery')
-                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="boxberyhub">Доставлен в BoxBerry</a>
+                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="boxberyhub">{{$statuses["boxberyhub"]}}</a>
                                 @elseif($order->status == 'boxberyhub')
-                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="shipped">Получено получателем</a>
+                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="warehouse">{{$statuses["warehouse"]}}</a>
+                                @elseif($order->status == 'warehouse')
+                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="destination">{{$statuses["destination"]}}</a>
+                                @elseif($order->status == 'destination')
+                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="shipped">{{$statuses["shipped"]}}</a>
                                 @elseif($order->status == 'shipped')
-                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="payed">Оплачено</a>
+                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="payed">{{$statuses["payed"]}}</a>
                                 @elseif($order->status == 'payed')
-                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="closed">Закрыть</a>
+                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="closed">{{$statuses["closed"]}}</a>
                                 @endif
                             </div>
                         </div>

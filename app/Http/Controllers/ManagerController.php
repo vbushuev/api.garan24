@@ -77,7 +77,10 @@ class ManagerController extends Controller{
         }
         if($filtersSet === false )$sel = $sel->where('status','<>','new');
         $orders=$sel->take(100)->get();
-        return view("orders.index",["orders"=>$orders]);
+        $st = DB::table('garan24_deal_statuses')->get();
+        $out = [];
+        foreach($st as $s){$out[$s->status]=$s->description;}
+        return view("orders.index",["orders"=>$orders,"statuses" => $out]);
     }
     public function getOrderitems(Request $rq){
         $id = $rq->input("id","0");

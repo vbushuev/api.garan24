@@ -45,7 +45,7 @@
                         if(d[0].ExpressDelivery){
                             $m.html("");
                             $.ajax({
-                                url:"//l.gauzymall.com/shipping/bb",
+                                url:"http://l.gauzymall.com/shipping/bb",
                                 method:"post",
                                 dataType:"json",
                                 data:JSON.stringify({
