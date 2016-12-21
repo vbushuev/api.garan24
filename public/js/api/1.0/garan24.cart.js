@@ -238,7 +238,7 @@
                     type:"POST",
                     //url:"//service.garan24.ru/checkout/",
                     //url:"http://service.garan24.bs2/checkout/",
-                    url:(document.location.hostname.match(/\.bs2/i))?"//service.garan24.bs2/checkout":"http://l.gauzymall.com/checkout",
+                    url:(document.location.hostname.match(/\.bs2/i))?"//service.garan24.bs2/checkout":"https://checkout.gauzymall.com",
                     dataType: "json",
                     data:JSON.stringify(rq).replace(/\'/,""),
                     beforeSend:function(){
@@ -261,8 +261,9 @@
                         if(!d.error){
                             $m.find(".garan24-overlay-message-text").html("Переход на страницу оформления заказа...");
                             console.debug(d);
-                            document.location.href=garan.cart.isframe?d.redirect_url:"//gauzymall.com/g24-checkout?order-id="+d.id;
-                            //document.location.href = d.redirect_url;
+                            //document.location.href=garan.cart.isframe?d.redirect_url:"//gauzymall.com/g24-checkout?order-id="+d.id;
+                            //document.location.href="https://checkout.gauzymall.com?order-id="+d.id;
+                            document.location.href = d.redirect_url;
                         }
                     },
                     error:function(x,s){

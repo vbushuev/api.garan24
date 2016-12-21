@@ -3,7 +3,6 @@ window.garan = {
         host:(document.location.hostname.match(/\.bs2/i))?"http://service.garan24.bs2":"http://l.gauzymall.com"
     },
     currency:{
-        _inited:false,
         multiplier:1.05,
         //multiplier:1.00,
         EUR:69.00,
@@ -11,20 +10,14 @@ window.garan = {
         GBP:76.00,
         RUB:1.00,
         rates:function(){
-            if(!garan.currency._inited){
-                console.warn("No currency getted yet.");
-                garan.currency.get(function(){},false);
-            }
             var cur = arguments.length?arguments[0]:false;
             if(!cur) cur = 'EUR';
             return ((cur == 'RUB')?1:garan.currency.multiplier)*garan.currency[cur];
         },
         get:function(){
             var cb = (arguments.length&&typeof arguments[0]=="function")?arguments[0]:function(){};
-            var sync = (arguments.length>1)?arguments[1]:true;
             $.ajax({
                 url:garan.service.host+"/currency",
-                async:sync,
                 type:"get",
                 dataType: "json",
                 crossDomain: true,
@@ -37,7 +30,6 @@ window.garan = {
                         }
                     }
                     cb(d);
-                    garan.currency._inited = true;
                 }
             });
         },
@@ -54,10 +46,6 @@ window.garan = {
              * currency - what the original currency (EUR,GBP,USD)
              */
             action:function(){
-                if(!garan.currency._inited){
-                    console.warn("No currency getted yet.");
-                    garan.currency.get(function(){},false);
-                }
                 var b = garan.cookie.get("g.currency.convert"), //i don't know why
                     o = $.extend(this.options,arguments.length?arguments[0]:{}),
                     rub = '&#8381;'
@@ -75,7 +63,7 @@ window.garan = {
                                     r = arguments[1].replace(/[\,]/,".").replace(/\s*/,"");
                                 //console.debug(r);
                                 r = parseFloat(r)*c;
-                                return garan.number.format(r,2,3,'','.')+rub;
+                                return garan.number.format(r,2,3,' ','.')+" "+rub;
                             }));
                             $(this).hide();
                             amt.insertAfter($(this));

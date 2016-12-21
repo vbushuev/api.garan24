@@ -29,7 +29,7 @@ class AuthController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/manager';
+    protected $redirectTo = '//manager.gauzymall.com';
 
     /**
      * Create a new authentication controller instance.

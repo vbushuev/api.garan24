@@ -19,6 +19,32 @@ var web = {
         return ret;
     }
 };
+var Editable = function(s){
+    var et = this;
+    this.selector = s;
+    this.jo = $(s);
+    this.close = function(t){
+        $(t).removeAttr("contentEditable");
+        $(t).parent().find(".editable-ok, .editable-cancel").remove();
+        console.debug("Cancel data");
+    };
+    this.save = function(t){
+        console.debug("Saving data");
+        var $t=$(t),url=$t.attr("data-rel"),f = $t.attr("data-ref"),v=$t.text();
+        //$.ajax();
+    };
+    this.click = function(t,et){
+        var $t = $(t),v = $t.find(".value").text();
+        console.debug("Lets edit editable ["+v+"]");
+        $t.attr("contentEditable","true");
+        $t.after('<a href="javascript:0;" class="editable-ok"><i class="fa fa-check"></i></a>').on("click",function(){et.save(this)});
+        $t.after('<a href="javascript:0;" class="editable-cancel"><i class="fa fa-close"></i></a>').on("click",function(){et.close(this)});
+        $t.focus();
+    };
+    $(s).each(function(){
+        $(this).on("click",function(){et.click(this,et)});
+    });
+};
 function moveCaretToStart(el) {
     console.debug(el+" caret to start");
     if (typeof el.selectionStart == "number") {
@@ -221,15 +247,44 @@ function calculateTotal(){
             console.debug("GA event: phone["+v+"] entered.");
         });
     }
-    $("div.editable").on("click",function(){
-        var $t = $(this), v = $t.find(".value").text();
-        console.debug("Lets edit editable ["+v+"]");
-        $t.find(".value").hide(function(){
-            $t.find(".edit").show();
-        });
 
-    });
     $(document).ready(function(){
+        $(".editable-field .editable-value").each(function(){
+            var $t = $(this),url=$t.attr("data-rel"),f = $t.attr("data-ref"),v=$t.text();
+            $t.on("click",function(){
+                var $tt = $(this);
+                console.debug("Lets edit editable ["+v+"]");
+
+                $t.attr("contentEditable","true");
+                var save = $('<a href="javascript:0;" class="editable-ok"><i class="fa fa-check"></i></a>').on("click",function(){
+                    console.debug("Saving data "+url+" "+f+" = "+v);
+                    var new_v= $tt.text().replace(/[\r\n]/,'');
+                    console.debug(new_v);
+                    $.ajax({
+                        url:url+'&'+f+'='+new_v,
+                        type:"get",
+                        dataType:"json",
+                        complete:function(d){
+                            console.debug(d);
+                            $tt.removeAttr("contentEditable");
+                            $tt.parent().find(".editable-ok, .editable-cancel").remove();
+                        }
+                    });
+                });
+
+                var close = $('<a href="javascript:0;" class="editable-cancel"><i class="fa fa-close"></i></a>').on("click",function(){
+                    $tt.removeAttr("contentEditable");
+                    $tt.parent().find(".editable-ok, .editable-cancel").remove();
+                    $tt.text(v);
+                    console.debug("Cancel data");
+                });
+                $t.after(close);
+                $t.after(save);
+                $t.focus();
+            });
+            //$t.on("mouseover",function(){$t.after('<i class="fa fa-pencil"></i>')});
+            //$t.on("mouseout",function(){$t.next('.fa-pencil').remove();});
+        });
         /*$("#form #back").unbind("click").on("click",function(e){
             e.preventDefault();
             e.stopPropagation();

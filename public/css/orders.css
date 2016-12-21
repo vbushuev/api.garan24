@@ -150,3 +150,25 @@ table tr td{
 .editable .edit{
     display:none;
 }
+
+.editable-field{
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+}
+.editable-field .editable-value{
+    display: inline-block;
+    margin-right: .5em;
+}
+.editable-field:after{
+  display: inline-block;
+  position: absolute;
+  right: -1.1em;
+  top: 0;
+  width: 2em;
+  font-family: 'FontAwesome';
+  text-align: right;
+  /*color: #676f7c;*/
+  opacity: 0.23;
+  content: '\f040';
+}

@@ -19,6 +19,9 @@ Route::group(['domain'=>'checkout.gauzymall.bs2'],function(){
 Route::group(['domain'=>'checkout.gauzymall.com'],function(){
     Route::controller('/', 'CheckoutController');
 });
+Route::group(['domain'=>'manager.gauzymall.com'],function(){
+    Route::controller('/', 'ManagerController');
+});
 Route::group(['domain'=>'cart.gauzymall.bs2'],function(){
     Route::controller('/', 'CartController');
 });
@@ -27,6 +30,7 @@ Route::group(['domain'=>'cart.gauzymall.com'],function(){
 });
 
 // Old style
+Route::controller('xray', 'GreenLineController');
 Route::resource('customer', 'GaranCustomerController');
 Route::resource('order', 'GaranOrderController');
 Route::resource('product', 'GaranProductController');
@@ -48,7 +52,6 @@ Route::match(['get','post'],'/currency', 'ServicesController@Currency');
 Route::match(['get','post'],'/currency/update', 'ManagerController@CurrencyUpdate');
 Route::match(['get','post'],'/social', 'ServicesController@Social');
 Route::match(['get','post'],'/analytics', 'ServicesController@Analytics');
-
 
 Route::auth();
 

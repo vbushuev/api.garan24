@@ -26,12 +26,13 @@ class ManagerController extends Controller{
     protected $products;
     public function __construct(){
         $this->middleware('cors');
-        $this->middleware('auth');
-        \Garan24\Garan24::$DB["host"] = "151.248.117.239";
+        //$this->middleware('auth');
         \Garan24\Garan24::$DB["prefix"] = "xr_";
         \Garan24\Garan24::$DB["schema"] = "gauzymall";
-        //\Garan24\Garan24::$DB["user"] = "vsb";
-        //\Garan24\Garan24::$DB["pass"] = "Vampire04";
+        //\Garan24\Garan24::$DB["host"] = "151.248.117.239";
+        //\Garan24\Garan24::$DB["user"] = "gauzymall";
+        //\Garan24\Garan24::$DB["pass"] = "D6a8O2e1";
+        \Garan24\Garan24::$DB["host"] = "127.0.0.1";
         \Garan24\Garan24::$DB["user"] = "gauzymall";
         \Garan24\Garan24::$DB["pass"] = "D6a8O2e1";
         $domain = "http://gauzymall.com";
@@ -88,6 +89,18 @@ class ManagerController extends Controller{
         //var_dump($res);
         return response()->json($res->order,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
+    public function getUpdate(Request $rq){
+        $resp=["error"=>"No Id accepted"];
+        $data = $rq->all();
+        if(!isset($data["id"]))return response()->json($resp,500,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+        $order_id = $data["id"];
+        if(isset($data["external_order_id"])){
+            DB::table('deals')->where("internal_order_id",$order_id)
+                ->update(["external_order_id" => $data["external_order_id"]]);
+            $resp = ["Ok"];
+        }
+        return response()->json($resp,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    }
     public function getUpdatestatus(Request $rq){
         $exid = $rq->input("external_order_id",false);
         $status = DB::table('garan24_deal_statuses')
@@ -129,6 +142,9 @@ class ManagerController extends Controller{
     public function getConsole(Request $rq){
         return view("orders.manager");
     }
+    public function getPayed(Request $rq){
+        return response()->json($c,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    }
     public function CurrencyUpdate(Request $rq){
         $d = $rq->all();
         Log::debug(json_encode($d,JSON_PRETTY_PRINT));
@@ -144,14 +160,17 @@ class ManagerController extends Controller{
     public function getBbparsel(Request $rq){
         $r = ["error"=>["code"=>"1","message"=>"no deal id"]];
         $deal_id = $rq->input("deal",false);
+        Log::debug("BB request for: ".$deal_id);
         if($deal_id!==false){
             $b = $rq->input("weight",1000);
+            Log::debug("BB parsel wieght: ".$b);
             $deal = new Deal(["id"=>$deal_id]);
             $d2b = new Converter();
             $bb = new BoxBerry();
             $con = $d2b->convert($deal,$b);
             //$r=$con;
             $r = json_decode($bb->ParcelCreateForeign($con),true);
+            Log::debug("BB response: ".json_encode($r,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE));
             if(!isset($r["err"])){
                 DB::table('deals')
                     ->where("internal_order_id",$deal_id)
@@ -176,5 +195,11 @@ class ManagerController extends Controller{
         $c = DB::table('currency_rates')->take(4)->get();
         return response()->json($c,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
+    public function CurrencyFee(Request $rq){
+        //DB::table('currency_rates')->insertGetId(["value"=>"{}"])];
+        $c = DB::table('currency_rates')->take(4)->get();
+        return response()->json($c,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    }
+
 }
 ?>

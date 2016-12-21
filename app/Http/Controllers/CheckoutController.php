@@ -24,15 +24,19 @@ use \Garan24\Gateway\Ariuspay\PreauthRequest as PreauthRequest;
 - знак вопроса подвинуть, и тексты сразу
 
  - Рассрочка 3 месяца +20% от стоимости
+www.gauzymall.com
+ ck_544489f713e318c799590b10c0d3f0f46cc1eae9
+ cs_f7b3eb696479a1dcc1302fc00f5c3183eefa4015
 */
 
 class CheckoutController extends Controller{
     protected $viewFolder = 'co';
     protected $urlFolder = "/";
     //protected $thishost = "https://service.garan24.ru";
-    protected $thishost = "http://l.gauzymall.com";
+    protected $thishost = "https://l.gauzymall.com";
     public function __construct(){
-        \Garan24\Garan24::$DB["host"] = "151.248.117.239";
+        //\Garan24\Garan24::$DB["host"] = "151.248.117.239";
+        \Garan24\Garan24::$DB["host"] = "127.0.0.1";
         \Garan24\Garan24::$DB["prefix"] = "xr_";
         \Garan24\Garan24::$DB["schema"] = "gauzymall";
         //\Garan24\Garan24::$DB["user"] = "vsb";

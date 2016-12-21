@@ -2,7 +2,7 @@ jQuery.noConflict();
 (function($) {
     window.garan = {
         service:{
-            host:(document.location.hostname.match(/\.bs2/i))?"http://service.garan24.bs2":"http://l.gauzymall.com"
+            host:(document.location.hostname.match(/\.bs2/i))?"http://service.garan24.bs2":"//l.gauzymall.com"
         },
         currency:{
             _inited:false,

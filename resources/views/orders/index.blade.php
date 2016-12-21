@@ -93,15 +93,7 @@
                                             @endif
                                         </p>
                                         <strong>Заказ в магазине:</strong>
-                                        <div class="editable">
-                                            <i class="value" data-rel="external_order_id">{{$order->external_order_id or '-'}}</i>
-                                            <div class="edit">
-                                                @include('elements.inputs.input',['name'=>'external_order_id','icon'=>'bag','id'=>'external_order_id','text'=>'Номер заказа в магазине',"value"=>$order->external_order_id])
-                                                <a href="javascript:0;" class="editable-ok"><i class="fa fa-check"></i></a>
-                                                <a href="javascript:0;" class="editable-cancel"><i class="fa fa-close"></i></a>
-                                            </div>
-
-                                        </div>
+                                        @include('elements.inputs.editable',['name'=>'external_order_id',"value"=>$order->external_order_id,"func"=>"update?id=".$order->order_id])
                                     </div>
                                     <div class="col-xs-12 col-sm-12 col-md-8 col-lg-8">
                                         <?php $items = json_decode("[]"); ?>
@@ -178,7 +170,7 @@
             };*/
             $(document).ready(function(){
                 $.ajax({
-                    url:'/manager/statistics',
+                    url:'statistics',
                     type:"get",
                     dataType:"json",
                     beforeSend:function(){
@@ -234,7 +226,7 @@
                     $(".order-details-row").slideUp();
                     if(typeof itemsContainer!= "undefined" && itemsContainer.hasClass("empty")){
                         $.ajax({
-                            url:'/manager/orderitems',
+                            url:'orderitems',
                             type:"get",
                             dataType:"json",
                             data:{id:order_id},
@@ -245,7 +237,7 @@
                                 console.debug(d);
                                 var ii = '',getinfo = function(it){
                                     $.ajax({
-                                        url:'/manager/product?id='+it.product_id,
+                                        url:'product?id='+it.product_id,
                                         type:"get",
                                         dataType:"json",
                                         success:function(itm){
@@ -282,10 +274,10 @@
                 $(".order-action").on("click",function(){
                     var $t = $(this),ac = $t.attr("data-rel"),id = $t.parents(".order-action-section:first").attr("data-ref");
                     if(ac=="boxbery"){
-                        var w=$("#weight").val().trim();
+                        var w=$t.parents(".order-action-section:first").find("#weight").val().trim();
                         w=(w.length)?w:1000;
                         $.ajax({
-                            url:"/manager/updatestatus?id="+id+"&status="+ac,
+                            url:"updatestatus?id="+id+"&status="+ac,
                             type:"get",
                             dataType:"json",
                             beforeSend:function(){
@@ -293,7 +285,7 @@
                             },
                             success:function(d){
                                 $.ajax({
-                                    url:"/manager/bbparsel?deal="+id+"&weight="+w,
+                                    url:"bbparsel?deal="+id+"&weight="+w,
                                     type:"get",
                                     dataType:"json",
                                     success:function(d){
@@ -312,9 +304,9 @@
                         });
                     }
                     else if(ac=="credit"){
-                        var ext_order = $("#external_order_id").val();
+                        var ext_order = $("#external_order_id:visible").val();
                         $.ajax({
-                            url:"/manager/updatestatus?id="+id+"&status="+ac+"&external_order_id="+ext_order,
+                            url:"updatestatus?id="+id+"&status="+ac+"&external_order_id="+ext_order,
                             type:"get",
                             dataType:"json",
                             beforeSend:function(){
@@ -327,7 +319,7 @@
                     }
                     else {
                         $.ajax({
-                            url:"/manager/updatestatus?id="+id+"&status="+ac,
+                            url:"updatestatus?id="+id+"&status="+ac,
                             type:"get",
                             dataType:"json",
                             beforeSend:function(){
