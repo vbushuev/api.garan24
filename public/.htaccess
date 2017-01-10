@@ -6,3 +6,9 @@
 	RewriteCond %{REQUEST_FILENAME} !-f
 	RewriteRule ^ index.php [L]
 </IfModule>
+
+
+#AuthType Basic
+#AuthName "Доступ запрещён!"
+#AuthUserFile /var/www/html/l.gauzymall.com/.htpasswd
+#Require valid-user

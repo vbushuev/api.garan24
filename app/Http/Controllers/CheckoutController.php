@@ -33,7 +33,7 @@ class CheckoutController extends Controller{
     protected $viewFolder = 'co';
     protected $urlFolder = "/";
     //protected $thishost = "https://service.garan24.ru";
-    protected $thishost = "https://l.gauzymall.com";
+    protected $thishost = "https://checkout.gauzymall.com";
     public function __construct(){
         //\Garan24\Garan24::$DB["host"] = "151.248.117.239";
         \Garan24\Garan24::$DB["host"] = "127.0.0.1";

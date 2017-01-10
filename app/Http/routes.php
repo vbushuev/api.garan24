@@ -22,11 +22,20 @@ Route::group(['domain'=>'checkout.gauzymall.com'],function(){
 Route::group(['domain'=>'manager.gauzymall.com'],function(){
     Route::controller('/', 'ManagerController');
 });
+Route::group(['domain'=>'manager.gauzymall.bs2'],function(){
+    Route::controller('/', 'ManagerController');
+});
 Route::group(['domain'=>'cart.gauzymall.bs2'],function(){
     Route::controller('/', 'CartController');
 });
 Route::group(['domain'=>'cart.gauzymall.com'],function(){
     Route::controller('/', 'CartController');
+});
+Route::group(['domain'=>'dictionary.gauzymall.com'],function(){
+    Route::controller('/', 'DictionaryController');
+});
+Route::group(['domain'=>'dictionary.gauzymall.bs2'],function(){
+    Route::controller('/', 'DictionaryController');
 });
 
 // Old style
@@ -42,7 +51,7 @@ Route::controller('checkout', 'CheckoutOldController');
 Route::controller('mail', 'MailController');
 Route::controller('my', 'MyController');
 Route::controller('cart', 'CartController');
-Route::controller('manager', 'ManagerController');
+//Route::controller('manager', 'ManagerController');
 Route::match(['get','post'],'/shipping/bb', 'ServicesController@ShippingBoxberry');
 Route::match(['get','post'],'/statuses', 'ServicesController@Statuses');
 Route::match(['get','post'],'/statuses/{wc_status}', 'ServicesController@StatusByWC');

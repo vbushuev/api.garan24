@@ -45,6 +45,45 @@ var Editable = function(s){
         $(this).on("click",function(){et.click(this,et)});
     });
 };
+function initEditable(){
+    $(".editable-field .editable-value").each(function(){
+        var $t = $(this),url=$t.attr("data-rel"),f = $t.attr("data-ref"),v=$t.text();
+        $t.on("click",function(){
+            var $tt = $(this);
+            console.debug("Lets edit editable ["+v+"]");
+
+            $t.attr("contentEditable","true");
+            var save = $('<a href="javascript:0;" class="editable-ok"><i class="fa fa-check"></i></a>').on("click",function(){
+                console.debug("Saving data "+url+" "+f+" = "+v);
+                var new_v= $tt.text().replace(/[\r\n]/,'');
+                console.debug(new_v);
+                $.ajax({
+                    url:url+'&'+f+'='+new_v,
+                    type:"get",
+                    dataType:"json",
+                    complete:function(d){
+                        console.debug(d);
+                        $tt.removeAttr("contentEditable");
+                        $tt.parent().find(".editable-ok, .editable-cancel").remove();
+                    }
+                });
+            });
+
+            var close = $('<a href="javascript:0;" class="editable-cancel"><i class="fa fa-close"></i></a>').on("click",function(){
+                $tt.removeAttr("contentEditable");
+                $tt.parent().find(".editable-ok, .editable-cancel").remove();
+                $tt.text(v);
+                console.debug("Cancel data");
+            });
+            $t.after(close);
+            $t.after(save);
+            $t.focus();
+            $t.blur(function(e){
+                setTimeout(function(){$tt.parent().find(".editable-ok, .editable-cancel").remove()},2400);
+            });
+        });
+    });
+}
 function moveCaretToStart(el) {
     console.debug(el+" caret to start");
     if (typeof el.selectionStart == "number") {
@@ -63,7 +102,8 @@ function calculateTotal(){
             qnt = $t.prev(".quantity").text().replace(/\s+/ig,'').replace(/[а-я\.]+\./ig,'');
 
         console.debug("total["+total+"] => item cost:["+amt+" x "+qnt+"] isNaN:"+isNaN(amt));
-        total+=(amt.length&&!isNaN(amt))?parseFloat(amt)*qnt:0;
+        //total+=(amt.length&&!isNaN(amt))?parseFloat(amt)*qnt:0;
+        total+=(amt.length&&!isNaN(amt))?parseFloat(amt):0;
     });
     $("#cart-total-price").html(total.format(2,3,' ','.')+" руб.");
     var shipping = $("#ShippingAmountHidden").val();
@@ -249,42 +289,7 @@ function calculateTotal(){
     }
 
     $(document).ready(function(){
-        $(".editable-field .editable-value").each(function(){
-            var $t = $(this),url=$t.attr("data-rel"),f = $t.attr("data-ref"),v=$t.text();
-            $t.on("click",function(){
-                var $tt = $(this);
-                console.debug("Lets edit editable ["+v+"]");
-
-                $t.attr("contentEditable","true");
-                var save = $('<a href="javascript:0;" class="editable-ok"><i class="fa fa-check"></i></a>').on("click",function(){
-                    console.debug("Saving data "+url+" "+f+" = "+v);
-                    var new_v= $tt.text().replace(/[\r\n]/,'');
-                    console.debug(new_v);
-                    $.ajax({
-                        url:url+'&'+f+'='+new_v,
-                        type:"get",
-                        dataType:"json",
-                        complete:function(d){
-                            console.debug(d);
-                            $tt.removeAttr("contentEditable");
-                            $tt.parent().find(".editable-ok, .editable-cancel").remove();
-                        }
-                    });
-                });
-
-                var close = $('<a href="javascript:0;" class="editable-cancel"><i class="fa fa-close"></i></a>').on("click",function(){
-                    $tt.removeAttr("contentEditable");
-                    $tt.parent().find(".editable-ok, .editable-cancel").remove();
-                    $tt.text(v);
-                    console.debug("Cancel data");
-                });
-                $t.after(close);
-                $t.after(save);
-                $t.focus();
-            });
-            //$t.on("mouseover",function(){$t.after('<i class="fa fa-pencil"></i>')});
-            //$t.on("mouseout",function(){$t.next('.fa-pencil').remove();});
-        });
+        initEditable();
         /*$("#form #back").unbind("click").on("click",function(e){
             e.preventDefault();
             e.stopPropagation();

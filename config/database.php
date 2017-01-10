@@ -66,6 +66,20 @@ return [
             'engine' => null,
         ],
 
+        'gpars' => [
+            'driver' => 'mysql',
+            'host' => '127.0.0.1',
+            'port' => '3306',
+            'database' => 'gpars',
+            'username' => 'gpars',
+            'password' => 'gpars',
+            'charset' => 'utf8',
+            'collation' => 'utf8_unicode_ci',
+            'prefix' => 'xr_g_',
+            'strict' => false,
+            'engine' => null,
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', 'localhost'),

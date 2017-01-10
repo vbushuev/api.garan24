@@ -9,10 +9,10 @@
                     Статус <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="/manager">Рабочие</a></li>
+                    <li><a href="/">Рабочие</a></li>
                     <li role="separator" class="divider"></li>
                     @foreach($statuses as $status=>$desc)
-                    <li style="display:block;"><a href="/manager?status={{$status}}">{{$desc}}</a></li>
+                    <li style="display:block;"><a href="?status={{$status}}">{{$desc}}</a></li>
                     @endforeach
                     <!--<li role="separator" class="divider"></li>
                     <li><a href="/manager?status=credit">Выкупленные</a></li>
@@ -170,7 +170,7 @@
             };*/
             $(document).ready(function(){
                 $.ajax({
-                    url:'statistics',
+                    url:'/statistics',
                     type:"get",
                     dataType:"json",
                     beforeSend:function(){

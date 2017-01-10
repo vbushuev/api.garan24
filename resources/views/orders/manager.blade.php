@@ -38,12 +38,12 @@
                 $("#currency-save").on("click",function(){
                     garan.form.submit({
                         form:$("#currency-form"),
-                        url:"/currency/update",
+                        url:"/currencyupdate",
                         type:"post"
                     });
                 });
                 $.ajax({
-                    url:'/manager/socialresult',
+                    url:'/socialresult',
                     dataType:'json',
                     success:function(d){
                         var t ={
@@ -67,7 +67,7 @@
                     }
                 });
                 $.ajax({
-                    url:'/manager/analyticsresult',
+                    url:'/analyticsresult',
                     dataType:'json',
                     success:function(d){
                         var t ={

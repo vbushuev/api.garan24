@@ -229,7 +229,7 @@ jQuery.noConflict();
                     delete itm.variations;
                     delete itm.currency;
                     delete itm.shop;
-                    delete itm.sku;
+                    //delete itm.sku;
                     rq.order.items[i] = itm;
                     tot+=itm.regular_price*itm.quantity;
                     //console.debug(itm);

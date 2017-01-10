@@ -222,7 +222,7 @@
                     delete itm.variations;
                     delete itm.currency;
                     delete itm.shop;
-                    delete itm.sku;
+                    //delete itm.sku;
                     rq.order.items[i] = itm;
                     if(typeof itm.product_id == "undefined"){
                         if((typeof itm.shop != "undefined")&&(typeof itm.sku != "undefined")){

@@ -65,6 +65,8 @@ table tr td{
 .orders .order.status-closed .order-field{background-color: rgb(255, 255, 255); color:#555;}
 .orders .order.status-canceled .order-field{background-color: #d9534f; color:#fff;}
 
+.orders .order.status-edited .order-field{background-color: rgba(0, 191, 128,1); color:#fff;}
+
 .content-name {font-weight: 700;}
 .content-quntity {text-align: right;}
 .content-amount{text-align: right;}

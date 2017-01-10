@@ -30,14 +30,12 @@ class ManagerController extends Controller{
         \Garan24\Garan24::$DB["prefix"] = "xr_";
         \Garan24\Garan24::$DB["schema"] = "gauzymall";
         //\Garan24\Garan24::$DB["host"] = "151.248.117.239";
-        //\Garan24\Garan24::$DB["user"] = "gauzymall";
-        //\Garan24\Garan24::$DB["pass"] = "D6a8O2e1";
         \Garan24\Garan24::$DB["host"] = "127.0.0.1";
         \Garan24\Garan24::$DB["user"] = "gauzymall";
         \Garan24\Garan24::$DB["pass"] = "D6a8O2e1";
-        $domain = "http://gauzymall.com";
-        $consumer_key = "ck_653d001502fc0b8e1b5e562582f678ce7b966b85";
-        $consumer_secret = "cs_a9b8f4b535f845f82509c1cfa6bea5d094219dce";
+        $domain = "https://www.gauzymall.com";
+        $consumer_key = "ck_49991773cb558558384abaa2b00be9ab3b3de3b5";
+        $consumer_secret = "cs_4a56c14e1f65523c757cf18fdfacb95ed18a1a55";
         $options = [
             'debug'           => true,
         	'return_as_array' => false,
@@ -143,13 +141,105 @@ class ManagerController extends Controller{
         return view("orders.manager");
     }
     public function getPayed(Request $rq){
+        $c = ["error"=>"No Id accepted"];
+        $order = $rq->input("id",false);
+        while($order!==false){
+            $dd = DB::table('deals')
+                ->join('userinfo','deals.customer_id','=','userinfo.user_id')
+                ->join('garan24_user_cardref','garan24_user_cardref.user_id','=','userinfo.user_id')
+                ->join('garan24_cardrefs','garan24_user_cardref.card_ref_id','=','garan24_cardrefs.id')
+                ->where('deals.internal_order_id','=',$order)->select(
+                    'deals.internal_order_id as client_orderid',
+                    'garan24_cardrefs.card_ref_id as cardrefid',
+                    'deals.amount',
+                    'deals.service_fee',
+                    'deals.shipping_cost'
+                    )->get();
+            $dd = json_decode(json_encode($dd),true);
+            $dd = $dd[0];
+            $c = $dd;
+            if(!count($dd)) break;
+            $dd["order_desc"] = "Post payment for order #".$order;
+            $dd["ipaddress"] = "213.87.145.97";
+            $dd["redirect_url"] = "gauzymall.com";
+            $dd["cardrefid"] = preg_replace("/[\r\n]+/i","",$dd["cardrefid"]);
+            $dd["currency"] = "RUB";
+            $dd["amount"] += $dd["service_fee"]+$dd["shipping_cost"];
+            unset($dd["service_fee"]);
+            unset($dd["shipping_cost"]);
+
+            $crdData = array_merge(ManagerController::$ariuspay["akbars"]["RebillRequest"],["data"=>$dd]);
+            $crdData["data"]["login"] = $crdData["merchant_login"];
+            $c = $crdData;
+            $request = new \Garan24\Gateway\Ariuspay\RebillRequest($crdData);
+            $connector = new \Garan24\Gateway\Ariuspay\Connector();
+            $connector->setRequest($request);
+            $connector->call();
+            $response =  $connector->getResponse();
+
+            $field = "paynet-order-id";
+            $c = array_merge(ManagerController::$ariuspay["akbars"]["StatusRequest"],["data"=> [
+                "client_orderid"=>$dd["client_orderid"],
+                "orderid" => $response->$field,
+                "login" =>$crdData["merchant_login"]
+            ]]);
+            $c["endpoint"] = $crdData["endpoint"];
+            break;
+        }
         return response()->json($c,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
-    public function CurrencyUpdate(Request $rq){
+    public function getPayedstatus(Request $rq){
+        $c = ["error"=>"No Id accepted"];
+        $order = $rq->input("id",false);
+        while($order!==false){
+            $c = array_merge(ManagerController::$ariuspay["akbars"]["StatusRequest"],["data"=> [
+                "client_orderid"=>$order,
+                "orderid" => $rq->input("orderid"),
+                "login" => ManagerController::$ariuspay["akbars"]["StatusRequest"]["merchant_login"]
+            ]]);
+            $connector = new \Garan24\Gateway\Ariuspay\Connector();
+            $status = new \Garan24\Gateway\Ariuspay\StatusRequest($c);
+            $connector->setRequest($status);
+            $connector->call();
+            $response =  $connector->getResponse();
+            /*while(preg_replace("/[\r\n\s]/m","",$response->status) == "processing"){
+                sleep(5);
+                $connector->call();
+                $response =  $connector->getResponse();
+            }*/
+            if(preg_replace("/[\r\n\s]/m","",$response->status) == 'approved'){
+                $dbstatus = DB::table('garan24_deal_statuses')
+                    ->where("status","=","payed")->first();
+                    DB::table('deals')
+                        ->where("internal_order_id",$order)
+                        ->update(["status" => $dbstatus->id]);
+            }
+            $field = "last-four-digits";
+            $c = [
+                "status"=>preg_replace("/[\r\n]+/m","",$response->status),
+                "card" =>preg_replace("/[\r\n]+/m","",$response->bin)."xxxxxx".preg_replace("/[\r\n]+/m","",$response->$field)
+            ];
+            break;
+        }
+        return response()->json($c,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    }
+    public function getCurrencyupdate(Request $rq){
+        return $this->postCurrencyUpdate($rq);
+    }
+    public function postCurrencyupdate(Request $rq){
         $d = $rq->all();
         Log::debug(json_encode($d,JSON_PRETTY_PRINT));
+        $woocommerce__exchange_rate = [
+            "EUR" => "woocommerce_euro_exchange_rate",
+            "USD" => "woocommerce_dollar_exchange_rate",
+            "GBP" => "woocommerce_pound_exchange_rate"
+        ];
         foreach($d as $k=>$v){
-            if(in_array(strtoupper($k),["EUR","USD","GBP"]))DB::table('currency_rates')->where("iso_code",strtoupper($k))->update(["value"=>$v]);
+
+            if(in_array(strtoupper($k),["EUR","USD","GBP"])){
+                DB::table('currency_rates')->where("iso_code",strtoupper($k))->update(["value"=>$v]);
+                DB::table('options')->where("option_name",$woocommerce__exchange_rate[strtoupper($k)])->update(["option_value"=>$v]);
+            }
         }
         return $this->getConsole($rq);
     }
@@ -200,6 +290,50 @@ class ManagerController extends Controller{
         $c = DB::table('currency_rates')->take(4)->get();
         return response()->json($c,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
+    public static $ariuspay = ["akbars" =>[
+        "SaleRequest" => [
+            "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+            "endpoint" => "2879",
+            "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+            "merchant_login" => "garan24"
+        ],
+        "RebillRequest" => [
+            "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+            "endpoint" => "3058",
+            "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+            "merchant_login" => "garan24"
+        ],
+        "StatusRequest" => [
+            "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+            "endpoint" => "3058",
+            "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+            "merchant_login" => "garan24"
+        ],
+        "CaptureRequest" => [
+            "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+            "endpoint" => "2879",
+            "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+            "merchant_login" => "garan24"
+        ],
+        "PreauthRequest" => [
+            "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+            "endpoint" => "3028",
+            "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+            "merchant_login" => "garan24"
+        ],
+        "CreateCardRef_RIB" => [
+            "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+            "endpoint" => "3028",
+            "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+            "merchant_login" => "garan24"
+        ],
+        "CreateCardRef" => [
+            "url" => "https://gate.payneteasy.com/paynet/api/v2/",
+            "endpoint" => "2879",
+            "merchant_key" => "1398E8C3-3D93-44BF-A14A-6B82D3579402",
+            "merchant_login" => "garan24"
+        ]
+    ]];
 
 }
 ?>

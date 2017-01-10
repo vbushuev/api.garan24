@@ -12,6 +12,8 @@
         width:100%;
         font-weight: 300;
         padding:0 1em;
+        z-index: 9999;
+        font-size: 16px;
     }
     ._xg-greenline ._xg-greenline-menu{
         float:left;
@@ -59,6 +61,24 @@
         border: solid 1px rgb(255,255,255);
         padding:0 .2em;
         margin:0 .2em;
+    }
+    ._xg-input{
+        height:2em;
+        line-height:2em;
+        width:32em;
+        margin:0 1em;
+        color:#111;
+    }
+    ._xg-button{
+        height:2em;
+        line-height:2em;
+        margin:0 1em;
+        background-color:rgba(0, 191, 128,1);
+        color:#fff;
+        -webkit-border-radius: .2em;
+        -moz-border-radius: .2em;
+        border-radius: .2em;
+        border: solid 1px rgb(255,255,255);
     }
     @media (min-width: 768px){
         ._xg_green_line {
