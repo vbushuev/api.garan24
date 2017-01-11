@@ -21,7 +21,7 @@ class DictionaryController extends Controller{
     public function postDictionary(Request $rq){
         $lang = $rq->input("lang",'en');
         $row = $rq->input("row",0);
-        $sel = DB::connection('gpars')->select("select * from xr_g_dictionary where lang = '".$lang."' and id>=".$row." order by id");
+        $sel = DB::connection('gpars')->select("select * from xr_g_dictionary where lang = '".$lang."' and id>=".$row." order by status desc,id");
         return response()->json($sel,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
     public function getUpdate(Request $rq){

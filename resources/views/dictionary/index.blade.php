@@ -42,7 +42,7 @@
                         for(var i in d){
                             var q = d[i];
                             str+= '<tr class="order phrase status-'+q.status+'">';
-                            str+= '<td class="order-field" style="width:4em;">'+q.id+'</td>';
+                            str+= '<td class="order-field" style="width:4em;">'+i+'</td>';
                             str+= '<td class="order-field" style="width:18em;">'+q.created+'</td>';
                             str+= '<td class="order-field" style="width:2em;">'+q.lang+'</td>';
                             str+= '<td class="order-field" style="width:40em;">'+q.original+'</td>';

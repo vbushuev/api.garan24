@@ -73,6 +73,8 @@
                             <div class="order-info-section">
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                        <div id="delivery_type-{{$order->order_id}}" style="display:none">{{$order->delivery_id}}</div>
+                                        <div id="payment_type-{{$order->order_id}}" style="display:none">{{$order->payment_id}}</div>
                                         <?php $passport = json_decode($order->passport); ?>
                                         <h3>Покупатель</h3>
                                         <p>{{$order->first_name}} {{$order->fio_middle}} {{$order->last_name}}</p>
@@ -90,6 +92,7 @@
                                             @if($order->tracker)
                                                 <br /><strong>Tracker:</strong>
                                                 <a target="_blank" href='http://api.boxberry.de/?act=build&track={{$order->tracker}}&token=18455.rvpqeafa'>{{$order->tracker}}</a>
+                                                <div id="parcelTracker-{{$order->order_id}}" style="display:none">{{$order->tracker}}</div>
                                             @endif
                                         </p>
                                         <strong>Заказ в магазине:</strong>
@@ -266,6 +269,22 @@
                                 itemsContainer.html(ii);
                             }
                         });
+                        /*$.ajax({
+                            url:"//l.gauzymall.bs2/shipping/bb",
+                            type:"post",
+                            crossDomain:true,
+                            dataType:"json",
+                            data:JSON.stringify({
+                                method:"ParselStory",
+                                data:{
+                                    ImId:$("#parcelTracker-"+order_id).text()
+                                }
+                            }),
+                            success:function(d){
+                                console.debug(d);
+                            }
+
+                        });*/
                         itemsContainer.removeClass("empty");
                     }
                     $("#order-details-"+$t.attr("data-ref")).slideToggle();
@@ -314,6 +333,72 @@
                             },
                             success:function(d){
                                 document.location.reload();
+                            }
+                        });
+                    }
+
+                    else if(ac=="shipped"||ac=="payed"){
+                        var paymentType=$("#payment_type-"+id).text();
+                        if(paymentType == 1){
+                            $.ajax({
+                                url:"payed?id="+id,
+                                type:"get",
+                                dataType:"json",
+                                beforeSend:function(){
+                                    $t.html('<i class="fa fa-spin fa-spinner fa-2x fa-fw"></i>');
+                                },
+                                success:function(d){
+                                    console.debug(d);
+                                    $t.html('Проверить платеж').attr("data-rel","checkpayment").attr("data-rel2",d.data.orderid);
+
+                                }
+                            });
+                        }
+                        else if(paymentType==2){
+                            $.ajax({
+                                url:"updatestatus?id="+id+"&status=payed",
+                                type:"get",
+                                dataType:"json",
+                                beforeSend:function(){
+                                    $t.html('<i class="fa fa-spin fa-spinner fa-2x fa-fw"></i>');
+                                },
+                                success:function(d){
+                                    document.location.reload();
+                                }
+                            });
+                        }
+                    }
+                    else if(ac=="checkpayment"){
+                        var orderid = $t.attr("data-rel2");
+                        $.ajax({
+                            url:"payedstatus?id="+id+"&orderid="+orderid,
+                            type:"get",
+                            dataType:"json",
+                            beforeSend:function(){
+                                $t.html('<i class="fa fa-spin fa-spinner fa-2x fa-fw"></i>');
+                            },
+                            success:function(d){
+                                $t.html('Проверить платеж');
+                                console.debug(d);
+                                if(typeof d.status!="undefined"){
+                                    if(d.status=="approved"){
+                                        $.ajax({
+                                            url:"updatestatus?id="+id+"&status=payed",
+                                            type:"get",
+                                            dataType:"json",
+                                            beforeSend:function(){
+                                                $t.html('<i class="fa fa-spin fa-spinner fa-2x fa-fw"></i>');
+                                            },
+                                            success:function(d){
+                                                document.location.reload();
+                                            }
+                                        });
+                                    }
+                                    else if(d.status=="declined"){
+                                        $t.toggleClass("btn-default","btn-danger");
+                                        $t.html('Платеж отклонен!!!');
+                                    }
+                                }
                             }
                         });
                     }
