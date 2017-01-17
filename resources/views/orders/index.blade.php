@@ -122,8 +122,14 @@
                                     </div>
 
                                 @elseif($order->status == 'credit')
+                                    @if(($order->payment_id==1)&&($order->payed!=1))
+                                        <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="payment">Списать</a>
+                                    @endif
                                     <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="dispatched">{{$statuses["dispatched"]}}</a>
                                 @elseif($order->status == 'dispatched')
+                                    @if(($order->payment_id==1)&&($order->payed!=1))
+                                        <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="payment">Списать</a>
+                                    @endif
                                     <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="delivered">{{$statuses["delivered"]}}</a>
                                 @elseif($order->status == 'delivered')
                                     <div class="col-xs-6 bb-sticker">
@@ -132,19 +138,41 @@
                                         @include('elements.inputs.input',['name'=>'weight','icon'=>'bag','id'=>'weight','text'=>'Общий вес посылки (г)'])
                                     </div>
                                     <div class="col-xs-3">
+                                        @if(($order->payment_id==1)&&($order->payed!=1))
+                                            <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="payment">Списать</a>
+                                        @endif
                                         <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="boxbery">{{$statuses["boxbery"]}}</a>
                                     </div>
                                 @elseif($order->status == 'boxbery')
+                                    @if(($order->payment_id==1)&&($order->payed!=1))
+                                        <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="payment">Списать</a>
+                                    @endif
                                     <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="boxberyhub">{{$statuses["boxberyhub"]}}</a>
                                 @elseif($order->status == 'boxberyhub')
+                                    @if(($order->payment_id==1)&&($order->payed!=1))
+                                        <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="payment">Списать</a>
+                                    @endif
                                     <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="warehouse">{{$statuses["warehouse"]}}</a>
                                 @elseif($order->status == 'warehouse')
+                                    @if(($order->payment_id==1)&&($order->payed!=1))
+                                        <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="payment">Списать</a>
+                                    @endif
                                     <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="destination">{{$statuses["destination"]}}</a>
                                 @elseif($order->status == 'destination')
+                                    @if(($order->payment_id==1)&&($order->payed!=1))
+                                        <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="payment">Списать</a>
+                                    @endif
                                     <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="shipped">{{$statuses["shipped"]}}</a>
                                 @elseif($order->status == 'shipped')
-                                    <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="payed">{{$statuses["payed"]}}</a>
+                                    @if(($order->payment_id==1)&&($order->payed!=1))
+                                        <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="payment">Списать</a>
+                                    @else
+                                        <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="payed">{{$statuses["payed"]}}</a>
+                                    @endif
                                 @elseif($order->status == 'payed')
+                                    @if(($order->payment_id==1)&&($order->payed!=1))
+                                        <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="payment">Списать</a>
+                                    @endif
                                     <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="closed">{{$statuses["closed"]}}</a>
                                 @endif
                             </div>
@@ -337,22 +365,25 @@
                         });
                     }
 
-                    else if(ac=="shipped"||ac=="payed"){
+                    else if(ac=="payment"){
                         var paymentType=$("#payment_type-"+id).text();
                         if(paymentType == 1){
-                            $.ajax({
-                                url:"payed?id="+id,
-                                type:"get",
-                                dataType:"json",
-                                beforeSend:function(){
-                                    $t.html('<i class="fa fa-spin fa-spinner fa-2x fa-fw"></i>');
-                                },
-                                success:function(d){
-                                    console.debug(d);
-                                    $t.html('Проверить платеж').attr("data-rel","checkpayment").attr("data-rel2",d.data.orderid);
-
-                                }
-                            });
+                            if(confirm("Данная операция повлечет списание денежных средств с карты клиента. Продолжить?")){
+                                $.ajax({
+                                    url:"payed?id="+id,
+                                    type:"get",
+                                    dataType:"json",
+                                    beforeSend:function(){
+                                        $t.html('<i class="fa fa-spin fa-spinner fa-2x fa-fw"></i>');
+                                    },
+                                    success:function(d){
+                                        console.debug(d);
+                                        //$t.html('Проверить платеж').attr("data-rel","checkpayment").attr("data-rel2",d.data.orderid).delay(4000).click();
+                                        $t.attr("data-rel","checkpayment").attr("data-rel2",d.data.orderid);
+                                        setTimeout(function(){$t.click();},4000);
+                                    }
+                                });
+                            }
                         }
                         else if(paymentType==2){
                             $.ajax({
@@ -395,8 +426,7 @@
                                         });
                                     }
                                     else if(d.status=="declined"){
-                                        $t.toggleClass("btn-default","btn-danger");
-                                        $t.html('Платеж отклонен!!!');
+                                        $t.html('Платеж отклонен!!! Повторить').attr("data-rel","checkpayment").attr("data-rel",'payment');
                                     }
                                 }
                             }

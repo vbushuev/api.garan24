@@ -63,7 +63,7 @@ class ManagerController extends Controller{
         //$id = $rq->input("status","0");
         $filtersSet = false;
         $filters = $rq->all();
-        $sel = DB::table('orders')->join('userinfo','orders.user_id','=','userinfo.user_id')->where("status","<>","canceled");
+        $sel = DB::table('orders')->join('userinfo','orders.user_id','=','userinfo.user_id');
 
         foreach($filters as $f=>$v){
             if($f=="status"){
@@ -74,7 +74,7 @@ class ManagerController extends Controller{
                 $sel = $sel->where("external_order_id","like", "%".$v."%");//->orWhere("internal_order_id","=",$v);
             }
         }
-        if($filtersSet === false )$sel = $sel->where('status','<>','new');
+        if($filtersSet === false )$sel = $sel->where('status','<>','new')->where('status','<>','closed')->where("status","<>","canceled");
         $orders=$sel->take(100)->get();
         $st = DB::table('garan24_deal_statuses')->get();
         $out = [];
@@ -212,7 +212,7 @@ class ManagerController extends Controller{
                     ->where("status","=","payed")->first();
                     DB::table('deals')
                         ->where("internal_order_id",$order)
-                        ->update(["status" => $dbstatus->id]);
+                        ->update(["status" => $dbstatus->id,"payed"=>"1"]);
             }
             $field = "last-four-digits";
             $c = [
