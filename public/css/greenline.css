@@ -1,0 +1,211 @@
+html,
+body {
+    padding: 0;
+    margin: 0;
+}
+
+.gl-clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
+}
+
+.gl {
+    position: fixed;
+    top: 0;
+    legt: 0;
+    width: 100%;
+    z-index: 9999;
+}
+
+.gl-container {
+    background-color: #00bf80;
+    position: relative;
+}
+
+.gl-container a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    font-family: sans-serif;
+    line-height: 1.6em;
+    padding: 10px 15px;
+}
+
+.gl-header {
+    width: 100%;
+}
+
+.gl-logo {
+    float: left;
+}
+
+.gl-container a:hover {
+    color: #444;
+}
+
+.gl-nav {
+    display: none;
+}
+
+.gl-nav ul {
+    display: block;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.gl-nav ul li {
+    display: block;
+}
+
+.gl-nav ul li a {
+    font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
+    font-weight: normal;
+    font-size: 0.9em;
+}
+
+.gl-mobile-menu-icon {
+    float: right;
+}
+
+.gl-mobile-menu-icon button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1em;
+    line-height: 1.6em;
+    padding: 10px 15px;
+    text-transform: uppercase;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.gl-mobile-menu-icon button:focus {
+    outline: none;
+}
+
+.gl-mobile-menu-icon button:hover {
+    color: #444;
+}
+
+.gl-mobile-menu-icon button.toggled {
+    color: #444;
+}
+
+.gl-popup-overlay {
+    width: 100%;
+    height: 100%;
+    top: 45px;
+    background: rgba(0,0,0,0.7);
+    position: fixed;
+    z-index: 9997;
+    cursor: pointer;
+}
+
+.gl-popup {
+    position: fixed;
+    top: 45px;
+    background: #fff;
+    padding: 15px;
+    width: 100%;
+    max-width: 1170px;
+    z-index: 9998;
+    transform: translateX(-50%);
+    left: 50%;
+    min-height: 20px;
+    box-sizing: border-box;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.5);
+}
+
+.gl-popup-close {
+    display: block;
+    float: right;
+    line-height: 40px;
+    font-size: 14px;
+    text-transform: uppercase;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #777;
+    transition: all 0.2s ease-in;
+    padding: 0;
+}
+
+.gl-popup-close:focus {
+    outline: none;
+}
+
+.gl-popup-close:hover {
+    color: red;
+}
+
+.gl-popup-content {
+    max-height: 25em;
+    overflow-y: scroll;
+    width: 100%;
+}
+
+.gl-mobile-invisible {
+    display: none;
+}
+
+@media screen and (min-width: 768px) {
+
+    .gl-logo {
+        float: left;
+    }
+
+    .gl-nav {
+        display: block;
+    }
+
+    .gl-nav ul {
+        display: inline-block;
+    }
+
+    .gl-nav__left {
+        float: left;
+    }
+
+    .gl-nav__right {
+        float: right;
+    }
+
+    .gl-nav ul li {
+        float: left;
+    }
+
+    .gl-header {
+        width: auto;
+        float: left;
+    }
+
+    .gl-mobile-menu-icon {
+        display: none;
+    }
+
+    .gl-mobile-visible {
+        display: none;
+    }
+
+    .gl-mobile-invisible {
+        display: inline;
+    }
+
+}
+
+@media screen and (min-width: 1024px) {
+
+
+
+}
+
+@media screen and (min-width: 1200px) {
+
+    .gl-row {
+        width: 1170px;
+        margin: 0 auto;
+    }
+
+}
