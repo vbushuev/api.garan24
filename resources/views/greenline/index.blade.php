@@ -158,11 +158,25 @@
         display: none;
     }
 
-    .gl-row {
-        height:inherit;
-        line-height: inherit;
+    .gl-popup-content section {
+        line-height: 1.6em;
+        font-size: 1em;
     }
+    .gl-popup-content section p{
+        margin-top: .8em;
+    }
+    .gl-popup-content section ul{
+        margin:0 4em;
+        text-align: left;
+        list-style: disc;
+    }
+    .gl-popup-content section ul li{
 
+    }
+    .gl-popup-content section h1,.gl-popup-content section h2,.gl-popup-content section h3{
+        font-weight: 800;
+        font-size: 1.2em;
+    }
     @media screen and (min-width: 768px) {
 
         .gl-logo {
@@ -229,7 +243,7 @@
         <div class="gl-row gl-clearfix">
             <div class="gl-header gl-clearfix">
                 <div class="gl-logo">
-                    <a href="#"><strong>Gauzymall</strong></a>
+                    <a href="https://www.gauzymall.com"><strong>Gauzymall</strong></a>
                 </div>
                 <div class="gl-mobile-menu-icon">
                     <button id="glMobileMenu"><i class="fa fa-bars" aria-hidden="true"></i></button>
@@ -237,14 +251,14 @@
             </div>
             <nav class="gl-nav" id="glNav">
                 <ul class="gl-nav__left gl-clearfix">
-                    <li><a href="javascript:{0}" id="itemOne">Как купить</a></li>
-                    <li><a href="javascript:{0}" id="itemTwo">Доставка</a></li>
-                    <li><a href="javascript:{0}">Оплата</a></li>
-                    <li><a href="javascript:{0}">Рассрочка</a></li>
+                    <li><a href="javascript:{0}" id="howtobuy">Как купить</a></li>
+                    <li><a href="javascript:{0}" id="shipping">Доставка</a></li>
+                    <li><a href="javascript:{0}" id="payment">Оплата</a></li>
+                    @if(isset($installments))<li><a href="javascript:{0}" id="installments">Рассрочка</a></li>@endif
                 </ul>
                 <ul class="gl-nav__right gl-clearfix">
-                    <li><a href="#">Акция</a></li>
-                    <li><a href="#">О нас</a></li>
+                    @if(isset($sale))<li><a href="javascript:{0}" id="sale">Акция</a></li>@endif
+                    <li><a href="javascript:{0}" id="about">О нас</a></li>
                     <li><a href="tel:88007075103"><span class="gl-mobile-visible">Телефон </span>8 800 707 51 03</a></li>
                     <li><a href="mailto:info@garan24.ru"><i class="fa fa-envelope-o gl-mobile-invisible" aria-hidden="true"></i><span class="gl-mobile-visible">Электронная почта</span></a></li>
                     <li><a href="#"><i class="fa fa-language gl-mobile-invisible" aria-hidden="true"></i><span class="gl-mobile-visible">Перевод</span></a></li>
@@ -253,45 +267,35 @@
         </div>
     </div>
 </div>
-<!--
-<div style="width: 100%; max-width: 1170px; margin: 0 auto; padding: 50px 15px; box-sizing: border-box;">
-    <h1>{{ $site  }}</h1>
-    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce cursus, velit nec rutrum auctor, nisl libero lacinia lorem, ut venenatis elit sem vitae nisl. Cras a felis eu dui luctus vehicula tempus sed neque. Etiam ut purus et tortor venenatis commodo et vel urna. Nullam convallis enim non orci maximus, id consequat lectus scelerisque. Quisque eget posuere nisi. Donec dignissim porta purus vel vestibulum. Sed rhoncus maximus sapien, a tempus augue hendrerit eget. Phasellus quis turpis velit. Proin congue a lectus et congue. Duis vitae lorem a odio lobortis convallis. Nullam efficitur velit eget augue finibus finibus. Quisque vestibulum interdum odio a vehicula. Donec quis ante eget dui egestas bibendum quis dignissim massa. Etiam scelerisque nulla at sapien pellentesque, ac tristique nulla congue. Mauris nec quam mauris.</p>
-    <p>Cras massa est, porttitor id leo a, accumsan porttitor sem. Mauris facilisis metus mauris, at bibendum augue pharetra eu. Etiam elementum, est eu interdum elementum, neque massa gravida ante, eu molestie nibh ante quis est. Nunc viverra venenatis dictum. Morbi tempor cursus tortor quis condimentum. Nulla eget porttitor risus. Vivamus blandit tortor in ligula interdum, eget luctus orci elementum. Maecenas lacus lacus, rutrum in mattis id, volutpat sit amet urna. Donec aliquam elementum nibh quis efficitur. Proin lobortis justo vel elit vulputate, sit amet iaculis lorem porttitor. Duis at lacus dui. Sed nec mauris sit amet est convallis consequat accumsan vitae nulla.</p>
-    <p>Proin porta lectus pretium ipsum scelerisque faucibus. Vivamus eu sapien porttitor, maximus lorem eget, iaculis orci. Sed viverra finibus mi, sed vestibulum urna malesuada quis. Sed ac tellus vitae urna lobortis semper. Cras vel mollis erat, et interdum eros. Sed luctus vitae nulla sit amet faucibus. Cras massa elit, posuere id venenatis rutrum, placerat eu justo. Fusce euismod, mi id sollicitudin scelerisque, sem orci luctus odio, vitae venenatis lorem sapien in dui. Praesent at tempor quam.</p>
-    <p>Cras euismod tristique risus nec sodales. Aenean pulvinar lacus ut feugiat sollicitudin. Donec lobortis lorem in ullamcorper bibendum. Nulla euismod nulla eget nisi tempor, at posuere sem tristique. Pellentesque vehicula libero et hendrerit interdum. Nunc et justo ullamcorper, imperdiet urna eu, semper risus. Sed non elit ante. Sed porta lectus vitae ipsum eleifend blandit. Phasellus in ipsum lacinia, congue neque a, eleifend est. Vivamus a orci interdum, dapibus nisi sed, convallis nibh. In eget feugiat lorem. Curabitur eget urna vel justo vulputate maximus.</p>
-    <p>Vivamus tempus, tellus ut cursus sagittis, felis ex faucibus nisi, vitae congue dolor risus nec odio. Etiam imperdiet mattis mi ut facilisis. Curabitur sit amet dui vel ligula rhoncus ultricies eget a sem. Praesent ut vestibulum lectus. Donec interdum ex sed iaculis aliquet. Fusce at lobortis est, dignissim placerat ex. Nulla sollicitudin augue sit amet massa sollicitudin pharetra. In enim diam, laoreet eget convallis non, consectetur a massa. Fusce faucibus tincidunt felis at blandit. Curabitur vitae feugiat felis. Phasellus non felis sit amet dui pharetra malesuada. Fusce in egestas urna.</p>
-</div>
--->
 <div class="gl-popup-overlay" id="glPopupOverlay" style="display: none;"></div>
 <div class="gl-popup" id="glPopup" style="display: none;">
-    <button class="gl-popup-close" id="glPopupClose">Закрыть</button>
+    <button class="gl-popup-close" id="glPopupClose" ><i class="fa fa-times fa-2x">&nbsp;</i></button>
     <div class="gl-popup-content" id="glPopupContent">
-        <section id="sectionOne" style="display: none;">
-            <h3>Section 1</h3>
-            @if ( $site == 'brandalley' )
-                <strong>Text for {{ $site  }}</strong>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut posuere ipsum. Fusce quis urna in quam consequat fermentum. Aliquam semper sagittis orci. Curabitur sapien erat, tincidunt non auctor at, tempus sit amet nulla. Pellentesque eu aliquet libero. Nulla volutpat at dui vitae ultrices. Cras sollicitudin risus nisi, ornare sodales ante pellentesque vitae. Suspendisse aliquet diam at enim placerat placerat. Aliquam ac vestibulum nulla</p>
-                <p>Sed sed velit turpis. Proin in ultricies nunc, id tristique ante. Integer porta pellentesque ipsum, nec accumsan arcu tristique eget. Proin ultrices aliquam libero, sit amet rutrum lacus maximus vel. Donec dui diam, cursus vel dignissim eu, consectetur sed massa. Aenean enim metus, ultrices ac urna sed, maximus lobortis ex. Sed a placerat tortor, in vehicula orci. Nulla placerat ac nunc at varius. Maecenas tincidunt ex quis vehicula pretium.</p>
-                <p>Maecenas eget rutrum lorem. Nunc ultricies, tortor eget fringilla convallis, nisi sapien suscipit diam, a convallis erat lacus vehicula erat. Donec risus nisi, commodo vitae fringilla non, consequat non nunc. Sed a sollicitudin arcu. Proin feugiat posuere dolor. Suspendisse fringilla lectus lorem, non semper lorem molestie vel. Duis laoreet pellentesque venenatis. Pellentesque pulvinar tempor accumsan. Ut sed orci a quam imperdiet consectetur vitae maximus diam. Phasellus faucibus purus ac efficitur posuere. Curabitur nec tristique purus, ut tincidunt est. Quisque ac urna vehicula, dapibus metus et, malesuada erat. Mauris ornare magna id finibus ullamcorper. Nunc pharetra sapien vel leo volutpat, porttitor finibus justo porttitor. Nam in neque finibus lectus placerat tincidunt at ut ante. Mauris aliquet mauris ut lorem cursus feugiat.</p>
-                <p>Maecenas dapibus dui vel molestie sodales. Cras nec consequat metus. Proin eu ante eget lectus convallis vestibulum id vitae magna. Morbi interdum, diam nec lacinia egestas, massa eros congue justo, vel tempus elit odio id quam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas fringilla lacus ut venenatis congue. Donec non ex et magna venenatis imperdiet id a turpis. Maecenas pulvinar nunc eu arcu viverra, a maximus ligula porttitor.</p>
-                <p>Donec sollicitudin eget felis ut molestie. In fermentum tortor dapibus magna tempus, eu tincidunt ante pulvinar. Ut sodales sem venenatis malesuada elementum. Morbi blandit diam est, in fringilla tortor commodo vitae. Pellentesque in diam sed est volutpat fringilla vitae eget enim. Quisque et scelerisque neque, sed euismod mauris. Nulla hendrerit scelerisque mauris, sed pellentesque felis ultrices vitae. Pellentesque laoreet sem nec cursus dapibus. Phasellus nibh est, pretium non augue eget, lobortis vulputate ex. Quisque iaculis vulputate finibus. Etiam cursus, tortor et ultrices iaculis, tellus velit varius odio, non volutpat urna neque eu odio. Duis congue dolor vitae varius finibus. Aenean auctor rhoncus luctus. Ut id neque lacinia, auctor lacus at, venenatis lacus. Integer in elit vitae libero ultrices venenatis id et augue.</p>
-            @elseif ( $site == 'ctshirts' )
-                <strong>Text for {{ $site  }}</strong>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ut posuere ipsum. Fusce quis urna in quam consequat fermentum. Aliquam semper sagittis orci. Curabitur sapien erat, tincidunt non auctor at, tempus sit amet nulla. Pellentesque eu aliquet libero. Nulla volutpat at dui vitae ultrices. Cras sollicitudin risus nisi, ornare sodales ante pellentesque vitae. Suspendisse aliquet diam at enim placerat placerat. Aliquam ac vestibulum nulla</p>
-                <p>Sed sed velit turpis. Proin in ultricies nunc, id tristique ante. Integer porta pellentesque ipsum, nec accumsan arcu tristique eget. Proin ultrices aliquam libero, sit amet rutrum lacus maximus vel. Donec dui diam, cursus vel dignissim eu, consectetur sed massa. Aenean enim metus, ultrices ac urna sed, maximus lobortis ex. Sed a placerat tortor, in vehicula orci. Nulla placerat ac nunc at varius. Maecenas tincidunt ex quis vehicula pretium.</p>
-                <p>Maecenas eget rutrum lorem. Nunc ultricies, tortor eget fringilla convallis, nisi sapien suscipit diam, a convallis erat lacus vehicula erat. Donec risus nisi, commodo vitae fringilla non, consequat non nunc. Sed a sollicitudin arcu. Proin feugiat posuere dolor. Suspendisse fringilla lectus lorem, non semper lorem molestie vel. Duis laoreet pellentesque venenatis. Pellentesque pulvinar tempor accumsan. Ut sed orci a quam imperdiet consectetur vitae maximus diam. Phasellus faucibus purus ac efficitur posuere. Curabitur nec tristique purus, ut tincidunt est. Quisque ac urna vehicula, dapibus metus et, malesuada erat. Mauris ornare magna id finibus ullamcorper. Nunc pharetra sapien vel leo volutpat, porttitor finibus justo porttitor. Nam in neque finibus lectus placerat tincidunt at ut ante. Mauris aliquet mauris ut lorem cursus feugiat.</p>
-                <p>Maecenas dapibus dui vel molestie sodales. Cras nec consequat metus. Proin eu ante eget lectus convallis vestibulum id vitae magna. Morbi interdum, diam nec lacinia egestas, massa eros congue justo, vel tempus elit odio id quam. Interdum et malesuada fames ac ante ipsum primis in faucibus. Maecenas fringilla lacus ut venenatis congue. Donec non ex et magna venenatis imperdiet id a turpis. Maecenas pulvinar nunc eu arcu viverra, a maximus ligula porttitor.</p>
-                <p>Donec sollicitudin eget felis ut molestie. In fermentum tortor dapibus magna tempus, eu tincidunt ante pulvinar. Ut sodales sem venenatis malesuada elementum. Morbi blandit diam est, in fringilla tortor commodo vitae. Pellentesque in diam sed est volutpat fringilla vitae eget enim. Quisque et scelerisque neque, sed euismod mauris. Nulla hendrerit scelerisque mauris, sed pellentesque felis ultrices vitae. Pellentesque laoreet sem nec cursus dapibus. Phasellus nibh est, pretium non augue eget, lobortis vulputate ex. Quisque iaculis vulputate finibus. Etiam cursus, tortor et ultrices iaculis, tellus velit varius odio, non volutpat urna neque eu odio. Duis congue dolor vitae varius finibus. Aenean auctor rhoncus luctus. Ut id neque lacinia, auctor lacus at, venenatis lacus. Integer in elit vitae libero ultrices venenatis id et augue.</p>
+        <section id="section_howtobuy" style="display: none;">{!!$howtobuy!!}</section>
+        <section id="section_shipping" style="display: none;">{!!$shipping!!}</section>
+        <section id="section_payment" style="display: none;">{!!$payment!!}</section>
+        @if(isset($installments))<section id="section_installments" style="display: none;">{!!$installments!!}</section>@endif
+        @if(isset($sale))<section id="section_sale" style="display: none;">{!!$sale!!}</section>@endif
+
+        <section id="section_about" style="display: none;">
+            @if(isset($about))
+                {!!$about!!}
+            @else
+                <h3>О нас</h3>
+                <p><strong>Сервис Gauzymall</strong> – это сервис европейской компании <strong>G24 Europe</strong>, предоставляющий Вам свою помощь в приобретении товаров в зарубежных интернет магазинах с доставкой в Россию.</p>
+                <p>Пользуясь нашим сервисом, Вы можете совершать покупки в разных интернет магазинах Европы и других стран, складывая выбранные товары в единую корзину.</p>
+                <p>Наши главные преимущества:</p>
+                <ul>
+                    <li>Удобная услуга «Мультикорзина», дающая возможность делать покупки в разных магазинах, оформляя при этом единый заказ, который будет доставлен одной посылкой с минимальными затратами на доставку.</li>
+                    <li>Не нужно никаких дополнительных действий по оформлению заказа и доставки – Вы совершаете покупки привычным образом, так же, как и в любом российском интернет-магазине.</li>
+                    <li>Отсутствие предоплаты товара, минимальный платеж  – всего 1 рубль, который осуществляется для проверки Вашей карты. Фактически Вы оплачиваете заказ после его доставки.</li>
+                    <li>Стоимость покупок фиксируется в рублях на момент оформления заказа.</li>
+                    <li>Оплата покупок производится банковской картой любого российского банка.</li>
+                    <li>Нет платы за регистрацию или абонентской платы</li>
+                    <li>Минимум дополнительных расходов – Вы оплачиваете только товары, доставку и наши расходы на оплату и оформление Вашего заказа.</li>
+                </ul>
+                <p>Технологическая поддержка сервиса осуществляется ООО «Гаран 24»</p>
             @endif
-        </section>
-        <section id="sectionTwo" style="display: none;">
-            <h3>Section 2</h3>
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque sodales massa vel sapien sodales lobortis. Ut commodo in tortor non sodales. Aliquam at placerat orci, ac aliquam justo. Suspendisse potenti. Donec ornare metus vel lacus dictum, at mattis nunc rutrum. Morbi sit amet eros vehicula purus euismod hendrerit at nec libero. Sed at lectus turpis. Suspendisse eu elit et metus hendrerit tincidunt sit amet at velit.</p>
-            <p>Vivamus nec lorem ac leo commodo molestie sed non turpis. Aliquam erat volutpat. Curabitur egestas ipsum sed volutpat facilisis. Morbi at massa vitae est gravida fermentum vel eu est. Fusce posuere pretium rutrum. Morbi velit ex, volutpat ac pharetra facilisis, suscipit sed felis. Maecenas ante sem, fringilla nec faucibus vel, lobortis sodales urna.</p>
-            <p>Duis gravida facilisis dictum. Suspendisse commodo odio sit amet tellus semper cursus. Duis nec rutrum eros. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nam felis magna, maximus sollicitudin porta ac, finibus ultrices dui. Donec tristique massa dui, sodales rutrum mauris placerat et. Praesent sodales velit quis massa dapibus, ac tempor turpis ultricies. Cras vehicula luctus auctor. Nam tempor augue et neque elementum, eu consectetur diam mattis. Integer vitae fringilla est, nec rhoncus ligula. Sed pretium odio in erat auctor, sed pellentesque arcu sagittis. Ut dolor sapien, hendrerit id elit in, bibendum auctor felis. Duis non tempus mauris. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</p>
-            <p>Nam rhoncus accumsan lacus, at elementum lorem elementum ut. Sed augue tortor, maximus sed dictum at, accumsan sed erat. Nam eu nisl posuere, ultricies purus eu, vehicula ligula. Aliquam dui urna, feugiat at venenatis ac, fringilla non ex. Donec at interdum nisi, nec elementum quam. Nulla odio nulla, porttitor egestas ornare in, sollicitudin ut nisi. Sed justo arcu, sagittis quis molestie sed, posuere vel elit. Ut aliquam elit eget orci maximus congue. Duis lacinia eros sed dolor iaculis consequat. Curabitur sit amet purus eget mauris fermentum ornare.</p>
-            <p>Donec at dolor nibh. Maecenas quis velit elit. Proin interdum ac justo ac rhoncus. Praesent ipsum ligula, venenatis a placerat sit amet, pretium a leo. Nullam vitae velit accumsan, faucibus est non, euismod justo. Vestibulum eget neque condimentum, fermentum dui nec, consequat dui. Donec aliquet tortor eget fermentum aliquet. Nulla a massa erat. Etiam aliquet faucibus finibus. Quisque fringilla purus quis nunc posuere, eget pellentesque eros lacinia. Nulla eu eleifend lorem. Pellentesque odio lorem, gravida nec elit quis, posuere tempor risus. Sed eu blandit tellus.</p>
         </section>
     </div>
 </div>
@@ -438,25 +442,131 @@ function openPopup( section_id ) {
     gl_section.style.display = 'block';
 
 }
+var ba = {
+    checkout:function (){
+        var its = this.parse();
+        xG.checkout(its);
+    },
+    parse:function(){
+        var pp = [];
+        var rows = document.getElementsByClassName("cart-item");
+        console.debug("items found "+rows.length);
+        for(var i= 0;i<rows.length;++i){
+            var row = rows[i];
+            var cells = row.getElementsByTagName("td");
+            var price_spans = cells[1].getElementsByTagName("div")[0].getElementsByTagName("span");
+            console.debug(price_spans);
+            var origprice =(price_spans.length>2)?price_spans[1].innerHTML:price_spans[0].innerHTML;
+            var price =(price_spans.length>2)?price_spans[2].innerHTML:price_spans[1].innerHTML;
+            var sale =(price_spans.length>2)?price_spans[4].innerHTML:price_spans[1].innerHTML;
+            origprice = origprice.replace(/[^\d\.,]/ig,"").replace(/,/ig,".").replace(/\.$/,"");
+            price = price.replace(/[^\d\.,]/ig,"").replace(/,/ig,".").replace(/\.$/,"");
+            sale = sale.replace(/[^\d\.,]/ig,"").replace(/,/ig,".").replace(/\.$/,"");
+            var p = {
+                shop:"brandalley",
+                quantity:cells[4].getElementsByClassName("quantity")[0].getElementsByTagName("span")[0].getElementsByTagName("input")[0].value,
+                currency:'EUR',
+                original_price:origprice,
+                regular_price:price,
+                sale_price:sale,
+                title:cells[0].getElementsByTagName("div")[2].getElementsByTagName("div")[0].getElementsByTagName("a")[0].innerHTML.replace(/[`']/,''),
+                description:cells[0].getElementsByTagName("div")[2].getElementsByTagName("div")[1].getElementsByTagName("a")[0].innerHTML.replace(/[`']/,''),
+                product_img:"http:"+cells[0].getElementsByTagName("div")[0].getElementsByTagName("a")[0].getElementsByTagName("img")[0].getAttribute("src"),
+                product_url:"https://www-v6.brandalley.fr"+cells[0].getElementsByTagName("div")[2].getElementsByTagName("div")[1].getElementsByTagName("a")[0].getAttribute("href"),
+                sku:"BRA"+cells[0].getElementsByTagName("div")[2].getElementsByTagName("div")[1].getElementsByTagName("a")[0].getAttribute("href").replace(/\D/g,''),
+                variations:{
+                    size:(typeof cells[0].getElementsByTagName("div")[2].getElementsByClassName("info_product_sup")[0]!="undefined")?cells[0].getElementsByTagName("div")[2].getElementsByClassName("info_product_sup")[0].innerHTML:"",
+                    color:""
+                }
+            };
+            pp.push(p);
+        };
+        console.log(pp);
+        return pp;
+    }
+};
 
-var item_one = document.getElementById( 'itemOne' );
 
-item_one.addEventListener( 'click', function( event ){
+    document.getElementById( 'howtobuy' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_howtobuy' );}, false );
+    document.getElementById( 'shipping' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_shipping' );}, false );
+    document.getElementById( 'payment' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_payment' );}, false );
+    document.getElementById( 'installments' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_installments' );}, false );
+    document.getElementById( 'sale' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_sale' );}, false );
+    document.getElementById( 'about' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_about' );}, false );
 
-    event.preventDefault();
+    var tohide = [];
+    tohide = tohide.concat(document.getElementsByClassName( 'footer_paiement' ));
+    tohide = tohide.concat(document.getElementsByClassName( 'bon_achat' ))
+    console.debug(tohide);
+    for(var i=0;i<tohide.length;++i){
+        var itm = tohide[i][0];
+        if(itm!=null && typeof itm!="undefined") itm.style.display = 'none';
+    }
 
-    openPopup( 'sectionOne' );
+    var checkout = document.getElementById( 'panier-valider' );
+    if(typeof checkout != 'undefined' && checkout != null){
+        checkout.setAttribute("href","javascript:{0}");
+        var clone = checkout.cloneNode();
+        //while (checkout.firstChild) {clone.appendChild(checkout.lastChild);}
+        checkout.parentNode.replaceChild(clone, checkout);
+        clone.innerHTML = 'Оформить заказ';
+        clone.addEventListener( 'click', function( event ){
+            event.preventDefault();
+            event.stopPropagation();
+            ba.checkout();
+        }, false );
+    }
+    <!-- Currencies -->
+    var pe = [];
+    var priceElements = document.getElementsByClassName("block_price");
+    if(priceElements!=null && typeof priceElements!="undefined"){
+        for (var i=0;i<priceElements.length;++i) {
+            var el = priceElements[i];
+            //console.debug(el);
+            if(el==null || typeof el=="undefined")break;
+            var el1 = el.getElementsByTagName("span");
+            if(el1!=null){
+                if(el1.length>1){
+                    pe.push(el1[1]);
+                    pe.push(el1[2]);
+                }
+                else pe.push(el1[0]);
+            }
 
-}, false );
+        }
+    }
+    priceElements = document.getElementsByClassName("price_total");
+    if(priceElements!=null && typeof priceElements!="undefined"){
+        for (var i=0;i<priceElements.length;++i) {
+            pe.push(priceElements[i]);
+        }
+    }
+    xG.currency.get(pe,"EUR");
 
-var item_two = document.getElementById( 'itemTwo' );
+    <!-- Yandex.Metrika counter -->
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter{{$yandexCounterId}} = new Ya.Metrika({
+                    id:{{$yandexCounterId}},
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true,
+                    trackHash:true
+                });
+            } catch(e) { }
+        });
 
-item_two.addEventListener( 'click', function( event ){
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
 
-    event.preventDefault();
-
-    openPopup( 'sectionTwo' );
-
-}, false );
-
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
 </script>

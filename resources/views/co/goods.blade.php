@@ -15,8 +15,11 @@
                     {{$good["quantity"]}} шт.
                 </div>
                 <div class="amount col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                    <!--@amountrate($good["regular_price"],$deal->order->currency)-->
-                    @amount($good["regular_price"]*$good["quantity"])
+                    @if(isset($good["sale_price"]))
+                        @amountrate($good["sale_price"]*$good["quantity"],$deal->currency)
+                    @else
+                        @amountrate($good["regular_price"]*$good["quantity"],$deal->currency)
+                    @endif
                 </div>
             </div>
         </div>

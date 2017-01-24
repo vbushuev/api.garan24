@@ -21,10 +21,10 @@
 	<script src="/js/jquery.color.js"></script>
 	<script src="/js/jquery.redirect.js"></script>
 	<script src="/js/jquery.maskedinput.min.js"></script>
-	<script src="/js/api/2.0/garan24.core.js"></script>
-	<script src="/js/api/2.0/garan24.delivery.js"></script>
-	<script src="/js/api/2.0/garan24.customer.js"></script>
-	<script src="/js/api/2.0/garan24.cart.js"></script>
+	<script src="/js/api/2.1/garan24.core.js"></script>
+	<script src="/js/api/2.1/garan24.delivery.js"></script>
+	<script src="/js/api/2.1/garan24.customer.js"></script>
+	<script src="/js/api/2.1/garan24.cart.js"></script>
 
 </head>
 <body>

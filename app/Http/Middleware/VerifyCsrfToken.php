@@ -60,5 +60,7 @@ class VerifyCsrfToken extends BaseVerifier
         "/prod/create",
         "/prod/create/s",
         "/dictionary",
+        "/delete",
+        "/add",
     ];
 }

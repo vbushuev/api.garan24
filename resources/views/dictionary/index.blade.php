@@ -24,9 +24,20 @@
         </div>
     </div>
     <script>
+        var urlParams;
+        (window.onpopstate = function () {
+            var match,
+                pl     = /\+/g,  // Regex for replacing addition symbol with a space
+                search = /([^&=]+)=?([^&]*)/g,
+                decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
+                query  = window.location.search.substring(1);
+                urlParams = {};
+                while (match = search.exec(query))
+                    urlParams[decode(match[1])] = decode(match[2]);
+        })();
         $=jQuery.noConflict();
         var dictionary = {
-            _language:'en',
+            _language:(typeof urlParams.lang!="undefined")?urlParams.lang:'en',
             getDictionary:function(){
                 $.ajax({
                     url:'/dictionary',
@@ -50,6 +61,7 @@
                             str+= '<td class="order-field" style="width:4em;"><div class="editable-field"><div class="editable-value" data-ref="priority" data-rel="update?id='+q.id+'">'+q.priority+'</div></div></td>';
                             str+= '<td class="order-field" style="width:18em;">'+q.updated+'</td>';
                             str+= '<td class="order-field" style="width:6em;">'+q.status+'</td>';
+                            str+= '<td class="order-field" style="width:6em;"><a href="javascript:dictionary.delete('+q.id+')" class="delete" data-rel="delete?id='+q.id+'">Удалить</a></td>';
                             str+='</tr>';
                         }
                         $(".dictionary").append(str);
@@ -58,6 +70,43 @@
                     },
                     complete:function(){
                         $(".spinner").fadeOut().remove();
+                    }
+                });
+            },
+            delete:function(idx){
+                var t = this;
+                $.ajax({
+                    url:'/delete',
+                    type:"post",
+                    dataType:"json",
+                    data:{id:idx},
+                    beforeSend:function(){
+                        $(t).html('<i class="fa fa-spin fa-spinner fa-2x fa-fw"></i>');
+                    },
+                    success:function(d){
+                        console.debug(d);
+                        document.location.reload();
+                    }
+                });
+            },
+            add:function(idx){
+                var args = arguments[0],t = this;;
+                $.ajax({
+                    url:'/add',
+                    type:"post",
+                    dataType:"json",
+                    data:{
+                        lang:this._language,
+                        original:args.original,
+                        translate:args.translate,
+                        priority:args.priority
+                    },
+                    beforeSend:function(){
+                        $(t).html('<i class="fa fa-spin fa-spinner fa-2x fa-fw"></i>');
+                    },
+                    success:function(d){
+                        console.debug(d);
+                        document.location.reload();
                     }
                 });
             },
@@ -81,6 +130,7 @@
             <th class="header-field" style="width:3em;">Приоритет</th>
             <th class="header-field" style="width:18em;">Обновлено</th>
             <th class="header-field" style="width:8em;">Статус</th>
+            <th class="header-field" style="width:8em;">&nbsp;</th>
         </tr>
     </table>
 @endsection

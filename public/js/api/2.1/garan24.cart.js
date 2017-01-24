@@ -211,6 +211,7 @@ jQuery.noConflict();
             },
             checkout:function(){
                 garan.cart.order.order_id = garan.cart.id;
+                
                 var rq = {
                     domain_id:8,
                     version: "1.0",

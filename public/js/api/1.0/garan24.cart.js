@@ -219,6 +219,8 @@
                 },$m = $("#garan24-overlay");
                 for(var i in garan.cart.order.items) {
                     var itm = garan.cart.order.items[i];
+                    rq.order.order_currency = itm.currency;
+                    rq.order.currency = itm.currency;
                     delete itm.variations;
                     delete itm.currency;
                     delete itm.shop;

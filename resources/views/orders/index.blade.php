@@ -53,6 +53,7 @@
                     <td class="order-field order-amount">{{$order->payment}}<br />@amount($order->amount)</td>
                     <td class="order-field order-amount">Курсовая: @amount($order->amount-($order->amount/1.05))<br />%: @amount($order->service_fee)</td>
                     <td class="order-field order-amount">@amount($order->amount+$order->service_fee+$order->shipping_cost)</td>
+                    <td class="order-field order-rawdata" style="display:none;">{{$order->rawdata or ''}}</td>
                 </tr>
                 <tr class="order-details-row" id="order-details-{{$order->order_id}}">
                     <td colspan="8">
@@ -253,7 +254,9 @@
                 $(".order").on("click",function(){
                     var $t = $(this),
                         itemsContainer = $t.next().find(".order-items"),
-                        order_id=$t.attr("data-ref");
+                        order_id=$t.attr("data-ref"),
+                        rawdata = JSON.parse($t.find(".order-rawdata").text());
+                    console.debug(rawdata);
                     $(".order-details-row").slideUp();
                     if(typeof itemsContainer!= "undefined" && itemsContainer.hasClass("empty")){
                         $.ajax({
@@ -273,6 +276,12 @@
                                         dataType:"json",
                                         success:function(itm){
                                             console.debug(itm);
+                                            currencySymbol = '<i class="fa fa-rub"></i>';
+                                            switch(d.currency){
+                                                case 'GBP':currencySymbol='<i class="fa fa-gbp"></i>'; break;
+                                                case 'EUR':currencySymbol='<i class="fa fa-eur"></i>'; break;
+                                                case 'USD':currencySymbol='<i class="fa fa-usd"></i>'; break;
+                                            }
                                             ii='<div class="row">';
                                             ii+='<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 content-image" >';
                                             ii+='<a href="'+itm.product_url+'" target="__blank"><img src="'+itm.images[0].src+'" alt="'+itm.title+'" /></a>';
@@ -285,7 +294,7 @@
                                             ii+='x'+it.quantity;
                                             ii+='</div>';
                                             ii+='<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" content-amount>';
-                                            ii+=parseFloat(itm.price).format(2,3,' ','.')+' руб.';
+                                            ii+=parseFloat(it.price).format(2,3,' ','.')+'<i class="fa fa-rub"></i><br/><sup>'+currencySymbol+itm.price+'</sup>';
                                             ii+='</div>';
                                             ii+='</div><br/>';
                                             itemsContainer.append(ii);
