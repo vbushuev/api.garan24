@@ -1,6 +1,11 @@
 <style>
     @import url("//fonts.googleapis.com/css?family=Lato:100|Open+Sans:300,400,800&subset=latin,cyrillic");
     @import url("//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
+    @font-face {
+        font-family: 'EngraversGothic BT Regular';
+        /*src:url("//l.gauzymall.com/css/fonts/tt0586m_.ttf");*/
+        src:url("/css/tt0586m_.ttf");
+    }
     .gl-clearfix:after {
         content: "";
         display: table;
@@ -22,6 +27,7 @@
         position: relative;
         height:50px;
         line-height: 50px;
+        font-size: 1em!important;
     }
 
     .gl-container a {
@@ -43,6 +49,12 @@
         float: left;
         height:50px;
         line-height: 50px;
+    }
+    .gl-logo a{
+        font-family: 'EngraversGothic BT Regular';
+        text-transform: uppercase;
+        letter-spacing: .2em;
+        font-size: 16px;
     }
 
     .gl-container a:hover {
@@ -70,7 +82,7 @@
     .gl-nav ul li a {
         font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
         font-weight: normal;
-        font-size: 0.9em;
+        font-size: 16px!important;
     }
 
     .gl-mobile-menu-icon {
@@ -160,7 +172,8 @@
 
     .gl-popup-content section {
         line-height: 1.6em;
-        font-size: 1em;
+        font-size: 16px;
+        font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
     }
     .gl-popup-content section p{
         margin-top: .8em;
@@ -175,7 +188,8 @@
     }
     .gl-popup-content section h1,.gl-popup-content section h2,.gl-popup-content section h3{
         font-weight: 800;
-        font-size: 1.2em;
+        font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
+        font-size: 120%;
     }
     @media screen and (min-width: 768px) {
 
@@ -243,7 +257,7 @@
         <div class="gl-row gl-clearfix">
             <div class="gl-header gl-clearfix">
                 <div class="gl-logo">
-                    <a href="https://www.gauzymall.com"><strong>Gauzymall</strong></a>
+                    <a href="https://www.gauzymall.com">gauzymall</a>
                 </div>
                 <div class="gl-mobile-menu-icon">
                     <button id="glMobileMenu"><i class="fa fa-bars" aria-hidden="true"></i></button>
@@ -261,7 +275,7 @@
                     <li><a href="javascript:{0}" id="about">О нас</a></li>
                     <li><a href="tel:88007075103"><span class="gl-mobile-visible">Телефон </span>8 800 707 51 03</a></li>
                     <li><a href="mailto:info@garan24.ru"><i class="fa fa-envelope-o gl-mobile-invisible" aria-hidden="true"></i><span class="gl-mobile-visible">Электронная почта</span></a></li>
-                    <li><a href="#"><i class="fa fa-language gl-mobile-invisible" aria-hidden="true"></i><span class="gl-mobile-visible">Перевод</span></a></li>
+                    <!--<li><a href="#"><i class="fa fa-language gl-mobile-invisible" aria-hidden="true"></i><span class="gl-mobile-visible">Перевод</span></a></li>-->
                 </ul>
             </nav>
         </div>
@@ -442,106 +456,7 @@ function openPopup( section_id ) {
     gl_section.style.display = 'block';
 
 }
-var ba = {
-    checkout:function (){
-        var its = this.parse();
-        xG.checkout(its);
-    },
-    parse:function(){
-        var pp = [];
-        var rows = document.getElementsByClassName("cart-item");
-        console.debug("items found "+rows.length);
-        for(var i= 0;i<rows.length;++i){
-            var row = rows[i];
-            var cells = row.getElementsByTagName("td");
-            var price_spans = cells[1].getElementsByTagName("div")[0].getElementsByTagName("span");
-            console.debug(price_spans);
-            var origprice =(price_spans.length>2)?price_spans[1].innerHTML:price_spans[0].innerHTML;
-            var price =(price_spans.length>2)?price_spans[2].innerHTML:price_spans[1].innerHTML;
-            var sale =(price_spans.length>2)?price_spans[4].innerHTML:price_spans[1].innerHTML;
-            origprice = origprice.replace(/[^\d\.,]/ig,"").replace(/,/ig,".").replace(/\.$/,"");
-            price = price.replace(/[^\d\.,]/ig,"").replace(/,/ig,".").replace(/\.$/,"");
-            sale = sale.replace(/[^\d\.,]/ig,"").replace(/,/ig,".").replace(/\.$/,"");
-            var p = {
-                shop:"brandalley",
-                quantity:cells[4].getElementsByClassName("quantity")[0].getElementsByTagName("span")[0].getElementsByTagName("input")[0].value,
-                currency:'EUR',
-                original_price:origprice,
-                regular_price:price,
-                sale_price:sale,
-                title:cells[0].getElementsByTagName("div")[2].getElementsByTagName("div")[0].getElementsByTagName("a")[0].innerHTML.replace(/[`']/,''),
-                description:cells[0].getElementsByTagName("div")[2].getElementsByTagName("div")[1].getElementsByTagName("a")[0].innerHTML.replace(/[`']/,''),
-                product_img:"http:"+cells[0].getElementsByTagName("div")[0].getElementsByTagName("a")[0].getElementsByTagName("img")[0].getAttribute("src"),
-                product_url:"https://www-v6.brandalley.fr"+cells[0].getElementsByTagName("div")[2].getElementsByTagName("div")[1].getElementsByTagName("a")[0].getAttribute("href"),
-                sku:"BRA"+cells[0].getElementsByTagName("div")[2].getElementsByTagName("div")[1].getElementsByTagName("a")[0].getAttribute("href").replace(/\D/g,''),
-                variations:{
-                    size:(typeof cells[0].getElementsByTagName("div")[2].getElementsByClassName("info_product_sup")[0]!="undefined")?cells[0].getElementsByTagName("div")[2].getElementsByClassName("info_product_sup")[0].innerHTML:"",
-                    color:""
-                }
-            };
-            pp.push(p);
-        };
-        console.log(pp);
-        return pp;
-    }
-};
 
-
-    document.getElementById( 'howtobuy' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_howtobuy' );}, false );
-    document.getElementById( 'shipping' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_shipping' );}, false );
-    document.getElementById( 'payment' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_payment' );}, false );
-    document.getElementById( 'installments' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_installments' );}, false );
-    document.getElementById( 'sale' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_sale' );}, false );
-    document.getElementById( 'about' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_about' );}, false );
-
-    var tohide = [];
-    tohide = tohide.concat(document.getElementsByClassName( 'footer_paiement' ));
-    tohide = tohide.concat(document.getElementsByClassName( 'bon_achat' ))
-    console.debug(tohide);
-    for(var i=0;i<tohide.length;++i){
-        var itm = tohide[i][0];
-        if(itm!=null && typeof itm!="undefined") itm.style.display = 'none';
-    }
-
-    var checkout = document.getElementById( 'panier-valider' );
-    if(typeof checkout != 'undefined' && checkout != null){
-        checkout.setAttribute("href","javascript:{0}");
-        var clone = checkout.cloneNode();
-        //while (checkout.firstChild) {clone.appendChild(checkout.lastChild);}
-        checkout.parentNode.replaceChild(clone, checkout);
-        clone.innerHTML = 'Оформить заказ';
-        clone.addEventListener( 'click', function( event ){
-            event.preventDefault();
-            event.stopPropagation();
-            ba.checkout();
-        }, false );
-    }
-    <!-- Currencies -->
-    var pe = [];
-    var priceElements = document.getElementsByClassName("block_price");
-    if(priceElements!=null && typeof priceElements!="undefined"){
-        for (var i=0;i<priceElements.length;++i) {
-            var el = priceElements[i];
-            //console.debug(el);
-            if(el==null || typeof el=="undefined")break;
-            var el1 = el.getElementsByTagName("span");
-            if(el1!=null){
-                if(el1.length>1){
-                    pe.push(el1[1]);
-                    pe.push(el1[2]);
-                }
-                else pe.push(el1[0]);
-            }
-
-        }
-    }
-    priceElements = document.getElementsByClassName("price_total");
-    if(priceElements!=null && typeof priceElements!="undefined"){
-        for (var i=0;i<priceElements.length;++i) {
-            pe.push(priceElements[i]);
-        }
-    }
-    xG.currency.get(pe,"EUR");
 
     <!-- Yandex.Metrika counter -->
     (function (d, w, c) {
@@ -569,4 +484,241 @@ var ba = {
             d.addEventListener("DOMContentLoaded", f, false);
         } else { f(); }
     })(document, window, "yandex_metrika_callbacks");
+
+    document.getElementById( 'howtobuy' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_howtobuy' );}, false );
+    document.getElementById( 'shipping' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_shipping' );}, false );
+    document.getElementById( 'payment' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_payment' );}, false );
+    document.getElementById( 'installments' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_installments' );}, false );
+    document.getElementById( 'sale' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_sale' );}, false );
+    document.getElementById( 'about' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_about' );}, false );
+
+    @if($site=="brandalley")
+        var ba = {
+            parse:function(){
+                var pp = [];
+                var rows = document.getElementsByClassName("cart-item");
+                console.debug("items found "+rows.length);
+                for(var i= 0;i<rows.length;++i){
+                    var row = rows[i];
+                    var cells = row.getElementsByTagName("td");
+                    var price_spans = cells[1].getElementsByTagName("div")[0].getElementsByTagName("span");
+                    console.debug(price_spans);
+                    var origprice =(price_spans.length>2)?price_spans[1].innerHTML:price_spans[0].innerHTML;
+                    var price =(price_spans.length>2)?price_spans[2].innerHTML:price_spans[1].innerHTML;
+                    var sale =(price_spans.length>2)?price_spans[6].innerHTML:price_spans[1].innerHTML;
+                    origprice = origprice.replace(/[^\d\.,]/ig,"").replace(/,/ig,".").replace(/\.$/,"");
+                    price = price.replace(/[^\d\.,]/ig,"").replace(/,/ig,".").replace(/\.$/,"");
+                    sale = sale.replace(/[^\d\.,]/ig,"").replace(/,/ig,".").replace(/\.$/,"");
+                    var p = {
+                        shop:"brandalley",
+                        quantity:cells[4].getElementsByClassName("quantity")[0].getElementsByTagName("span")[0].getElementsByTagName("input")[0].value,
+                        currency:'EUR',
+                        original_price:origprice,
+                        regular_price:price,
+                        sale_price:sale,
+                        title:cells[0].getElementsByTagName("div")[2].getElementsByTagName("div")[0].getElementsByTagName("a")[0].innerHTML.replace(/[`']/,''),
+                        description:cells[0].getElementsByTagName("div")[2].getElementsByTagName("div")[1].getElementsByTagName("a")[0].innerHTML.replace(/[`']/,''),
+                        product_img:"http:"+cells[0].getElementsByTagName("div")[0].getElementsByTagName("a")[0].getElementsByTagName("img")[0].getAttribute("src"),
+                        product_url:"https://www.brandalley.fr"+cells[0].getElementsByTagName("div")[2].getElementsByTagName("div")[1].getElementsByTagName("a")[0].getAttribute("href"),
+                        sku:"BRA"+cells[0].getElementsByTagName("div")[2].getElementsByTagName("div")[1].getElementsByTagName("a")[0].getAttribute("href").replace(/\D/g,''),
+                        variations:{
+                            size:(typeof cells[0].getElementsByTagName("div")[2].getElementsByClassName("info_product_sup")[0]!="undefined")?cells[0].getElementsByTagName("div")[2].getElementsByClassName("info_product_sup")[0].innerHTML:"",
+                            color:""
+                        }
+                    };
+                    pp.push(p);
+                };
+                console.log(pp);
+                return pp;
+            }
+        };
+        //xG.hide(".footer_paiement,.bon_achat,.wishlist_part,#account-user-group,#sticky_footer");
+        xG.hide(".code_promo_form,.bon_achat,.wishlist_part,#account-user-group,#sticky_footer");
+        var checkout = document.getElementById( 'panier-valider' );
+        if(typeof checkout != 'undefined' && checkout != null){
+            checkout.setAttribute("href","javascript:{0}");
+            var clone = checkout.cloneNode();
+            //while (checkout.firstChild) {clone.appendChild(checkout.lastChild);}
+            checkout.parentNode.replaceChild(clone, checkout);
+            clone.innerHTML = 'Оформить заказ';
+            clone.addEventListener( 'click', function( event ){
+                event.preventDefault();
+                event.stopPropagation();
+                var its = ba.parse();
+                xG.checkout(its);
+            }, false );
+        }
+        var addcart = document.getElementsByClassName( 'button_add_cart' );
+        console.debug(addcart);
+        if(addcart!=null&&typeof addcart!="undefined"){
+            for(var i=0;i<addcart.length;++i){
+                //if(addcart[i]!=null)addcart[i].setAttribute("value","Добавить в корзину");
+                if(addcart[i]!=null)addcart[i].value="Добавить в корзину";
+            }
+        }
+        <!-- Currencies -->
+        var pe = xG._getElement("#big_total");
+        var priceElements = document.getElementsByClassName("total_command_right");
+        if(priceElements!=null && typeof priceElements!="undefined"){
+            for (var i=0;i<priceElements.length;++i) {
+                var el = priceElements[i];
+                //console.debug(el);
+                if(el==null || typeof el=="undefined")break;
+                var el1 = el.getElementsByTagName("span");
+                if(el1!=null){
+                    if(el1.length>1){
+                        pe.push(el1[1]);
+                        pe.push(el1[2]);
+                    }
+                    else pe.push(el1[0]);
+                }
+
+            }
+        }
+        var priceElements = document.getElementsByClassName("block_price");
+        if(priceElements!=null && typeof priceElements!="undefined"){
+            for (var i=0;i<priceElements.length;++i) {
+                var el = priceElements[i];
+                //console.debug(el);
+                if(el==null || typeof el=="undefined")break;
+                var el1 = el.getElementsByTagName("span");
+                if(el1!=null){
+                    if(el1.length>1){
+                        pe.push(el1[1]);
+                        pe.push(el1[2]);
+                    }
+                    else pe.push(el1[0]);
+                }
+
+            }
+        }
+        priceElements = document.getElementsByClassName("price_total");
+        if(priceElements!=null && typeof priceElements!="undefined"){
+            for (var i=0;i<priceElements.length;++i) {
+                pe.push(priceElements[i]);
+            }
+        }
+        priceElements = document.getElementsByClassName("price_unitaire");
+        if(priceElements!=null && typeof priceElements!="undefined"){
+            for (var i=0;i<priceElements.length;++i) {
+                var el = priceElements[i];
+                //console.debug(el);
+                if(el==null || typeof el=="undefined")break;
+                var el1 = el.getElementsByTagName("span");
+                if(el1!=null){
+                    if(el1.length>1){
+                        pe.push(el1[1]);
+                        pe.push(el1[2]);
+                    }
+                    else pe.push(el1[0]);
+                }
+
+            }
+        }
+        xG.currency.get(pe,"EUR");
+    @elseif($site=="ctshirts")
+        xG.hide(".header__user-link,.iconlink--phone,#js-coupon-code,.order-shipping,.item-list__total,.content__block--changecountry");
+        //document.getElementById('js-order-subtotal').
+        var pe = xG._getElement(".item-total,#js-order-subtotal,.price,.item-list__was-price"),pes = document.getElementsByClassName('item-list__td--price');
+        for(var i=0;i<pes.length;++i){
+            var e = pes[i].getElementsByTagName("b");
+            if(e!=null && e.length)pe.push(e[0]);
+            else pe.push(pes[i]);
+        }
+        xG.currency.get(pe,"GBP");
+        var checkouts = document.getElementsByClassName("form__checkout-btn");
+        if(typeof checkouts != 'undefined' && checkouts != null){
+            for(var i=0;i<checkouts.length;++i){
+                var checkout = checkouts[i];
+                checkout.innerHTML = 'Оформить заказ';
+                //checkout.removeAttribute("type");
+                console.debug(checkout);
+                checkout.addEventListener( 'click', function( e ){
+                    e.preventDefault();
+                    e.stopPropagation();
+                    var its = [];
+                    //parse
+                    var rows = document.getElementById('cart-table').getElementsByTagName('tbody')[0].getElementsByClassName('cart-row');
+                    for(var r=0; r<rows.length;++r){
+                        //r=r*2;
+                        var row = rows[r];
+                        if(row==null)continue;
+                        var cells = row.getElementsByTagName('td');
+                        console.debug(cells[4].getElementsByTagName("div"));
+                        var origprice =cells[4].getElementsByTagName("b")[0].innerHTML.replace(/[^\d\.]+/g,""),
+                            price = (cells[4].getElementsByTagName("div").length)?cells[4].getElementsByTagName("div")[1].innerHTML.replace(/[^\d\.]+/g,""):cells[4].getElementsByTagName("b")[1].innerHTML.replace(/[^\d\.]+/g,""),
+                            sale = cells[4].getElementsByTagName("b")[1].innerHTML.replace(/[^\d\.]+/g,"");
+                        price = price.replace(/\.$/,"");
+                        sale = sale.replace(/\.$/,"");
+                        var p = {
+                            shop:"ctshirts",
+                            quantity:cells[3].getElementsByTagName("input")[1].value,
+                            currency:'GBP',
+                            original_price:origprice,
+                            regular_price:price,
+                            sale_price:sale,
+                            title:cells[1].getElementsByTagName("div")[0].getElementsByTagName("div")[0].getElementsByTagName("a")[0].innerHTML.replace(/[`']/,''),
+                        //  description:cells[1].getElementsByTagName("div")[2].getElementsByTagName("div")[1].getElementsByTagName("a")[0].innerHTML.replace(/[`']/,''),
+                            product_img:cells[0].getElementsByTagName("a")[0].getElementsByTagName("img")[0].getAttribute("src"),
+                            product_url:"http:"+cells[0].getElementsByTagName("a")[0].getAttribute("href").replace(/\/\/.+?gauzymall\.com/,"//www.ctshirts.com"),
+                            sku:"CTS"+cells[1].getElementsByTagName("div")[0].getElementsByTagName("div")[1].getElementsByTagName("span")[0].innerHTML.substr(0,10),
+                            variations:{
+                                size:""
+                            }
+                        };
+                        if(row.getElementsByClassName('attribute--value value js-beltSize')[0])
+                        p.variations.size = row.getElementsByClassName('attribute--value value js-beltSize')[0].textContent.trim();
+
+                        else if(row.getElementsByClassName('attribute--value value js-collarSize')[0]){
+                            p.variations.size = "collar "+row.getElementsByClassName('attribute--value value js-collarSize')[0].textContent.trim();
+                            p.variations.size += " sleeve "+ row.getElementsByClassName('attribute--value value js-sleeveLength')[0].textContent.trim();
+                            p.variations.size += " cuff "+ row.getElementsByClassName('attribute--value value js-cuffType')[0].textContent.trim();
+                        }
+
+                        else if(row.getElementsByClassName('attribute--value value js-shoeSize')[0])
+                        p.variations.size = row.getElementsByClassName('attribute--value value js-shoeSize')[0].textContent.trim();
+
+                        else if(row.getElementsByClassName('attribute--value value js-simpleSize')[0])
+                        p.variations.size = row.getElementsByClassName('attribute--value value js-simpleSize')[0].textContent.trim();
+
+                        else if(row.getElementsByClassName('attribute--value value js-casualShirtSize')[0])
+                        p.variations.size = row.getElementsByClassName('attribute--value value js-casualShirtSize')[0].textContent.trim();
+
+                        else if(row.getElementsByClassName('attribute--value value js-jacketSize')[0]){
+                            p.variations.size = row.getElementsByClassName('attribute--value value js-jacketSize')[0].textContent.trim();
+                            if(row.getElementsByClassName('attribute--value value js-jacketLength')[0]){
+                                p.variations.size += '/'+row.getElementsByClassName('attribute--value value js-jacketLength')[0].textContent.trim();
+                            }
+                        }
+
+                        else if(row.getElementsByClassName('attribute--value value js-trouserWaist')[0]){
+                            p.variations.size = row.getElementsByClassName('attribute--value value js-trouserWaist')[0].textContent.trim();
+                            if(row.getElementsByClassName('attribute--value value js-trouserLength')[0]){
+                                p.variations.size += '/'+row.getElementsByClassName('attribute--value value js-trouserLength')[0].textContent.trim();
+                            }
+                        }
+                        its.push(p);
+                    }
+                    console.debug(its);
+                    xG.checkout(its);
+                    return false;
+                }, false );
+            }
+        }
+        xG.ajax({
+            url:"https://www.ctshirts.com/uk/account",
+            type:"post",
+            data:{
+                dwfrm_login_username_d0kcwofmfkvq:"shops@garan24.ru",
+                dwfrm_login_password:"garan24shop"
+            },
+            complete:function(d){
+                console.debug(d);
+            }
+        });
+    @endif
+
+
 </script>
+
+<!-- /Yandex.Metrika counter -->

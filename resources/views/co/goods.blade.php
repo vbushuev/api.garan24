@@ -16,16 +16,15 @@
                 </div>
                 <div class="amount col-xs-6 col-sm-6 col-md-6 col-lg-6">
                     @if(isset($good["sale_price"]))
-                        @amountrate($good["sale_price"]*$good["quantity"],$deal->currency)
+                        @amount($good["sale_price"]*$good["quantity"])
                     @else
-                        @amountrate($good["regular_price"]*$good["quantity"],$deal->currency)
+                        @amount($good["regular_price"]*$good["quantity"])
                     @endif
                 </div>
             </div>
         </div>
     </div>
     @endforeach
-
     <div class="row cart-item" id="cart-total">
         <div class="total col-xs-8 col-sm-8 col-md-8 col-lg-8">Сумма заказа:</div>
         <div class="amount cart-total-amount total-amount col-xs-4 col-sm-4 col-md-4 col-lg-4" id="cart-total-price"></div>
@@ -70,4 +69,9 @@
         <div class="amount total-amount col-xs-4 col-sm-4 col-md-4 col-lg-4" id="total-price"></div>
     </div>
     <input type="hidden" id="ShippingAmountHidden" name="shipping_cost" value="{{$deal->shipping_cost or '1500'}}"/>
+    <div class="row hightlight">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <h2>Оплата после доставки!!!</h2>
+        </div>
+    </div>
 @endif

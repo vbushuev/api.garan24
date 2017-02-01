@@ -93,6 +93,13 @@ body .container .bye {
   text-align: center;
   font-size: 110%;
 }
+body .container .hightlight * {
+  padding: 0;
+}
+body .container .hightlight * h2 {
+  color: #00bf80;
+  text-align: right;
+}
 body .container .control-label {
   display: none;
 }
@@ -145,18 +152,21 @@ body .container .cart-item .image .image-container {
   display: inline-block;
   position: relative;
   text-align: center;
-  overflow: hidden;
+  overflow: visible;
   height: 4em;
   width: 4em;
   z-index: 100;
+  transition: width 0.2s ease-in;
 }
 body .container .cart-item .image .image-container img {
-  margin-left: -2em;
-  margin-top: -2em;
+  width: 4em;
+  transition: width 0.2s ease-in;
 }
 body .container .cart-item .image .image-container:hover {
-  overflow: visible;
   z-index: 1000;
+}
+body .container .cart-item .image .image-container:hover img {
+  width: 6em;
 }
 body .container .cart-item .name {
   padding-left: 0em;
@@ -372,6 +382,7 @@ body .container #footer {
   -webkit-border-radius: 0.5em;
   -moz-border-radius: 0.5em;
   border-radius: 0.5em;
+  transition: opacity 0.2s ease-out;
 }
 .helper-box {
   display: none;

@@ -158,7 +158,7 @@ class CheckoutController extends Controller{
                 "viewFolder"=>$this->viewFolder,"debug"=>"",
                 "goods"=>$deal->order->getProducts(),
                 "deal"=>$deal,
-                "customer"=>$deal->getCustomer()->toArray(),
+                "customer"=>($deal->getCustomer()!==null)?$deal->getCustomer()->toArray():[],
                 "shop_url"=>$deal->getShopUrl(),
                 "payments" => $deal->getPaymentTypes(),
                 "delivery" => $deal->getDeliveryTypes()

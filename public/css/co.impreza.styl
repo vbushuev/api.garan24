@@ -104,6 +104,11 @@ body
             margin: 1em auto;
             text-align: center;
             font-size: 110%;
+        .hightlight *
+            padding 0
+            h2
+                color $colorGreen
+                text-align right
         /*
         No labels
         */
@@ -153,17 +158,19 @@ body
                     display: inline-block;
                     position: relative;
                     text-align: center;
-                    overflow: hidden;
+                    overflow:visible;
                     height: 4em;
                     width: 4em;
                     z-index: 100;
+                    transition: width .2s ease-in
                     img
-                        margin-left: -2em;
-                        margin-top: -2em;
-
+                        width:4em;
+                        transition: width .2s ease-in
                 .image-container:hover
-                    overflow:visible;
+
                     z-index: 1000;
+                    img
+                        width 6em
             .name
                 padding-left: 0em;
             .quantity
@@ -191,6 +198,7 @@ body
             text-indent: 1.4em;
         .list-group-item.active .fa
             color: rgba(255,255,255,1);
+
 
         #header
             font-size: 12pt

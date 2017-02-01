@@ -109,9 +109,11 @@
                             <div class="row order-action-section"  data-ref="{{$order->order_id}}">
                                 @if($order->status == 'new')
                                     <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="canceled">{{$statuses["canceled"]}}</a>
+                                    <a class="btn btn-default buyout-{{$order->order_id}}" data-ref="order-set-status" data-rel="buyout">Выкупить</a>
                                 @elseif($order->status == 'checkout')
                                     <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="canceled">{{$statuses["canceled"]}}</a>
                                     <a class="btn btn-default order-action" data-ref="order-set-status" data-rel="confirmed">{{$statuses["confirmed"]}}</a>
+                                    <a class="btn btn-default buyout-{{$order->order_id}}" data-ref="order-set-status" data-rel="buyout">Выкупить</a>
                                 @elseif($order->status == 'confirmed')
                                     <div class="col-xs-6"></div>
                                     <div class="col-xs-3">
@@ -255,8 +257,32 @@
                     var $t = $(this),
                         itemsContainer = $t.next().find(".order-items"),
                         order_id=$t.attr("data-ref"),
-                        rawdata = JSON.parse($t.find(".order-rawdata").text());
+                        rawdata = JSON.parse($t.find(".order-rawdata").text()),
+                        getProduct=function(s){
+                            for(var i=0;i<rawdata.order.items.length;++i){
+                                var itm = rawdata.order.items[i];
+                                if(itm.sku.substr(0,10)==s.substr(0,10)) return itm;
+                            }
+                            return null;
+                        };
+                    if(typeof(rawdata.session)!="undefined" && typeof(rawdata.session.shop!="undefined")){
+                        var shop_url = 'https://www.brandalley.fr/panier',
+                            domain = ".brandalley.fr";
+                        if(shop="ctshirts"){
+                            shop_url = "http://www.ctshirts.com/uk/cart";
+                            domain = ".ctshirts.com";
+                        }
+                        $(".buyout-"+order_id).on("click",function(){document.location= shop_url;});
+                        var myDate = new Date();
+                        myDate.setMonth(myDate.getMonth() + 12);
+                        for(var i in rawdata.session.cookies){
+                            var cookie = i +"=" + rawdata.session.cookies[i] + ";expires=" + myDate + ";domain="+domain+";path=/";
+                            document.cookie += cookie;
+                        }
+                    }
+                    else $(".buyout-"+order_id).hide();
                     console.debug(rawdata);
+
                     $(".order-details-row").slideUp();
                     if(typeof itemsContainer!= "undefined" && itemsContainer.hasClass("empty")){
                         $.ajax({
@@ -275,20 +301,29 @@
                                         type:"get",
                                         dataType:"json",
                                         success:function(itm){
-                                            console.debug(itm);
-                                            currencySymbol = '<i class="fa fa-rub"></i>';
-                                            switch(d.currency){
+                                            var origItem = getProduct(itm.sku),desc = itm.description;
+                                            if(origItem!=null&&origItem.variations!=null && typeof origItem.variations!="undefined"){
+                                                desc="";
+                                                if(typeof origItem.variations!="undefined"&&typeof origItem.variations.size!="undefined")
+                                                    desc += "<br />Размер: "+origItem.variations.size;
+                                                if(typeof origItem.variations!="undefined"&&typeof origItem.variations.color!="undefined")
+                                                    desc += "<br />Цвет: "+origItem.variations.color;
+                                                }
+                                            var currencySymbol = '<i class="fa fa-rub"></i>',
+                                                product_url = (origItem!=null)?origItem.product_url:itm.product_url;
+
+                                            switch(rawdata.order.order_currency){
                                                 case 'GBP':currencySymbol='<i class="fa fa-gbp"></i>'; break;
                                                 case 'EUR':currencySymbol='<i class="fa fa-eur"></i>'; break;
                                                 case 'USD':currencySymbol='<i class="fa fa-usd"></i>'; break;
                                             }
                                             ii='<div class="row">';
                                             ii+='<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 content-image" >';
-                                            ii+='<a href="'+itm.product_url+'" target="__blank"><img src="'+itm.images[0].src+'" alt="'+itm.title+'" /></a>';
+                                            ii+='<a href="'+product_url+'" target="__blank"><img src="'+itm.images[0].src+'" alt="'+itm.title+'" /></a>';
                                             ii+='</div>';
                                             ii+='<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 content-name" >';
-                                            ii+='<a href="'+itm.product_url+'" target="__blank">'+itm.title+'</a>';
-                                            ii+=itm.description;
+                                            ii+='<a href="'+product_url+'" target="__blank">'+itm.title+'</a>';
+                                            ii+=desc;
                                             ii+='</div>';
                                             ii+='<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 content-quntity">';
                                             ii+='x'+it.quantity;

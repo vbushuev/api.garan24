@@ -48,6 +48,16 @@
 @yield('toper')
 <div id="wrapper" class="container">
 	<div id="header" class="row">
+		<div class="g-logo" style="width:100%;text-align:center;padding:1em;">
+			@if($deal->getShopUrl()!=null)
+			<a href="{{$deal->getShopUrl()}}" style="float:left;margin-left:1em;display:inline-block;color:grey;"><i class="fa fa-arrow-left"></i>&nbsp; Вернуться в магазин</a>
+			@else
+			<a href="javascript:history.back()" style="float:left;margin-left:1em;display:inline-block;color:grey;"><i class="fa fa-arrow-left"></i>&nbsp; Вернуться в магазин</a>
+			@endif
+
+			<img src="https://www.gauzymall.com/wp-content/uploads/2016/12/logo-big.png" alt="Покупки в Европе онлайн" width="350" class="logo-default" style="display:inline-block;">
+			<a href="tel:88007075103" style="float:right;margin-right:1em;display:inline-block;color:grey;"><i class="fa fa-phone"></i>&nbsp;8 800 707 51 03</a>
+		</div>
 		<!--<ul class="nav">
 			<li class="nav-item logo">ГАРАН <code>24</code></li>
 			<li class="nav-item"><a href="{{$shop_url or '#'}}">Вернуться к витрине</a></li>

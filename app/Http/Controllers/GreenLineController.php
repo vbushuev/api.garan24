@@ -20,10 +20,10 @@ class GreenLineController extends Controller{
         $this->middleware('cors');
     }
     public function getIndex(Request $rq){
-
+        $site = $rq->input("site","brandalley");
         $r=[
-            'yandexCounterId' => '40823799',
-            'site' => $rq->input('site','brandalley'),
+            'yandexCounterId' => '42442999',
+            'site' => $site,
             'shipping' => '<h3>Доставка</h3>
                 <p>Все заказанные Вами товары поступают на наш европейский склад, где мы проверим их соответствие заказу, тщательно упакуем и отправим посылку по указанному Вами адресу в Россию. Доставка заказов по России осуществляется компанией Боксберри.</p>
                 <p>Вы можете выбрать один из двух вариантов доставки:</p>

@@ -12,6 +12,6 @@
     @include("$viewFolder._buttons",["gobackurl"=>$shop_url])
     <br />
     <p class="text-muted small">
-        Нажимая кнопку "Продолжить", Вы присоединяетесь к <a href="http://gauzymall.com/g24-agreement/" target="__blank">Договору</a> на обслуживание клиентов сервиса.
+        Нажимая кнопку "Продолжить", Вы присоединяетесь к <a href="https://www.gauzymall.com/terms-and-conditions/" target="__blank">Договору</a> на обслуживание клиентов сервиса.
     </p>
 @endsection
