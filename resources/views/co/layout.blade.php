@@ -6,23 +6,26 @@
 	<title>Garan24 Checkout</title>
 	<meta name="robots" content="index, all">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="/css/img/logo_garan24.png" rel="icon" type="image/x-icon">
-	<link href="/css/font-awesome.min.css" rel="stylesheet">
-	<link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-	<!--<link rel="stylesheet" href="/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">-->
+	<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+	<!-- no local use
+		<link href="/css/font-awesome.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+		<script src="/js/jquery-2.1.4.min.js"></script>
+		<script src="/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+
+		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+	-->
+
+	<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
+	<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 
 	<link rel="Stylesheet" href="/css/jquery-ui.min.css" type="text/css">
 	<link rel="Stylesheet" href="/css/co.css" type="text/css">
-	<!-- no local use
-		<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" rel="stylesheet">
-		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
-		<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
-		<script src="//code.jquery.com/jquery-2.1.4.min.js"></script>
-		<script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
-	-->
-
-	<script src="/js/jquery-2.1.4.min.js"></script>
-	<script src="/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
 	<script src="/js/jquery-ui.min.js"></script>
 	<script src="/js/jquery.color.js"></script>
 	<script src="/js/jquery.redirect.js"></script>
@@ -49,7 +52,7 @@
 <div id="wrapper" class="container">
 	<div id="header" class="row">
 		<div class="g-logo" style="width:100%;text-align:center;padding:1em;">
-			@if($deal->getShopUrl()!=null)
+			@if(isset($deal) && $deal->getShopUrl()!=null)
 			<a href="{{$deal->getShopUrl()}}" style="float:left;margin-left:1em;display:inline-block;color:grey;"><i class="fa fa-arrow-left"></i>&nbsp; Вернуться в магазин</a>
 			@else
 			<a href="javascript:history.back()" style="float:left;margin-left:1em;display:inline-block;color:grey;"><i class="fa fa-arrow-left"></i>&nbsp; Вернуться в магазин</a>
@@ -66,24 +69,21 @@
 
 	</div>
 	<div id="content" class="row">
-		<!--<h1>
-			@if(isset($title))
-				{!!$title!!}
-			@else
-				<i class="first">Оформление</i> заказа
-			@endif
-		</h1>-->
+
 		@if(isset($deal))
-		<div class="cart col-xs-12 col-sm-12 col-md-6 col-lg-6">
-			@include($viewFolder.'.goods',['goods'=>$deal->order->getProducts()])
-		</div>
-		<div id="form" class="form col-xs-12 col-sm-12 col-md-6 col-lg-6">
-			@include($viewFolder.'.helper')
+			<div id="form" class="form col-xs-12 col-sm-12 col-md-6 col-lg-6">
+				@include($viewFolder.'.helper')
+				@yield('content')
+			</div>
+			<div id="goods" class="cart col-xs-12 col-sm-12 col-md-6 col-lg-6">
+				@include($viewFolder.'.goods',['goods'=>$deal->order->getProducts()])
+			</div>
 		@else
-		<div id="form" class="form col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			<div id="form" class="form col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				@yield('content')
+			</div>
 		@endif
-			@yield('content')
-		</div>
+
 
 	</div>
 	<!--

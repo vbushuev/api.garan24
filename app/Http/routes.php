@@ -39,6 +39,7 @@ Route::group(['domain'=>'dictionary.gauzymall.bs2'],function(){
 });
 
 // Old style
+Route::controller('gcat', 'GCatController');
 Route::controller('xray', 'GreenLineController');
 Route::resource('customer', 'GaranCustomerController');
 Route::resource('order', 'GaranOrderController');

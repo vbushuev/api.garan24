@@ -6,6 +6,7 @@
 	<title>X-Ray Shopping Orders</title>
 	<meta name="robots" content="index, all">
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link href="/css/img/logo_garan24.png" rel="icon" type="image/x-icon">
 	<link href="/css/font-awesome.min.css" rel="stylesheet">
 	<link rel="stylesheet" href="/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">

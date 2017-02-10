@@ -21,8 +21,10 @@ class GreenLineController extends Controller{
     }
     public function getIndex(Request $rq){
         $site = $rq->input("site","brandalley");
-        $r=[
-            'yandexCounterId' => '42442999',
+        $gl = DB::table('g_greenline')->where("site",$site)->first();
+        $r= json_decode(json_encode($gl),true);
+        $r2 = [
+            'yandexCounterId' => $gl->yandex_metric,//'42442999',
             'site' => $site,
             'shipping' => '<h3>Доставка</h3>
                 <p>Все заказанные Вами товары поступают на наш европейский склад, где мы проверим их соответствие заказу, тщательно упакуем и отправим посылку по указанному Вами адресу в Россию. Доставка заказов по России осуществляется компанией Боксберри.</p>
@@ -91,6 +93,7 @@ class GreenLineController extends Controller{
                     <a class="bs-btn pull-right" href="javascript:socialCreditQuestion("credit-form");" id="credit-button">Спасибо!</a>
                 </div>',
         ];
+
         //$cart = DB::table('garan24_cart')->where("id",$id)->first();
         return view("greenline.index",$r);
         //return response()->json($r,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);

@@ -156,7 +156,7 @@ class ManagerController extends Controller{
                     'deals.shipping_cost'
                     )->get();
             $dd = json_decode(json_encode($dd),true);
-            $dd = $dd[0];
+            $dd = $dd[count($dd)-1];
             $c = $dd;
             if(!count($dd)) break;
             $dd["order_desc"] = "Post payment for order #".$order;
@@ -178,6 +178,7 @@ class ManagerController extends Controller{
             $response =  $connector->getResponse();
 
             $field = "paynet-order-id";
+            //if(!count(trim($response->$field))) continue;
             $c = array_merge(ManagerController::$ariuspay["akbars"]["StatusRequest"],["data"=> [
                 "client_orderid"=>$dd["client_orderid"],
                 "orderid" => $response->$field,

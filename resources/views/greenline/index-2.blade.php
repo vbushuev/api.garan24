@@ -1,262 +1,4 @@
-<style>
-    @import url("//fonts.googleapis.com/css?family=Lato:100|Open+Sans:300,400,800&subset=latin,cyrillic");
-    @import url("//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
-    @font-face {
-        font-family: 'EngraversGothic BT Regular';
-        /*src:url("//l.gauzymall.com/css/fonts/tt0586m_.ttf");*/
-        src:url("/css/tt0586m_.ttf");
-    }
-    /*
-    .main__area{
-        max-width:132rem!important;
-    }*/
-    .gl-clearfix:after {
-        content: "";
-        display: table;
-        clear: both;
-    }
-
-    .gl {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 9999;
-        height:50px;
-        line-height: 50px;
-    }
-
-    .gl-container {
-        background-color: #00bf80;
-        position: relative;
-        height:50px;
-        line-height: 50px;
-        font-size: 1em!important;
-    }
-
-    .gl-container a {
-        display: inline-block;
-        color: #fff !important;
-        text-decoration: none;
-        font-family: sans-serif;
-        line-height: 1.6em;
-        padding: 10px 15px;
-    }
-
-    .gl-header {
-        width: 100%;
-        height:50px;
-        line-height: 50px;
-    }
-
-    .gl-logo {
-        float: left;
-        height:50px;
-        line-height: 50px;
-    }
-    .gl-logo a{
-        font-family: 'EngraversGothic BT Regular';
-        text-transform: uppercase;
-        letter-spacing: .2em;
-        font-size: 16px;
-    }
-
-    .gl-container a:hover {
-        color: #444;
-    }
-
-    .gl-nav {
-        display: none;
-    }
-
-    .gl-nav ul {
-        display: block;
-        list-style: none;
-        padding: 0;
-        margin: 0;
-
-    }
-
-    .gl-nav ul li {
-        display: block;
-        height:50px;
-        line-height: 50px;
-    }
-
-    .gl-nav ul li a {
-        font-family: 'Open Sans'!important;
-        font-weight: 400!important;
-        color:#fff!important;
-        font-size: 16px!important;
-    }
-
-    .gl-mobile-menu-icon {
-        float: right;
-    }
-
-    .gl-mobile-menu-icon button {
-        background: none;
-        border: none;
-        color: #fff;
-        font-size: 1em;
-        line-height: 1.6em;
-        padding: 10px 15px;
-        text-transform: uppercase;
-        font-weight: bold;
-        cursor: pointer;
-    }
-
-    .gl-mobile-menu-icon button:focus {
-        outline: none;
-    }
-
-    .gl-mobile-menu-icon button:hover {
-        color: #444;
-    }
-
-    .gl-mobile-menu-icon button.toggled {
-        color: #444;
-    }
-
-    .gl-popup-overlay {
-        width: 100%;
-        height: 100%;
-        top: 45px;
-        background: rgba(0,0,0,0.7);
-        position: fixed;
-        z-index: 9997;
-        cursor: pointer;
-    }
-
-    .gl-popup {
-        position: fixed;
-        top: 45px;
-        background: #fff;
-        padding: 15px;
-        width: 100%;
-        max-width: 1170px;
-        z-index: 9998;
-        transform: translateX(-50%);
-        left: 50%;
-        min-height: 20px;
-        box-sizing: border-box;
-        box-shadow: 0 4px 24px rgba(0,0,0,0.5);
-    }
-
-    .gl-popup-close {
-        display: block;
-        float: right;
-        line-height: 40px;
-        font-size: 14px;
-        text-transform: uppercase;
-        background: none;
-        border: none;
-        cursor: pointer;
-        color: #777;
-        transition: all 0.2s ease-in;
-        padding: 0;
-    }
-
-    .gl-popup-close:focus {
-        outline: none;
-    }
-
-    .gl-popup-close:hover {
-        color: red;
-    }
-
-    .gl-popup-content {
-        max-height: 25em;
-        overflow-y: scroll;
-        width: 100%;
-    }
-
-    .gl-mobile-invisible {
-        display: none;
-    }
-
-    .gl-popup-content section {
-        line-height: 1.6em;
-        font-size: 16px;
-        font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
-    }
-    .gl-popup-content section p{
-        margin-top: .8em;
-    }
-    .gl-popup-content section ul{
-        margin:0 4em;
-        text-align: left;
-        list-style: disc;
-    }
-    .gl-popup-content section ul li{
-
-    }
-    .gl-popup-content section h1,.gl-popup-content section h2,.gl-popup-content section h3{
-        font-weight: 800;
-        font-family: 'Lato', 'Open Sans', Helvetica, Arial, sans-serif;
-        font-size: 120%;
-    }
-    @media screen and (min-width: 768px) {
-
-        .gl-logo {
-            float: left;
-        }
-
-        .gl-nav {
-            display: block;
-        }
-
-        .gl-nav ul {
-            display: inline-block;
-        }
-
-        .gl-nav__left {
-            float: left;
-        }
-
-        .gl-nav__right {
-            float: right;
-        }
-
-        .gl-nav ul li {
-            float: left;
-        }
-
-        .gl-header {
-            width: auto;
-            float: left;
-        }
-
-        .gl-mobile-menu-icon {
-            display: none;
-        }
-
-        .gl-mobile-visible {
-            display: none;
-        }
-
-        .gl-mobile-invisible {
-            display: inline;
-        }
-
-    }
-
-    @media screen and (min-width: 1024px) {
-
-
-
-    }
-
-    @media screen and (min-width: 1200px) {
-
-        .gl-row {
-            width: 1170px;
-            margin: 0 auto;
-        }
-
-    }
-</style>
-<link href="css/greenline.css" rel="stylesheet">
+@include('greenline.styles')
 <div class="gl">
     <div class="gl-container">
         <div class="gl-row gl-clearfix">
@@ -274,12 +16,14 @@
                     <li><a href="javascript:{0}" id="shipping">Доставка</a></li>
                     <li><a href="javascript:{0}" id="payment">Оплата</a></li>
                     @if(isset($installments)&&count($installments))<li><a href="javascript:{0}" id="installments">Рассрочка</a></li>@endif
+                    @if(strlen(trim($sale)))<li><a href="javascript:{0}" id="sale">Акция</a></li>@endif
+                    <!--<li id="xr_g_searchField"><input  id="xr_g_searchInput" type="text" placeholder="Поиск товаров"</li>-->
                 </ul>
                 <ul class="gl-nav__right gl-clearfix">
-                    @if(strlen(trim($sale)))<li><a href="javascript:{0}" id="sale">Акция</a></li>@endif
-                    <li><a href="javascript:{0}" id="about">О нас</a></li>
-                    <li><a href="tel:88007075103"><span class="gl-mobile-visible">Телефон </span>8 800 707 51 03</a></li>
-                    <li><a href="mailto:info@garan24.ru"><i class="fa fa-envelope-o gl-mobile-invisible" aria-hidden="true"></i><span class="gl-mobile-visible">Электронная почта</span></a></li>
+
+                    <li><a href="javascript:{0}" id="about"><i class="fa fa-info"></i>&nbsp;</a></li>
+                    <li><a href="tel:88007075103"><i class="fa fa-phone"></i> 8 800 707 51 03</a></li>
+                    <li><a href="mailto:info@garan24.ru"><i class="fa fa-envelope-o gl-mobile-invisible" aria-hidden="true"></i><span class="gl-mobile-visible">Электронная почта</span>&nbsp;</a></li>
                     <!--<li><a href="#"><i class="fa fa-language gl-mobile-invisible" aria-hidden="true"></i><span class="gl-mobile-visible">Перевод</span></a></li>-->
                 </ul>
             </nav>
@@ -319,8 +63,190 @@
     </div>
 </div>
 <script>
-@include('greenline.scripts')
+var gl_mobile_menu = document.getElementById( "glMobileMenu" );
 
+gl_mobile_menu.addEventListener( "click", handle_nav_click, false );
+
+function handle_nav_click() {
+
+    var gl_nav = document.getElementById( "glNav" );
+
+    var gl_nav_display_prop = getComputedStyle( gl_nav ).display;
+
+    if ( gl_nav_display_prop == 'none' ) {
+
+        show_navigation();
+
+    } else if ( gl_nav_display_prop == 'block' ) {
+
+        hide_navigation();
+
+    }
+
+}
+
+function setClass( el, className ) {
+
+    if ( el.classList )
+
+        el.classList.add( className );
+
+    else
+
+        el.className += ' ' + className;
+
+}
+
+function removeClass( el, className ) {
+
+    if ( el.classList )
+
+        el.classList.remove( className );
+
+    else
+
+        el.className = el.className.replace( new RegExp( '(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi' ), ' ' );
+
+}
+
+window.addEventListener( 'resize', handle_nav_resize, false );
+
+function handle_nav_resize() {
+
+    if ( window.innerWidth < 768 ) {
+
+        hide_navigation();
+
+    } else {
+
+        show_navigation();
+
+    }
+
+}
+
+function show_navigation() {
+
+    var gl_nav = document.getElementById( "glNav" );
+
+    gl_nav.style.display = 'block';
+
+    setClass( gl_mobile_menu, 'toggled' );
+
+}
+
+function hide_navigation() {
+
+    var gl_nav = document.getElementById( "glNav" );
+
+    gl_nav.style.display = 'none';
+
+    removeClass( gl_mobile_menu, 'toggled' );
+
+}
+
+var gl_popup_overlay = document.getElementById( "glPopupOverlay" );
+
+gl_popup_overlay.addEventListener( "click", handle_overlay_click, false );
+
+var gl_popup_close = document.getElementById( "glPopupClose" );
+
+gl_popup_close.addEventListener( "click", handle_close_click, false );
+
+var gl_popup = document.getElementById( "glPopup" );
+
+function handle_overlay_click(){
+
+    close_gl_popup();
+
+}
+
+function handle_close_click(){
+
+    close_gl_popup();
+
+}
+
+document.addEventListener( 'keyup', function( e ) {
+
+    if( e.keyCode == 27 ) {
+
+        close_gl_popup();
+
+    }
+
+}, false );
+
+function close_gl_popup(){
+
+    gl_popup_overlay.style.display = 'none';
+    gl_popup.style.display = 'none';
+
+    var gl_popup_content = document.getElementById( 'glPopupContent' );
+
+    var gl_sections = gl_popup_content.children;
+
+    for ( var index = 0; index < gl_sections.length; ++index) {
+        gl_sections[index].style.display = 'none';
+    }
+
+}
+
+function openPopup( section_id ) {
+
+    close_gl_popup();
+
+    var gl_section = document.getElementById( section_id );
+
+    gl_popup_overlay.style.display = 'block';
+
+    gl_popup.style.display = 'block';
+
+    gl_section.style.display = 'block';
+
+}
+
+
+    <!-- Yandex.Metrika counter -->
+    (function (d, w, c) {
+        (w[c] = w[c] || []).push(function() {
+            try {
+                w.yaCounter{{$yandex_metric or $yandexCounterId}} = new Ya.Metrika({
+                    id:{{$yandex_metric or $yandexCounterId}},
+                    clickmap:true,
+                    trackLinks:true,
+                    accurateTrackBounce:true,
+                    webvisor:true,
+                    trackHash:true
+                });
+            } catch(e) { }
+        });
+
+        var n = d.getElementsByTagName("script")[0],
+            s = d.createElement("script"),
+            f = function () { n.parentNode.insertBefore(s, n); };
+        s.type = "text/javascript";
+        s.async = true;
+        s.src = "https://mc.yandex.ru/metrika/watch.js";
+
+        if (w.opera == "[object Opera]") {
+            d.addEventListener("DOMContentLoaded", f, false);
+        } else { f(); }
+    })(document, window, "yandex_metrika_callbacks");
+
+    if(document.getElementById( 'howtobuy' )!=null)document.getElementById( 'howtobuy' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_howtobuy' );}, false );
+    if(document.getElementById( 'shipping' )!=null)document.getElementById( 'shipping' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_shipping' );}, false );
+    if(document.getElementById( 'payment' )!=null)document.getElementById( 'payment' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_payment' );}, false );
+    if(document.getElementById( 'installments' )!=null)document.getElementById( 'installments' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_installments' );}, false );
+    if(document.getElementById( 'sale' )!=null)document.getElementById( 'sale' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_sale' );}, false );
+    if(document.getElementById( 'about' )!=null)document.getElementById( 'about' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_about' );}, false );
+    if(document.getElementById( 'search')!=null)document.getElementById( 'search' ).addEventListener('click',function(e){
+        e.preventDefault();
+        console.debug("Let's search");
+        var sf = document.getElementById( 'xr_g_searchField');
+        if(sf == null) return;
+        sf.style.display="inline-block";
+    },false);
     @if($site=="brandalley")
         var ba = {
             parse:function(){
@@ -508,14 +434,14 @@
         var ctshirts_func = function(){
             var ma = document.querySelector("#navigation > div");
             if(ma!=null)ma.style.maxWidth = "132rem";
+            //console.debug(ma);
+            //for(var j=0;j<ma.length;++j){ma[j].style.maxWidth = "132rem";}
             var pe = xG._getElement(".item-total,#js-order-subtotal,.price,.item-list__was-price"),pes = document.getElementsByClassName('item-list__td--price');
             for(var i=0;i<pes.length;++i){
                 var e = pes[i].getElementsByTagName("b");
                 if(e!=null && e.length)pe.push(e[0]);
                 else pe.push(pes[i]);
             }
-            var shipping = document.querySelector("#cart-items-form > div.js-order-totals-section.panel--flexed.item-list__header--footer-helper > table");
-            if(shipping!=null)shipping.style.display = 'none';
             xG.currency.get(pe,"GBP");
             var checkouts = document.getElementsByClassName("form__checkout-btn");
             if(typeof checkouts != 'undefined' && checkouts != null){

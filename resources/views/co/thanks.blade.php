@@ -7,7 +7,7 @@
         <i class="first">Проверьте</i> почту, Вам придет письмо от <span class="brand">Гаран24</span> с подтверждением Вашего заказа и ссылкой на Ваш Личный Кабинет.
     </p>
     <p>
-        <i class="first">Отслеживайте</i> Ваш заказ в <a target="__blank" href="//gauzymall.com/my-account/">в личном кабинете <span class="brand">GauzyMALL</span></a>
+        <i class="first">Отслеживайте</i> Ваш заказ в <a target="__blank" href="//www.gauzymall.com/my-account/">в личном кабинете <span class="brand">GauzyMALL</span></a>
     </p>
     <p>
         <i class="first">Остались</i> вопросы? Звоните по тел. <a href="tel:88007075103">@telephone('88007075103')</a>

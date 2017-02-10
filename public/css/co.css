@@ -2,24 +2,45 @@
 @import url("//fonts.googleapis.com/css?family=Roboto+Mono&subset=latin,cyrillic");
 @import url("//fonts.googleapis.com/css?family=Open+Sans&subset=latin,cyrillic");
 @import url("//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
-@media (min-width: 992px) {
-  .container {
-    width: 100%;
-  }
-}
+
 @media (min-width: 768px) {
   .container {
     width: 100%;
   }
+
+}
+@media (min-width: 992px) {
+  #goods {
+    float: left;
+  }
+  #form {
+    float: right;
+  }
+  .container {
+    width: 100%;
+  }
+  .scale-2 {
+      display:block;
+  }
+}
+@media (min-width: 1122px){
+    #goods{float:left;}
+    #form{float:right;}
+    .container {
+        width: 100%
+    }
+    .scale-2 {
+        display:block;
+    }
 }
 html,
 body {
   height: 100%;
+  font-size: 14px;
 }
 body {
   font-weight: 300;
   font-family: 'Open Sans';
-  font-size: 10pt;
   color: #676f7c;
   margin: 0;
   padding: 0;
@@ -41,21 +62,21 @@ body .container h3 {
   margin-bottom: 1em;
 }
 body .container h1 {
-  font-size: 20pt;
+  font-size: 2em;
   text-align: center;
   line-height: 2em;
   border-bottom: dotted 1px #676f7c;
 }
 body .container h2 {
-  font-size: 16pt;
+  font-size: 1.5em;
 }
 body .container h3 {
-  font-size: 14pt;
+  font-size: 1.2em;
   padding-right: 2em;
 }
 body .container h4 {
   font-weight: 700;
-  font-size: 12pt;
+  font-size: 1.1em;
 }
 body .container ul {
   list-style: none;
@@ -107,10 +128,10 @@ body .container .hide {
   display: none;
 }
 body .container .small {
-  font-size: 10pt;
+  font-size: 1em;
 }
 body .container .small a {
-  font-size: 10pt;
+  font-size: 1em;
 }
 body .container .attention {
   font-size: 110%;
@@ -195,7 +216,7 @@ body .container #cart-shipping-total {
   color: #676f7c;
 }
 body .container #cart-shipping-total * {
-  font-size: 16pt;
+  font-size: 1em;
   font-weight: 700;
 }
 body .container .list-group-item-text {
@@ -205,7 +226,7 @@ body .container .list-group-item.active .fa {
   color: #fff;
 }
 body .container #header {
-  font-size: 12pt;
+  font-size: 1.1em;
   padding: 0;
 }
 body .container #header .nav {
@@ -219,11 +240,11 @@ body .container #header .nav .nav-item {
   height: 2em;
   line-height: 2em;
   display: inline-block;
-  font-size: 12pt;
+  font-size: 1.1em;
 }
 body .container #header .nav .nav-item a {
   color: #aed581;
-  font-size: 12pt;
+  font-size: 1.1em;
 }
 body .container #header .nav .nav-item a:hover {
   background: none;
@@ -231,7 +252,7 @@ body .container #header .nav .nav-item a:hover {
 }
 body .container #header .nav .nav-item.logo {
   float: left;
-  font-size: 16pt;
+  font-size: 1em;
   margin-left: 1em;
 }
 body .container #content {
@@ -247,7 +268,7 @@ body .container #content .message {
   -moz-border-radius: 0.5em;
   border-radius: 0.5em;
   padding: 1em;
-  font-size: 12pt;
+  font-size: 1.1em;
 }
 body .container #content .message-alert {
   background-color: #e91e63;
@@ -271,6 +292,7 @@ body .container #footer {
   text-align: center;
 }
 .scale-2 {
+    display: none;
   width: 100%;
 }
 .scale-2-item {
@@ -423,7 +445,7 @@ body .container #footer {
   margin: 4em 6em 1em 6em;
   height: 92%;
   padding: 4em;
-  font-size: 12pt;
+  font-size: 1.1em;
   text-indent: 2em;
   -webkit-border-radius: 1em;
   -moz-border-radius: 1em;
@@ -439,7 +461,7 @@ body .container #footer {
   width: 40em;
   margin: 10% auto;
   padding: 4em;
-  font-size: 12pt;
+  font-size: 1.1em;
   text-indent: 2em;
   -webkit-border-radius: 1em;
   -moz-border-radius: 1em;
@@ -493,7 +515,7 @@ body .container #footer {
   margin: 4em 6em 1em 6em;
   height: 92%;
   padding: 4em;
-  font-size: 12pt;
+  font-size: 1.1em;
   text-indent: 2em;
   -webkit-border-radius: 1em;
   -moz-border-radius: 1em;
@@ -523,6 +545,9 @@ body .container #footer {
 .modal-box-item-close:hover {
   border: solid 4px #fff;
 }
+.btn{
+    font-size: 1em;
+}
 .btn-success {
   background-color: #00bf80;
   border-color: #00bf80;
@@ -530,7 +555,7 @@ body .container #footer {
 input,
 select,
 textarea {
-  font-size: 12pt;
+  font-size: 1.1em;
 }
 .input-field {
   padding: 0;
@@ -538,8 +563,8 @@ textarea {
   color: #676f7c;
 }
 .input-field input {
-  height: 40px;
-  line-height: 40px;
+  height: 2em;
+  line-height: 2em;
   background-color: #f2f3f5;
   padding-left: 3em;
   -webkit-border-radius: 5px;
@@ -555,11 +580,11 @@ textarea {
   top: 0;
   width: 2em;
   font-family: 'FontAwesome';
-  height: 40px;
+  height: 2em;
   text-align: center;
-  line-height: 40px;
+  line-height: 2em;
   color: #676f7c;
-  font-size: 14pt;
+  font-size: 1.2em;
   opacity: 0.33;
 }
 .input-field:focus {

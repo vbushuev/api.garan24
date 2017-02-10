@@ -268,7 +268,7 @@
                     if(typeof(rawdata.session)!="undefined" && typeof(rawdata.session.shop!="undefined")){
                         var shop_url = 'https://www.brandalley.fr/panier',
                             domain = ".brandalley.fr";
-                        if(shop="ctshirts"){
+                        if(rawdata.session.shop=="ctshirts"){
                             shop_url = "http://www.ctshirts.com/uk/cart";
                             domain = ".ctshirts.com";
                         }

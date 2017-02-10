@@ -1,0 +1,73 @@
+//out: gcat.css, compress:true
+@import url("//fonts.googleapis.com/css?family=Lato:100,300,400,700|Open+Sans:300,400,800&subset=latin,cyrillic");
+@import url("//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css");
+$colorGreen = rgb(0, 191, 128)
+$colorBlue = #33bbff
+$colorGrey = rgb(103, 111, 124)
+$colorLightGrey = rgb(242, 243, 245)
+$fontColor = rgb(103, 111, 124)
+//functions
+border-radius()
+   -webkit-border-radius arguments
+   -moz-border-radius arguments
+   border-radius arguments
+all-transition()
+   -webkit-transition all arguments ease-in//opacity 400ms ease-in;
+   -moz-transition all arguments ease-in//opacity 400ms ease-in;
+   transition  all arguments ease-in//opacity 400ms ease-in;
+blur()
+    -webkit-filter blur(arguments)
+    -moz-filter blur(arguments)
+    -o-filter blur(arguments)
+    -ms-filter blur(arguments)
+    filter blur(arguments)
+
+body
+    font-size 16px
+    font-family 'Open Sans'
+    font-weight 300
+    color $fontColor
+.price
+    position: relative;
+    font-family: 'Lato'
+    margin-top: .4em;
+    display: inline-block;
+    font-size: 1.4em;
+    width 100%
+    text-align: right;
+.price:after
+    font-family: 'FontAwesome';
+.price.EUR:after
+    content: '\f153'
+.price.GBP:after
+    content: '\f154'
+.price.USD:after
+    content: '\f155'
+.price.RUB:after
+    content: '\f158'
+strike.price
+    margin-top: 0
+    font-weight 100
+    font-size: 1em;
+
+.product
+    //border solid 1px $colorLightGrey
+    position: relative;
+    height 32em
+    padding 1em
+    text-align: center;
+    img
+        width 12em
+        display: inline-block;
+    .brand
+        font-family 'Lato'
+        font-weight 400
+        font-size 1.4em
+        width 100%
+        display block
+    .title
+        font-weight 400
+        font-size 1em
+        display inline-block
+        height 2em
+        overflow: hidden;

@@ -1,8 +1,7 @@
 @extends('dictionary.layout')
 @section('content')
     <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 statistics"></div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 links">
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 links">
             <!-- Single button -->
             <div class="btn-group">
                 <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -22,6 +21,41 @@
                 </ul>
             </div>
         </div>
+        <div class="col-xs-12 col-sm-12 col-md-3 col-lg-3 statistics">
+            <button id="addfrase" type="button" class="btn btn-default" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-plus"></i>&nbsp;Добавить
+            </button>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6 search-section">
+            <div class="input-group" style="font-size:18px;">
+                <span class="input-group-addon" id="basic-addon1" style="font-size:18px;"><i class="fa fa-search">&nbsp;</i></span>
+                <input type="text" id="search" name="searchstring" class="form-control" placeholder="поиск" aria-describedby="basic-addon1" style="height:50px;line-height:50px;" value="<?php echo isset($_GET['search'])?$_GET['search']:'';?>">
+            </div>
+        </div>
+    </div>
+    <div class="row" id="formadd" style="border:solid 1px #ddd;border-radius:.4em;margin:1em;padding:1em;display:none;">
+        <div class="col-xs-2">
+            <label for="lang">Язык:</label><br />
+            <div class="btn-group" role="group" aria-label="lang">
+                <button type="button" class="btn btn-default chooseLang" data-val="en">English</button>
+                <button type="button" class="btn btn-default active chooseLang" data-val="fr">Français</button>
+                <input type="hidden" name="lang" value="fr" />
+            </div>
+        </div>
+        <div class="col-xs-5">
+            <label for="original">Оригинал:</label><br />
+            <textarea name="original" style="width:100%;"></textarea>
+        </div>
+        <div class="col-xs-5">
+            <label for="translate">Перевод:</label><br />
+            <textarea name="translate" style="width:100%;"></textarea>
+        </div>
+        <input type="hidden" name="priority" value="0" />
+        <div class="col-xs-12">
+            <button id="addfrasesave" type="button" class="btn btn-default  pull-right" aria-haspopup="true" aria-expanded="false">
+                <i class="fa fa-save"></i>&nbsp;Сохранить
+            </button>
+        </div>
     </div>
     <script>
         var urlParams;
@@ -38,12 +72,16 @@
         $=jQuery.noConflict();
         var dictionary = {
             _language:(typeof urlParams.lang!="undefined")?urlParams.lang:'en',
+            _search:(typeof urlParams.search!="undefined")?urlParams.search:'',
             getDictionary:function(){
                 $.ajax({
                     url:'/dictionary',
                     type:"post",
                     dataType:"json",
-                    data:{lang:this._language},
+                    data:{
+                        lang:this._language,
+                        search:this._search
+                    },
                     beforeSend:function(){
                         $(".phrase").fadeOut().remove();
                         $(".dictionary").append('<tr class="spinner"><td colspan="8"><i class="fa fa-spin fa-spinner fa-2x fa-fw"></i></td></tr>');
@@ -90,16 +128,17 @@
                 });
             },
             add:function(idx){
-                var args = arguments[0],t = this;;
+                var args = arguments[0],t = this;
+                console.debug(args);
                 $.ajax({
                     url:'/add',
                     type:"post",
                     dataType:"json",
                     data:{
-                        lang:this._language,
+                        lang:args.lang,
                         original:args.original,
                         translate:args.translate,
-                        priority:args.priority
+                        priority:0
                     },
                     beforeSend:function(){
                         $(t).html('<i class="fa fa-spin fa-spinner fa-2x fa-fw"></i>');
@@ -111,13 +150,39 @@
                 });
             },
             lang:function(l){
-                this._language = l;
-                this.getDictionary();
+                window.dictionary._language = l;
+                window.dictionary._search = $("#search").val();
+                document.location.href="//"+document.location.hostname+"?lang="+window.dictionary._language+"&search="+window.dictionary._search;
+                //this.getDictionary();
             }
         };
         window.dictionary = dictionary;
         $(document).ready(function(){
             dictionary.getDictionary();
+            $("#addfrase").on("click",function(e){
+                $("#formadd").toggle();
+            });
+            $(".chooseLang").on("click",function(e){
+                $(".chooseLang").removeClass("active");
+                $(this).addClass("active");
+                $("input[name=lang]").val($(this).attr("data-val"));
+
+            });
+            $("#addfrasesave").on("click",function(e){
+                window.dictionary.add({
+                    lang:$("input[name=lang]").val(),
+                    original:$("textarea[name=original]").val(),
+                    translate:$("textarea[name=translate]").val()
+                });
+            });
+            $("#search").on("change keyup",function(e){
+                var s = $(this).val();
+                window.dictionary._search = s;
+                if(s.length>2 || s.length==0){
+                    document.location.href="//"+document.location.hostname+"?lang="+window.dictionary._language+"&search="+window.dictionary._search;
+                    //window.dictionary.getDictionary();
+                }
+            });
         });
     </script>
     <table class="dictionary orders">

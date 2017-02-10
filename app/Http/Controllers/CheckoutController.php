@@ -71,8 +71,7 @@ class CheckoutController extends Controller{
             "customer"=>[],
             "deal"=>$deal,
             "shop_url"=>$deal->getShopUrl()
-        ]
-        );
+        ]);
     }
     public function postIndex(Request $rq){
         Log::debug(__CLASS__.".".__METHOD__);
