@@ -74,7 +74,17 @@ table tr td{
     display:block;
     width:6em;
     height:6em;
+    text-align: center;
+    vertical-align: middle;
     overflow: hidden;
+    transition: all .4s ease-in;
+}
+.content-image a:hover{
+    overflow:visible;
+}
+.content-image a img{
+    display:inline-block;
+    width:8em;
 }
 .message{
     padding: 1em;

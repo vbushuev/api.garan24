@@ -73,7 +73,10 @@
         var dictionary = {
             _language:(typeof urlParams.lang!="undefined")?urlParams.lang:'en',
             _search:(typeof urlParams.search!="undefined")?urlParams.search:'',
+            _loading:false,
             getDictionary:function(){
+                if(dictionary._loading)return;
+                dictionary._loading = true;
                 $.ajax({
                     url:'/dictionary',
                     type:"post",
@@ -108,6 +111,7 @@
                     },
                     complete:function(){
                         $(".spinner").fadeOut().remove();
+                        dictionary._loading = false;
                     }
                 });
             },
@@ -145,15 +149,15 @@
                     },
                     success:function(d){
                         console.debug(d);
-                        document.location.reload();
+                        dictionary.getDictionary();
                     }
                 });
             },
             lang:function(l){
                 window.dictionary._language = l;
                 window.dictionary._search = $("#search").val();
-                document.location.href="//"+document.location.hostname+"?lang="+window.dictionary._language+"&search="+window.dictionary._search;
-                //this.getDictionary();
+                //document.location.href="//"+document.location.hostname+"?lang="+window.dictionary._language+"&search="+window.dictionary._search;
+                this.getDictionary();
             }
         };
         window.dictionary = dictionary;
@@ -179,8 +183,8 @@
                 var s = $(this).val();
                 window.dictionary._search = s;
                 if(s.length>2 || s.length==0){
-                    document.location.href="//"+document.location.hostname+"?lang="+window.dictionary._language+"&search="+window.dictionary._search;
-                    //window.dictionary.getDictionary();
+                    //document.location.href="//"+document.location.hostname+"?lang="+window.dictionary._language+"&search="+window.dictionary._search;
+                    window.dictionary.getDictionary();
                 }
             });
         });

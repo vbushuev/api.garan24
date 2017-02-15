@@ -97,6 +97,10 @@ class ServicesController extends Controller{
         $id =["id" => DB::table('analytics')->insertGetId(["value"=>$data,"type"=>$type,"ip"=>$ip])];
         return response()->json($id,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
-
+    public function CatchExceptions(Request $rq){
+        $data = json_decode($rq->getContent(),true);
+        $id =["id" => DB::table('exceptions')->insertGetId(["data"=>$data])];
+        return response()->json($id,200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+    }
 }
 ?>

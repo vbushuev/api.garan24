@@ -38,7 +38,7 @@ class DictionaryController extends Controller{
         foreach ($all as $key => $value) {
             if(!in_array($key,["id","status"])){
                 $upd .="{$key}=:{$key},";
-                if($key=='translate')$value = strtolower($value);
+                if($key=='translate')$value = $value;
                 $data[$key]=$value;
             }
         }
@@ -57,16 +57,25 @@ class DictionaryController extends Controller{
         return $this->postDelete($rq);
     }
     public function postAdd(Request $rq){
-        $data = [
-            "lang"=>$rq->input("lang",'fr'),
-            "original"=>mb_strtolower($rq->input("original",'_notext_')),
-            "translate"=>mb_strtolower($rq->input("translate",'_notext_')),
-            "priority"=>$rq->input("priority",'0')
-        ];
-        Log::debug("Add to dictionary ".json_encode($data,JSON_PRETTY_PRINT|JSON_UNESCAPED_UNICODE));
-        $affected = DB::connection('gpars')->insert("insert into xr_g_dictionary (lang,original,translate,priority) values(:lang,:original,:translate,:priority)",$data);
+        $original = $rq->input("original",'_notext_');
+        $translate = $rq->input("translate",'_notext_');
+        $ors = preg_split('/\|/m',$original);$ors=($ors!==false)?$ors:[$original];
+        $trs = preg_split('/\|/m',$translate);$trs=($trs!==false)?$trs:[$translate];
+        $reponse = [];
+        for ($i=0;$i<count($ors);++$i) {
+            $or = mb_strtolower($ors[$i]);
+            $tr = isset($trs[$i])?$trs[$i]:$trs[count($trs)-1];
+            $data = [
+                "lang"=>$rq->input("lang",'fr'),
+                "original"=>$or,
+                "translate"=>$tr,
+                "priority"=>$rq->input("priority",'0')
+            ];
+            $reponse[] = DB::connection('gpars')->insert("insert into xr_g_dictionary (lang,original,translate,priority) values(:lang,:original,:translate,:priority)",$data);
+        }
+
         $this->updatePriority();
-        return response()->json(["response"=>$affected],200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
+        return response()->json(["response"=>$reponse],200,['Content-Type' => 'application/json; charset=utf-8'],JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT);
     }
     protected function updatePriority(){
         DB::connection('gpars')->update("update xr_g_dictionary set priority = length(original) where 1");

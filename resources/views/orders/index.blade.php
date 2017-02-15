@@ -302,13 +302,6 @@
                                         dataType:"json",
                                         success:function(itm){
                                             var origItem = getProduct(itm.sku),desc = itm.description;
-                                            if(origItem!=null&&origItem.variations!=null && typeof origItem.variations!="undefined"){
-                                                desc="";
-                                                if(typeof origItem.variations!="undefined"&&typeof origItem.variations.size!="undefined")
-                                                    desc += "<br />Размер: "+origItem.variations.size;
-                                                if(typeof origItem.variations!="undefined"&&typeof origItem.variations.color!="undefined")
-                                                    desc += "<br />Цвет: "+origItem.variations.color;
-                                                }
                                             var currencySymbol = '<i class="fa fa-rub"></i>',
                                                 product_url = (origItem!=null)?origItem.product_url:itm.product_url;
 
@@ -317,12 +310,34 @@
                                                 case 'EUR':currencySymbol='<i class="fa fa-eur"></i>'; break;
                                                 case 'USD':currencySymbol='<i class="fa fa-usd"></i>'; break;
                                             }
+                                            if(origItem!=null&&origItem.variations!=null && typeof origItem.variations!="undefined"){
+                                                desc="";
+                                                if(typeof origItem.variations!="undefined"&&typeof origItem.variations.size!="undefined")
+                                                    desc += "<br />Размер: "+origItem.variations.size;
+                                                if(typeof origItem.variations!="undefined"&&typeof origItem.variations.color!="undefined")
+                                                    desc += "<br />Цвет: "+origItem.variations.color;
+                                                if(typeof origItem.variations.adds!="undefined"&&origItem.variations.adds.length){
+                                                    desc += "<br />Дополнительно: ";
+                                                    for(var ii in origItem.variations.adds){
+                                                        var addon = origItem.variations.adds[ii],
+                                                            title =decodeURIComponent(addon.value);
+                                                        title = $(title).text();
+                                                        itm.price+=addon.original_price;
+                                                        it.price+=addon.price;
+                                                        desc+='<br/>&nbsp;&nbsp;&nbsp;&nbsp;'+title+"&nbsp;";
+                                                        desc+=parseFloat(addon.price).format(2,3,' ','.')+'<i class="fa fa-rub"></i><br/><sup>'+currencySymbol+addon.original_price+'</sup>';
+                                                    }
+
+                                                }
+                                            }
+
                                             ii='<div class="row">';
                                             ii+='<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 content-image" >';
-                                            ii+='<a href="'+product_url+'" target="__blank"><img src="'+itm.images[0].src+'" alt="'+itm.title+'" /></a>';
+                                            ii+='<a href="'+product_url+'" target="__blank"><img src="'+itm.images[0].src+'" alt="'+itm.title+'"/></a>';
                                             ii+='</div>';
                                             ii+='<div class="col-xs-6 col-sm-6 col-md-6 col-lg-6 content-name" >';
                                             ii+='<a href="'+product_url+'" target="__blank">'+itm.title+'</a>';
+                                            ii+='<br/><i style="text-transform:uppercase;color:#bbb;font-style:regular;">'+itm.sku+'</i>';
                                             ii+=desc;
                                             ii+='</div>';
                                             ii+='<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2 content-quntity">';

@@ -230,6 +230,9 @@ class CheckoutController extends Controller{
         Mail::send('mail.welcome',["viewFolder"=>"mail","deal"=>$deal],function($message) use ($deal){
             $message->to($deal->getCustomer()->email)->subject("GauzyMALL");
         });
+        $customer = $deal->getCustomer();
+        if($customer==null)return redirect()->away($this->thishost."?id=".$data["deal_id"]);
+        if(!isset($customer->passport)||!isset($customer->passport["series"]))return redirect()->away($this->thishost."/passport?deal_id=".$data["deal_id"]);
         Log::debug("postPayment::".$this->viewFolder.'.payment');
         return view(
             $this->viewFolder.'.payment',

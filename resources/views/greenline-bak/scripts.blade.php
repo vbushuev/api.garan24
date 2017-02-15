@@ -1,4 +1,3 @@
-<script>
 var gl_mobile_menu = document.getElementById( "glMobileMenu" );
 
 gl_mobile_menu.addEventListener( "click", handle_nav_click, false );
@@ -147,8 +146,8 @@ function openPopup( section_id ) {
     (function (d, w, c) {
         (w[c] = w[c] || []).push(function() {
             try {
-                w.yaCounter = new Ya.Metrika({
-                    id:{{$yandex_metric}},
+                w.yaCounter{{$yandex_metric or $yandexCounterId}} = new Ya.Metrika({
+                    id:{{$yandex_metric or $yandexCounterId}},
                     clickmap:true,
                     trackLinks:true,
                     accurateTrackBounce:true,
@@ -170,42 +169,9 @@ function openPopup( section_id ) {
         } else { f(); }
     })(document, window, "yandex_metrika_callbacks");
 
-    if (document.getElementById( 'howtobuy' ) != null)
-        document.getElementById( 'howtobuy' ).addEventListener( 'click', function( event ){
-            event.preventDefault();
-            openPopup( 'section_howtobuy' );
-            yaCounter.reachGoal('HOW-TO-BUY');
-            console.log('Reached goal: HOW-TO-BUY');
-        }, false );
-    if(document.getElementById( 'shipping' ) != null)
-        document.getElementById( 'shipping' ).addEventListener( 'click', function( event ){
-            event.preventDefault();
-            openPopup( 'section_shipping' );
-            yaCounter.reachGoal('SHIPPING');
-            console.log('Reached goal: SHIPPING');
-        }, false );
-    if(document.getElementById( 'payment' ) != null)
-        document.getElementById( 'payment' ).addEventListener( 'click', function( event ){
-            event.preventDefault();
-            openPopup( 'section_payment' );
-            yaCounter.reachGoal('PAYMENT');
-            console.log('Reached goal: PAYMENT');
-        }, false );
-    if(document.getElementById( 'installments' ) != null)
-        document.getElementById( 'installments' ).addEventListener( 'click', function( event ){
-            event.preventDefault();
-            openPopup( 'section_installments' );
-        }, false );
-    if(document.getElementById( 'sale' ) != null)
-        document.getElementById( 'sale' ).addEventListener( 'click', function( event ){
-            event.preventDefault();
-            openPopup( 'section_sale' );
-        }, false );
-    if(document.getElementById( 'about' ) != null)
-        document.getElementById( 'about' ).addEventListener( 'click', function( event ){
-            event.preventDefault();
-            openPopup( 'section_about' );
-            yaCounter.reachGoal('ABOUT-US');
-            console.log('Reached goal: ABOUT-US');
-        }, false );
-</script>
+    if(document.getElementById( 'howtobuy' )!=null)document.getElementById( 'howtobuy' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_howtobuy' );}, false );
+    if(document.getElementById( 'shipping' )!=null)document.getElementById( 'shipping' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_shipping' );}, false );
+    if(document.getElementById( 'payment' )!=null)document.getElementById( 'payment' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_payment' );}, false );
+    if(document.getElementById( 'installments' )!=null)document.getElementById( 'installments' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_installments' );}, false );
+    if(document.getElementById( 'sale' )!=null)document.getElementById( 'sale' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_sale' );}, false );
+    if(document.getElementById( 'about' )!=null)document.getElementById( 'about' ).addEventListener( 'click', function( event ){event.preventDefault();openPopup( 'section_about' );}, false );

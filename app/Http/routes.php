@@ -62,6 +62,7 @@ Route::match(['get','post'],'/currency', 'ServicesController@Currency');
 Route::match(['get','post'],'/currency/update', 'ManagerController@CurrencyUpdate');
 Route::match(['get','post'],'/social', 'ServicesController@Social');
 Route::match(['get','post'],'/analytics', 'ServicesController@Analytics');
+Route::match(['post'],'/error', 'ServicesController@CatchExceptions');
 
 Route::auth();
 

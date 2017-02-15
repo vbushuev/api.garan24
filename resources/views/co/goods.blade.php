@@ -5,7 +5,7 @@
     <div class="row cart-item" id="cartItem-{{$good["product_id"]}}" data-ref="{{$good["product_url"]}}">
         <div class="image col-xs-4 col-sm-4 col-md-4 col-lg-4">
             <div class="image-container">
-                <img src="{{$good["product_img"] or $good["featured_src"]}}" alt="{{$good["title"] or $good['name']}}">
+                <img src="{{$good['featured_src'] or 'https://x.gauzymall.com/css/loader.gif'}}" alt="Изображение товара">
             </div>
         </div>
         <div class="name col-xs-8 col-sm-8 col-md-8 col-lg-8">
